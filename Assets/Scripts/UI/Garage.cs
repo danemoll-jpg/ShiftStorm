@@ -62,9 +62,9 @@ namespace ShiftStorm
             spin = (spin + Time.unscaledDeltaTime * 24f) % 360f;   // a slow turn: 15 s a round
             turntable.localRotation = Quaternion.Euler(0, spin, 0);
             // the vehicle in the upper part of the screen, the menu below it (a 7 m plane fits across)
-            cam.transform.position = Stage + new Vector3(0, 4.2f, -13.5f);
-            cam.transform.rotation = Quaternion.LookRotation(Stage + new Vector3(0, -1.6f, 0) - cam.transform.position, Vector3.up);
-            cam.fieldOfView = 40;
+            cam.transform.position = Stage + new Vector3(0, 3.0f, -9.6f);
+            cam.transform.rotation = Quaternion.LookRotation(Stage + new Vector3(0, -1.5f, 0) - cam.transform.position, Vector3.up);
+            cam.fieldOfView = 34;
             RenderSettings.fog = false;
         }
         // a picture from a set yaw (checks), the turntable stopped there

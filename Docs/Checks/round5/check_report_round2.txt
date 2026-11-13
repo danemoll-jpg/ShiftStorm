@@ -1,0 +1,50 @@
+ShiftStorm check 'round2', 2026-11-13 17:44, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 122.73 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            16.4 s    20 s  -3.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.6 s    20 s  -0.4
+  6 Sunken Gateway      Diving              9.4 s    10 s  -0.6
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 74.5 m/s (167 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 122.73] finish in 122.73 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.50 ms, 95th pct 7.27 ms, 99th pct 9.98 ms, worst 240.66 ms over 20203 frames (47 over 16.7 ms); peak draw calls 0, batches 0, triangles 4306k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      4.49 /   6.64 /  19.97 ms       0 draws    1766k tris
+  Cliffside Climb      4.36 /   6.93 / 240.66 ms       0 draws    4306k tris
+  Sky Arch             4.98 /   7.34 /  63.06 ms       0 draws    4141k tris
+  Lagoon Landing       3.21 /   4.96 /  14.66 ms       0 draws    1275k tris
+  Mangrove Run         5.80 /   7.88 /  56.68 ms       0 draws    4194k tris
+  Sunken Gateway       4.20 /   6.52 /  12.38 ms       0 draws    1912k tris
+  Coral Vault          3.64 /   6.24 / 117.23 ms       0 draws    2040k tris
+  Waterfall Return     6.06 /   8.85 / 128.28 ms       0 draws    3940k tris
+  frames over 50 ms during the lap: 15; worst: 242 ms at 28.5 s (Cliffside Climb, after "split Beach Promenade: 16.42 s (target 20 s), total 16.42 s"); 137 ms at 31.7 s (Cliffside Climb, after "split Beach Promenade: 16.42 s (target 20 s), total 16.42 s"); 134 ms at 119.7 s (Waterfall Return, after "gate G9 road landing passed (10/11)"); 119 ms at 102.6 s (Coral Vault, after "shortcut Coral Vault tunnel: in (Dive, 44 m/s)"); 117 ms at 115.7 s (Waterfall Return, after "Dive->Boat at z -466.9 (x 0.6, y -1.2) (Surface (pool)); speed 44.0 -> 44.0 m/s"); 115 ms at 107.3 s (Coral Vault, after "shortcut Coral Vault tunnel: left without finishing it (38 m off its line)")
+RESULTS PASS: shown True, lap 122.73 s, 8 splits, new best True, best on file 122.73 s (local/round5/fs2\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 122.73 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "TURN BACK: G6 dive portal", then reset (missed gate G6 dive portal) to the anchor at 5423 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+ABI PASS: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95; head top 1.03 m under a closed canopy top of 1.10 m; Drive: 0 below the hull; Boat: 0 below the hull; Fly: 0 below the hull; Dive: 0 of 24187 vertices outside the closed canopy above the body, 0 below the hull
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 1.99  wind 0.44  FOV 89.7  particles 80  speed 99 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.00  wind 0.45  FOV 90.0  particles 148  speed 100 % of top
+  Dive  pitch 1.50  wind 0.30  FOV 90.0  particles 115  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.13 ms, 95th pct 7.95 ms, 99th pct 10.35 ms, worst 242.17 ms over 49598 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.6  0.601 s  frames worst 14.58 / mean 7.84 ms
+  lap          Fly->Boat   z  -606.3  0.605 s  frames worst 10.46 / mean 5.46 ms
+  lap          Boat->Dive  z  -201.8  0.605 s  frames worst 20.90 / mean 5.76 ms
+  lap          Dive->Boat  z  -466.9  0.607 s  frames worst 117.39 / mean 11.12 ms
+  lap          Boat->Drive z  -304.6  0.604 s  frames worst 29.42 / mean 7.11 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; finish: quipgood_2; reset: grunt_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

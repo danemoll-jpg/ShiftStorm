@@ -51,6 +51,7 @@ namespace ShiftStorm
                     var r = gar.Shown.ModelOf(m).GetComponentsInChildren<Renderer>(); var b = r.Length > 0 ? r[0].bounds : new Bounds(); foreach (var x in r) b.Encapsulate(x.bounds);
                     forms.Add($"{Game.FormName(m)} {gar.FormInfo(m)} {b.size.x:0.0} x {b.size.y:0.0} x {b.size.z:0.0} m");
                     Capture($"{d.Replace(' ', '-')}-{Game.FormName(m)}");
+                    gar.Pose(90); yield return WaitReal(.05f); Capture($"{d.Replace(' ', '-')}-{Game.FormName(m)}-side");
                 }
                 Line($"  {d}: {string.Join("; ", forms)}");
                 // the change effect, mid-swap and just after
@@ -67,9 +68,9 @@ namespace ShiftStorm
             game.CloseMenu(); yield return Wait(.3f);
             // a race start in that design: the grid and a change mid-way
             game.StartCourse(0, true); yield return Until(() => !v.Holding, 6f); coast = false; smart = true;
-            Shot(.4f, $"race-in-{pick}"); yield return Wait(1.5f);
+            Shot(.4f, $"race-in-{pick}"); Shot(3.5f, $"race-in-{pick}-3s"); yield return Wait(4f);
             Line($"GARAGE race in '{pick}': shown form {Game.FormName(v.Forms.Current)}, Abi seat offset {v.Forms.SeatOffset}, Abi shown {v.Forms.ShowDriver}");
-            game.UseDesign(VehicleDesigns.GrayBox); Clear(); coast = true; game.StartCourse(0, false); yield return Wait(.2f);   // back to a time trial for the checks after
+            game.UseDesign(VehicleDesigns.Default); Clear(); coast = true; game.StartCourse(0, false); yield return Wait(.2f);   // back to a time trial for the checks after
             Save();
         }
     }

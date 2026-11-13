@@ -1,0 +1,8 @@
+ShiftStorm check 'best', 2026-11-13 17:47, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BEST SURVIVES A RESTART PASS: a new game process read local/round5/fs2\besttimes.json: best lap 122.73 s set 2026-11-13 17:47, 8 splits; the HUD's time trial has it: 122.73
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.03 ms, 95th pct 1.04 ms, 99th pct 1.04 ms, worst 1.04 ms over 2 frames; GPU time not available in batch mode
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

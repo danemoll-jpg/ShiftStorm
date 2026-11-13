@@ -100,7 +100,7 @@ namespace ShiftStorm.EditorTools
             var ti = (TextureImporter)assetImporter;
             if (assetPath.Contains("Resources/Dinos/")) ti.maxTextureSize = 1024;
             else if (assetPath.Contains("Resources/Driver/")) ti.maxTextureSize = 2048;
-            else if (assetPath.Contains("Resources/Vehicles/")) { ti.maxTextureSize = 2048; ti.isReadable = true; }   // Round 5: readable (rival recolour)
+            else if (assetPath.Contains("Resources/Vehicles/")) { ti.maxTextureSize = 1024; ti.isReadable = true; }   // Round 5: readable (rival recolour)
         }
         void OnPreprocessAudio()
         {

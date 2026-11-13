@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 1; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; }   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the gray box)
+        [Serializable] sealed class Data { public int version = 1; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; }   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -60,8 +60,8 @@ namespace ShiftStorm
         // Round 5: the vehicle design (Garage > Race with this design); "-design <name>" for a run only
         public static string Design
         {
-            get { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, "-design"); if (i >= 0 && i + 1 < a.Length) return a[i + 1]; return string.IsNullOrEmpty(D.design) ? VehicleDesigns.GrayBox : D.design; }
-            set { D.design = value == VehicleDesigns.GrayBox ? "" : value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] vehicle design {value}{(QuietRun.Check ? " (check run: not saved)" : " (saved)")}"); }
+            get { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, "-design"); if (i >= 0 && i + 1 < a.Length) return a[i + 1]; return string.IsNullOrEmpty(D.design) ? VehicleDesigns.Default : D.design; }
+            set { D.design = value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] vehicle design {value}{(QuietRun.Check ? " (check run: not saved)" : " (saved)")}"); }
         }
         static bool overrideSet; static Difficulty overrideLevel;   // the player has set it once: the first-flight note is no longer needed
     }

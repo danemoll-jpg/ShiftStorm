@@ -4,8 +4,9 @@ Keep each round's list short; each item is Dan's time.
 
 ## Round 5 — Abi's transforming machine, stage 1: three design directions (Tripo, by hand)
 
-**Status (2026-11-13): waiting on Dan.** Please make **only the car form of each direction first** (3 models) so you can compare
-them in 3D (Menu > Garage) before spending time on boats, planes and subs. When you pick a direction, make its other three forms.
+**Status (2026-11-13): DECIDED — Dan picked Direction 2, "Jetstream".** He made the four Jetstream images (car, boat, plane,
+sub) and is modelling them in Tripo now. Directions 1 and 3 (Tee Shot, Mudlark) are **parked, not dropped**: their prompts stay below for later
+(e.g. as rival drivers' own machines); don't build or show them this round. Rivals use Jetstream in their own colours.
 
 **What Code does with them:** `python Tools/import_vehicles.py` (one command) cleans each FBX in Blender (scale to 4.0 m long,
 origin at the hull centre, nose to +Z, wheels / waterline on the hull's floor, seat point, two LODs), copies it into

@@ -1,0 +1,29 @@
+ShiftStorm check 'soak', 2026-11-13 18:47, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SOAK: 12 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+  race 1: Rocket Rae 130.0 [Sky Arch slit], Chip "Showtime" Sterling 131.8, Vivi 133.6, Abi 134.8 [Coral Vault tunnel]
+  race 2: Rocket Rae 131.3, Chip "Showtime" Sterling 132.2, Abi 133.0 [Sky Arch slit], Vivi 133.4
+  race 3: Rocket Rae 129.2 [Sky Arch slit], Chip "Showtime" Sterling 133.1 [Coral Vault tunnel], Abi 133.3 [Coral Vault tunnel], Vivi 133.3
+SOAK PASS: 12 of 12 laps finished within 300 s (need 12); 0 counted finishes with a bad gate sequence; lap times min 129.2 / median 133.1 / max 134.8 s; shortcuts taken: Coral Vault tunnel 3, Sky Arch slit 3
+  resets: 0 in 12 laps; by reason: 
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.74 ms, 95th pct 2.96 ms, 99th pct 4.49 ms, worst 186.64 ms over 78195 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  soak1        Drive->Fly  z   944.6  0.950 s  frames worst 26.45 / mean 2.57 ms  OUT OF 0.5-0.8 s
+  soak1        Fly->Boat   z  -607.5  0.601 s  frames worst 8.45 / mean 1.69 ms
+  soak1        Boat->Dive  z  -202.9  0.602 s  frames worst 4.13 / mean 1.60 ms
+  soak1        Dive->Boat  z  -466.7  0.605 s  frames worst 4.29 / mean 1.70 ms
+  soak1        Boat->Drive z  -304.8  0.602 s  frames worst 7.69 / mean 1.75 ms
+  soak2        Drive->Fly  z   944.7  0.604 s  frames worst 6.74 / mean 1.75 ms
+  soak2        Fly->Boat   z  -607.1  0.603 s  frames worst 4.41 / mean 1.75 ms
+  soak2        Boat->Dive  z  -203.4  0.604 s  frames worst 4.24 / mean 1.66 ms
+  soak2        Dive->Boat  z  -466.5  0.601 s  frames worst 5.38 / mean 1.54 ms
+  soak2        Boat->Drive z  -304.6  0.600 s  frames worst 6.64 / mean 1.96 ms
+  soak3        Drive->Fly  z   944.9  0.601 s  frames worst 8.04 / mean 1.61 ms
+  soak3        Fly->Boat   z  -606.3  0.601 s  frames worst 5.38 / mean 1.91 ms
+  soak3        Boat->Dive  z  -201.7  0.606 s  frames worst 4.87 / mean 1.62 ms
+  soak3        Dive->Boat  z  -466.6  0.605 s  frames worst 4.21 / mean 1.59 ms
+  soak3        Boat->Drive z  -304.7  0.601 s  frames worst 4.13 / mean 1.61 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 6, Abi lines: waterfall: laugh_1; finish: quipgood_1; waterfall: lucky_1; finish: quipgood_2; waterfall: laugh_1; finish: win_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

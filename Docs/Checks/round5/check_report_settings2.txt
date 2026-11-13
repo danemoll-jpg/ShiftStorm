@@ -1,0 +1,8 @@
+ShiftStorm check 'settings2', 2026-11-13 18:03, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+INVERT SURVIVES A RESTART PASS: a new game process read local/round5/fs3\settings.json: invert on; stick pulled back in Fly: pitch -18.9 deg (nose down = inverted)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.24 ms, 95th pct 1.97 ms, 99th pct 3.15 ms, worst 4.70 ms over 286 frames; GPU time not available in batch mode
+sound: music  not playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

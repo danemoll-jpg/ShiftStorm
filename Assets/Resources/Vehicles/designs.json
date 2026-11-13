@@ -1,1 +1,14 @@
-{"designs": []}
+{
+  "designs": [
+    {
+      "name": "Jetstream",
+      "forms": [
+        "Car",
+        "Boat",
+        "Plane",
+        "Sub"
+      ],
+      "driver": true
+    }
+  ]
+}

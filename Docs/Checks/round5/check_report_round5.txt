@@ -1,0 +1,58 @@
+ShiftStorm check 'round5', 2026-11-13 18:50, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+GARAGE: menu page Garage, designs Gray box, Jetstream; items: Design: Jetstream   (2 of 2, A: next) | Form: Car - Tripo model   (A: next, with the change) | Racing with this design | Back
+  Gray box: Car gray box 4.0 x 2.6 x 4.2 m; Boat gray box 4.1 x 2.6 x 3.9 m; Plane gray box 6.9 x 2.0 x 5.8 m; Sub gray box 4.3 x 1.9 x 4.3 m
+  Gray box: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Jetstream: Car Tripo model 3.7 x 1.4 x 4.1 m; Boat Tripo model 3.8 x 1.3 x 4.1 m; Plane Tripo model 5.5 x 1.1 x 5.5 m; Sub Tripo model 3.8 x 1.6 x 4.2 m
+  Jetstream: change Car->Plane in the Garage: done True, swapped True, bursts 1
+GARAGE race with 'Jetstream': player's design Jetstream (forms imported: Car/Boat/Plane/Sub), rivals in it 3/3, saved setting Jetstream
+GARAGE race in 'Jetstream': shown form Car, Abi seat offset (0.00, -0.37, -0.35), Abi shown True
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 122.76 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            16.4 s    20 s  -3.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.9 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.6 s    20 s  -0.4
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 74.5 m/s (167 mph), Boat 58.3 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 122.76] finish in 122.76 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.20 ms, 95th pct 6.78 ms, 99th pct 8.20 ms, worst 86.87 ms over 21672 frames (8 over 16.7 ms); peak draw calls 0, batches 0, triangles 4356k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      4.14 /   6.47 /  86.87 ms       0 draws    1880k tris
+  Cliffside Climb      3.96 /   6.60 /  49.89 ms       0 draws    4356k tris
+  Sky Arch             4.50 /   7.06 /  15.11 ms       0 draws    4246k tris
+  Lagoon Landing       3.15 /   4.84 /  15.24 ms       0 draws    1352k tris
+  Mangrove Run         5.44 /   7.47 /  25.46 ms       0 draws    4290k tris
+  Sunken Gateway       4.04 /   6.00 /  38.64 ms       0 draws    1930k tris
+  Coral Vault          3.44 /   5.42 /   8.63 ms       0 draws    2105k tris
+  Waterfall Return     5.63 /   7.56 /  14.21 ms       0 draws    4060k tris
+  frames over 50 ms during the lap: 2; worst: 88 ms at 11.4 s (Beach Promenade, after "gate G0 start passed (1/11)"); 52 ms at 32.6 s (Cliffside Climb, after "split Beach Promenade: 16.41 s (target 20 s), total 16.41 s")
+RESULTS PASS: shown True, lap 122.76 s, 8 splits, new best True, best on file 122.76 s (local/round5/frel\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 122.76 s
+STRIP PASS: finished True in 25.5 s, gates 11/11, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 1.99  wind 0.44  FOV 89.7  particles 80  speed 99 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.45  FOV 90.0  particles 141  speed 100 % of top
+  Dive  pitch 1.50  wind 0.32  FOV 90.0  particles 114  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.75 ms, 95th pct 7.28 ms, 99th pct 9.01 ms, worst 88.41 ms over 58857 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.5  0.611 s  frames worst 17.30 / mean 7.33 ms
+  lap          Fly->Boat   z  -606.2  0.604 s  frames worst 8.26 / mean 4.90 ms
+  lap          Boat->Dive  z  -202.5  0.603 s  frames worst 11.40 / mean 5.46 ms
+  lap          Dive->Boat  z  -466.9  0.601 s  frames worst 14.29 / mean 7.25 ms
+  lap          Boat->Drive z  -304.6  0.602 s  frames worst 9.60 / mean 6.91 ms
+  strip        Drive->Fly  z   240.7  0.601 s  frames worst 3.26 / mean 1.10 ms
+  strip        Fly->Boat   z   500.2  0.600 s  frames worst 3.00 / mean 1.13 ms
+  strip        Boat->Dive  z   862.0  0.600 s  frames worst 3.68 / mean 1.14 ms
+  strip        Dive->Boat  z  1086.5  0.600 s  frames worst 4.19 / mean 1.15 ms
+  strip        Boat->Drive z  1201.5  0.600 s  frames worst 3.29 / mean 1.14 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; finish: quipgood_2; waterfall: lucky_1; finish: quipgood_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

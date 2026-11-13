@@ -30,10 +30,17 @@ namespace ShiftStorm
         }
         // every name the Garage cycles through: the gray box first
         public static List<string> Names { get { var n = new List<string> { GrayBox }; foreach (var d in Imported) n.Add(d.name); return n; } }
+        // the design raced with when none was chosen: Dan's pick (the first imported design), else the gray box
+        public static string Default => Imported.Count > 0 ? Imported[0].name : GrayBox;
         public static Design Find(string name) { if (string.IsNullOrEmpty(name) || name == GrayBox) return null; foreach (var d in Imported) if (d.name == name) return d; return null; }
         // checks can add a design that is not in the shipped list (the import test's "_Test")
         public static void AddForCheck(Design d) { Imported.RemoveAll(x => x.name == d.name); Imported.Add(d); }
 
+        static Vector3 Inv(Vector3 v) => new Vector3(1 / Mathf.Max(1e-4f, v.x), 1 / Mathf.Max(1e-4f, v.y), 1 / Mathf.Max(1e-4f, v.z));
+        static Mesh smooth; static Material glass;
+        static Mesh SmoothSphere { get { if (!smooth) { var g = GameObject.CreatePrimitive(PrimitiveType.Sphere); smooth = g.GetComponent<MeshFilter>().sharedMesh; Object.Destroy(g); } return smooth; } }
+        // clearer than the gray box's glass (alpha 0.7): Abi must show through it
+        static Material Glass { get { if (!glass) { var b = Resources.Load<Material>("Materials/VehicleGlass"); glass = new Material(b) { name = "Canopy glass" }; var c = new Color(.6f, .82f, 1f, .32f); glass.SetColor("_BaseColor", c); glass.SetFloat("_Smoothness", .95f); } return glass; } }
         static readonly Dictionary<string, Material> mats = new Dictionary<string, Material>();
         public static GameObject Instantiate(Design d, Mode m, Transform parent, Color tint, out Vector3 seat)
         {
@@ -51,14 +58,15 @@ namespace ShiftStorm
             }
             var mat = Mat(d.name, FileName(m), tint);
             foreach (var r in go.GetComponentsInChildren<Renderer>(true)) r.sharedMaterial = mat;   // (the game's own canopy is added after this)
-            // Dan's prompts ask for open cockpits with no glass (Tripo bakes glass in opaque): the sub gets a separate clear dome over the
-            // seat (closed while diving); the other forms stay open. Sized from the seat: 1.3 m across, 1.7 m long.
-            if (m == Mode.Dive)
+            // Dan's models have open cockpits and no glass (Tripo bakes glass in opaque): the game adds its own clear bubble over the cockpit
+            // rim on every form (Dan, 2026-11-13: "add the separate clear canopies"), sized from the seat: the rim is 0.42 m over Abi's hips
+            // (Tools/Blender/vehicle_import.py), the bubble 0.72 m wide, 1.1 m long, ~0.3 m high over the rim (Abi's head clears it by ~0.1 m); its lower half is inside the hull.
             {
-                var glass = Resources.Load<Material>("Materials/VehicleGlass");
                 var dome = new GameObject("Canopy (game)"); dome.transform.SetParent(go.transform, false);
-                dome.transform.position = parent.TransformPoint(seat + new Vector3(0, .55f, .1f)); dome.transform.localScale = new Vector3(1.3f, 1.1f, 1.7f);
-                dome.AddComponent<MeshFilter>().sharedMesh = MeshKit.LowSphere; var dr = dome.AddComponent<MeshRenderer>(); dr.sharedMaterial = glass;
+                dome.transform.position = parent.TransformPoint(seat + new Vector3(0, .36f, -.05f));
+                dome.transform.rotation = parent.rotation; dome.transform.localScale = Vector3.Scale(new Vector3(.72f, .74f, 1.1f), Inv(go.transform.localScale));
+                dome.AddComponent<MeshFilter>().sharedMesh = SmoothSphere; var dr = dome.AddComponent<MeshRenderer>(); dr.sharedMaterial = Glass;
+                dr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
             if (lod0 && lod1)
             {

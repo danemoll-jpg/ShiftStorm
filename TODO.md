@@ -20,6 +20,58 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 5 — speed, then the first art slice** (2026-11-13, release `build-6` / 0.5.0). Status below; spec stays under Current Objective until Dan's review.
+
+### Round 5 delivery (2026-11-13) — status per item
+Evidence: `Docs/Checks/round5/` (reports, before / after and Garage pictures, import previews). Every run: built exe, `-batchmode -mute`,
+no window, Below Normal, one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run. Sound was never
+unmuted. No window opened.
+0. **Vehicle prompts — done.** 12 prompts (3 directions x 4 forms: Tee Shot, Jetstream, Mudlark) with file names, folders, Tripo settings in
+   `Docs/MODELS-NEEDED.md` (later edited for open cockpits, no glass); posted to Dan. **Dan picked Jetstream** and made its 4 images and
+   4 Tripo models during the round (Tee Shot and Mudlark parked).
+1. **Feel of speed — done.** Engine pitch now runs to each form's top speed (lap peaks: car 1.99, plane 2.31, boat 2.00, sub 1.50; build 5
+   stopped at 1.8 at 45 m/s) + a wind layer (to 0.45); camera lower / closer at speed, FOV 65 -> 90 (98 boost) + a boost kick; air streaks,
+   boat spray, sub bubbles (80-143 particles); road posts every 20 m + dashed centre line. Before / after pictures at the same spots:
+   `before-after-*.jpg`. PC render mean 4.24 -> 4.18 ms on the lap, 0 frames over 50 ms (build 5: 5).
+2. **Real speed — done.** +15 % top speeds (Drive 75, Boat 58, Fly 92, Dive 44 m/s), acceleration 22 -> 30 m/s2 (car, boat), AI on the same
+   tuning. Lap 138.9 -> **122.7 s** (target 120-125), 0 resets, all 10 changes 0.600-0.607 s. Walls, near misses, scan: as Round 4.
+   Waterfall return: car lands at 72 m/s, change done before touch-down (0.87 s airtime), FOV dip 0.2 deg. Round 1 E6 (test strip's
+   surfacing ramp) now FAILS: at the new speed the strip's wheels-down zone fires 1 m past the ramp's end and a wheel ray still touches
+   it, so "change done before the wheels touch" is not met there; on the real course it is (above). Not changed: a check / strip matter.
+3. **Easy really easy — done (close to target).** Easy AI +18 % slower than the check pilot (target ~20 %; pilot won 3 of 3 without boost),
+   Normal +6 % (target ~8 %), Hard -3 % (as before). No rubber-banding. The pace cap and mistakes now start 600 m after the grid: at the faster
+   launch the held-back Easy cars were rammed at GO (15 touches in 25 starts) -> 6 touches, 0 resets, 0 wall hits (Round 4: 0 touches).
+4. **Coral Vault tunnel — left as it is** (Dan: "not sure maybe"); reshaping the climb-out still needs a window and Dan's OK.
+5. **Vehicle design stage 1 — done (system); waiting on Dan's models.** Swap-with-effect change (`FormSet`): four whole models, squash +
+   quarter twirl, swap at the midpoint with a burst by form; physics handover unchanged; every transition check passes at 0.60 s (lap,
+   strip). Garage (Menu > Garage): turntable, Design / Form (with the change) / Race with this design; pictures of the four gray-box forms
+   and mid-change (`garage-*.jpg`). One-command import `python Tools/import_vehicles.py` (Blender: scale, origin, facing, floor, Seat, LOD1,
+   texture; rival recolour in game; a separate glass dome for the sub) — tested on a Tripo-like stand-in (wrong size, facing, off-centre):
+   came in 4.0 m long, the right way round, raced with 3 recoloured rivals, Abi seated. **Imported: Jetstream car, boat, plane, sub**
+   (Tripo zips as downloaded; the importer now takes zips, caps meshes at 20,000 faces (from ~1.9 M) + a 6,000-face LOD; Dan's second
+   "Boat" download is the sub, mapped in `Art/Incoming/Vehicles/Jetstream/import.json`; facing yaw -90). A clear glass bubble on every
+   form over the cockpit rim (Dan's models have no glass); Abi on each model's seat. **Jetstream is the default design** (gray box still
+   in the Garage); rivals in Jetstream, green parts recoloured. Garage pictures, 3/4 and side, all four forms: `jetstream-garage.jpg`.
+   Lap in Jetstream: 122.76 s, 0 resets, render mean 4.20 ms, peak 4.36 M triangles; 2 races of four Jetstream cars (Easy): Abi 2:03.9,
+   AI 2:24.9-2:29.9, never stuck, no pass-through; 12-lap AI soak (Normal) 12 of 12.
+6. **Polished stretch — done, first pass.** Cliffside Climb: rock ledges + moss + ferns on the cliff, two waterfalls; Sky Arch: stacked mossy
+   rock pillars and span, ferns, a pterodactyl nest with a perched pterodactyl; Lagoon Landing: beaches, boulders, cycads, two waterfalls off
+   a cliff, drifting foam; 9 clouds; Jurassic fog now linear like TO (190-1100 m) so the arch reads from the ramp. Looks only (colliders,
+   scan unchanged). Frame cost: peak 4.3 M triangles on the climb (build 5: 3.7 M; first try 6.6 M, fixed by per-cell batches and an 800 m
+   cull distance), render mean 3.97 ms there. Still not TO: TO's Jurassic Par is far denser and greener (round leafy trees everywhere,
+   striped fairways), the cliff face is still a flat slab with rock patches, the road stays tan, clouds rarely in frame. No new models needed.
+7. **Regression + soak + wrap-up — done.** Final build: round5 (garage, lap, strip), round1 (E6 above), round2 + best, round2b, round3 +
+   settings2, quit / quitresults (exit 0), waterfall, round4: all PASS except E6. Soak (Normal, 50 AI laps, time scale 3): 50 of 50 within 300 s, 0 bad gate sequences, laps 129.2 / 132.9 / 143.5 s (min / median / max; Round 4: 138.5 / 142.1 / 147.8), tunnel 9x, slit 8x.
+
+#### For Dan to check (Round 5)
+- **Speed:** does it feel fast now (wind, engine, camera, streaks, posts)? Too much FOV / shake? Can you keep up on Easy, and is Normal a fair race?
+- **The change:** the new squash-twirl-swap with the burst: fun, or too busy at speed? (0.6 s as before.)
+- **Jetstream:** how do the four forms look in the Garage and at speed? The glass bubble: right size / placement, or none on some forms?
+  Is Abi visible enough in the open cockpit? Do the rivals' recoloured copies (red / blue / purple) read well?
+- **The polished stretch** (climb, arch, lagoon): the right direction for the Tee'd Off look? What should change first?
+- **Deck FPS** on the climb and the arch with four cars (PC: 4 ms; triangles up ~15 %).
+- **Sounds** (never played here): the wind layer and the higher engine pitch.
+
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
 ### Round 4 delivery (2026-11-13) — status per item
@@ -189,6 +241,8 @@ Dan (2026-11-13): "move the image prompts to the front. I can work on them
 and it can continue work and then I will let it know when I am done and it
 can incorporate them."
 
+**DECIDED (Dan, 2026-11-13): the Jetstream design** (all four forms). Tee Shot and
+   Mudlark are parked for later (other designs can be added, e.g. rivals' own machines); the Garage shows Jetstream (and its rival colours) only.
 0. **Write the vehicle prompts, tell Dan, keep going.** Write the 12 image
    prompts (3 design directions × 4 forms) and everything else item 5
    lists for them in `Docs/MODELS-NEEDED.md`, commit and push that file,
@@ -253,6 +307,13 @@ stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
      add a separate clear canopy per form in the game, shaped to the
      cockpit rim, closed for the sub, optional elsewhere; and
      the shared timing point for the physics handover.
+   - **Textures (Dan, 2026-11-13: the game is played on his 4K PC too, not
+     just the Deck):** Dan exports Tripo models with **4K** textures. Keep
+     the 4K source; add a **Texture quality** setting (High / Medium) in
+     Menu > Settings: High = full 4K on PC, Medium = half resolution
+     (Unity's global mipmap limit). Default: Medium on the Steam Deck
+     (detect it), High elsewhere. Report memory used by vehicle textures
+     with 4 cars on each setting.
    - **Viewer for Dan:** a "Garage" screen in the menu that shows each form
      (and any imported design) turning slowly, with a button to cycle forms
      and designs — so Dan can judge them on the Deck.
@@ -288,15 +349,20 @@ stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check (fill in at end of round)
-- …
+### For Dan to check
+- See "For Dan to check (Round 5)" under Completed Tasks.
 
 ## Next Steps (Do Not Start Yet)
+- **More vehicle designs** (Dan, 2026-11-13: "we can add different designs
+  later"). Tee Shot and Mudlark prompts are parked in `Docs/MODELS-NEEDED.md`;
+  the concept wants each driver's machine to fit their personality, so a
+  natural use is giving rivals their own designs. Deferred, not decided against.
 - **Rest of the course art** (Beach Promenade, Mangrove Run, the cave, the
   Waterfall Return) to the standard Round 5 sets on its polished stretch.
   Waits on Dan's review of that stretch and the vehicle design. New character / organic models
-  go through the manual Tripo pipeline in `CLAUDE.md`; the real vehicle is
-  built by script in Blender, not in Tripo.
+  go through the manual Tripo pipeline in `CLAUDE.md`; the real vehicle comes
+  from Tripo too (Dan's models, `Tools/import_vehicles.py`).
+- **Vehicle design stage 2:** Dan picks a direction in the Garage; then its other three forms, canopies shaped to its cockpit rim.
 - **Later experiment:** optional submerged bypass in Mangrove Run — only after
   the base lap works (concept doc).
 

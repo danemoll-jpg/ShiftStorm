@@ -1,0 +1,5 @@
+{
+  "_note": "Written by Code (Round 5): Dan's second 'Boat' download is the boat; the first one is the sub (ringed propeller, dive pods). The models lie along X with the nose at -X: yaw -90.",
+  "yaw": -90,
+  "files": {"Car": "Jetstream_Car.zip", "Boat": "Jetstream_Boat (1).zip", "Plane": "Jetstream_Plane.zip", "Sub": "Jetstream_Boat.zip"}
+}

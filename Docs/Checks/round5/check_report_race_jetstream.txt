@@ -1,0 +1,32 @@
+ShiftStorm check 'race', 2026-11-13 18:42, build 0.5.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+RACE 1: 1. Abi 2:03.88, 2. Rocket Rae 2:24.93, 3. Chip "Showtime" Sterling 2:27.25, 4. Vivi 2:29.92
+  player (check pilot, no boost) place every 10 s: 4 3 1 1 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 144.93 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Chip "Showtime" Sterling: 147.25 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Vivi: 149.92 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 1 PASS: AI never stuck True, no pass-through True
+RACE 2: 1. Abi 2:03.95, 2. Rocket Rae 2:26.78, 3. Chip "Showtime" Sterling 2:27.75, 4. Vivi 2:29.61
+  player (check pilot, no boost) place every 10 s: 4 3 1 1 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 146.78 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Chip "Showtime" Sterling: 147.75 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 3, shortcut plan Coral Vault tunnel, taken Coral Vault tunnel
+  Vivi: 149.61 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 2 PASS: AI never stuck True, no pass-through True
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.45 ms, 95th pct 2.25 ms, 99th pct 3.52 ms, worst 306.21 ms over 211521 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  race1        Drive->Fly  z   945.2  0.600 s  frames worst 11.92 / mean 1.46 ms
+  race1        Fly->Boat   z  -606.2  0.600 s  frames worst 6.11 / mean 1.41 ms
+  race1        Boat->Dive  z  -202.2  0.600 s  frames worst 4.53 / mean 1.43 ms
+  race1        Dive->Boat  z  -466.5  0.600 s  frames worst 4.17 / mean 1.49 ms
+  race1        Boat->Drive z  -305.2  0.602 s  frames worst 3.75 / mean 1.36 ms
+  race2        Drive->Fly  z   945.2  0.600 s  frames worst 49.65 / mean 1.68 ms
+  race2        Fly->Boat   z  -606.2  0.601 s  frames worst 4.11 / mean 1.42 ms
+  race2        Boat->Dive  z  -202.3  0.600 s  frames worst 5.15 / mean 1.53 ms
+  race2        Dive->Boat  z  -466.4  0.600 s  frames worst 5.33 / mean 1.42 ms
+  race2        Boat->Drive z  -305.0  0.602 s  frames worst 42.68 / mean 1.89 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 4, Abi lines: waterfall: laugh_1; finish: win_1; waterfall: laugh_1; finish: quipgood_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

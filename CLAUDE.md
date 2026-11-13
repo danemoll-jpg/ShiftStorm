@@ -95,7 +95,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Previous / next course (strip, 4 lanes) | D-pad left / right | F3 / F4 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
-| Menu: Resume, Restart, Race, Time Trial, test courses, Settings, Quit game | Menu (Start) | Esc |
+| Menu: Resume, Restart, Race, Time Trial, test courses, Garage, Settings, Quit game | Menu (Start) | Esc |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
 Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout. Quit game asks "No / Yes" (No is preselected) and exits
@@ -120,12 +120,20 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `-TimeoutMinutes 150`). Round 4: `round4` = `scan` (colliders inside the route's width, start-line pictures) + `walls` (10 / 25 / 45 deg
   hits per form, 3 s held against a wall) + `nearmiss` (near / far / wrong-form gate passes, the penalty against the most a near miss can
   save) + `starts` (25 race starts, `-starts N`) + `difficulty` (`-races N` per level); `tunnel` (`-legs N` AI runs through the Coral
-  Vault tunnel + scrape runs). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
+  Vault tunnel + scrape runs). Round 5: `round5` = `garage` (every design x form in the Garage, mid-change pictures, Race with this
+  design; `-testDesign _Test` adds the import test's design) + `lap` (now also the speed feel per form: engine pitch, wind, FOV,
+  particles) + `strip`. Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
 - Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
   `-race` / `-trial`; `-saveDir <dir>` puts the best-times and settings files elsewhere (checks never touch Dan's own files).
 - In game: Menu (Start) / Esc opens the menu (see Controls); D-pad left / right still steps courses.
+- Vehicle import (Round 5, one command, Tripo models Dan saved in `Art/Incoming/Vehicles/<Design>/<Design>_<Form>.fbx`):
+  `python Tools/import_vehicles.py` (or `--design Jetstream`; takes Tripo's zips as downloaded, meshes capped at 20,000 faces;
+  `import.json` "files" maps a form saved under another name; `--src local/round5/testfbx --design _Test` for the stand-in made by
+  `Tools/Blender/make_test_vehicle.py`). Blender cleans each (4.0 m long, origin, facing: `import.json` "yaw", default 180; floor per
+  form, Seat point, LOD1, texture) into `Assets/Resources/Vehicles/<Design>/` + `designs.json`, previews in `Docs/Checks/round5/import/`;
+  then build. Never ship `_Test` (names starting `_` are hidden; delete its folder before the release build).
 - Launcher: `powershell -File Tools/Build-Launcher.ps1` (and `-CoreOnly` for `LauncherChecks.exe`) -> `Builds/Launcher/`.
 - Release (local draft, then the deliberate publish):
   `python Tools/Release-Round.py --version 0.1.0 --build 1 --notes "..."` then
@@ -136,12 +144,13 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0) and Round 4 (build 5, 0.4.0) are delivered: four-mode vehicle, full gray-box Paradise
+Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0), Round 4 (build 5, 0.4.0) and Round 5 (build 6, 0.5.0) are delivered: four-mode vehicle, full gray-box Paradise
 Plunge lap in the Jurassic Par look and sound, ordered gates, time trial, Abi in the cockpit; Round 2b: where to go (glowing gate frames,
 next gold / after cyan, HUD arrow + marker + route strip, route guides in every form, direction cues from the heading against the route),
 much faster, fullscreen by default.
-- **Speeds (Round 2b, `Resources/Tuning`):** Drive 65 m/s (boost 82), Boat 50 (62), Fly 80 (100), Dive 38 (48). Paradise Plunge is
-  built 1.7x larger on the ground plan than build 2 (`ParadisePlunge.S`; heights unchanged): line 7.3 km, pilot lap ~141 s.
+- **Speeds (Round 5, `Resources/Tuning`):** Drive 75 m/s (boost 94, accel 30), Boat 58 (72, accel 30), Fly 92 (115), Dive 44 (55);
+  +15 % on Round 2b's. Paradise Plunge is built 1.7x larger on the ground plan than build 2 (`ParadisePlunge.S`; heights unchanged):
+  line 7.3 km, pilot lap ~123 s (build 5: 139 s).
 - **Frame rate:** physics at a fixed 60 Hz, `Time.maximumDeltaTime` 0.25 s, so movement only slows below 4 fps.
 - **Fullscreen:** `Assets/Scripts/Core/ScreenSetting.cs` (from Chastain Rush) sets borderless FullScreenWindow at the desktop's own
   resolution before the first scene, overriding Unity's remembered window; windowed only by the menu / Alt+Enter (saved in
@@ -172,6 +181,20 @@ much faster, fullscreen by default.
   - **Coral Vault tunnel back on** (`ParadisePlunge.VaultTunnel`, `-noTunnel` turns it off): wider openings, smooth narrowing, an open
     climb-out, a stronger current; an AI that keeps hitting rock gives up its shortcut. Saves about 1.2 s (not the 2-3 s aimed for).
 
-Current objective: **Round 5** (unattended): Part A speed (feel and real speed, Easy really easy), then Part B the first art slice
-(vehicle design stage 1: Tripo prompts for 3 directions, a swap-with-effect change, a Garage viewer; a polished Cliffside Climb -> Sky Arch -> Lagoon Landing stretch). Release build 6
-(0.5.0). See `TODO.md`.
+- **Round 5 (build 6, 0.5.0):**
+  - **Speed feel:** engine pitch runs to each form's top speed (and past it on boost) + a wind layer (`VehicleSound`); camera lower and
+    closer at speed, FOV to 90 (98 on boost), a boost kick (`ChaseCam`); `Vehicle/SpeedFx.cs` air streaks (player, car / plane), boat
+    spray, sub bubbles; road posts every 20 m and dashed centre lines. AI on the same tuning. Easy ~20 % slower than the check pilot,
+    Normal ~5-8 %, Hard as before; the AI's pace cap and mistakes start 600 m after the grid (clean launches).
+  - **Swap change:** `Vehicle/FormSet.cs`: four whole models per vehicle, 0.6 s squash + quarter twirl, swapped at the midpoint with a
+    burst (body-coloured panels + sparkles / spray / bubbles by form). Physics handover unchanged (t = 0). `FormAnimator` now only poses
+    the gray-box model per form. Abi follows each model's Seat point (`FormSet.SeatOffset`) and squashes with it.
+  - **Designs + Garage:** `Vehicle/VehicleDesigns.cs` ("Gray box" + `Resources/Vehicles/designs.json`); rivals' copies have the green
+    parts recoloured; every imported form gets the game's own clear bubble over the cockpit rim (Dan's models have no glass). **Jetstream**
+    (Dan's pick, Tripo, 4 forms, `Resources/Vehicles/Jetstream/`) is the default design; Tee Shot and Mudlark are parked. Menu > Garage
+    (`UI/Garage.cs`): turntable, Design / Form (with the change) / Race with this design (saved, `settings.json` "design").
+  - **Polished stretch** (`World/ParadisePlunge.Polish.cs`): TO-style cliff ledges, waterfalls, arch rock stacks + pterodactyl nest,
+    lagoon beaches, foam, clouds; Detail layer (11) culled beyond 800 m; looks only (colliders unchanged). Jurassic fog is now linear
+    190-1100 m (TO's 140-820 x 1.35).
+
+Current objective: Round 5 delivered; waiting on Dan's review of build 6 and his vehicle models (see `TODO.md`).

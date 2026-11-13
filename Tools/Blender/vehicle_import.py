@@ -33,6 +33,10 @@ if len(meshes) > 1: bpy.ops.object.join()
 obj = bpy.context.view_layer.objects.active; obj.name = "LOD0"
 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 faces_in = len(obj.data.polygons)
+# Tripo's detailed meshes run to several hundred thousand faces: cap the game mesh (Steam Deck budget, four cars on screen)
+MAX_FACES = 20000
+if faces_in > MAX_FACES:
+    d0 = obj.modifiers.new("cap", "DECIMATE"); d0.ratio = MAX_FACES / faces_in; bpy.ops.object.modifier_apply(modifier="cap")
 
 # turn, scale to length, centre, floor
 obj.rotation_euler = (0, 0, math.radians(yaw)); bpy.ops.object.transform_apply(rotation=True)
@@ -47,9 +51,16 @@ obj.location = (-(lo.x + hi.x) / 2, -(lo.y + hi.y) / 2, FLOOR - lo.z); bpy.ops.o
 lo, hi = bounds(obj); size = hi - lo
 wide = size.x > size.y * 1.15   # wider than long: very likely turned 90 deg (a plane's wings can do this too: the preview decides)
 
-# seat: given, or found: the middle of the hull, 45 % back from the nose, 40 % up its height (Abi's hips)
+# seat: given, or found: Abi's hips 60 % back from the nose (the open cockpits of Dan's Jetstream models sit there) and 0.42 m under
+# the hull's top (her head then clears the cockpit rim); the hull's top is the highest point within 0.5 m of the centre line around
+# that spot (the tail fins are left out)
 if seat_arg != "auto": seat = mathutils.Vector([float(c) for c in seat_arg.split(",")])
-else: seat = mathutils.Vector((0, hi.y - size.y * .55, lo.z + size.z * .4))
+else:
+    sy = hi.y - size.y * .6
+    near = [obj.matrix_world @ v.co for v in obj.data.vertices]
+    near = [v.z for v in near if abs(v.x) < .5 and abs(v.y - sy) < .6]
+    top = max(near) if near else lo.z + size.z * .8
+    seat = mathutils.Vector((0, sy, top - .42))
 e = bpy.data.objects.new("Seat", None); bpy.context.scene.collection.objects.link(e); e.location = seat
 
 # base colour texture: the first image used by the materials
@@ -68,7 +79,7 @@ for m in obj.data.materials:
 
 # LOD1
 lod1 = obj.copy(); lod1.data = obj.data.copy(); lod1.name = "LOD1"; bpy.context.scene.collection.objects.link(lod1)
-dec = lod1.modifiers.new("dec", "DECIMATE"); dec.ratio = .35
+dec = lod1.modifiers.new("dec", "DECIMATE"); dec.ratio = .3
 bpy.ops.object.select_all(action="DESELECT"); lod1.select_set(True); bpy.context.view_layer.objects.active = lod1; bpy.ops.object.modifier_apply(modifier="dec")
 faces0, faces1 = len(obj.data.polygons), len(lod1.data.polygons)
 

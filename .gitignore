@@ -17,3 +17,8 @@ Assets/_Recovery.meta
 # Check-run output, per round (pictures that matter are copied to Docs/Checks/)
 local/
 # Signing key: Builds/PublisherPrivate/ (inside Builds/, never committed)
+
+# Round 5: Tripo downloads (40+ MB each) stay on disk; the imported, decimated models are in Assets/Resources/Vehicles
+Art/Incoming/**/*.zip
+Art/Incoming/**/*.fbx
+Art/Incoming/**/*.glb
