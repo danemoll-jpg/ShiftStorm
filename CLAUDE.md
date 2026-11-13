@@ -121,15 +121,9 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 delivered 2026-11-13 (release `build-1`, 0.1.0): Unity project, launcher, `Docs/REUSE-AUDIT.md`, one `ShiftVehicle`
-with Drive / Boat / Fly / Dive, Blender placeholder vehicle, gray-box transition strip and four mode lanes (built in code by
-`WorldBuilder.cs`), check pilot (`-check all`). Dan tried it on PC: handling feels intuitive, no changes asked.
+Round 1 (build 1) and Round 2 (build 2, 0.2.0) are delivered: four-mode vehicle, full gray-box Paradise Plunge lap in the Jurassic Par
+look and sound, ordered gates, time trial, Abi in the cockpit. Dan tested build 2 on the Steam Deck: it runs, but he couldn't tell
+where to go (and got "wrong way" in every direction in the air), it is far too slow, and it doesn't start fullscreen.
 
-Round 2 delivered 2026-11-13 (release `build-2`, 0.2.0): the full Paradise Plunge lap in gray box (`ParadisePlunge.cs`, built from
-one racer line; the flooded cave runs under the finishing road, progress is searched in a window so stacked sections never
-mix), ordered gates G0-G10 with form permissions / wrong-way / missed-gate rules, time trial (countdown, splits, results, best
-time in `besttimes.json`, restart, course menu), Jurassic Par look (URP toon shaders ported from Tee'd Off in `Assets/Shaders`,
-`JurassicLook.cs`) and sound (`CourseAudio.cs`), Abi in an open cockpit (`Driver.cs`) on the shared Mixamo driver clips in
-`Resources/Drivers/Animations`, with her voice lines. Evidence: `Docs/Checks/round2/`.
-
-Current objective: see `TODO.md` (Round 3 is planned as three AI rivals and the two shortcuts; it waits on Dan's Round 2 review).
+Current objective: **Round 2b — fixes from Dan's Deck test** (route markers / arrow / fixed wrong-way cue, much higher speeds with the
+course rescaled, fullscreen by default). Round 3 (AI rivals, shortcuts) waits until these are done.
