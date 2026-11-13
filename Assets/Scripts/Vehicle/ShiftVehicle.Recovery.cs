@@ -16,11 +16,22 @@ namespace ShiftStorm
             if (Input.ConsumeReset()) { if (Finished) Begin(Course); else Recover("reset button"); return; }   // after the finish: start again
             if (Finished) return;
             var p = Body.position;
-            if (Course.OutOfBounds(p, Progress)) { Recover("out of bounds"); return; }
+            // out of bounds: at once on land and water and below / above the course; in the air (a much wider corridor) after a few seconds of
+            // THIS WAY, so a plane that strays is shown the way back before it is reset (Round 2b)
+            bool fly = Mode == Mode.Fly;
+            if (Course.OutOfBounds(p, Progress, fly ? Course.AirHalfWidth : Course.halfWidth, out bool hard))
+            {
+                OutOfBoundsFor += dt;
+                if (hard || !fly || OutOfBoundsFor > shared.airOutOfBoundsSeconds) { Recover("out of bounds"); return; }
+            }
+            else OutOfBoundsFor = 0;
             bool asking = Input.Throttle > .3f || Input.Brake > .3f;
             stuckFor = asking && Speed < shared.stuckSpeed ? stuckFor + dt : 0;
             if (stuckFor > shared.stuckSeconds) { Recover("stuck"); return; }
-            if (BestProgress > lastBest + .5f) { lastBest = BestProgress; noProgressFor = 0; } else noProgressFor += dt;
+            // no new progress: the timer waits while the racer is heading along the route at speed on it (coming back after turning round,
+            // as the arrow says), so only a racer going nowhere is reset (Round 2b)
+            bool returning = RouteAlign > .7f && Speed > 10f && !OffRoute;
+            if (BestProgress > lastBest + .5f) { lastBest = BestProgress; noProgressFor = 0; } else if (!returning) noProgressFor += dt;
             if (noProgressFor > shared.noProgressSeconds) { Recover("no progress"); return; }
             bool wrongWater = (Mode == Mode.Drive || Mode == Mode.Fly) && WaterVolume.SurfaceAt(p, out float s, 0f) && p.y < s - .2f && !TransformZone.InCorridor(p);
             wrongWaterFor = wrongWater ? wrongWaterFor + dt : 0;
@@ -30,11 +41,11 @@ namespace ShiftStorm
         public void Recover(string reason)
         {
             var anchor = Course.AnchorFor(BestProgress, GatesPassed);
-            bool wasChanging = Changing;
+            bool wasChanging = Changing; var at = Body.position; float sp = Speed;
             Resets++; LastResetReason = reason;
             Place(anchor, anchor.mode, shared.resetSpeed);
             GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer);
-            Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}) to the anchor at {anchor.progress:0} m in {anchor.mode}");
+            Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}, at {p3(at)}, {sp:0} m/s, {OffLine:0} m off the line) to the anchor at {anchor.progress:0} m in {anchor.mode}");
         }
 
         // Checks only: put the vehicle somewhere by hand (the skip / out-of-order tests), in a form, at a speed along its facing. Race progress
@@ -66,7 +77,7 @@ namespace ShiftStorm
                 case Mode.Dive: EnterDive(speed); break;
             }
             Forms?.Snap(mode);
-            LastZone = null; stuckFor = wrongWaterFor = noProgressFor = 0; lastBest = BestProgress;
+            LastZone = null; stuckFor = wrongWaterFor = noProgressFor = 0; lastBest = BestProgress; ClearRoute();
             lastPos = Body.position; Progress = Course ? (anchor.progress > 0 ? anchor.progress : Course.Project(lastPos, out _, out _)) : 0;
             MissedGate = null; missedFor = 0;
             HeadingDeg = anchor.transform.eulerAngles.y;

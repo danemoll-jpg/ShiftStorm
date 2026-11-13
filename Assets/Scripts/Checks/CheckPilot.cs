@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -15,7 +16,9 @@ namespace ShiftStorm
     // and it reads its place on the line from the vehicle's own progress (stack-safe). The camera renders into a 1280 x 800 texture (the
     // Steam Deck's screen); player-view pictures (HUD included) go to <dir>. The measured audio output level is reported (it must be 0).
     //   round2 = lap + skip + abi; round1 = strip + lanes + edge (Round 1 regression); all = both; best = the best-time survival check
-    //   (a second process with the same -saveDir).
+    //   (a second process with the same -saveDir). Round 2b: nav (the guided pilot: starts in the air off the line facing sideways, and
+    //   facing backwards, and must find the route by the HUD alone; marker / arrow pictures in each form), slowfps (movement at a low frame
+    //   rate), screen (the screen mode decided at start-up); round2b = nav + lap + skip + slowfps + screen.
     public sealed class CheckPilot : MonoBehaviour
     {
         Game game; ShiftVehicle v; ShiftInput input; Camera cam; RenderTexture rt; Texture2D grab; AudioMeter meter;
@@ -34,7 +37,10 @@ namespace ShiftStorm
         ProfilerRecorder draws, tris, batches; readonly System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
         // pilot settings, per scenario
-        float holdSpeed = -1; bool boost, secondary, reverse, smart; Func<float> steerWeave, yOverride; float throttleCap = 1;
+        float holdSpeed = -1; bool boost, secondary, reverse, smart, guided, coast; Func<float> steerWeave, yOverride; float throttleCap = 1;
+        int sleepMs;   // slowfps: a sleep in every frame (a low frame rate)
+        readonly Dictionary<Mode, float> topSpeed = new Dictionary<Mode, float>();
+        readonly List<(float t, float ms, string seg, string ev)> hitches = new List<(float, float, string, string)>();
 
         void Start()
         {
@@ -56,10 +62,13 @@ namespace ShiftStorm
 
         void Update()
         {
+            if (sleepMs > 0) System.Threading.Thread.Sleep(sleepMs);
             float gpu = -1;
             FrameTimingManager.CaptureFrameTimings();
             if (FrameTimingManager.GetLatestTimings(1, timing) > 0) gpu = (float)timing[0].gpuFrameTime;
-            frames.Add((Time.time, Time.unscaledDeltaTime, shotLastFrame, gpu, segNow)); shotLastFrame = false;
+            frames.Add((Time.time, Time.unscaledDeltaTime, shotLastFrame, gpu, segNow));
+            if (measure && !shotLastFrame && Time.unscaledDeltaTime > .05f) hitches.Add((Time.time - v.StartTime, Time.unscaledDeltaTime * 1000, segNow, v.LastEvent));
+            shotLastFrame = false;
             if (measure)
             {
                 if (!px) { px = new Texture2D(1, 1, TextureFormat.RGB24, false); draws = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count"); tris = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count"); batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count"); }
@@ -79,6 +88,9 @@ namespace ShiftStorm
         void FixedUpdate()
         {
             if (!v || !v.Course) return;
+            if (!v.Holding) topSpeed[v.Mode] = Mathf.Max(topSpeed.TryGetValue(v.Mode, out var ts) ? ts : 0, v.Speed);
+            if (coast) { input.sThrottle = input.sBrake = input.sSteer = input.sVertical = 0; input.sBoost = input.sSecondary = false; return; }
+            if (guided) { Guided(); return; }
             var p = v.Body.position; var c = v.Course;
             float prog = v.Progress;
             float ahead = v.Mode == Mode.Dive ? Mathf.Max(14f, v.Speed * .9f) : Mathf.Max(18f, v.Speed * 1.1f);
@@ -99,15 +111,31 @@ namespace ShiftStorm
                 c.PointAt(prog + d0, out var a0); c.PointAt(prog + d1, out var a1);
                 float turn = Vector3.Angle(Vector3.ProjectOnPlane(a0, Vector3.up), Vector3.ProjectOnPlane(a1, Vector3.up)) * Mathf.Deg2Rad;
                 float r = turn > 1e-3f ? (d1 - d0) / turn : 1e4f;
-                float aLat = v.Mode == Mode.Drive ? 17f : 10f, vmax = Mathf.Sqrt(aLat * r);
+                float aLat = v.Mode == Mode.Drive ? 27f : 15f, vmax = Mathf.Sqrt(aLat * r);
                 if (v.Speed > vmax + 1.5f) { thr = 0; brk = Mathf.Clamp01((v.Speed - vmax) / 8f); }
-                sec |= v.Mode == Mode.Drive ? Mathf.Abs(err) > 22f && v.Speed > 14f : Mathf.Abs(err) > 14f;
+                sec |= v.Mode == Mode.Drive ? Mathf.Abs(err) > 22f && v.Speed > 20f : Mathf.Abs(err) > 14f;
             }
             input.sThrottle = reverse ? 0 : thr; input.sBrake = reverse ? 1 : brk; input.sSteer = reverse ? 0 : Mathf.Clamp(steer, -1, 1);
             input.sVertical = vert; input.sBoost = boost; input.sSecondary = sec;
         }
 
-        void Clear() { holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
+        // Round 2b: the guided pilot steers only by what the HUD shows: the arrow (its angle, and CLIMB / DIVE as its pitch) when it is shown,
+        // else the next gate's marker on the screen, else straight on. Full throttle, no boost.
+        void Guided()
+        {
+            var hud = Hud.Instance; float yaw = 0, pitch = 0; bool any = false;
+            if (hud.ArrowShown) { yaw = hud.ArrowYaw; pitch = hud.ArrowPitch; any = true; }
+            else if (hud.MarkerShown)
+            {
+                float vfov = cam.fieldOfView, hfov = Camera.VerticalToHorizontalFieldOfView(vfov, cam.aspect), camPitch = -cam.transform.eulerAngles.x; if (camPitch < -180) camPitch += 360;
+                yaw = (hud.MarkerViewport.x - .5f) * hfov; pitch = (hud.MarkerViewport.y - .5f) * vfov + camPitch; any = true;
+            }
+            input.sThrottle = 1; input.sBrake = 0; input.sBoost = false; input.sSecondary = v.Mode == Mode.Drive && Mathf.Abs(yaw) > 40 && v.Speed > 20;
+            input.sSteer = any ? Mathf.Clamp(yaw / 25f, -1, 1) : 0;
+            input.sVertical = any && (v.Mode == Mode.Fly || v.Mode == Mode.Dive) ? Mathf.Clamp(pitch / 10f, -1, 1) : 0;
+        }
+
+        void Clear() { guided = coast = false; holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
         IEnumerator Until(Func<bool> done, float timeout) { float end = Time.time + timeout; while (!done() && Time.time < end) yield return null; }
         IEnumerator Wait(float s) { float end = Time.time + s; while (Time.time < end) yield return null; }
         void Line(string s) { report.AppendLine(s); Debug.Log("[Check] " + s); }
@@ -123,9 +151,12 @@ namespace ShiftStorm
             Line($"ShiftStorm check '{which}', {DateTime.Now:yyyy-MM-dd HH:mm}, build {Application.version}, {SystemInfo.graphicsDeviceName}, {W}x{H} off-screen");
             Line($"model: {VehicleFactory.ModelSource}; driver: {Driver.Instance?.Source}");
             Line($"muted from the first frame: {QuietRun.Muted}; AudioListener.volume = {AudioListener.volume}; audio output {AudioSettings.outputSampleRate} Hz");
-            bool r2 = which == "round2" || which == "all", r1 = which == "round1" || which == "all";
-            if (r2 || which == "lap") yield return Lap();
-            if (r2 || which == "skip") yield return Skip();
+            bool r2 = which == "round2" || which == "all", r1 = which == "round1" || which == "all", r2b = which == "round2b" || which == "all";
+            if (r2b || which == "screen") ScreenReport();
+            if (r2b || which == "nav") yield return Nav();
+            if (r2 || r2b || which == "lap") yield return Lap();
+            if (r2 || r2b || which == "skip") yield return Skip();
+            if (r2b || which == "slowfps") yield return SlowFps();
             if (r2 || which == "abi") yield return Abi();
             if (which == "best") yield return Best();
             if (r1 || which == "strip") yield return Strip();
@@ -187,7 +218,7 @@ namespace ShiftStorm
                 ("6-gateway", Mk("portal") - 8), ("7-vault-arch", Mk("hi1") - 40), ("7-vault-curtain", Mk("lo2") - 35), ("8-exit-channel", Mk("poolEdge") - 25),
                 ("8-pool-ramp", Mk("G8") - 6), ("8-through-curtain", Mk("rampLip") + 3), ("8-finish-road", Mk("G9") + 25),
             };
-            int next = 0; float t0 = Time.time; int resets0 = v.Resets;
+            int next = 0; float t0 = Time.time; int resets0 = v.Resets; topSpeed.Clear();
             yield return Until(() => !v.Holding, 6f);
             measure = true;
             Line($"LAP countdown: held on the grid {v.StartTime - t0:0.0} s, then GO (clock started at GO)");
@@ -212,8 +243,11 @@ namespace ShiftStorm
                 var s = c.segments[k]; float t = k < v.Splits.Count ? v.Splits[k] - prev : -1; if (k < v.Splits.Count) prev = v.Splits[k];
                 Line($"  {k + 1} {s.name,-19} {s.form,-16} {(t >= 0 ? $"{t,6:0.0} s" : "    --")}  {s.target,4:0} s  {(t >= 0 ? (t - s.target).ToString("+0.0;-0.0") : "")}");
             }
-            foreach (var l in v.Log) if (l.Contains("missed") || l.Contains("rejected") || l.Contains("wrong way") || l.Contains("reset")) Line("  log: " + l);
+            Line($"  top speed per form on the lap: {string.Join(", ", new[] { Mode.Drive, Mode.Boat, Mode.Fly, Mode.Dive }.Select(m => $"{m} {(topSpeed.TryGetValue(m, out var x) ? x : 0):0.0} m/s ({(topSpeed.TryGetValue(m, out var y) ? y * 2.237f : 0):0} mph)"))} (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)");
+            foreach (var l in v.Log) if (l.Contains("missed") || l.Contains("rejected") || l.Contains("wrong way") || l.Contains("reset") || l.Contains("back through")) Line("  log: " + l);
             RenderReport(c);
+            hitches.Sort((a, b) => b.ms.CompareTo(a.ms));
+            Line($"  frames over 50 ms during the lap: {hitches.Count}{(hitches.Count > 0 ? "; worst: " + string.Join("; ", hitches.GetRange(0, Mathf.Min(6, hitches.Count)).ConvertAll(h => $"{h.ms:0} ms at {h.t:0.0} s ({h.seg}, after \"{h.ev}\")")) : "")}");
             // results, best saved, restart
             var tt = game.Trial;
             Line($"RESULTS {(tt.HasResults && tt.SegmentTimes.Count == segs && tt.Best != null && File.Exists(BestTimes.FilePath) ? "PASS" : "FAIL")}: shown {tt.HasResults}, lap {tt.Lap:0.00} s, {tt.SegmentTimes.Count} splits, new best {tt.NewBest}, best on file {(tt.Best != null ? tt.Best.lap.ToString("0.00") : "none")} s ({BestTimes.FilePath})");
@@ -235,7 +269,7 @@ namespace ShiftStorm
             yOverride = () => 40f; Shot(1.5f, "flying-over-the-cave");
             int r0 = v.Resets; string cue = "";
             float until = Time.time + 30f;
-            while (Time.time < until && v.Resets == r0) { if (v.Cue.StartsWith("MISSED") && cue == "") { cue = v.Cue; Shot(0, "missed-cue"); } yield return null; }
+            while (Time.time < until && v.Resets == r0) { if (v.Cue.StartsWith("TURN BACK") && Time.time < v.CueUntil && cue == "") { cue = v.Cue; Shot(0, "missed-cue"); } yield return null; }
             yield return Wait(.5f);
             bool pass1 = v.Resets > r0 && v.LastResetReason.Contains("G6") && v.GatesPassed == g0 && !v.Finished && v.Mode == v.Course.AnchorFor(v.BestProgress, v.GatesPassed).mode;
             Line($"SKIP BY AIR {(pass1 ? "PASS (rejected)" : "FAIL")}: after G5 the check turned it into a plane 40 m up and flew the cave's line: cue \"{cue}\", then reset ({v.LastResetReason}) to the anchor at {v.Course.AnchorFor(v.BestProgress, v.GatesPassed).progress:0} m in {v.Mode}; gates {v.GatesPassed}/{c.gates.Count} (G6-G10 never counted), finished {v.Finished}");
@@ -245,8 +279,8 @@ namespace ShiftStorm
             yield return Until(() => !v.Holding, 5f);
             yield return Until(() => v.GatesPassed >= 1 && v.Body.position.z > 25, 10f);
             reverse = true; bool cueSeen = false;
-            float until2 = Time.time + 10f; while (Time.time < until2 && v.Body.position.z > -12) { cueSeen |= v.Cue == "WRONG WAY" && Time.time < v.CueUntil; yield return null; }
-            reverse = false; int gAfter = v.GatesPassed;
+            float until2 = Time.time + 10f; while (Time.time < until2 && v.Body.position.z > -12) { cueSeen |= v.Cue.StartsWith("WRONG WAY") && Time.time < v.CueUntil; yield return null; }
+            reverse = false; int gAfter = v.GatesPassed; Shot(0, "wrong-way-cue");
             yield return Until(() => v.Body.position.z > 30, 10f);
             bool pass2 = cueSeen && gAfter == 1 && v.GatesPassed == 1 && v.Log.Exists(x => x.Contains("wrong way"));
             Line($"REVERSE CROSSING {(pass2 ? "PASS (rejected)" : "FAIL")}: through G0, back through it (cue WRONG WAY: {cueSeen}), forward again: gates {v.GatesPassed} (still 1)");
@@ -327,7 +361,7 @@ namespace ShiftStorm
                     float t = Time.time - t0; secondary = t > 6 && t < 9; boost = t > 12 && t < 14;
                     top = Mathf.Max(top, v.Speed); slid |= v.Drifting || v.Carving; yield return null;
                 }
-                Line($"LANE {names[lane]}: form {mode} -> {v.Mode} (no change expected), top speed {top:0.0} m/s, {(lane <= 3 ? (slid ? "drift/carve used" : "drift/carve NOT seen") : "climb/dive weave")}, resets {v.Resets - r0}");
+                Line($"LANE {names[lane]}: form {mode} -> {v.Mode} (no change expected), top speed {top:0.0} m/s (build 2: {new[] { 0, 0, 34.5f, 26.0f, 57.7f, 28.0f }[lane]:0.0}), {(lane <= 3 ? (slid ? "drift/carve used" : "drift/carve NOT seen") : "climb/dive weave")}, resets {v.Resets - r0}");
             }
         }
 
@@ -379,6 +413,77 @@ namespace ShiftStorm
             var c6 = Of(scenario); var d = c6.Find(x => x.what == "Boat->Drive");
             float doneAt = d != null && d.took > 0 ? d.at + d.took : -1, touch = v.FirstWheelContactAt;
             Line($"E6 surfacing pool -> road {(c6.Exists(x => x.what == "Dive->Boat") && d != null && doneAt > 0 && touch > 0 && doneAt <= touch && v.Resets == 0 ? "PASS" : "FAIL")}: changes {string.Join(", ", c6.ConvertAll(x => x.what))}; Boat->Drive done {(doneAt > 0 && touch > 0 ? $"{touch - doneAt:0.00} s before the wheels touched" : "n/a")}, resets {v.Resets}");
+        }
+
+        // ---- Round 2b item 3: the screen mode decided at start-up (logged by ScreenSetting; a test run never changes the window) ----
+        void ScreenReport()
+        {
+            Line($"SCREEN: {ScreenSetting.StartupLine.Replace("[Screen] ", "")}");
+            Line($"SCREEN: player settings: default mode {Screen.fullScreenMode} (batch mode: no real window), saved choice file {System.IO.Path.Combine(Application.persistentDataPath, "display.json")}");
+        }
+
+        // ---- Round 2b item 1: find the route by the HUD alone ----
+        IEnumerator Nav()
+        {
+            var c = Game.Instance.Courses[0];
+            Line("NAV: the guided pilot steers only by the HUD (the arrow's angle and CLIMB / DIVE when it shows, else the next gate's marker on the screen, else straight on)");
+            foreach (var (name, side, back) in new[] { ("nav-air-sideways", 1f, false), ("nav-air-backwards", 0f, true) })
+            {
+                scenario = name; Clear(); BeginAt(0, AnchorNear(Mk("lip") + 90)); yield return Wait(.3f);
+                float p0 = Mk("lip") + 150; var at = c.PointAt(p0, out var d); var flat = Vector3.ProjectOnPlane(d, Vector3.up).normalized; var right = Vector3.Cross(Vector3.up, flat);
+                var pos = at + right * 70f * side + Vector3.up * 6f; var face = back ? -flat : right;
+                v.DebugPlace(pos, Quaternion.LookRotation(face), Mode.Fly, 60, p0);
+                int r0 = v.Resets, g0 = v.GatesPassed; guided = true; float t0 = Time.time;
+                bool wrongSeen = false, wrongWhileTurning = false, thisWay = false, arrowSeen = false, markerSeen = false; float firstWrong = -1, firstMarker = -1;
+                Shot(.25f, "start-arrow");
+                while (Time.time - t0 < 50f && v.Resets == r0 && v.GatesPassed == g0)
+                {
+                    bool cueNow = Time.time < v.CueUntil;
+                    if (cueNow && v.Cue.StartsWith("WRONG WAY")) { if (!wrongSeen) { firstWrong = Time.time - t0; Shot(0, "wrong-way"); } wrongSeen = true; if (!back) wrongWhileTurning = true; }
+                    if (cueNow && v.Cue == "THIS WAY") thisWay = true;
+                    arrowSeen |= Hud.Instance.ArrowShown;
+                    if (Hud.Instance.MarkerShown && !markerSeen) { markerSeen = true; firstMarker = Time.time - t0; Shot(.1f, "marker"); }
+                    if (Time.frameCount % 240 == 0) Debug.Log($"[Check] {name} t {Time.time - t0:0.0} pos {v.Body.position:F0} prog {v.Progress:0} off {v.OffLine:0} align {v.RouteAlign:0.00} arrow {Hud.Instance.ArrowShown} {Hud.Instance.ArrowYaw:0}/{Hud.Instance.ArrowPitch:0} marker {Hud.Instance.MarkerShown} cue {(Time.time < v.CueUntil ? v.Cue : "")}");
+                    yield return null;
+                }
+                bool passed = v.GatesPassed > g0 && v.Resets == r0;
+                Shot(0, "after");
+                bool pass = passed && (back ? wrongSeen : !wrongWhileTurning) && arrowSeen;
+                Line($"NAV {name} {(pass ? "PASS" : "FAIL")}: placed {(back ? "on the line facing backwards" : "70 m off the line, facing sideways (away from it)")} as a plane at 60 m/s; " +
+                     $"{(passed ? $"passed {c.gates[g0].label} after {Time.time - t0:0.0} s" : v.Resets > r0 ? $"reset ({v.LastResetReason})" : "did not reach the next gate in 50 s")}, resets {v.Resets - r0}; " +
+                     $"arrow shown {arrowSeen}, THIS WAY {thisWay}, next-gate marker first in view at {firstMarker:0.0} s, WRONG WAY {(wrongSeen ? $"shown at {firstWrong:0.0} s" : "never shown")}{(back ? " (expected: it starts facing backwards)" : " (must not show)")}");
+                guided = false;
+            }
+            // pictures from the player's view: the next gate's marker (facing along the route) and the arrow (turned away), in each form
+            foreach (var (form, mark) in new[] { (Mode.Drive, Mk("promMid") + 40), (Mode.Boat, Mk("bend2") + 20), (Mode.Fly, Mk("lip") + 160), (Mode.Dive, Mk("G7") - 70) })
+            {
+                scenario = "nav-" + form; Clear(); BeginAt(0, AnchorNear(mark)); yield return Wait(.2f);
+                var at = c.PointAt(mark, out var d); var flat = Vector3.ProjectOnPlane(d, Vector3.up).normalized;
+                coast = true;
+                v.DebugPlace(at, Quaternion.LookRotation(flat), form, form == Mode.Drive ? 25 : 20, mark); yield return Wait(.6f);
+                Capture("marker"); bool m1 = Hud.Instance.MarkerShown;
+                v.DebugPlace(at, Quaternion.LookRotation(Quaternion.Euler(0, 125, 0) * flat), form, 8, mark); yield return Wait(.9f);
+                Capture("arrow"); bool a1 = Hud.Instance.ArrowShown; float yaw = Hud.Instance.ArrowYaw;
+                Line($"NAV pictures {form}: marker on the next gate shown {m1}; turned 125 deg away: arrow shown {a1} at {yaw:0} deg, cue \"{(Time.time < v.CueUntil ? v.Cue : "")}\"");
+                coast = false;
+            }
+        }
+
+        // ---- Round 2b item 2: movement does not slow down at a low frame rate ----
+        IEnumerator SlowFps()
+        {
+            var res = new List<(float fps, float dist, float gameT, float wallT)>();
+            foreach (int sleep in new[] { 0, 40, 90 })
+            {
+                scenario = $"slowfps-{sleep}"; Clear(); BeginAt(2, 0); yield return Wait(.2f);
+                var start = v.Body.position; float g0 = Time.time, w0 = Time.realtimeSinceStartup; int f0 = Time.frameCount; sleepMs = sleep; float worst = 0, sumU = 0, sumD = 0;
+                while (Time.time - g0 < 6f) { worst = Mathf.Max(worst, Time.unscaledDeltaTime); sumU += Time.unscaledDeltaTime; sumD += Time.deltaTime; yield return null; }
+                sleepMs = 0;
+                float gt = Time.time - g0, wt = Time.realtimeSinceStartup - w0; res.Add(((Time.frameCount - f0) / wt, Vector3.Distance(start, v.Body.position), gt, wt)); Line($"  slowfps sleep {sleep} ms: worst frame {worst * 1000:0} ms, sum of unscaled frame times {sumU:0.00} s, of game frame times {sumD:0.00} s, timeScale {Time.timeScale}, captureDeltaTime {Time.captureDeltaTime}");
+            }
+            float d0 = res[0].dist; bool pass = true; var parts = new List<string>();
+            foreach (var x in res) { float ratio = x.dist / d0, pace = x.gameT / x.wallT; pass &= Mathf.Abs(ratio - 1) < .02f && pace > .97f; parts.Add($"{x.fps:0} fps: {x.dist:0.0} m in {x.gameT:0.00} s game time ({x.wallT:0.00} s real, {pace:0.00} x), {ratio * 100:0.0} %"); }
+            Line($"SLOW FPS {(pass ? "PASS" : "FAIL")}: full throttle from standstill on the drive lane for 6 s of game time; {string.Join("; ", parts)}. Fixed step {Time.fixedDeltaTime * 1000:0.00} ms, maximum catch-up {Time.maximumDeltaTime:0.00} s per frame");
         }
     }
 }

@@ -92,6 +92,8 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Reset to last safe anchor | Y | R |
 | Invert climb / dive (saved, PlayerPrefs `invertVertical`) | View (Back) | F2 |
 | Previous / next course (strip, 4 lanes) | D-pad left / right | F3 / F4 |
+| FPS + speed readout on / off (saved, PlayerPrefs `showStats`) | R3 (right stick click) | F1 |
+| Full screen / windowed (saved, `display.json`) | Menu > Screen | Alt+Enter |
 
 After the finish, Reset starts the course again.
 
@@ -105,8 +107,9 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `powershell -File Tools/Unity-Batch.ps1 -Log local/logs/build.log -Method ShiftStorm.EditorTools.BuildPlayer.Run -Extra '-buildVersion','0.1.0'`
 - Muted, windowless check in the built exe (`-batchmode -mute`, Below Normal; report + pictures in the folder):
   `powershell -File Tools/Run-Check.ps1 -Check round2 -Out local/round2/check -Extra '-saveDir','local/round2/save'`
-  (`round2` = `lap` + `skip` + `abi`; `round1` = `strip` + `lanes` + `edge`; `all` = both; `best` = a second process reading the
-  best time saved by `lap`, same `-saveDir`). The lap check also measures render + GPU time per segment (PC numbers).
+  (`round2` = `lap` + `skip` + `abi`; `round1` = `strip` + `lanes` + `edge`; `round2b` = `screen` + `nav` + `lap` + `skip` + `slowfps`;
+  `all` = all three; `best` = a second process reading the best time saved by `lap`, same `-saveDir`). `nav`: a guided pilot that steers
+  only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
 - Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
   `-saveDir <dir>` puts the best-times file elsewhere (checks never touch Dan's own `besttimes.json`).
@@ -121,9 +124,17 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 (build 1) and Round 2 (build 2, 0.2.0) are delivered: four-mode vehicle, full gray-box Paradise Plunge lap in the Jurassic Par
-look and sound, ordered gates, time trial, Abi in the cockpit. Dan tested build 2 on the Steam Deck: it runs, but he couldn't tell
-where to go (and got "wrong way" in every direction in the air), it is far too slow, and it doesn't start fullscreen.
+Round 1 (build 1), Round 2 (build 2, 0.2.0) and Round 2b (build 3, 0.2.1) are delivered: four-mode vehicle, full gray-box Paradise
+Plunge lap in the Jurassic Par look and sound, ordered gates, time trial, Abi in the cockpit; Round 2b: where to go (glowing gate frames,
+next gold / after cyan, HUD arrow + marker + route strip, route guides in every form, direction cues from the heading against the route),
+much faster, fullscreen by default.
+- **Speeds (Round 2b, `Resources/Tuning`):** Drive 65 m/s (boost 82), Boat 50 (62), Fly 80 (100), Dive 38 (48). Paradise Plunge is
+  built 1.7x larger on the ground plan than build 2 (`ParadisePlunge.S`; heights unchanged): line 7.3 km, pilot lap ~141 s.
+- **Frame rate:** physics at a fixed 60 Hz, `Time.maximumDeltaTime` 0.25 s, so movement only slows below 4 fps.
+- **Fullscreen:** `Assets/Scripts/Core/ScreenSetting.cs` (from Chastain Rush) sets borderless FullScreenWindow at the desktop's own
+  resolution before the first scene, overriding Unity's remembered window; windowed only by the menu / Alt+Enter (saved in
+  `display.json` in persistentDataPath). Test runs (`-mute`, `-check`, `-batchmode`, the launcher's start-up check) only log what they
+  would set. The launcher passes no screen arguments.
+- **Audio clips:** SFX and voice are imported with Preload Audio Data on (off caused first-play hitches); music streams.
 
-Current objective: **Round 2b — fixes from Dan's Deck test** (route markers / arrow / fixed wrong-way cue, much higher speeds with the
-course rescaled, fullscreen by default). Round 3 (AI rivals, shortcuts) waits until these are done.
+Current objective: **wait for Dan's Deck test of build 3.** Next: Round 3 (AI rivals, shortcuts) once he's happy with the lap.

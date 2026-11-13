@@ -1,0 +1,84 @@
+using UnityEngine;
+
+namespace ShiftStorm
+{
+    // Round 2b (Dan on the Deck: "everywhere I try to go is telling me it is the wrong way ... no indicators whatsoever"): where to go, and
+    // the direction cues.
+    // The cause of Dan's "wrong way": build 2's red centre cue in the air was the missed-gate cue "MISSED G3 arch exit - GO BACK". It came
+    // from progress alone (progress along the line more than 25 m past the next gate's place) and was shown again every physics step
+    // whatever the heading, so once a plane had gone past the Sky Arch beside G3's frame (easy: the line curves, a plane flies straight and
+    // there was nothing to aim at), turning in any direction still said "go back" until the reset 5 s later. Next to that, a plane more than
+    // 75 m to the side of the line (2 s of flying sideways) was reset "out of bounds" without any warning. The real backward cue (crossing the
+    // last gate backward) almost never fired.
+    // Now: WRONG WAY only when the racer really moves against the route direction here (the line's direction at its progress) for a moment,
+    // and is on the route; off the route it is THIS WAY with the arrow; past the next gate it is TURN BACK until it heads back to it (then
+    // THIS WAY), measured on the far side of the gate's own plane; in the air, out of bounds warns (THIS WAY) for a few seconds first.
+    // GuideTarget is where the HUD's arrow points (and the guided check pilot steers): along the route ahead, never past the next gate.
+    public sealed partial class ShiftVehicle
+    {
+        public ProgressGate NextGate => Course && GatesPassed < Course.gates.Count ? Course.gates[GatesPassed] : null;
+        public ProgressGate GateAfter => Course && GatesPassed + 1 < Course.gates.Count ? Course.gates[GatesPassed + 1] : null;
+        public Vector3 RouteDir { get; private set; } = Vector3.forward;   // the line's direction at the racer's progress
+        public Vector3 RoutePoint { get; private set; }                    // the nearest line point
+        public float OffLine { get; private set; }                         // metres from the line (ground plan on land and water, 3D in the air and underwater)
+        public bool OffRoute { get; private set; }
+        public bool WrongWay { get; private set; }
+        public float RouteAlign { get; private set; } = 1;                 // cos(angle) between the racer's travel and the route direction
+        public Vector3 GuideTarget { get; private set; }
+        public float OutOfBoundsFor { get; private set; }
+        float backwardFor, offFor;
+
+        void ClearRoute() { WrongWay = OffRoute = false; backwardFor = offFor = 0; OutOfBoundsFor = 0; RouteAlign = 1; }
+
+        public float OffRouteLimit => Mode == Mode.Fly ? shared.offRouteFly : Mode == Mode.Dive ? shared.offRouteDive : Mode == Mode.Boat ? shared.offRouteBoat : shared.offRouteDrive;
+
+        void TrackRoute(Vector3 p, Vector3 at, Vector3 dir)
+        {
+            float dt = Time.fixedDeltaTime;
+            // the route direction, smoothed over a few metres either side (corners and the line's 3 m steps)
+            var a = Course.PointAt(Progress - 6, out _); var b = Course.PointAt(Progress + 6, out _);
+            var rd = b - a; RouteDir = rd.sqrMagnitude > 1e-4f ? rd.normalized : dir; RoutePoint = at;
+            bool air = Mode == Mode.Fly || Mode == Mode.Dive;
+            OffLine = air ? Vector3.Distance(p, at) : new Vector2(p.x - at.x, p.z - at.z).magnitude;
+            offFor = OffLine > OffRouteLimit ? offFor + dt : 0; OffRoute = offFor > .4f;
+            // travel direction: the velocity when moving, else the nose
+            var vel = Body.linearVelocity; var travel = vel.sqrMagnitude > 9f ? vel.normalized : transform.forward;
+            var route = air ? RouteDir : Vector3.ProjectOnPlane(RouteDir, Vector3.up).normalized; if (!air) travel = Vector3.ProjectOnPlane(travel, Vector3.up).normalized;
+            RouteAlign = Vector3.Dot(travel, route);
+            bool backwards = RouteAlign < shared.wrongWayCos && !Holding && !Finished;
+            backwardFor = backwards ? backwardFor + dt : 0;
+            bool wasWrong = WrongWay; WrongWay = backwardFor > shared.wrongWaySeconds && !OffRoute;
+            if (WrongWay && !wasWrong) Note("wrong way", $"wrong way: heading {Mathf.Acos(Mathf.Clamp(RouteAlign, -1, 1)) * Mathf.Rad2Deg:0} deg against the route at {Progress:0} m ({Mode})");
+
+            var gates = Course.gates; var g = NextGate;
+            // past the next gate without earning it: on the far side of its own plane, and its place on the line well behind
+            bool past = false; float over = 0;
+            if (!Finished && g && !Changing && GatesPassed < gates.Count)
+            {
+                over = Progress - g.progress;
+                past = over > shared.missedGateCueMeters && g.transform.InverseTransformPoint(p).z > 0;
+            }
+            bool returning = false;
+            if (past)
+            {
+                if (MissedGate != g) { MissedGate = g; missedFor = 0; Note("missed", $"missed gate {g.label} ({over:0} m past it, {Mode}): turn back"); }
+                var toGate = g.transform.position - p; returning = Vector3.Dot(travel, toGate.normalized) > .5f;
+                if (!returning) missedFor += dt;
+                if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label}"); return; }
+            }
+            else if (MissedGate == g && over < 0) { MissedGate = null; missedFor = 0; }
+
+            // where to go: the route ahead (never past the next gate); back to the gate when it was missed; back onto the line when off it
+            float ahead = Mathf.Clamp(Speed * 1.6f, 45f, 170f);
+            float aim = Progress + (OffRoute ? ahead * .6f : ahead);
+            if (g) aim = Mathf.Min(aim, g.progress + 2f);
+            GuideTarget = MissedGate ? MissedGate.transform.position : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
+
+            // the cue, most important first
+            if (Holding || Finished) return;
+            if (MissedGate) ShowCue(returning ? $"THIS WAY: {MissedGate.label}" : $"TURN BACK: {MissedGate.label}", returning ? CueKind.Guide : CueKind.Wrong, .3f);
+            else if (WrongWay) ShowCue("WRONG WAY - TURN AROUND", CueKind.Wrong, .3f);
+            else if (OffRoute || OutOfBoundsFor > 0) ShowCue("THIS WAY", CueKind.Guide, .3f);
+        }
+    }
+}

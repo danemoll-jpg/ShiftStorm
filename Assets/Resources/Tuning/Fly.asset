@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a0d6c58cdea2c4d9b2f99236616c09, type: 3}
   m_Name: Fly
   m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.FlyTuning
-  entrySpeed: {x: 30, y: 48}
-  minSpeed: 26
-  cruiseSpeed: 38
-  topSpeed: 50
+  entrySpeed: {x: 48, y: 77}
+  minSpeed: 42
+  cruiseSpeed: 62
+  topSpeed: 80
   speedGain: 0.5
-  boostTopSpeed: 62
-  pitchRate: 40
+  boostTopSpeed: 100
+  pitchRate: 42
   maxPitchUp: 22
   maxPitchDown: 28
   pitchReturn: 18
   rollRate: 110
   maxBank: 55
   levelRate: 70
-  bankTurnBonus: 10
+  bankTurnBonus: 18
   entryPitch: {x: -6, y: 12}
-  groundClearance: 2.5
-  ceilingAboveStart: 40
+  groundClearance: 4
+  ceilingAboveStart: 60

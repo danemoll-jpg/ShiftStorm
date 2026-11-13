@@ -64,7 +64,9 @@ namespace ShiftStorm
                 Body.AddForce(-right * Mathf.Clamp(sideways * grip, -maxGrip, maxGrip), ForceMode.Acceleration);
                 float angle = Mathf.Lerp(drive.slowSteerAngle, drive.fastSteerAngle, Mathf.Clamp01(Mathf.Abs(speedForward) / drive.topSpeed));
                 float yaw = Mathf.Tan(steer * angle * Mathf.Deg2Rad) * speedForward / drive.wheelbase * Mathf.Lerp(1, drive.driftYawBoost, driftBlend);
-                yaw = Mathf.Clamp(yaw, -1.8f, 1.8f);
+                // Round 2b: the yaw rate cap eases from 1.8 rad/s standing to highSpeedYawCap at top speed (calmer at 145 mph on a stick)
+                float cap = Mathf.Lerp(1.8f, drive.highSpeedYawCap, Mathf.Clamp01(Mathf.Abs(speedForward) / drive.topSpeed)) * Mathf.Lerp(1, drive.driftYawBoost, driftBlend);
+                yaw = Mathf.Clamp(yaw, -cap, cap);
                 Body.AddTorque(up * ((yaw - Vector3.Dot(Body.angularVelocity, up)) * drive.yawResponse), ForceMode.Acceleration);
             }
             Vector3 tilt = Vector3.Cross(transform.up, up), tiltVelocity = Vector3.ProjectOnPlane(Body.angularVelocity, up);

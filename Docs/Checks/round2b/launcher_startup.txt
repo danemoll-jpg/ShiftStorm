@@ -1,0 +1,12 @@
+Launcher start-up check (ShiftStormLauncher.exe --startup-check, hidden window, game -batchmode -racerTestSave), 0.2.1 starter ZIP, 2026-11-13 04:10
+{
+  "child": 39724,
+  "game": "C:\\Users\\danmo\\ShiftStorm\\local\\round2b\\launcher\\install\\ShiftStorm\\versions\\3\\ShiftStorm.exe",
+  "parentAlive": true,
+  "ready": true,
+  "save": "C:\\Users\\danmo\\ShiftStorm\\local\\round2b\\launcher\\save"
+}
+[Quiet] muted from the first frame (AudioListener.volume = 0); files go to C:\Users\danmo\ShiftStorm\local\round2b\launcher\save
+[Screen] start-up (started by the launcher, screen arguments: none): Unity started it Windowed 2844 x 1355; desktop 3840 x 2160; test run: left as it is, would set FullScreenWindow (borderless full screen) 3840 x 2160
+[Screen] at the first frame: Windowed 2844 x 1355, desktop 3840 x 2160, current resolution 3840 x 2160
+[Launcher] ready signal written

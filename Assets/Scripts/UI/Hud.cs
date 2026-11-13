@@ -8,8 +8,12 @@ namespace ShiftStorm
     // setting, the last thing that happened, the controls. Round 2: the lap clock and the current segment with its target, the last split,
     // lap progress (gates + progress to the next gate), the countdown (3, 2, 1, GO), return cues (missed gate, wrong way), the results
     // (lap, splits against their targets and the best lap's, new best) and the course menu (Menu / Esc).
-    public sealed class Hud : MonoBehaviour
+    // Round 2b: where to go (an arrow toward the route ahead when it is off to the side or behind, CLIMB / DIVE in the air and underwater, a
+    // marker on the next gate with its distance, the route strip along the top: the lap by form, the gates, you), direction cues in colour
+    // (red WRONG WAY / TURN BACK, yellow THIS WAY), a speedometer, speed lines at speed, and the FPS + speed readout (F1 / R3).
+    public sealed partial class Hud : MonoBehaviour
     {
+        public static Hud Instance { get; private set; }
         public ShiftVehicle v; public Game game;
         Text mode, info, last, help, timer, segment, center, results, menu; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
         float lastSplitShown = -1; string splitLine = "";
@@ -19,7 +23,7 @@ namespace ShiftStorm
             var go = new GameObject("HUD"); var canvas = go.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = cam; canvas.planeDistance = .5f;
             var scaler = go.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1280, 720); scaler.matchWidthOrHeight = 1;
-            var h = go.AddComponent<Hud>(); h.v = v; h.game = game; h.Build(go.transform); return h;
+            var h = go.AddComponent<Hud>(); h.v = v; h.game = game; h.cam = cam; Instance = h; h.Build(go.transform); h.BuildGuide(go.transform); return h;
         }
         Text Label(Transform p, Vector2 anchor, Vector2 pos, int size, TextAnchor align, Vector2 box)
         {
@@ -44,7 +48,7 @@ namespace ShiftStorm
             center = Label(p, new Vector2(.5f, .5f), new Vector2(0, 120), 90, TextAnchor.MiddleCenter, new Vector2(1200, 120));
             help = Label(p, new Vector2(.5f, 0), new Vector2(0, 8), 16, TextAnchor.LowerCenter, new Vector2(1250, 26));
             help.color = new Color(1, 1, 1, .75f);
-            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  stick Y / I-K climb-dive  Y/R reset  Menu/Esc courses  View/F2 invert";
+            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu  View/F2 invert  R3/F1 FPS";
             var bg = new GameObject("boost bg"); bg.transform.SetParent(p, false); var bgi = bg.AddComponent<Image>(); bgi.color = new Color(0, 0, 0, .55f);
             var br = bgi.rectTransform; br.anchorMin = br.anchorMax = br.pivot = new Vector2(0, 0); br.anchoredPosition = new Vector2(24, 40); br.sizeDelta = new Vector2(320, 22);
             var fill = new GameObject("boost"); fill.transform.SetParent(bg.transform, false); boostImage = fill.AddComponent<Image>(); boostImage.color = new Color(1, .78f, .15f);
@@ -59,6 +63,7 @@ namespace ShiftStorm
             menuPanel.SetActive(false);
         }
 
+        Camera cam;
         static string Form(Mode m) => m == Mode.Drive ? "CAR" : m == Mode.Boat ? "BOAT" : m == Mode.Fly ? "WINGS" : "SUB";
         static string Delta(float d) => (d >= 0 ? "+" : "-") + Mathf.Abs(d).ToString("0.00");
 
@@ -66,7 +71,8 @@ namespace ShiftStorm
         {
             if (!v) return;
             string extra = v.Drifting ? "  DRIFT" : v.Carving ? "  CARVE" : "";
-            mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}  {v.Speed * 2.237f:0} mph{extra}";
+            mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}{extra}";
+            UpdateGuide();
             boostFill.offsetMax = new Vector2(3 + 314 * v.Boost, -3); boostImage.color = v.Boosting ? new Color(1, .45f, .1f) : new Color(1, .78f, .15f);
             var c = v.Course; bool trial = c && c.timeTrial;
             float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime;
@@ -89,8 +95,13 @@ namespace ShiftStorm
             else segment.text = "";
             // center: countdown, then cues
             if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }
-            else if (trial && Time.time - v.StartTime < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
-            else if (Time.time < v.CueUntil && !v.Finished) { center.fontSize = 40; center.color = new Color(1, .45f, .3f); center.text = v.Cue; }
+            else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
+            else if (Time.time < v.CueUntil && !v.Finished)
+            {
+                center.fontSize = v.CueType == ShiftVehicle.CueKind.Guide ? 44 : 52;
+                center.color = v.CueType == ShiftVehicle.CueKind.Wrong ? new Color(1, .3f, .22f) : v.CueType == ShiftVehicle.CueKind.Warn ? new Color(1, .6f, .25f) : new Color(1, .9f, .35f);
+                center.text = v.Cue;
+            }
             else center.text = "";
             last.text = v.Finished ? $"FINISHED {TimeTrial.Clock(v.FinishTime)}  -  Y / R to race again" : v.LastEvent;
             // results

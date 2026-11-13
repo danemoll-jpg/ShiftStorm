@@ -1,0 +1,57 @@
+ShiftStorm check 'round2b', 2026-11-13 04:04, build 0.2.1, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SCREEN: start-up (started directly, screen arguments: none): Unity started it Windowed 2844 x 1355; desktop 3840 x 2160; test run: left as it is, would set FullScreenWindow (borderless full screen) 3840 x 2160
+SCREEN: player settings: default mode Windowed (batch mode: no real window), saved choice file C:/Users/danmo/AppData/LocalLow/ShiftStorm/ShiftStorm\display.json
+NAV: the guided pilot steers only by the HUD (the arrow's angle and CLIMB / DIVE when it shows, else the next gate's marker on the screen, else straight on)
+NAV nav-air-sideways PASS: placed 70 m off the line, facing sideways (away from it) as a plane at 60 m/s; passed G3 arch exit after 8.4 s, resets 0; arrow shown True, THIS WAY True, next-gate marker first in view at 0.0 s, WRONG WAY never shown (must not show)
+NAV nav-air-backwards PASS: placed on the line facing backwards as a plane at 60 m/s; passed G3 arch exit after 13.6 s, resets 0; arrow shown True, THIS WAY True, next-gate marker first in view at 0.0 s, WRONG WAY shown at 0.6 s (expected: it starts facing backwards)
+NAV pictures Drive: marker on the next gate shown True; turned 125 deg away: arrow shown True at -118 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Boat: marker on the next gate shown True; turned 125 deg away: arrow shown True at -135 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Fly: marker on the next gate shown True; turned 125 deg away: arrow shown True at -142 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Dive: marker on the next gate shown True; turned 125 deg away: arrow shown True at -128 deg, cue "WRONG WAY - TURN AROUND"
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 140.73 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            19.0 s    20 s  -1.0
+  2 Cliffside Climb     Driving            18.0 s    20 s  -2.0
+  3 Sky Arch            Flying             23.4 s    25 s  -1.6
+  4 Lagoon Landing      Boating            13.4 s    15 s  -1.6
+  5 Mangrove Run        Boating            21.1 s    20 s  +1.1
+  6 Sunken Gateway      Diving             10.9 s    10 s  +0.9
+  7 Coral Vault         Diving             20.4 s    25 s  -4.6
+  8 Waterfall Return    Dive-boat-drive    14.5 s    15 s  -0.5
+  top speed per form on the lap: Drive 64.6 m/s (144 mph), Boat 50.2 m/s (112 mph), Fly 80.6 m/s (180 mph), Dive 38.0 m/s (85 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 140.73] finish in 140.73 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 5.34 ms, 95th pct 9.31 ms, 99th pct 14.41 ms, worst 729.59 ms over 20598 frames (132 over 16.7 ms); peak draw calls 0, batches 0, triangles 3851k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      4.51 /   6.99 /  11.42 ms       0 draws    1210k tris
+  Cliffside Climb      4.30 /   6.77 /  21.40 ms       0 draws    3550k tris
+  Sky Arch             5.00 /   7.36 / 729.59 ms       0 draws    3735k tris
+  Lagoon Landing       5.21 /   9.21 /  88.28 ms       0 draws    1173k tris
+  Mangrove Run         7.57 /  12.40 / 356.01 ms       0 draws    3851k tris
+  Sunken Gateway       5.34 /   9.46 /  75.20 ms       0 draws    1739k tris
+  Coral Vault          4.94 /   8.34 / 579.64 ms       0 draws    1785k tris
+  Waterfall Return     7.83 /  11.84 /  23.38 ms       0 draws    3720k tris
+  frames over 50 ms during the lap: 46; worst: 752 ms at 58.5 s (Sky Arch, after "gate G3 arch exit passed (4/11)"); 620 ms at 74.0 s (Lagoon Landing, after "split Lagoon Landing: 13.38 s (target 15 s), total 73.81 s"); 600 ms at 118.7 s (Coral Vault, after "split Sunken Gateway: 10.87 s (target 10 s), total 105.78 s"); 584 ms at 124.9 s (Coral Vault, after "split Sunken Gateway: 10.87 s (target 10 s), total 105.78 s"); 542 ms at 119.0 s (Coral Vault, after "split Sunken Gateway: 10.87 s (target 10 s), total 105.78 s"); 525 ms at 58.2 s (Sky Arch, after "gate G3 arch exit passed (4/11)")
+RESULTS PASS: shown True, lap 140.73 s, 8 splits, new best True, best on file 140.73 s (local/round2b/savefinal2\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 140.73 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "TURN BACK: G6 dive portal", then reset (missed gate G6 dive portal) to the anchor at 5423 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+  slowfps sleep 0 ms: worst frame 8 ms, sum of unscaled frame times 6.00 s, of game frame times 6.00 s, timeScale 1, captureDeltaTime 0
+  slowfps sleep 40 ms: worst frame 45 ms, sum of unscaled frame times 5.98 s, of game frame times 5.98 s, timeScale 1, captureDeltaTime 0
+  slowfps sleep 90 ms: worst frame 105 ms, sum of unscaled frame times 5.96 s, of game frame times 5.96 s, timeScale 1, captureDeltaTime 0
+SLOW FPS PASS: full throttle from standstill on the drive lane for 6 s of game time; 1028 fps: 234.9 m in 6.00 s game time (6.00 s real, 1.00 x), 100.0 %; 24 fps: 235.8 m in 6.03 s game time (6.07 s real, 0.99 x), 100.4 %; 11 fps: 237.7 m in 6.05 s game time (6.14 s real, 0.98 x), 101.2 %. Fixed step 16.67 ms, maximum catch-up 0.25 s per frame
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.54 ms, 95th pct 8.07 ms, 99th pct 13.13 ms, worst 752.27 ms over 87713 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   945.1  0.601 s  frames worst 59.13 / mean 7.93 ms
+  lap          Fly->Boat   z  -606.4  0.609 s  frames worst 11.85 / mean 5.62 ms
+  lap          Boat->Dive  z  -203.8  0.601 s  frames worst 21.71 / mean 7.89 ms
+  lap          Dive->Boat  z  -466.8  0.601 s  frames worst 15.74 / mean 9.16 ms
+  lap          Boat->Drive z  -304.5  0.607 s  frames worst 67.40 / mean 9.71 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: lucky_1; finish: quipgood_2; reset: grunt_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

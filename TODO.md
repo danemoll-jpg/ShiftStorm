@@ -22,58 +22,11 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
 ## Completed Tasks
 - **Round 1 — foundation and the four modes** (2026-11-13, release `build-1` / 0.1.0). Dan's review: tried on PC, "seems fine, everything felt intuitive"; Deck not tried yet. Driver / location picked (see Round 2). Round 1 spec moved to `TODO-ARCHIVE.md`.
 
-- **Round 2 — the full gray-box lap, Jurassic Par atmosphere** (2026-11-13, release `build-2` / 0.2.0). Status below; the Round 2 spec and Round 1's per-item status are in `TODO-ARCHIVE.md`.
+- **Round 2 — the full gray-box lap, Jurassic Par atmosphere** (2026-11-13, release `build-2` / 0.2.0). Dan's Deck test: runs, but no idea where to go ("wrong way" everywhere in the air), far too slow, not fullscreen. The Round 2 spec and per-item status are in `TODO-ARCHIVE.md`.
 
-### Round 2 delivery (2026-11-13) — status per item
-Evidence: `Docs/Checks/round2/` (`check_report_round2.txt`, `check_report_best.txt`, `check_report_round1_regression.txt`, player-view pictures).
-Every run: built exe, `-batchmode -mute`, no window, Below Normal; measured audio output peak 0.000000 (AudioListener.volume 0) in every run.
-Sound was never unmuted: the music, ambience, splashes and voice lines were checked as playing / triggered, not listened to.
-1. **Paradise Plunge lap — done.** `ParadisePlunge.cs`: eight segments in order, built from one racer line (4.3 km); horseshoe with the flooded
-   cave running under the finishing road. Check: one full lap by the check pilot, 11/11 gates in order, 0 resets, **141.8 s** (target 150).
-   Segments (time / target): Promenade 18.2/20, Climb 17.5/20, Sky Arch 22.4/25, Lagoon 14.3/15, Mangrove 22.4/20, Gateway 11.3/10,
-   Coral Vault 20.9/25, Waterfall Return 14.9/15. The pilot drives the ideal line at full throttle without boost, so a person will be slower.
-   Every change took 0.60 s.
-2. **Ordered gates and race position — done.** Gates count only in order, forward, and in an allowed form. Going back through a gate shows a
-   "wrong way" cue. Going past a gate without earning it shows a "go back" cue, then resets you to an earlier anchor. Progress is searched
-   near the last progress in 3D, so the cave under the road is never mistaken for the road. Position = gates passed + progress toward the
-   next gate (`Course.RaceDistance`), ready for Round 3's rivals.
-   Checks, all rejected as they should be: flying over the cave (no gate counted, the "missed G6" cue, reset to the boat anchor before
-   G6); reversing through G0 (cue shown, still 1 gate); crossing the finish line from the pool without G8/G9 (not finished).
-3. **Time trial, results, restart — done.** 3-2-1-GO countdown, lap clock, per-segment splits with their targets, a results panel (lap, splits,
-   best, NEW BEST), the best lap saved to `besttimes.json`, Reset after the finish restarts, and a course menu (Menu / Esc) that keeps the
-   Round 1 strip and lanes. Checks: results and restart PASS; a second game process read the saved best lap (141.82 s), PASS.
-4. **Jurassic Par look and sound — done (first pass).** Tee'd Off's toon shaders ported to URP (`Assets/Shaders`: toon bands, outline, toon
-   water, sky); `ArtStyle_Jurassic` colours, haze and sun; underwater fog in the cave; cycads, tree ferns, mossy boulders, the rock arch,
-   waterfall curtain, glowing crystals and hot-spring vents; Tee'd Off dinosaurs (bronto, trike, T. rex) standing in the valley and
-   pterodactyls circling. Sound: `course_jurassic` intro then loop, the jungle and bubbles ambience, splashes, far dino calls. Check: I looked
-   at player-view pictures of all 8 segments and fixed what didn't read: the dive entrance is now visible down a straight, the wing sign sits
-   before the ramp, the cave arches have glowing edges, and the white mist sheet is gone.
-5. **Abi in the cockpit — done.** Abigail (Humanoid), scale 0.95, in an open cockpit tub under a bigger canopy (Blender script updated).
-   She uses Dan's 6 shared Mixamo clips (`Resources/Drivers/Animations`): Driving loop, Sitting Idle on the grid and after the finish,
-   Thumbs Up at each change, Disapproval after a reset, Clap at the finish, horn at GO. Her legs stay forward in the seat and her hips are
-   pinned to it, because the clips sit on a chair. Voice, with cooldowns: finish (win / quipgood), reset (disaster / grunt / trouble),
-   waterfall leap (laugh / lucky). Check: in all 4 forms, 0 vertices through the closed canopy and 0 below the hull; pictures `*-abi-*.jpg`.
-   `Docs/MODELS-NEEDED.md`: received; nothing is waiting on Dan.
-6. **Steam Deck performance — partly done.** PC numbers only: every lap frame was rendered at 1280x800 with the GPU waited for (GTX 1660 Ti):
-   mean 3.6 ms, 95th percentile 5.9 ms; 99 of 28,789 frames went over 16.7 ms, with hitches up to 0.7 s. The hitches are not explained:
-   an earlier run on the same lap peaked at 96 ms. Peak about 3 million triangles (Mangrove and the return, scenery with outlines and
-   shadows). Draw-call counters are not available in a release build. Real Deck numbers need the Deck or a visible window: **not done**,
-   as the rules say (ask Dan first).
-7. **Wrap-up — done.** This file, `CLAUDE.md`, `Docs/REUSE-AUDIT.md` section 5, commit + push, release `build-2` (0.2.0), disk cleaned.
-   Round 1 regression (strip, lanes, 6 edge cases) still passes; the drive lane's wide weave resets once, as in Round 1.
+- **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
-#### For Dan to check (Round 2)
-- **On the Deck:** install `ShiftStorm-0.2.0-Full.zip` from ShiftStorm-Releases (or let the launcher update). Drive a full lap. Is it
-  steady at 60 fps? Watch for hitches (the PC showed some, unexplained), and for the mangrove, the waterfall return and the valley flight
-  (the most triangles).
-- Race a lap: is ~2:20-2:40 about right, and do the segments feel the right length? Coral Vault is short, Mangrove a little long.
-- Can you see each change coming (wing sign and streamers, foam corridor and boat sign, dive sign and lights, the pool's ramp and waterfall)?
-- The look: is the haze too strong? Are the toon water, sky and outlines what you want from Jurassic Par?
-- Abi: how she looks in the open cockpit and the canopy; do the clips (thumbs up at every change, clap, horn at GO) feel right or too much?
-- Sound: music, jungle/bubbles ambience, splashes, Abi's lines. Never heard during testing (always muted).
-- The course menu (Menu / Esc) and restart; best time kept between sessions.
-
-## Current Objective — Round 2b: fixes from Dan's Steam Deck test
+## Current Objective — Round 2b: fixes from Dan's Steam Deck test (delivered 2026-11-13, waiting on Dan's Deck test)
 
 **Dan's review of build 2 on the Steam Deck (2026-11-13):** "seems to play
 fine" (runs OK on the Deck), with three problems, quoted:
@@ -136,11 +89,50 @@ Round 3 (AI and shortcuts) waits until these are fixed.
    `CLAUDE.md` (new speeds, the toggle button, how fullscreen is set),
    commit, push, publish release build 3 (0.2.1), clean the disk.
 
+### Round 2b delivery (2026-11-13) — status per item
+Evidence: `Docs/Checks/round2b/` (`check_report_all.txt`, `check_report_round2b_final.txt`, `check_report_best.txt`, player-view pictures).
+Every run: built exe, `-batchmode -mute`, no window, Below Normal; measured audio output peak 0.000000 (AudioListener.volume 0) in every
+run. Sound was never unmuted. No window was opened (the fullscreen look is left to Dan, as agreed).
+1. **Where to go — done.** Cause of "wrong way in every direction": build 2's red cue in the air was the missed-gate cue "MISSED G3 - GO
+   BACK", driven only by progress (25 m past the next gate's place) and refreshed every step whatever the heading, so a plane that passed
+   the Sky Arch beside G3's frame (nothing to aim at; the line curves, a plane flies straight) was told "go back" whichever way it turned,
+   then reset 5 s later; 75 m to the side it was also reset "out of bounds" with no warning. Fix (`ShiftVehicle.Route.cs`): WRONG WAY only
+   when moving against the route direction at your position (> ~110 deg for 0.6 s) while on the route; off the route: THIS WAY + arrow;
+   past a gate (through its plane): TURN BACK until you head back to it (then THIS WAY), reset timer paused while returning; in the air a
+   420 m corridor with 4 s of THIS WAY before a reset (a U-turn at 80 m/s is ~330 m wide). Shown: every gate a big glowing frame (Beacon
+   shader, no fog) — next gold, pulsing, light column; the one after cyan; HUD arrow (with gate name + distance, CLIMB / DIVE in the air
+   and underwater), a diamond marker + distance on the next gate, and a **route strip** (picked over a minimap: simpler) along the top
+   showing the lap by form, the gates and you. Route: white edge lines + amber chevrons on the road, rings through the whole flight, a buoy
+   lane through lagoon and river, guide lights through the whole cave. Check (guided pilot steers only by the HUD): plane 70 m off the line
+   facing away — passed G3 in 8.4 s, WRONG WAY never shown; plane facing backwards on the line — WRONG WAY at 0.6 s, passed G3 in 13.6 s;
+   marker + arrow pictures in all 4 forms (`nav-*.jpg`).
+2. **Much faster — done.** Speeds ~1.6-1.9x: Drive 65 (boost 82), Boat 50 (62), Fly 80 (100), Dive 38 (48) m/s, accelerations, grip and
+   turn rates raised to match (all in `Resources/Tuning/*.asset`); top speed on the lap before -> after: Drive 34.5 -> 64.6, Boat 26.0 ->
+   50.2, Fly 57.7 -> 80.6, Dive 28.0 -> 38.0 m/s. Course rescaled 1.7x on the ground plan (`ParadisePlunge.S`): line 4.3 -> 7.3 km, pilot
+   lap 141.8 -> **140.7-141.0 s**, 0 resets, all 5 changes 0.60 s. Sense of speed: FOV 65 -> ~85 deg with speed (+6 boost), speed lines, boost
+   shake, big speedometer. Frame rate: physics fixed 60 Hz, up to 0.25 s caught up per frame — the slow-fps check gives the same distance at
+   968, 24 and 11 fps (100.0 / 100.0 / 100.8 %). **FPS + speed readout: R3 (right stick click) / F1**, or the menu. Round 1 strip and E1-E6
+   all PASS; the lanes' open-loop full-stick weave now leaves the lane more often (drive 4 resets, build 2: 1; boat 1, build 2: 0): same
+   wiggle, twice the speed. Bonus: build 2's "unexplained" hitches were mostly audio clips loading on first play (preload was off): fixed;
+   PC check runs still show hitches that move from run to run (1 to 46 frames over 50 ms per lap, worst 0.1-1.1 s): not explained; likely this PC.
+3. **Fullscreen — done (log only, as agreed).** `ScreenSetting.cs` (copied from Chastain Rush's): borderless full screen at the desktop's
+   own resolution before the first scene, overriding Unity's remembered window; windowed only if chosen in the menu (Screen) or Alt+Enter
+   (saved in `display.json`). The launcher passes no screen arguments. Logged at start-up: started directly, "would set FullScreenWindow
+   3840 x 2160" (this PC); from the launcher (its hidden start-up check on the 0.2.1 starter ZIP): "started by the launcher, screen
+   arguments: none; Unity started it Windowed 2844 x 1355 [its remembered window]; would set FullScreenWindow 3840 x 2160"
+   (`launcher_startup.txt`). That remembered window is what the new start-up setting overrides. The real look: Dan.
+4. **Wrap-up — done.** This file, `CLAUDE.md`, `Docs/REUSE-AUDIT.md` section 6, commit + push, release `build-3` (0.2.1), disk cleaned.
+
+### For Dan to check (Round 2b)
+- **Fullscreen:** start the game on the Deck (and from the launcher): does it fill the screen at 1280 x 800? Menu > Screen / Alt+Enter switch.
+- **Can you find the way?** Gold frame = next gate, cyan = the one after; the arrow when it's off to the side or behind; the strip at the top.
+  Try leaving the route in the air on purpose: you should see THIS WAY and the arrow, never WRONG WAY unless you're really going backwards.
+- **Speed:** is it fast enough now (about 145 mph on the road, 180 in the air)? Does each form still handle on the Deck's stick?
+- **Deck numbers:** press R3 (right stick) for FPS + speed; tell me the FPS in the mangrove, the flight and the waterfall return, and any hitches.
+- Is ~2:20 a lap still about right, and are the edge lines, chevrons, rings, buoys and cave lights too much / not enough?
+
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
 
 ## Next Steps (Do Not Start Yet)
 - **Round 3 — three AI rivals and the two shortcuts** (Sky Arch inside slit,
@@ -156,5 +148,7 @@ Round 3 (AI and shortcuts) waits until these are fixed.
 - Unity batch runs need the sandbox off (UPM named pipe). The world is built in code at start-up; there is no hand-made scene content.
 - Frame times from batch-mode checks are CPU only; a windowed or on-Deck measurement is needed for real GPU numbers (needs Dan's OK
   for a visible window, or his Deck).
-- Round 2: frame-time hitches (up to 0.7 s, 99 frames over 16.7 ms in one full lap; 96 ms worst in an earlier run) are not yet explained.
-  Next step: a profiled lap (development build), then shader warm-up / GC / scenery LOD as needed. Scenery peaks near 3 M triangles.
+- Round 2's frame-time hitches: mostly audio clips loading on their first play (preloadAudioData was off on every SFX / voice clip);
+  fixed in Round 2b (preload on). PC check runs still show a few hitches that move from run to run (1, 12, 23, 46 frames over 50 ms in four
+  laps; worst 0.1-1.1 s), so likely this PC (check pictures being written, other processes); if the Deck shows them too: a profiled lap
+  (development build). Scenery peaks near 3.9 M triangles after the 1.7x rescale.

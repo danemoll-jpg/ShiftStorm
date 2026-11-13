@@ -49,7 +49,7 @@ namespace ShiftStorm
         public float RaceDistance => Course ? Course.RaceDistance(GatesPassed, Progress) : 0;
         public readonly List<float> Splits = new List<float>();     // time from GO at the end of each course segment (Course.segments)
         public ProgressGate MissedGate { get; private set; }         // the next gate when the racer has gone past it without earning it
-        public string Cue { get; private set; } = "";                // a return cue for the HUD ("missed gate ...", "wrong way")
+        public string Cue { get; private set; } = "";                // a direction cue for the HUD ("WRONG WAY", "THIS WAY", "TURN BACK ...")
         public float CueUntil { get; private set; } = -1;
         bool held; float missedFor;
 
@@ -83,7 +83,7 @@ namespace ShiftStorm
         {
             Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
-            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0;
+            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
             Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0);
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
             BestProgress = lastBest = Progress; foreach (var g in course.gates) if (g.progress < Progress - 1f) GatesPassed++;
@@ -92,9 +92,13 @@ namespace ShiftStorm
             Note("start", $"start on {course.courseName} in {Mode}{(held ? $", countdown {shared.countdownSeconds:0} s" : "")}");
         }
 
+        public static int FixedSteps;   // physics steps so far (the stats readout: steps per rendered frame)
+        public float TopSpeedNow => Mode == Mode.Drive ? drive.topSpeed : Mode == Mode.Boat ? boat.topSpeed : Mode == Mode.Fly ? fly.topSpeed : dive.topSpeed;
+        public float BoostTopSpeedNow => Mode == Mode.Drive ? drive.boostTopSpeed : Mode == Mode.Boat ? boat.boostTopSpeed : Mode == Mode.Fly ? fly.boostTopSpeed : dive.boostTopSpeed;
+
         void FixedUpdate()
         {
-            float dt = Time.fixedDeltaTime;
+            float dt = Time.fixedDeltaTime; FixedSteps++;
             if (held)
             {
                 if (Time.time < HoldUntil) { Input.ConsumeReset(); return; }
@@ -189,23 +193,23 @@ namespace ShiftStorm
 
         // ---- progress ----
         // Progress is searched near the last progress (Course.Project with a hint), so the cave under the road is never mistaken for the road.
-        // Gates count in order, forward, inside their frame and in a permitted form; a backward crossing of the last gate is a "wrong way"
-        // cue; going past the next gate without earning it gives a return cue, then a reset (ShiftTuning.missedGate*).
+        // Gates count in order, forward, inside their frame and in a permitted form. Round 2b: the direction cues come from ShiftVehicle.Route
+        // (heading against the route direction here, off the route, past the next gate), never from a gate crossing alone.
         void TrackProgress()
         {
             if (!Course) return;
             var p = Body.position; var gates = Course.gates;
-            Progress = Course.Project(p, Progress, out _, out _);
+            Progress = Course.Project(p, Progress, out var at, out var dir);
             if (Progress > BestProgress) BestProgress = Progress;
             while (GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
             {
                 var g = gates[GatesPassed];
-                if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}"); break; }
+                if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); break; }
                 GatesPassed++; MissedGate = null; missedFor = 0;
                 Note("gate", $"gate {g.label} passed ({GatesPassed}/{gates.Count})");
                 if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime; Note("finish", $"finish in {FinishTime:0.00} s, {Resets} resets"); }
             }
-            if (GatesPassed > 0 && GatesPassed < gates.Count && gates[GatesPassed - 1].CrossedBackward(lastPos, p)) { Note("wrong way", $"wrong way: back through {gates[GatesPassed - 1].label}"); ShowCue("WRONG WAY"); }
+            if (GatesPassed > 0 && GatesPassed < gates.Count && gates[GatesPassed - 1].CrossedBackward(lastPos, p)) Note("back through", $"back through {gates[GatesPassed - 1].label} (still {GatesPassed} gates)");
             lastPos = p;
             var segs = Course.segments;
             while (Splits.Count < segs.Count && GatesPassed >= segs[Splits.Count].gatesNeeded && Progress >= segs[Splits.Count].endProgress - 1f)
@@ -213,20 +217,11 @@ namespace ShiftStorm
                 var sg = segs[Splits.Count]; float t = Time.time - StartTime, prev = Splits.Count > 0 ? Splits[Splits.Count - 1] : 0; Splits.Add(t);
                 Note("split", $"split {sg.name}: {t - prev:0.00} s (target {sg.target:0} s), total {t:0.00} s");
             }
-            // missed gate: past the next gate's place without earning it
-            if (!Finished && GatesPassed < gates.Count && !Changing)
-            {
-                var g = gates[GatesPassed]; float over = Progress - g.progress;
-                if (over > shared.missedGateCueMeters)
-                {
-                    if (MissedGate != g) { MissedGate = g; missedFor = 0; Note("missed", $"missed gate {g.label} ({over:0} m past it, {Mode}): go back"); }
-                    missedFor += Time.fixedDeltaTime; ShowCue($"MISSED {g.label} - GO BACK");
-                    if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label}"); }
-                }
-                else if (MissedGate == g && over < 0) { MissedGate = null; missedFor = 0; }
-            }
+            TrackRoute(p, at, dir);
         }
-        void ShowCue(string text) { Cue = text; CueUntil = Time.time + 1.5f; }
+        public enum CueKind { Guide, Warn, Wrong }
+        public CueKind CueType { get; private set; }
+        void ShowCue(string text, CueKind kind, float seconds = 1.5f) { Cue = text; CueType = kind; CueUntil = Time.time + seconds; }
 
         void SetLayer(int layer) { foreach (var t in GetComponentsInChildren<Transform>(true)) t.gameObject.layer = layer; }
     }

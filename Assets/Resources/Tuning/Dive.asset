@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19a098de9858e6478f38f308f6960a9, type: 3}
   m_Name: Dive
   m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.DiveTuning
-  entrySpeed: {x: 8, y: 20}
-  cruiseSpeed: 16
-  topSpeed: 22
-  boostTopSpeed: 28
+  entrySpeed: {x: 10, y: 34}
+  cruiseSpeed: 28
+  topSpeed: 38
+  boostTopSpeed: 48
   minSpeed: 0
-  reverseSpeed: 7
+  reverseSpeed: 9
   speedGain: 0.7
   brakeGain: 1.5
-  turnRate: 48
+  turnRate: 60
   turnResponse: 2.2
   bankForTurn: 22
-  pitchRate: 30
+  pitchRate: 36
   maxPitch: 32
-  pitchReturn: 22
+  pitchReturn: 26
   entryDescentPitch: -10
   minDepth: 1.2
   floorClearance: 1.6

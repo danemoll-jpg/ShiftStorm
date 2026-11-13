@@ -21,7 +21,7 @@ MonoBehaviour:
   alignAssistSeconds: 0.45
   alignAssistMaxDegPerSecond: 80
   alignAssistMaxTotalDeg: 40
-  resetSpeed: 12
+  resetSpeed: 20
   graceSeconds: 1.5
   stuckSeconds: 4
   stuckSpeed: 1.5

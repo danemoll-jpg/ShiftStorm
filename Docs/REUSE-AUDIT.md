@@ -206,3 +206,14 @@ Also new in Round 2, not from Tee'd Off: the shared driver animations from Mixam
 Written new in Round 2: the Paradise Plunge course builder and its strips (`MeshKit`), stack-safe progress (`Course.Project` with a
 window), the gate rules (forms, wrong way, missed gate), the time trial and best times, the course menu, the driver seat pose, the
 waterfall shader.
+
+## 6. What ShiftStorm copied in Round 2b
+
+| From | To (ShiftStorm) | Changed |
+|---|---|---|
+| CR `Assets/Scripts/ScreenSetting.cs` (Round 24 A3 / Round 27) | `Scripts/Core/ScreenSetting.cs` | Kept: borderless FullScreenWindow at `Display.main.systemWidth x systemHeight` applied at BeforeSceneLoad (wins over Unity's remembered window), windowed at 3/4 size, the choice saved in `display.json`. Dropped: the resolution list and stepping. Changed: skips (and only logs) on any test run (`QuietRun.Muted` / batch mode) instead of `CheckRun.Active`; logs the start-up line (launcher or direct, screen arguments, Unity's starting mode, what it sets); Alt+Enter and the menu row call it. |
+| TO audio clips copied in Round 2 (`Resources/Audio/Sfx`, `Voice/abigail`) | same | Import setting only: Preload Audio Data on (first-play loads caused frame hitches). |
+
+Written new in Round 2b: the direction cues and guide target (`ShiftVehicle.Route.cs`), the gate frames and the guide (`Race/RouteGuide.cs`,
+`Shaders/Beacon.shader`), the HUD arrow / marker / route strip / speedometer / speed lines / stats (`UI/Hud.Guide.cs`), the camera's speed
+FOV and boost shake, the course rescale, and the `nav` / `slowfps` / `screen` checks.

@@ -38,6 +38,11 @@ namespace ShiftStorm
             ("G9", 0, 2.9f, -140), ("", 0, 2.9f, -60), ("finish", 0, 2.9f, 0), ("lineEnd", 0, 2.9f, 20),
         };
         public const float RoadY = 2f, Water = 0f, CaveRoof = -1.5f, CaveFloor = -18f, CaveHalf = 17f;
+        // Round 2b: the whole course is S times larger on the ground plan than build 2 (heights unchanged), so the lap stays about 150 s at
+        // the new speeds (about 1.6 x). The control points, the land, the lagoon, the pool and the scenery are written in build 2's metres and
+        // scaled by W(); everything placed along the line (roads, banks, cave, gates, zones, anchors, signs) follows the scaled line.
+        public const float S = 1.7f;
+        static Vector3 W(float x, float y, float z) => new Vector3(x * S, y, z * S);
 
         public static Course Build(Transform parent)
         {
@@ -45,10 +50,10 @@ namespace ShiftStorm
             var g = new GameObject("Course Paradise Plunge"); g.transform.SetParent(parent, false); root = g.transform;
             scen = new GameObject("Scenery").transform; scen.SetParent(root, false);
             c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic";
-            c.halfWidth = 75; c.minY = -30; c.maxY = 105; c.endMargin = 40; c.startMode = Mode.Drive;
+            c.halfWidth = 75; c.airHalfWidth = 420; c.minY = -30; c.maxY = 130; c.endMargin = 40; c.startMode = Mode.Drive;
             MakeLine();
             Land(); Road(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery();
-            Gates(); Zones(); Anchors(); Signs(); Segments();
+            Gates(); RouteMarks(); Zones(); Anchors(); Signs(); Segments();
             return c;
         }
 
@@ -57,7 +62,7 @@ namespace ShiftStorm
         {
             var pts = new List<Vector3>(); var at = new List<int>();
             int n = Points.Length;
-            Vector3 P(int i) => new Vector3(Points[Mathf.Clamp(i, 0, n - 1)].x, Points[Mathf.Clamp(i, 0, n - 1)].y, Points[Mathf.Clamp(i, 0, n - 1)].z);
+            Vector3 P(int i) => W(Points[Mathf.Clamp(i, 0, n - 1)].x, Points[Mathf.Clamp(i, 0, n - 1)].y, Points[Mathf.Clamp(i, 0, n - 1)].z);
             for (int i = 0; i < n - 1; i++)
             {
                 at.Add(pts.Count);
@@ -121,28 +126,28 @@ namespace ShiftStorm
             var ground = Mt(JurassicLook.Jungle); var rock = Mt(JurassicLook.Rock); var sand = Mt(JurassicLook.Sand);
             // the sea and lakes everywhere (visual only; the route's water bodies are WaterVolumes)
             var sea = new GameObject("Sea (visual)"); sea.transform.SetParent(root, false);
-            sea.AddComponent<MeshFilter>().sharedMesh = Grid(3200, 40); sea.transform.position = new Vector3(200, Water - .02f, 50);
+            sea.AddComponent<MeshFilter>().sharedMesh = Grid(3200 * S, 48); sea.transform.position = W(200, Water - .02f, 50);
             var sr = sea.AddComponent<MeshRenderer>(); sr.sharedMaterial = JurassicLook.WaterMat(JurassicLook.Water, JurassicLook.WaterLight, JurassicLook.WaterRim, 0f); sr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             // the lake west of the promenade (a car in it is recovered)
-            Vol<WaterVolume>("Lake", new Vector3(-340, -4, 420), Quaternion.identity, new Vector3(600, 8, 960));
+            Vol<WaterVolume>("Lake", W(-340, -4, 420), Quaternion.identity, W(600, 8, 960));
             // west arm (the promenade's island), its lakeshore beach, the island over the cave (with the pool's opening)
-            Box(root, "West arm", new Vector3(10, 1.25f, 290), new Vector3(100, .5f, 700), ground);
-            Box(root, "Beach", new Vector3(-48, -.5f, 330), new Vector3(16, 2.4f, 780), sand);
-            Box(root, "Island W", new Vector3(-106, 1.25f, -225), new Vector3(168, .5f, 330), ground);
-            Box(root, "Island E", new Vector3(46, 1.25f, -225), new Vector3(48, .5f, 330), ground);
-            Box(root, "Island S", new Vector3(0, 1.25f, -340), new Vector3(44, .5f, 100), ground);
-            Box(root, "Island N", new Vector3(0, 1.25f, -127), new Vector3(44, .5f, 134), ground);
-            Box(root, "Ridge", new Vector3(122, 1.25f, -120), new Vector3(100, .5f, 70), ground);
-            Box(root, "Island beach S", new Vector3(-60, -.5f, -400), new Vector3(280, 2.4f, 20), sand);
+            Box(root, "West arm", W(10, 1.25f, 290), W(100, .5f, 700), ground);
+            Box(root, "Beach", W(-48, -.5f, 330), W(16, 2.4f, 780), sand);
+            Box(root, "Island W", W(-106, 1.25f, -225), W(168, .5f, 330), ground);
+            Box(root, "Island E", W(46, 1.25f, -225), W(48, .5f, 330), ground);
+            Box(root, "Island S", W(0, 1.25f, -340), W(44, .5f, 100), ground);
+            Box(root, "Island N", W(0, 1.25f, -127), W(44, .5f, 134), ground);
+            Box(root, "Ridge", W(122, 1.25f, -120), W(100, .5f, 70), ground);
+            Box(root, "Island beach S", W(-60, -.5f, -400), W(280, 2.4f, 20), sand);
             // the central valley (dinosaurs), the east arm's high cliffs, the far north hills
-            Box(root, "Valley floor", new Vector3(290, -.3f, 300), new Vector3(460, 1.4f, 800), Mt(JurassicLook.JungleDark));
+            Box(root, "Valley floor", W(290, -.3f, 300), W(460, 1.4f, 800), Mt(JurassicLook.JungleDark));
             for (int i = 0; i < 9; i++)
             {
                 float z = -80 + i * 95, h = 38 + (i * 37 % 17);
-                Box(root, "East cliff", new Vector3(560 + (i % 2) * 14, h * .5f - 1, z), new Vector3(70, h, 100), rock);
-                Box(root, "East cliff moss", new Vector3(560 + (i % 2) * 14, h - .5f, z), new Vector3(72, 2, 102), Mt(JurassicLook.Moss));
+                Box(root, "East cliff", W(560 + (i % 2) * 14, h * .5f - 1, z), W(70, h, 100), rock);
+                Box(root, "East cliff moss", W(560 + (i % 2) * 14, h - .5f, z), W(72, 2, 102), Mt(JurassicLook.Moss));
             }
-            for (int i = 0; i < 6; i++) { float x = -20 + i * 80, h = 50 + (i * 23 % 19); Box(root, "North hill", new Vector3(x, h * .5f, 790 + (i % 2) * 20), new Vector3(90, h, 90), rock); Box(root, "North hill moss", new Vector3(x, h, 790 + (i % 2) * 20), new Vector3(92, 3, 92), Mt(JurassicLook.Moss)); }
+            for (int i = 0; i < 6; i++) { float x = -20 + i * 80, h = 50 + (i * 23 % 19); Box(root, "North hill", W(x, h * .5f, 790 + (i % 2) * 20), W(90, h, 90), rock); Box(root, "North hill moss", W(x, h, 790 + (i % 2) * 20), W(92, 3, 92), Mt(JurassicLook.Moss)); }
         }
         static Mesh Grid(float size, int cells)
         {
@@ -153,7 +158,7 @@ namespace ShiftStorm
         }
 
         // ---------------- road: promenade, climb, ramp; and the finishing road ----------------
-        static float HalfWidth(float p) => p < M("climb0") ? 11f : p < M("rampStart") - 10 ? 10f : 9f;
+        static float HalfWidth(float p) => p < M("climb0") ? 13f : p < M("rampStart") - 10 ? 12.5f : 11f;   // Round 2b: wider for the new speeds
         static void Road()
         {
             var road = Mt(JurassicLook.Road); var rock = Mt(JurassicLook.Rock); var barrier = Mt(JurassicLook.Stone, true, default, .6f);
@@ -178,27 +183,27 @@ namespace ShiftStorm
             }
             // the finishing road: from the landing to where the promenade's start piece begins (no overlap)
             float fa = M("landing") - 12, fb = M("lineEnd") - 81f;
-            MeshKit.Strip(root, "Finishing road", Samples(fa, fb, -12, 12, (p, pt) => RoadY, (p, pt) => 1f, 3f), road, rock);
-            MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fb, -12.7f, -12f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
-            MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fb, 12f, 12.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            MeshKit.Strip(root, "Finishing road", Samples(fa, fb, -14, 14, (p, pt) => RoadY, (p, pt) => 1f, 3f), road, rock);
+            MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fb, -14.7f, -14f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fb, 14f, 14.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
             // start / finish banner and grid lines
             var fin = new Vector3(0, RoadY, 0);
-            Box(root, "Finish line", fin + Vector3.up * .03f, new Vector3(22, .06f, 2.2f), Mt(new Color(.1f, .1f, .1f)), null, false);
-            for (int i = 0; i < 11; i++) Box(root, "Finish check", fin + new Vector3(-10 + i * 2, .07f, (i % 2) * 1f - .5f), new Vector3(1, .02f, 1), Mt(Color.white), null, false);
-            foreach (float x in new[] { -13.5f, 13.5f }) Box(root, "Banner post", fin + new Vector3(x, 4.5f, 0), new Vector3(.8f, 9, .8f), Mt(JurassicLook.FernTrunk, true));
-            Box(root, "Banner", fin + new Vector3(0, 8.6f, 0), new Vector3(27.8f, 2.2f, .5f), Mt(JurassicLook.Amber, true));
+            Box(root, "Finish line", fin + Vector3.up * .03f, new Vector3(26, .06f, 2.2f), Mt(new Color(.1f, .1f, .1f)), null, false);
+            for (int i = 0; i < 13; i++) Box(root, "Finish check", fin + new Vector3(-12 + i * 2, .07f, (i % 2) * 1f - .5f), new Vector3(1, .02f, 1), Mt(Color.white), null, false);
+            foreach (float x in new[] { -15.5f, 15.5f }) Box(root, "Banner post", fin + new Vector3(x, 4.5f, 0), new Vector3(.8f, 9, .8f), Mt(JurassicLook.FernTrunk, true));
+            Box(root, "Banner", fin + new Vector3(0, 8.6f, 0), new Vector3(31.8f, 2.2f, .5f), Mt(JurassicLook.Amber, true));
         }
 
         // ---------------- lagoon ----------------
         static void Lagoon()
         {
             var bank = Mt(JurassicLook.Jungle); var mud = Mt(JurassicLook.Mud);
-            Vol<WaterVolume>("Lagoon", new Vector3(400, -8, -460), Quaternion.identity, new Vector3(200, 16, 320));
-            Box(root, "Lagoon bank N", new Vector3(415, -7, -290), new Vector3(230, 17, 20), bank);
-            Box(root, "Lagoon bank E", new Vector3(510, -7, -470), new Vector3(20, 17, 380), bank);
-            Box(root, "Lagoon bank S", new Vector3(400, -7, -630), new Vector3(240, 17, 20), bank);
-            Box(root, "Lagoon bank W", new Vector3(290, -7, -415), new Vector3(20, 17, 250), bank);
-            Box(root, "Lagoon bed", new Vector3(400, -16.5f, -460), new Vector3(200, 1, 320), mud);
+            Vol<WaterVolume>("Lagoon", W(400, -8, -460), Quaternion.identity, W(200, 16, 320));
+            Box(root, "Lagoon bank N", W(415, -7, -290), W(230, 17, 20), bank);
+            Box(root, "Lagoon bank E", W(510, -7, -470), W(20, 17, 380), bank);
+            Box(root, "Lagoon bank S", W(400, -7, -630), W(240, 17, 20), bank);
+            Box(root, "Lagoon bank W", W(290, -7, -415), W(20, 17, 250), bank);
+            Box(root, "Lagoon bed", W(400, -16.5f, -460), W(200, 1, 320), mud);
             // foam markers outline the landing corridor; buoys after a wide runout
             float s = M("splash");
             for (int i = -3; i <= 4; i++) foreach (float side in new[] { -1f, 1f })
@@ -307,28 +312,28 @@ namespace ShiftStorm
         static void Return()
         {
             var rock = Mt(JurassicLook.Rock); var moss = Mt(JurassicLook.Moss);
-            Vol<WaterVolume>("Surfacing pool", new Vector3(0, (Water + CaveFloor - 2) * .5f, -246), Quaternion.identity, new Vector3(44, Water - CaveFloor + 2, 92));
-            Box(root, "Pool wall W", new Vector3(-24, -8.5f, -240), new Vector3(4, 20, 100), rock); Box(root, "Pool wall E", new Vector3(24, -8.5f, -240), new Vector3(4, 20, 100), rock);
-            Box(root, "Pool floor", new Vector3(0, CaveFloor - 1, -240), new Vector3(48, 2, 100), Mt(JurassicLook.Sand));
+            Vol<WaterVolume>("Surfacing pool", W(0, (Water + CaveFloor - 2) * .5f, -246), Quaternion.identity, W(44, Water - CaveFloor + 2, 92));
+            Box(root, "Pool wall W", W(-24, -8.5f, -240), W(4, 20, 100), rock); Box(root, "Pool wall E", W(24, -8.5f, -240), W(4, 20, 100), rock);
+            Box(root, "Pool floor", W(0, CaveFloor - 1, -240), W(48, 2, 100), Mt(JurassicLook.Sand));
             // the water ramp (a boat climbs it on its hull) and its support
-            var a = new Vector3(0, -.6f, -222); var b = new Vector3(0, 5f, -182); var d = b - a; var rot = Quaternion.LookRotation(d.normalized, Vector3.up);
-            var ramp = Box(root, "Water ramp", (a + b) * .5f - rot * Vector3.up * .5f, new Vector3(20, 1, d.magnitude + .4f), Mt(new Color(.4f, .66f, .7f)), rot);
+            var a = W(0, -.6f, -222); var b = W(0, 5f, -182); var d = b - a; var rot = Quaternion.LookRotation(d.normalized, Vector3.up);
+            var ramp = Box(root, "Water ramp", (a + b) * .5f - rot * Vector3.up * .5f, new Vector3(24, 1, d.magnitude + .4f), Mt(new Color(.4f, .66f, .7f)), rot);
             ramp.AddComponent<WetRamp>();
-            Box(root, "Water ramp support", new Vector3(0, -7f, -186), new Vector3(18, 22, 8), rock);
-            Box(root, "Spillway", new Vector3(0, -9, -196), new Vector3(44, 2, 12), rock);
+            Box(root, "Water ramp support", W(0, -7f, -186), W(18, 22, 8), rock);
+            Box(root, "Spillway", W(0, -9, -196), W(44, 2, 12), rock);
             // cliffs either side, the overhang the waterfall pours from, the curtain across the ramp near its lip, mist at its foot
             foreach (float s in new[] { -1f, 1f })
             {
-                Box(root, "Falls cliff", new Vector3(s * 31, 12, -205), new Vector3(14, 26, 40), rock);
-                Box(root, "Falls cliff moss", new Vector3(s * 31, 25.5f, -205), new Vector3(15, 1.5f, 41), moss);
+                Box(root, "Falls cliff", W(s * 31, 12, -205), W(14, 26, 40), rock);
+                Box(root, "Falls cliff moss", W(s * 31, 25.5f, -205), W(15, 1.5f, 41), moss);
             }
-            Box(root, "Falls overhang", new Vector3(0, 22, -192), new Vector3(48, 6, 12), rock);
-            Box(root, "Falls overhang moss", new Vector3(0, 25.3f, -192), new Vector3(49, 1, 13), moss);
+            Box(root, "Falls overhang", W(0, 22, -192), W(48, 6, 12), rock);
+            Box(root, "Falls overhang moss", W(0, 25.3f, -192), W(49, 1, 13), moss);
             var curtain = GameObject.CreatePrimitive(PrimitiveType.Quad); curtain.name = "Waterfall curtain"; curtain.transform.SetParent(root, false);
-            UnityEngine.Object.Destroy(curtain.GetComponent<Collider>()); curtain.transform.position = new Vector3(0, 10.5f, -187); curtain.transform.localScale = new Vector3(40, 23, 1);
+            UnityEngine.Object.Destroy(curtain.GetComponent<Collider>()); curtain.transform.position = W(0, 10.5f, -187); curtain.transform.localScale = new Vector3(40 * S, 23, 1);
             var cr = curtain.GetComponent<MeshRenderer>(); cr.sharedMaterial = JurassicLook.FallMat(.32f); cr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             // landing marker chevrons on the finishing road
-            for (int i = 0; i < 5; i++) Box(root, "landing chevron", new Vector3(0, RoadY + .03f, -165 + i * 7), new Vector3(9, .05f, 1.2f), Mt(new Color(.95f, .5f, .1f)), Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), false);
+            for (int i = 0; i < 5; i++) Box(root, "landing chevron", W(0, RoadY + .03f, -165 + i * 7), new Vector3(9, .05f, 1.2f), Mt(new Color(.95f, .5f, .1f)), Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), false);
         }
 
         // ---------------- the Sky Arch ----------------
@@ -370,11 +375,11 @@ namespace ShiftStorm
             // on the climb's hillside
             for (float p = M("climb0") + 20; p < M("rampStart") - 25; p += 16) { var q = At(p); Plant(new Vector3(q.x, q.y - .9f + 9f, q.z) - Right(p) * R(16, 36), (int)R(0, 2), R(1.1f, 1.6f)); }
             // the valley (well clear of the flight line's low end) and the island over the cave
-            for (int i = 0; i < 110; i++) { var p = new Vector3(R(80, 500), .4f, R(-80, 640)); Plant(p, i % 9 == 0 ? 2 : (int)R(0, 2), R(1.2f, 2.2f)); }
+            for (int i = 0; i < 150; i++) { var p = W(R(80, 500), .4f, R(-80, 640)); Plant(p, i % 9 == 0 ? 2 : (int)R(0, 2), R(1.2f, 2.2f)); }
             for (int i = 0; i < 70; i++)
             {
-                var p = new Vector3(R(-165, 65), 1.5f, R(-345, -65));
-                if (Mathf.Abs(p.x) < 30 && p.z > -300 && p.z < -60) continue;   // the pool, the ramp and the finishing road
+                var p = W(R(-165, 65), 1.5f, R(-345, -65));
+                if (Mathf.Abs(p.x) < 30 * S && p.z > -300 * S && p.z < -60 * S) continue;   // the pool, the ramp and the finishing road
                 Plant(p, i % 6 == 0 ? 2 : (int)R(0, 2), R(1f, 1.8f));
             }
             // river and lagoon banks: ferns and mangrove roots
@@ -389,17 +394,17 @@ namespace ShiftStorm
                     for (int k = 0; k < 3; k++) b.Add(MeshKit.LowCylinder, root0 + new Vector3(0, 1.2f, 0) + Flat(Dir(p)) * (k * 2.5f - 2.5f), Quaternion.AngleAxis(s * 35, Flat(Dir(p))), new Vector3(.3f, 3.2f, .3f), JurassicLook.FernTrunk);
                 }
             }
-            for (int i = 0; i < 30; i++) { float a = R(0, Mathf.PI * 2); var p = new Vector3(400 + Mathf.Cos(a) * 118, 1.4f, -460 + Mathf.Sin(a) * 175); Plant(p, (int)R(0, 2), R(1.2f, 1.8f)); }
+            for (int i = 0; i < 30; i++) { float a = R(0, Mathf.PI * 2); var p = W(400 + Mathf.Cos(a) * 118, 1.4f, -460 + Mathf.Sin(a) * 175); Plant(p, (int)R(0, 2), R(1.2f, 1.8f)); }
             foreach (var kv in batches) kv.Value.Object(scen, $"Plants {kv.Key}", JurassicLook.VertexColored(true));
             // dinosaurs in the valley under the flight (scenery only), pterodactyls circling high
-            Dino("bronto", new Vector3(170, .4f, 330), 140, 15f);
-            Dino("bronto", new Vector3(300, .4f, 120), -40, 12f);
-            Dino("trike", new Vector3(285, .4f, 430), 200, 5.5f);
-            Dino("trex", new Vector3(130, .4f, -20), 60, 9f);
+            Dino("bronto", W(170, .4f, 330), 140, 18f);
+            Dino("bronto", W(300, .4f, 120), -40, 15f);
+            Dino("trike", W(285, .4f, 430), 200, 7f);
+            Dino("trex", W(130, .4f, -20), 60, 11f);
             for (int i = 0; i < 3; i++)
             {
-                var pg = Dino("ptero", new Vector3(260, 95 + i * 9, 300), 0, 3f);
-                if (pg) { var cir = pg.AddComponent<Circle>(); cir.center = new Vector3(240 + i * 30, 95 + i * 9, 260 + i * 40); cir.radius = 70 + i * 25; cir.speed = .18f + i * .04f; cir.phase = i * 2.1f; }
+                var pg = Dino("ptero", W(260, 95 + i * 9, 300), 0, 3.5f);
+                if (pg) { var cir = pg.AddComponent<Circle>(); cir.center = W(240 + i * 30, 95 + i * 9, 260 + i * 40); cir.radius = (70 + i * 25) * S; cir.speed = .18f + i * .04f; cir.phase = i * 2.1f; }
             }
         }
         // Tee'd Off's Jurassic tree kinds (TO JurassicBuilder.Tree, kinds 8-10), same shapes, ShiftStorm sizes
@@ -453,31 +458,72 @@ namespace ShiftStorm
         // ---------------- race logic: gates, zones, anchors, signs, segments ----------------
         static void Gates()
         {
-            var post = Mt(new Color(.98f, .5f, .12f), true, default, .6f);
             void G(int i, string label, float p, Vector2 half, params Mode[] modes)
             {
                 var q = At(p); var d = Dir(p);
                 var g = new GameObject("Gate " + label); g.transform.SetParent(root, false); g.transform.SetPositionAndRotation(q, Quaternion.LookRotation(d, Vector3.up));
                 var pg = g.AddComponent<ProgressGate>(); pg.index = i; pg.label = label; pg.halfSize = half; pg.modes = modes; pg.progress = p; c.gates.Add(pg);
-                if (i == 0 || i == 10) return;   // the start / finish banner marks those
-                foreach (float s in new[] { -1f, 1f })
-                {
-                    var bottom = q + g.transform.right * s * (half.x - 1) + Vector3.down * half.y;
-                    float h = Mathf.Min(half.y * 2, 16); var b = Box(g.transform, "post", Vector3.zero, new Vector3(.5f, h, .5f), post, null, false);
-                    b.transform.position = q + g.transform.right * s * (half.x - 1) + Vector3.up * (h * .5f - Mathf.Min(half.y, 4f)); b.transform.rotation = g.transform.rotation;
-                }
+                // Round 2b: a big glowing frame (GateMarker: next gold with a light column, the one after cyan); G0 is the start line itself
+                // (the frames of the cave gates and the river's exit sit inside the cave walls / the banks, so those are drawn smaller)
+                var look = i == 6 ? new Vector2(CaveHalf - 3, 3.5f) : i == 7 ? new Vector2(CaveHalf - 3, 5) : i == 5 ? new Vector2(17, 8) : default;
+                if (i > 0) GateMarker.Make(pg, c, !Array.Exists(modes, m => m == Mode.Dive) || Array.Exists(modes, m => m == Mode.Boat), look);
             }
-            G(0, "G0 start", M("G0"), new Vector2(13, 7), Mode.Drive);
-            G(1, "G1 promenade exit", M("G1"), new Vector2(13, 7), Mode.Drive);
-            G(2, "G2 launch", M("lip") - 3, new Vector2(12, 9), Mode.Drive, Mode.Fly);
+            G(0, "G0 start", M("G0"), new Vector2(15, 8), Mode.Drive);
+            G(1, "G1 promenade exit", M("G1"), new Vector2(15, 8), Mode.Drive);
+            G(2, "G2 launch", M("lip") - 3, new Vector2(13, 10), Mode.Drive, Mode.Fly);
             G(3, "G3 arch exit", M("arch") + 55, new Vector2(42, 28), Mode.Fly);
             G(4, "G4 lagoon landing", M("splash") + 50, new Vector2(48, 12), Mode.Boat);
             G(5, "G5 mangrove exit", M("G5"), new Vector2(22, 8), Mode.Boat);
             G(6, "G6 dive portal", M("portal"), new Vector2(CaveHalf, 6), Mode.Dive);
             G(7, "G7 chamber exit", M("G7"), new Vector2(CaveHalf + 4, 10), Mode.Dive);
             G(8, "G8 surfacing pool", M("G8"), new Vector2(22, 10), Mode.Boat, Mode.Dive);
-            G(9, "G9 road landing", M("G9"), new Vector2(13, 8), Mode.Drive);
-            G(10, "G10 finish", M("finish"), new Vector2(13, 7), Mode.Drive);
+            G(9, "G9 road landing", M("G9"), new Vector2(15, 9), Mode.Drive);
+            G(10, "G10 finish", M("finish"), new Vector2(15, 8), Mode.Drive);
+        }
+        // Round 2b item 1: the route is visible the whole way, not just at gates. Road: white edge lines and amber chevrons on the surface;
+        // flight: a chain of glowing rings along the line; water: a buoy lane (visual only, nothing to hit at speed); the cave: guide lights
+        // either side at the racer line's height, so its climbs and dips read ahead.
+        static void RouteMarks()
+        {
+            var edge = Mt(new Color(.97f, .95f, .88f), false, new Color(.18f, .18f, .16f));
+            float[] cuts = { 0, M("climb0"), M("rampStart") - 10, M("lip") };
+            for (int k = 0; k < cuts.Length - 1; k++)
+            {
+                float hw = HalfWidth(cuts[k] + 1);
+                foreach (float s in new[] { -1f, 1f })
+                    MeshKit.Strip(scen, "Edge line", Samples(cuts[k], cuts[k + 1], s < 0 ? -hw + .5f : hw - 1.2f, s < 0 ? -hw + 1.2f : hw - .5f, (p, pt) => pt.y - .9f + .03f, (p, pt) => pt.y - .9f - .02f, 3f), edge, null, false);
+            }
+            float fa = M("landing") - 12, fb = M("lineEnd") - 81f;
+            foreach (float s in new[] { -1f, 1f }) MeshKit.Strip(scen, "Edge line", Samples(fa, fb, s < 0 ? -13.5f : 12.8f, s < 0 ? -12.8f : 13.5f, (p, pt) => RoadY + .03f, (p, pt) => RoadY - .02f, 3f), edge, null, false);
+            // chevrons on the road, every 55 m, pointing the way
+            var chev = new MeshKit.Batch(); var amber = new Color(1f, .62f, .15f);
+            void Chevron(float p)
+            {
+                var q = At(p); q.y -= .9f - .04f; var f = Facing(p); var fw = Flat(Dir(p)); var r = Right(p);
+                foreach (float s in new[] { -1f, 1f }) chev.Add(MeshKit.Cube, q + r * s * 1.5f - fw * 1.1f, f * Quaternion.Euler(0, -s * 38, 0), new Vector3(.9f, .05f, 4.6f), amber);
+            }
+            for (float p = 40; p < M("lip") - 25; p += 55) Chevron(p);
+            for (float p = M("G9") + 10; p < M("finish") - 15; p += 55) Chevron(p);
+            chev.Object(scen, "Road chevrons", JurassicLook.VertexColored(false, new Color(.25f, .15f, .02f)), false, false);
+            // the flight: rings along the line (not at the arch itself)
+            var rings = new MeshKit.Batch(); var gold = new Color(1f, .9f, .55f, .55f);
+            for (float p = M("lip") + 70; p < M("splash") - 50; p += 75)
+            {
+                if (Mathf.Abs(p - M("arch")) < 45) continue;
+                var q = At(p); var frame = Quaternion.LookRotation(Dir(p), Vector3.up); const float R = 11f;
+                for (int i = 0; i < 14; i++) { float a = i * 360f / 14; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(a * Mathf.Deg2Rad), Mathf.Sin(a * Mathf.Deg2Rad), 0) * R), frame * Quaternion.Euler(0, 0, a), new Vector3(.7f, R * .47f, .7f), gold); }
+            }
+            rings.Object(scen, "Flight rings", GateMarker.Beacon, false, false);
+            // the water: a buoy lane through the lagoon and the river
+            var buoys = new MeshKit.Batch(); int n = 0;
+            for (float p = M("splash") + 25; p < M("diveZone") - 15; p += 24, n++)
+                foreach (float s in new[] { -1f, 1f }) { var q = At(p); q.y = Water + .45f; buoys.Add(MeshKit.LowCylinder, q + Right(p) * s * 15f, Quaternion.identity, new Vector3(1.1f, 1.5f, 1.1f), n % 2 == 0 ? new Color(1f, .45f, .1f) : Color.white); }
+            buoys.Object(scen, "Buoy lane", JurassicLook.VertexColored(true, new Color(.12f, .08f, .04f)), false, false);
+            // the cave: guide lights either side at the line's height
+            var lights = new MeshKit.Batch(); n = 0;
+            for (float p = M("portal") + 6; p < M("poolEdge"); p += 12, n++)
+                foreach (float s in new[] { -1f, 1f }) lights.Add(MeshKit.Cube, At(p) + Right(p) * s * (CaveHalf - 2.5f), Facing(p), Vector3.one * .9f, n % 2 == 0 ? new Color(.35f, 1f, .9f) : new Color(1f, .78f, .35f));
+            lights.Object(scen, "Cave guide lights", GateMarker.Beacon, false, false);
         }
         static void Zones()
         {
@@ -489,8 +535,8 @@ namespace ShiftStorm
             Z("Hull down (landing corridor)", sp, Facing(s + 10), new Vector3(42, 12, 100), Mode.Boat, true);
             float dz = M("diveZone"); var dp = At(dz); dp.y = -1;
             Z("Canopy seals (dive portal)", dp, Facing(dz), new Vector3(34, 8, 12), Mode.Dive);
-            Z("Surface (pool)", new Vector3(0, -7, -270), Quaternion.identity, new Vector3(40, 14, 12), Mode.Boat);
-            Z("Wheels down (water ramp lip)", new Vector3(0, 8, -176), Quaternion.identity, new Vector3(30, 10, 10), Mode.Drive);
+            Z("Surface (pool)", W(0, -7, -270), Quaternion.identity, new Vector3(64, 14, 16), Mode.Boat);
+            Z("Wheels down (water ramp lip)", W(0, 8, -176), Quaternion.identity, new Vector3(34, 12, 12), Mode.Drive);
         }
         static void Anchors()
         {

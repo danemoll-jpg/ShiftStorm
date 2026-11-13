@@ -74,9 +74,8 @@ namespace ShiftStorm
         {
             var g = new GameObject("Gate " + label); g.transform.SetParent(c.transform, false); g.transform.localPosition = at;
             var pg = g.AddComponent<ProgressGate>(); pg.index = index; pg.label = label; pg.halfSize = half; c.gates.Add(pg);
-            // two thin posts mark it (visual only)
-            Box(g.transform, "post L", new Vector3(-half.x + 1, 0, 0), new Vector3(.4f, Mathf.Min(half.y * 2, 14), .4f), "Gate", 0, false);
-            Box(g.transform, "post R", new Vector3(half.x - 1, 0, 0), new Vector3(.4f, Mathf.Min(half.y * 2, 14), .4f), "Gate", 0, false);
+            // Round 2b: a glowing frame (GateMarker), the next one highlighted
+            GateMarker.Make(pg, c, at.y > -1f);
         }
         // A sign: post, colored board facing the oncoming racer, and the vehicle in the coming form, side-on.
         public static void Sign(Transform parent, Vector3 at, Mode form, float postHeight = 4)

@@ -19,7 +19,7 @@ namespace ShiftStorm
         public float alignAssistMaxDegPerSecond = 80f;
         public float alignAssistMaxTotalDeg = 40f;
         [Header("Recovery")]
-        public float resetSpeed = 12f;                // a reset resumes at this modest speed
+        public float resetSpeed = 20f;                // a reset resumes at this modest speed
         public float graceSeconds = 1.5f;             // no collisions with obstacles after a reset
         public float stuckSeconds = 4f;               // under stuckSpeed this long while asking to go: recover
         public float stuckSpeed = 1.5f;
@@ -27,8 +27,13 @@ namespace ShiftStorm
         public float wrongWaterSeconds = .35f;        // a car or plane under the water outside a landing corridor: recover after this
         [Header("Race (Round 2)")]
         public float countdownSeconds = 3f;           // a time trial's countdown on the grid (3, 2, 1, GO)
-        public float missedGateCueMeters = 25f;       // this far past the next gate's place without earning it: the "go back" cue
-        public float missedGateResetMeters = 90f;     // this far past it, or ...
-        public float missedGateResetSeconds = 5f;     // ... this long with the cue showing: reset to the last anchor before that gate
+        public float missedGateCueMeters = 40f;       // this far past the next gate's place (and through its plane) without earning it: TURN BACK
+        public float missedGateResetMeters = 150f;    // this far past it, or ...
+        public float missedGateResetSeconds = 6f;     // ... this long with the cue showing while not heading back to it: reset to the last anchor before that gate
+        [Header("Direction cues (Round 2b)")]
+        public float wrongWayCos = -.35f;             // WRONG WAY: moving against the route direction (cos of the angle below this, about 110 deg) ...
+        public float wrongWaySeconds = .6f;           // ... for this long, while on the route
+        public float offRouteDrive = 16f, offRouteBoat = 26f, offRouteFly = 55f, offRouteDive = 15f;   // further than this from the line: THIS WAY
+        public float airOutOfBoundsSeconds = 4f;      // in the air, out of bounds to the side this long (THIS WAY meanwhile) before the reset
     }
 }

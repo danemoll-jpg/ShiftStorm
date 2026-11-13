@@ -17,6 +17,7 @@ namespace ShiftStorm
         public List<RecoveryAnchor> anchors = new List<RecoveryAnchor>();
         public List<Segment> segments = new List<Segment>();
         public float halfWidth = 45, minY = -30, maxY = 60, endMargin = 30;
+        public float airHalfWidth;              // Round 2b: the allowed distance from the line in the air (0: halfWidth)
         public Mode startMode = Mode.Drive;
         public bool timeTrial;                  // countdown, lap timer, splits, results (Paradise Plunge); the test courses start at once
         public string look = "";                // "jurassic": Paradise Plunge's look and sound (JurassicLook); "" = the Round 1 gray boxes
@@ -85,12 +86,16 @@ namespace ShiftStorm
             float seg = cumulative[i] - cumulative[i - 1]; float t = seg > 0 ? Mathf.Clamp01((progress - cumulative[i - 1]) / seg) : 0;
             dir = (line[i] - line[i - 1]).normalized; return Vector3.Lerp(line[i - 1], line[i], t);
         }
-        public bool OutOfBounds(Vector3 p, float hint = -1f)
+        public bool OutOfBounds(Vector3 p, float hint = -1f) => OutOfBounds(p, hint, halfWidth, out _);
+        // hard: below / above the course or past its ends (always an immediate reset); otherwise too far to the side of the line (half: the
+        // allowed distance, halfWidth on land and water, AirHalfWidth in the air)
+        public bool OutOfBounds(Vector3 p, float hint, float half, out bool hard)
         {
             float prog = Project(p, hint, out var at, out _);
-            return p.y < minY || p.y > maxY || new Vector2(p.x - at.x, p.z - at.z).magnitude > halfWidth
-                || (prog <= 0.01f && Vector3.Distance(p, line[0]) > endMargin) || (prog >= Length - 0.01f && Vector3.Distance(p, line[line.Count - 1]) > endMargin);
+            hard = p.y < minY || p.y > maxY || (prog <= 0.01f && Vector3.Distance(p, line[0]) > endMargin) || (prog >= Length - 0.01f && Vector3.Distance(p, line[line.Count - 1]) > endMargin);
+            return hard || new Vector2(p.x - at.x, p.z - at.z).magnitude > half;
         }
+        public float AirHalfWidth => airHalfWidth > 0 ? airHalfWidth : halfWidth;
         // The last anchor at or behind both the best progress reached and the next unearned gate: never forward past an unearned checkpoint.
         public RecoveryAnchor AnchorFor(float bestProgress, int gatesPassed)
         {

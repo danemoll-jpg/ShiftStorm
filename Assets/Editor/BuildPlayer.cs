@@ -15,7 +15,10 @@ namespace ShiftStorm.EditorTools
         {
             string version = Arg("-buildVersion") ?? "0.1.0";
             PlayerSettings.bundleVersion = version;
-            PlayerSettings.enableFrameTimingStats = true;   // checks read GPU frame times (FrameTimingManager) where the device gives them
+            PlayerSettings.enableFrameTimingStats = true;
+            // Round 2b: borderless full screen at the native resolution by default (ScreenSetting applies it at start-up); the game handles
+            // Alt+Enter itself (and saves the choice), so Unity's own switch is off
+            PlayerSettings.fullScreenMode = FullScreenMode.FullScreenWindow; PlayerSettings.defaultIsNativeResolution = true; PlayerSettings.allowFullscreenSwitch = false;   // checks read GPU frame times (FrameTimingManager) where the device gives them
             var model = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Models/ShiftVehicle.fbx");
             if (model) foreach (var n in new[] { "Wheel_FL", "Wheel_RL", "Wing_L", "Wing_R", "Tail", "Canopy" }) { var t = model.transform.Find(n); Debug.Log($"[Build] model part {n}: {(t ? t.localPosition.ToString("F2") + " rot " + t.localEulerAngles.ToString("F0") : "MISSING")}"); }
             else Debug.LogWarning("[Build] no vehicle FBX: the game uses its primitive fallback");

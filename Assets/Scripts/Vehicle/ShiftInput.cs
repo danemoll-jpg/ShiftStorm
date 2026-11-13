@@ -12,6 +12,7 @@ namespace ShiftStorm
     // Invert is saved in PlayerPrefs ("invertVertical"); a check run never writes it.
     // Round 2, the course menu: Menu (Start) / Esc opens and closes it; D-pad up / down or Up / Down (W / S) move, A / Enter / Space choose,
     // B / Backspace go back. While it is open the race is paused, so these never reach the vehicle.
+    // Round 2b: R3 (right stick click) / F1 shows or hides the FPS + speed readout; Alt+Enter switches full screen / windowed.
     public sealed class ShiftInput : MonoBehaviour
     {
         public float Throttle { get; private set; }
@@ -22,12 +23,14 @@ namespace ShiftStorm
         public bool Secondary { get; private set; }
         public static bool Invert { get; private set; }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back;
+        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter;
         bool resetRequested; int startStep;
         public bool MenuPressed { get; private set; }
         public int MenuMove { get; private set; }
         public bool ConfirmPressed { get; private set; }
         public bool BackPressed { get; private set; }
+        public bool StatsPressed { get; private set; }
+        public bool FullscreenPressed { get; private set; }
 
         // Checks drive through this same path (ShiftVehicle reads only these properties).
         [System.NonSerialized] public bool Scripted;
@@ -59,8 +62,10 @@ namespace ShiftStorm
             menuDown = new InputAction("Menu down", InputActionType.Button); menuDown.AddBinding("<Gamepad>/dpad/down"); menuDown.AddBinding("<Keyboard>/downArrow"); menuDown.AddBinding("<Keyboard>/s");
             confirm = new InputAction("Confirm", InputActionType.Button); confirm.AddBinding("<Gamepad>/buttonSouth"); confirm.AddBinding("<Keyboard>/enter"); confirm.AddBinding("<Keyboard>/space");
             back = new InputAction("Back", InputActionType.Button); back.AddBinding("<Gamepad>/buttonEast"); back.AddBinding("<Keyboard>/backspace");
+            stats = new InputAction("FPS readout", InputActionType.Button); stats.AddBinding("<Gamepad>/rightStickPress"); stats.AddBinding("<Keyboard>/f1");
+            enter = new InputAction("Enter", InputActionType.Button); enter.AddBinding("<Keyboard>/enter"); enter.AddBinding("<Keyboard>/numpadEnter");
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter };
         void OnEnable() { foreach (var a in All) a.Enable(); }
         void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
@@ -69,6 +74,10 @@ namespace ShiftStorm
         {
             MenuPressed = menu.WasPressedThisFrame() && !Scripted; ConfirmPressed = confirm.WasPressedThisFrame(); BackPressed = back.WasPressedThisFrame();
             MenuMove = (menuDown.WasPressedThisFrame() ? 1 : 0) - (menuUp.WasPressedThisFrame() ? 1 : 0);
+            StatsPressed = stats.WasPressedThisFrame() && !Scripted;
+            var kb = Keyboard.current; bool alt = kb != null && (kb.leftAltKey.isPressed || kb.rightAltKey.isPressed);
+            FullscreenPressed = alt && enter.WasPressedThisFrame() && !Scripted;
+            if (FullscreenPressed) ConfirmPressed = false;   // Alt+Enter is never a menu "choose"
             if (Scripted)
             {
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Vertical = sVertical; Boost = sBoost; Secondary = sSecondary;

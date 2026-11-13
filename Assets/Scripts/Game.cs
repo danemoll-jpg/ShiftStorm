@@ -30,7 +30,10 @@ namespace ShiftStorm
             Instance = this;
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);   // a log line must not cost a frame spike
             Application.targetFrameRate = QuietRun.Check ? -1 : 60; QualitySettings.vSyncCount = QuietRun.Check ? 0 : 1;
-            Time.fixedDeltaTime = 1f / 60f;
+            // Round 2b: movement never slows with the frame rate: physics steps at a fixed 60 Hz and up to 15 steps catch up per frame
+            // (maximumDeltaTime 0.25 s), so the game runs at full speed down to 4 fps; the readout (R3 / F1) shows steps per frame.
+            Time.fixedDeltaTime = 1f / 60f; Time.maximumDeltaTime = .25f;
+            Hud.StatsOn = !QuietRun.Check && PlayerPrefs.GetInt("showStats", 0) == 1;
             Physics.IgnoreLayerCollision(ShiftVehicle.GhostLayer, ShiftVehicle.ObstacleLayer, true);
             Shared = Load<ShiftTuning>("Shift"); Drive = Load<DriveTuning>("Drive"); Boat = Load<BoatTuning>("Boat"); Fly = Load<FlyTuning>("Fly"); Dive = Load<DiveTuning>("Dive");
             JurassicLook.Apply(false);   // remember the Round 1 look before anything changes it
@@ -38,16 +41,19 @@ namespace ShiftStorm
             Player = VehicleFactory.MakePlayer(Shared, Drive, Boat, Fly, Dive);
             Driver.Make(Player);
             Cam = Camera.main; if (!Cam) { var cg = new GameObject("Main Camera"); cg.tag = "MainCamera"; Cam = cg.AddComponent<Camera>(); cg.AddComponent<AudioListener>(); }
-            Cam.farClipPlane = 1800; Cam.nearClipPlane = .2f; Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
+            Cam.farClipPlane = 2600; Cam.nearClipPlane = .2f; Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
             if (!FindAnyObjectByType<AudioListener>()) Cam.gameObject.AddComponent<AudioListener>();
             Cam.gameObject.AddComponent<AudioMeter>();
             Cam.gameObject.AddComponent<ChaseCam>().target = Player;
             CourseAudio.Make(Cam.gameObject, Player);
             Trial = gameObject.AddComponent<TimeTrial>(); Trial.v = Player;
             Hud.Make(Cam, Player, this);
+            gameObject.AddComponent<RouteGuide>().v = Player;
             if (!FindAnyObjectByType<Light>()) { var l = new GameObject("Sun").AddComponent<Light>(); l.type = LightType.Directional; l.transform.rotation = Quaternion.Euler(50, -30, 0); l.shadows = LightShadows.Soft; }
             int start = 0; var a = System.Environment.GetCommandLineArgs(); int i = System.Array.IndexOf(a, "-course"); if (i >= 0 && i + 1 < a.Length) int.TryParse(a[i + 1], out start);
             StartCourse(Mathf.Clamp(start, 0, Courses.Count - 1));
+            Debug.Log($"[Screen] at the first frame: {Screen.fullScreenMode} {Screen.width} x {Screen.height}, desktop {Display.main.systemWidth} x {Display.main.systemHeight}, current resolution {Screen.currentResolution.width} x {Screen.currentResolution.height}");
+            Debug.Log($"[Time] fixed step {Time.fixedDeltaTime * 1000:0.00} ms, maximum frame catch-up {Time.maximumDeltaTime:0.00} s, target frame rate {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount}");
             Debug.Log($"[Game] ready: {Courses.Count} courses, model {VehicleFactory.ModelSource}, driver {Driver.Instance?.Source}, muted {QuietRun.Muted}, listener volume {AudioListener.volume}");
             if (QuietRun.Check) gameObject.AddComponent<CheckPilot>();
         }
@@ -64,6 +70,8 @@ namespace ShiftStorm
         void Update()
         {
             var inp = Player.Input;
+            if (inp.FullscreenPressed) ScreenSetting.Toggle();
+            if (inp.StatsPressed) { Hud.StatsOn = !Hud.StatsOn; PlayerPrefs.SetInt("showStats", Hud.StatsOn ? 1 : 0); PlayerPrefs.Save(); }
             if (MenuOpen)
             {
                 if (inp.MenuMove != 0) MenuIndex = (MenuIndex + inp.MenuMove + MenuItems.Count) % MenuItems.Count;
@@ -81,12 +89,18 @@ namespace ShiftStorm
         {
             MenuItems.Clear(); MenuItems.Add("Resume"); MenuItems.Add("Restart " + Courses[CourseIndex].courseName);
             foreach (var c in Courses) MenuItems.Add(c.courseName + (c.timeTrial ? "  (time trial)" : "  (test)"));
+            MenuItems.Add(ScreenItem); MenuItems.Add(StatsItem);
             MenuIndex = 0; MenuOpen = true; Time.timeScale = 0;
         }
+        static string ScreenItem => "Screen: " + (ScreenSetting.Fullscreen ? "Full screen" : "Windowed") + "   (Alt+Enter)";
+        static string StatsItem => "FPS + speed readout: " + (Hud.StatsOn ? "on" : "off") + "   (R3 / F1)";
         public void CloseMenu() { MenuOpen = false; Time.timeScale = 1; }
         public void Choose(int item)
         {
             CloseMenu();
+            int screenItem = 2 + Courses.Count;
+            if (item == screenItem) { ScreenSetting.Toggle(); MenuItems[item] = ScreenItem; MenuOpen = true; Time.timeScale = 0; return; }   // stays open
+            if (item == screenItem + 1) { Hud.StatsOn = !Hud.StatsOn; if (!QuietRun.Check) { PlayerPrefs.SetInt("showStats", Hud.StatsOn ? 1 : 0); PlayerPrefs.Save(); } MenuItems[item] = StatsItem; MenuOpen = true; Time.timeScale = 0; return; }
             if (item == 1) StartCourse(CourseIndex);
             else if (item >= 2) StartCourse(item - 2);
         }
