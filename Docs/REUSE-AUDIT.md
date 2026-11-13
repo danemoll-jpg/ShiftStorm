@@ -1,0 +1,185 @@
+# ShiftStorm Reuse Audit
+
+Read-only audit of two reference projects, written before any code was copied.
+Paths are relative to each repo root:
+
+- **CR** = `C:\Users\danmo\chastain_rush` (Unity 6000.6.1f1, URP, Input System)
+- **TO** = `C:\Users\danmo\Tee-dOff` (Unity 6000.6.1f1, **Built-in pipeline**: no URP package, shaders are `CGPROGRAM`)
+
+Every path named below was checked on disk (2026-11-12).
+
+**Key facts up front**
+- Most CR vehicle and race code lives in **namespace `Racer`** (ported from Woodstock Rush). Newer files use `ChastainRush`. Expect to rename on copy.
+- CR's vehicle tuning is **C# code** (`VehicleProfile.BuildAll()`), not ScriptableObjects. ShiftStorm's rule says tuning lives in data, so this must change.
+- CR's plane **already sits on top of the car**: `PlaneFlight` is added to the same GameObject as `ArcadeVehicle`, which it switches off through `ArcadeVehicle.Flown` and drives itself (in the air) or calls `ArcadeVehicle.Simulate` (on its wheels). This is the closest existing pattern to a shape-changing vehicle.
+- CR's vehicle is wired into a big open world (Chastain map, traffic, pipes, stunt park, weather, menus, replays). Most of the coupling is static calls (`GameMenus.Open`, `WorldMap.OwnsInput`, `StuntPark.*`, `WeatherGrip.*`, `RaceController.Instance`) that can be stubbed or removed.
+- `CheckRun.cs` has **no `-mute` flag**. It mutes on any `-exe*`, `-batchmode` or `-executeMethod` argument. ShiftStorm needs `-mute` added.
+
+---
+
+## 1. chastain_rush (CR)
+
+### 1.1 Car controller
+
+| File | How it's built | Copy as-is | Needs changes | Doesn't fit one shape-changing vehicle |
+|---|---|---|---|---|
+| `Assets/Scripts/Vehicle/ArcadeVehicle.cs` (231 lines; one file, no partials) | Rigidbody arcade car: 4 raycast suspension points, spring/damper, drive/brake/coast, lateral grip, yaw torque from a bicycle model, upright torque, air self-levelling, optional air steering. `Simulate(throttle, brake, steer, dt)` is public and input-free. `Flown` flag skips its own step. | Core `Simulate` drive/suspension/grip math; `Flown` hand-off idea; `Live` registry. | Remove `StuntPark` loop/energy carry, `WeatherGrip`, `DrainPipe`/`SurfaceUp`, `HighAssist.Forgiving`, replay `Puppet`, `-r37*` switches. Keep `ShallowWater` immersion only if the Drive mode should slow in shallows. Move tuning fields to a ScriptableObject. | It assumes it is the only motor. In ShiftStorm it becomes the **Drive mode** of one controller, not the owner of the body. |
+| `Assets/Scripts/Vehicle/VehicleInput.cs` (108) | Input System actions built in code (no `.inputactions` asset): throttle RT/W, brake LT/S, steer LS/A-D, reset Y/R, view X/V, look RS, air pitch/spin, fist LB/F. Per-device binding for split screen. `Scripted` overrides for checks. | Action-building pattern, deadzones, `Scripted` check hooks, `ConsumeReset/ConsumeView`. | Remove `GameMenus`, `MenuInput`, `TrailerMode`, `WorldMap`, `RiderGestures` calls. Add Fly/Dive axes (pitch, rise/sink) and a boost button. | Car-only action set; ShiftStorm needs one action set that every mode reads. |
+| `Assets/Scripts/Vehicle/VehicleConfiguration.cs` (163) + `VehicleProfile.cs` (153) | `Apply(id)` resets the motor from a JSON snapshot, writes profile values into `ArcadeVehicle`, rebuilds the visual (`VehicleVisual.Build`), adds/ends `HelicopterFlight` or `PlaneFlight` by profile class, sets box collider, mass, CCD, registers contacts. Small-vehicle wipeout logic. | The **swap-in-place** sequence (snapshot, re-apply, rebuild visual, re-register colliders, snap camera) is a useful template for a mode change. | Profiles from code to ScriptableObjects; drop paint/police/cup/upgrade/rider code; no visual rebuild per change (the transforming mesh animates instead). | `Apply` resets steering and state; ShiftStorm must **keep** position, forward intent, boost and race progress across a change. |
+| `Assets/Scripts/Vehicle/CarRecovery.cs` (286) | Installs `VehicleRespawn.Recover`. In a race: nearest lap point facing race direction, stepped until the box is clear; else last stable spot or nearest road. Separate branches for helicopter and plane. Never into water. | Clear-spot search (overlap box, step along lap and sideways), "short of next checkpoint" rule. | Depends on `RaceController`, `RaceRoute`, `RoadLookup`, `TreeTrunks`, `StuntPark`, `ShallowWater`, `DrainPipe`, `WorldBoot`. Rewrite around ShiftStorm's track spline. | The "never in water" rule is wrong for Boat/Dive segments: the reset spot must match the **mode the segment expects** (surface of the lagoon for Boat, under water for Dive). |
+| `Assets/Scripts/Vehicle/VehicleRespawn.cs` (113) | Last stable grounded pose, fall height reset, `Respawned` event, pluggable `Recover` delegate. | Mostly as-is. | Stable-pose test is "wheels down"; needs per-mode "stable" (afloat, flying level, submerged). | — |
+
+### 1.2 Plane controller
+
+| File | How it's built | Copy as-is | Needs changes | Doesn't fit |
+|---|---|---|---|---|
+| `Assets/Scripts/Vehicle/PlaneFlight.cs` (250) + `.Aerobatics.cs` (128), `.Crash.cs` (121), `.Effects.cs` (141) | Arcade flight on the car's own body: pitch/bank/rudder rates, throttle 0..1, holds height and wings level hands-off, climb costs speed, gentle stall (nose eases down). Take-off past `TakeOffSpeed`; landing under `LandSink` rolls out on wheels; harder is a forgiving crash. Builds its own Input actions. Aerobatics = full roll/loop with a bumper held. Effects = propeller, sound. | Flight feel and constants (`TopSpeed 115`, `Cruise 85`, `StallSpeed 27`, `PitchRate 45`, `RollRate 95`, `MaxBank 70`); hands-off levelling; speed/height trade; `Scripted` hooks. | Strip runway line-up (`RunwayWest/East`, Cobb County data), `WorldMap`, `GameMenus`, `RaceController` air-reset hooks, `HelicopterFlight` checks. Constants into a ScriptableObject. Use the shared input set. | Take-off and landing are **player-driven**; in ShiftStorm the change is triggered by a zone, so Fly must start already airborne with blended speed and land into Drive/Boat by zone, not by touchdown rules. Crash-on-landing rules must not fire during a transform. |
+| `Assets/Scripts/Vehicle/GuidedFlight.cs` (107) | Aimed ballistic hop from wherever the car is to a landing point (Hermite curve in plan, gravity in height), let go on any hit or reset. Only needs `ArcadeVehicle`. | As-is (one dependency). | Rename namespace. | Good fit for scripted **transition hops** (car leaps off the cliff into the sky arch, plane drops into the lagoon). |
+| `Assets/Scripts/Vehicle/HelicopterFlight*.cs` (4 files) | Hover flight on the same body. | — | — | Reference only, for Dive-mode hover/depth hold. |
+
+### 1.3 Camera
+
+| File | How it's built | Copy as-is | Needs changes | Doesn't fit |
+|---|---|---|---|---|
+| `Assets/Scripts/Vehicle/ChaseCamera.cs` (98) | Smoothed follow at a profile offset, heading lag, look-ahead, sphere-cast obstruction, flight tilt; keeps its own chase pose so other views can ease back. Deps: `ArcadeVehicle`, `VehicleRespawn`, `DrainPipe`. | Nearly as-is. | Drop `DrainPipe.View`; per-mode offset blended during a change; under-water obstruction mask. | — |
+| `Assets/Scripts/Vehicle/CameraViews.cs` (275) + `.Trailer.cs` | Chase / Far chase / First person / Front / Down, cycled with X/V, PlayerPrefs, look-around. Deps: `ChaseCamera`, `VehicleInput`, `VehicleConfiguration`, `HelicopterFlight`, `TrailerMode`, `GameMenus`, `MenuInput`, `WorldMap`, `CheckRun`. | View cycling and look-around. | Strip trailer, helicopter Down view, menus. | — |
+
+### 1.4 Collisions
+
+| File | How it's built | Notes |
+|---|---|---|
+| `Assets/Scripts/Vehicle/VehicleContact.cs` (37) | `Physics.ContactModifyEvent`: car vs small vehicle mass scaling, zero bounce. Immutable dictionary snapshot for the physics thread. | **Copy as-is** for racer-vs-racer contacts (no deps). |
+| `Assets/Scripts/Vehicle/VehicleSurfaceContacts.cs` (292) | Replaces mesh internal-edge normals on registered ramps so ramps never slow the car. Registers surfaces by name (`sc...`). | Copy, change the naming rule to ShiftStorm's ramps. Needed for transition ramps. |
+| `Assets/Scripts/Vehicle/WallGlance.cs` (157), `RampHold.cs` (114), `Race/LandingZone.cs` (62) | Glancing wall hits keep speed; ramp landings keep speed; landing zones. | Adapt; Drive mode only. |
+| `Assets/Scripts/Vehicle/ShallowWater.cs` (187) | Water areas (box/round/outline) in 64 m cells; `Sample` gives immersion and surface Y; also holds `WaterFeedback` (splash). Deps: `ArcadeVehicle`, `SoundMix`. | **Adapt**: its surface query is the natural basis for Boat buoyancy and Dive depth (where is the water surface here?). |
+
+### 1.5 Race progress (`Assets/Scripts/Race/`)
+
+| File | How it's built | Copy / change / doesn't fit |
+|---|---|---|
+| `RaceController.cs` (1399) + `.Air.cs`, `.Twin.cs` | One big controller: 3 laps, ordered checkpoints, 5 s miss penalty, official shortcuts, rolling start, AI field, records, ghosts, barriers. `.Air` = ring race; `.Twin` = "Wings & Wheels" (car lap and plane lap of one race). Deps: `MapBuilder`, `RaceBarriers`, `RaceMarkers`, `RoadDriver`, `CleanLapGhost`, `SplitScreen`, `TrailerMode`, `WorldMap`, `GameMenus` and more. | Too entangled to copy. **Read and rewrite** a small ShiftStorm race controller with the same rules. |
+| `RaceRoute.cs` (522): `RouteJson`, `RaceGate` | Route data in `Data/routes/*.json`, made by `Tools/mapgen/make_route.py`, heights from the Chastain terrain. `RaceGate.Crossed(from, to, reach, out fraction)` = directed plane test with half width, Below/Above, ring/frame mode, `EitherWay`, `MaxSpeed`. | **Copy `RaceGate`** (it handles ground gates and sky rings, and fits underwater gates too). Drop the route loader (Chastain map data). |
+| `RaceEntrant.cs` (58) | Per-racer progress: next gate, missed gates, laps, own clock, teleport flag. | Copy with small changes: progress must not reset when the mode changes. |
+| `RaceMarkers.cs` (328), `AirGuideArrow.cs` (101) | Runtime arches/beams; 3D arrow to the next ring drawn over everything. | Adapt (arrow is useful in Fly and Dive). |
+| `RaceStuckReset.cs` (51) | Wedged detection then reset prompt. | Adapt per mode. |
+| `RoadDriver.cs` (858), `PlanePilot.cs` (266) | AI driver on a road spline; AI pilot flying the ring line through the plane's own `Scripted` controls. | Later rounds. Same "AI uses the player's controls" rule is worth keeping. |
+| `CleanLapGhost.cs` (153) | Best clean lap ghost. | Later. |
+
+Transformation **triggers do not exist** in CR; ShiftStorm builds them new (separate from gates, per CLAUDE.md).
+
+### 1.6 Check runs, launcher bridge, Steam Deck
+
+| File | How it's built | Copy / change |
+|---|---|---|
+| `Assets/Scripts/CheckRun.cs` (50) | Static, `SubsystemRegistration`: active on `-exe*`, `-batchmode`, `-executeMethod`; picks an output folder; sets `AudioListener.volume = 0` before the first scene; `runInBackground = true`; `Hear(bool)` for a sound step. No deps. | Copy; **add `-mute`**, rename temp folder to `ShiftStormCheck`, log the measured output level. |
+| `Assets/Scripts/LauncherBridge.cs` (76) | Reads `-racerManagedMusic`, `-racerPersonalMusic`, `-racerLauncherReady`, `-racerLauncherNonce`; once `GameShell` runs a few frames, writes the nonce to the ready file. `ReplaceOldLauncher` swaps a known "launcher 1" exe. Deps: `WorldBoot.Defer`, `GameShell`. | Copy; wait on ShiftStorm's own boot object instead of `GameShell`; drop `WorldBoot.Defer` and **drop `ReplaceOldLauncher`** (no old launcher exists). Keep the `-racer*` argument names only if the copied launcher keeps them. |
+| `Assets/Scripts/SteamDeck.cs` (40) | Detects 1280x800 or the Deck GPU ("Custom GPU 0405", "Van Gogh", "Sephiroth"); `-steamDeck 0/1` override; scales view/traffic/people to 60 %. Deps: `Racer.GameSettings`, `CheckRun`. | Copy detection and override; replace scales with ShiftStorm's quality knobs. |
+| Launcher: `Launcher/core.cpp`, `core.hpp`, `launcher.cpp`, `store.cpp`, `core_cli.cpp`, `launcher.rc`, `ChastainRush.ico`, `vendor/` (json.hpp, miniz.c/.h + licenses) | Native launcher. | Copy per CLAUDE.md. **Do not copy `Launcher/pinned-key.json` or `pinned_key.hpp`**: they pin Chastain Rush's key; ShiftStorm makes its own with `New-LauncherKey.py`. |
+| `Tools/Build-Launcher.ps1`, `New-LauncherKey.py`, `Prepare-LauncherRelease.py`, `Prepare-ComponentUpdate.py`, `Package-LauncherStarter.py`, `Publish-LauncherRelease.py`; `Docs/Starter/README-LAUNCHER.md` | Build, sign, package, publish. | Copy and rename. Note: CR has no `Builds/LauncherSDK`; the SDK comes from Racer's, as CLAUDE.md says. |
+| `Tools/Blender/plane.py`, `cars.py`, `kit.py`, `render_vehicle.py`, `contact_sheet.py` | Scripted hard-surface vehicle models and preview renders. | Reference for the scripted transforming vehicle and its preview sheets. |
+
+---
+
+## 2. Tee-dOff (TO)
+
+Pipeline note: TO is **Built-in RP**. Every TO shader needs a URP port before use. Models are FBX with a baked base-color PNG, imported as **Humanoid** (`animationType: 3` checked on Chip, Rae, Vivi, Christina, Marcus). Sources were made in **Meshy** (`Art/Characters/incoming/<Name>/<Name>_meshy.fbx/.glb` + task JSON), rigged and animated through **Mixamo** (clip FBXs beside each model).
+
+### 2.1 Characters (golfers and hosts)
+
+Folder pattern: model `Assets/_Project/Art/Characters/<Name>/<Name>.fbx` + `<Name>_basecolor.png`; profile `Assets/_Project/Resources/Characters/<id>/<id>.asset`; definitions in `Assets/_Project/Scripts/Characters/Cast.cs`; stats in `Assets/_Project/Resources/Characters/roster.json`.
+
+| Character (id) | Files | Mixamo clips present | Mark |
+|---|---|---|---|
+| Chip "Showtime" Sterling (`chip`) | `Art/Characters/Chip/Chip.fbx` | (shared clips) | **Reuse directly** as a driver model; seat pose is new. |
+| Rocket Rae (`rae`) | `Art/Characters/Rae/Rae.fbx` | `Mutant Flexing Muscles.fbx` | Reuse directly. |
+| Vivi (`vivi`) | `Art/Characters/Vivi/Vivi.fbx` | `Victory (1).fbx`, `Salsa Dancing.fbx`, `Samba Dancing.fbx`, `Dying.fbx` | Reuse directly (podium clips ready). |
+| Penny Pickett (`penny`) | `Art/Characters/Penny/Penny.fbx` | `Bashful.fbx`, `Terrified.fbx` | Reuse directly. |
+| Marcus "Motormouth" Miles (`marcus`) | `Art/Characters/Marcus/Marcus.fbx` | `Laughing.fbx`, `Standing Taunt Chest Thump.fbx`, `Strut Walking.fbx`, `Throw.fbx` | Reuse directly. |
+| Christina (`christina`) | `Art/Characters/Christina/Christina.fbx` | `Hip Hop Dancing.fbx` | Reuse directly. |
+| Otis Oakley (`otis`) | `Art/Characters/Otis/Otis.fbx` | — | Reuse directly. |
+| Ollie the Octopus (`ollie`, Lost City host) | `Art/Characters/Atlantis/octopus/`; concept `Art/Characters/concepts/atlantis/Octopus.png` | non-Humanoid | Adapt (coral vault cameo / marshal). |
+| Professor Pith (`pith`, jungle host) | `Art/Characters/Pith/Pith.fbx` | — | Adapt (mangrove / waterfall cameo). |
+| Others: Abigail, Barnaby, Biscuit, Brick, Chester, CountBogey, Dot, Farmer, Groundskeeper, Harold, Moss, Nana, OldManOak, Rexford, Dinos, Lunar, Seasons, Groovy | `Assets/_Project/Art/Characters/<Name>/` | various | Reuse later as rivals/cameos. |
+
+- **Facial expressions:** none as blend shapes. Faces are painted into the base-color texture. Only a procedural wink exists (`CharacterModel.eyeSize`, head-bone eye positions; `Assets/_Project/Scripts/Characters/CharacterModel.cs`). Mark: **build new** if racing needs expressions (texture swaps or simple eye/mouth decals).
+- **Drivers in a cockpit:** TO has golf clips only (swings, reactions, dances). Seated driving/steering, piloting and diving poses: **build new** (Mixamo "Driving" / "Sitting" clips, listed in `Docs/MODELS-NEEDED.md` when needed).
+- Code for playing a Humanoid model through Playables: `Assets/_Project/Scripts/Characters/ModelGolfer.cs`, `ClipPicker.cs`. Adapt (podium and intro only).
+
+### 2.2 Voice clips
+
+`Assets/_Project/Resources/Audio/Voice/<id>/*.ogg` (32 speakers; about 42 clips per golfer; announcer about 1,000 clips) + `Resources/Audio/subtitles.json`.
+
+| Kind | Examples | Mark |
+|---|---|---|
+| General reactions | `greet`, `laugh`, `gasp`, `grunt`, `taunt`, `win`, `lose`, `lucky`, `quipgood`, `quipbad`, `disaster`, `trouble`, `wait`, `water` | **Reuse directly** for race banter (hits, overtakes, splash-down, win/lose). |
+| Golf-specific | `birdie`, `bogey`, `par`, `eagle`, `ace`, `teeup`, `drive`, `holeout`, `threeputt`, `lipout`, `stiff`, `mishit` | Don't reuse. |
+| Announcer | course and hazard lines (`candy_*`, `dino_*`, `exp_*`, `farm_*`, ...) | Build new race-announcer lines (ElevenLabs) in the same voice. |
+
+### 2.3 Music cues
+
+- Source MP3s: `Art/Music/*.mp3` (25 tracks, e.g. `course_seaside.mp3`, `course_atlantis.mp3`, `course_jurassic.mp3`, `course_expedition.mp3`, `title.mp3`, `round_end.mp3`, `credits.mp3`).
+- Game copies: `Assets/_Project/Resources/Audio/Music/*.ogg` with matching `*_intro.ogg` stings.
+- Jingles: `Assets/_Project/Resources/Audio/Jingles/hole_in_one.wav`, `match_win.wav`.
+
+| Cue | Use in ShiftStorm | Mark |
+|---|---|---|
+| `course_seaside`, `course_atlantis`, `course_jurassic`, `course_expedition` (+ intros) | Paradise Plunge placeholder soundtrack (beach, sunken, jungle sections) | **Reuse directly** for the prototype; new Suno race track later. |
+| `title`, `round_end`, `match_win` | Menu / results | Reuse directly. |
+
+### 2.4 SFX useful for water and air
+
+`Assets/_Project/Resources/Audio/Sfx/`: `amb_waves.wav`, `amb_gull_1..3.wav`, `amb_bubbles.wav`, `amb_atlantis.wav`, `amb_jungle.wav`, `amb_dolphin_1..2.wav`, `amb_wind.wav`, `amb_wind_strong.wav`, `sea_splash_1..2.wav`, `splash_1..2.wav`, `cloud_whoosh_1..2.wav`, `power_whoosh.wav`. Mark: **reuse directly** as ambience/splash/whoosh placeholders. Engine, propeller, boat motor and sub hum: build new (ElevenLabs) or copy CR's `Assets/Scripts/Vehicle/VehicleSoundSynthesis.cs`.
+
+### 2.5 Tropical / water / beach scenery and shaders
+
+TO courses are **built in code at runtime** from hole JSON (`Assets/_Project/Resources/Courses/<Course>/holeN.json`) by builder scripts; there are few environment mesh assets. Reuse means porting builder code (and the shaders) or re-scripting in Blender.
+
+| Source | What it has | Paradise Plunge segment | Mark |
+|---|---|---|---|
+| `Assets/_Project/Scripts/Course/SeasideBuilder.cs` (Gull's Point Links, `Resources/Courses/GullsPoint`, look `Resources/Tuning/ArtStyle_Seaside.asset`) | Toon ocean to the horizon, shore foam lines, swaying dune grass, dry-stone walls, lighthouse, harbor village, gulls | Beach promenade, cliffs, lagoon surface | **Adapt** (port meshes/placement code; best match) |
+| `Assets/_Project/Scripts/Course/JurassicBuilder.cs` (Jurassic Par, climate `tropical`, `ArtStyle_Jurassic.asset`) | Cycad palms, tree ferns, mossy boulders, **waterfalls off mossy cliffs**, swamp, hot springs | Waterfall, cliffs, mangrove stand-in | Adapt |
+| `Assets/_Project/Scripts/Course/AtlantisBuilder.cs` + `.Round25.cs` (Lost City Links, climate `undersea`, `ArtStyle_Atlantis.asset`) | Sea floor sand, branching and fan coral, kelp forests, white marble temples, columns, **city gates**, crystals, galleon wreck | Sunken gateway, coral vault (Dive) | Adapt |
+| `Assets/_Project/Scripts/Course/ExpeditionBuilder.cs` (The Lost Expedition, climate `jungle`) | Great falls, ruins, stone heads, stepped temple, hanging vines, gateway stone ring | Waterfall, mangroves, sky arch idea | Adapt |
+| `Assets/_Project/Resources/Shaders/ToonOcean.shader` (+ `Foam.shader`) | Two-tone rolling waves, crest lines, vertex swell, distance fade; opaque, cheap | Lagoon and sea surface | **Adapt** (URP port; also expose swell height to Boat buoyancy) |
+| `Toon.shader`, `ToonTextured.shader`, `ToonOutline.shader`, `ToonCommon.cginc` | 2-3 band toon light + outline; `ToonTextured` is the character shader | Everything (house style) | Adapt (URP port; one shared toon lit + outline) |
+| `ToonSway.shader`, `ToonTerrain.shader`, `ToonGlass.shader`, `Sky.shader`, `Cloud.shader`, `Glow.shader` | Grass/palm sway, ground, glass (Atlantis bubble), sky, clouds, crystals | Palms, ground, sub canopy, sky arch | Adapt (URP port) |
+| `Assets/_Project/Scripts/Course/ArtStyle.cs` + `Resources/Tuning/ArtStyle*.asset` | One ScriptableObject of toon bands, outline, sky, fog, palettes, water colors | Per-section look | Adapt (good model for ShiftStorm's look data) |
+| Mangroves, lagoon shoreline, sky arch, race track surface | — | — | **Build new** (Blender script) |
+
+---
+
+## 3. Recommendations
+
+### Recommended prototype driver
+1. **Rocket Rae** (`rae`, `Assets/_Project/Art/Characters/Rae/Rae.fbx`): power and speed personality reads instantly as a racer; Humanoid, flex clip on hand for the intro.
+2. **Chip "Showtime" Sterling** (`chip`, `Assets/_Project/Art/Characters/Chip/Chip.fbx`): TO's balanced default lead (all stats 5), the face of the series, full voice set.
+3. **Vivi** (`vivi`, `Assets/_Project/Art/Characters/Vivi/Vivi.fbx`): already has Victory and two dance clips, so the finish/podium works with no new Mixamo work.
+
+### Recommended prototype location
+1. **Gull's Point Links seaside** (`SeasideBuilder.cs`, `ToonOcean.shader`, `ArtStyle_Seaside.asset`): ocean, beach, cliffs and foam already exist, which covers the Drive to Boat change on the beach promenade and lagoon.
+2. **Lost City Links sunken city** (`AtlantisBuilder.cs`, `ArtStyle_Atlantis.asset`): coral, kelp and marble city gates match the sunken gateway and coral vault for the Dive mode.
+3. **Jurassic Par / Lost Expedition falls** (`JurassicBuilder.cs`, `ExpeditionBuilder.cs`): waterfalls off cliffs and palms give the waterfall segment and a Fly to Dive drop.
+
+For the Round 1 test strip, start with option 1 (beach promenade, cliff, lagoon): it exercises Drive, Boat and Fly with the least new art.
+
+---
+
+## 4. What ShiftStorm copied in Round 1
+
+| ShiftStorm file | Copied from (chastain_rush) | What changed |
+|---|---|---|
+| `Launcher/core.cpp`, `core.hpp`, `launcher.cpp`, `store.cpp`, `core_cli.cpp`, `vendor/*` | `Launcher/` (same names) | Renamed ChastainRush -> ShiftStorm (exe, window, cover, save folder `ShiftStorm/ShiftStorm`), catalog URL -> `danemoll-jpg/ShiftStorm-Releases`, `LauncherBuild` reset to 1. Logic unchanged. |
+| `Launcher/launcher.rc`, `ShiftStorm.ico` | `Launcher/launcher.rc` | New icon (`Tools/make_icon.py`). |
+| `Launcher/pinned_key.hpp`, `pinned-key.json` | not copied | Made fresh by `Tools/New-LauncherKey.py` (ShiftStorm's own key, private half in `Builds/PublisherPrivate/`). |
+| `Tools/Build-Launcher.ps1`, `New-LauncherKey.py`, `Prepare-LauncherRelease.py`, `Prepare-ComponentUpdate.py`, `Package-LauncherStarter.py`, `Publish-LauncherRelease.py`, `cleanup_round.py` | `Tools/` (same names) | Names and repository renamed; SDK still read from Racer's `Builds/LauncherSDK`; `gh` still Racer's `Builds/PublisherTools`. New wrapper `Tools/Release-Round.py` stages one draft with the update assets and the starter ZIP. |
+| `Assets/Scripts/LauncherBridge.cs` | `Assets/Scripts/LauncherBridge.cs` | Waits for `ShiftVehicle` instead of `GameShell`; `WorldBoot` deferral and `ReplaceOldLauncher` (launcher-1 migration) dropped. |
+| `Assets/Scripts/Core/QuietRun.cs` | `Assets/Scripts/CheckRun.cs` (idea) | Adds the explicit `-mute` flag; `-check` / `-checkOut` arguments. |
+| `Assets/Scripts/Vehicle/ShiftVehicle.Drive.cs` | `Vehicle/ArcadeVehicle.cs` (`Simulate`) | Suspension, drive, grip, yaw, self-righting ported. Stunt park, weather, shallow water, hold-at-rest, air steering left out. Drift, boost and change authority added. Numbers moved into `DriveTuning`. |
+| `Assets/Scripts/Vehicle/ShiftVehicle.Fly.cs` | `Vehicle/PlaneFlight.cs` (`FixedUpdate` air branch) | Attitude flight, bank turn, auto-level and climb/dive speed trade ported. Take-off, landing, crash, aerobatics, map boundary and stall left out; speed floor, ground clearance and ceiling added. Numbers in `FlyTuning`. |
+| `Assets/Scripts/Vehicle/ShiftInput.cs` | `Vehicle/VehicleInput.cs` (bindings) | Triggers, dead zones and Y / R reset kept; boost, secondary, vertical axis and invert added; one action set for every form. |
+| `Assets/Settings/URP.asset`, `URP_Renderer.asset` | `Assets/Settings/` | Copied as-is (known-good URP 17.6 settings). |
+| `Packages/manifest.json` | `Packages/manifest.json` | Same package versions; terrain and particle modules dropped. |
+
+Written new (nothing to copy): boating and diving handling, the form-change framework (zones, speed blending, authority ramp, alignment
+assist), the form animator, recovery anchors and course progress, the gray-box strip and lanes, the check pilot, the Blender vehicle script.
+Nothing from Tee-dOff was copied in Round 1.

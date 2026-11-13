@@ -1,0 +1,19 @@
+# Unity
+Library/
+Temp/
+Obj/
+Logs/
+UserSettings/
+Build/
+Builds/
+MemoryCaptures/
+*.csproj
+*.sln
+*.slnx
+.vs/
+__pycache__/
+Assets/_Recovery/
+Assets/_Recovery.meta
+# Check-run output, per round (pictures that matter are copied to Docs/Checks/)
+local/
+# Signing key: Builds/PublisherPrivate/ (inside Builds/, never committed)

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa2aa1dc9d65f8478a3d808896e7e50, type: 3}
+  m_Name: Drive
+  m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.DriveTuning
+  entrySpeed: {x: 6, y: 40}
+  topSpeed: 40
+  reverseSpeed: 11
+  acceleration: 14
+  reverseAcceleration: 7
+  braking: 26
+  coastingDrag: 0.45
+  boostAcceleration: 10
+  boostTopSpeed: 50
+  slowSteerAngle: 32
+  fastSteerAngle: 10
+  wheelbase: 2.6
+  steeringResponse: 7
+  yawResponse: 8
+  lateralGrip: 7
+  maxGripAcceleration: 24
+  driftMinSpeed: 12
+  driftGrip: 1.6
+  driftMaxGrip: 9
+  driftYawBoost: 1.55
+  driftRecoverySeconds: 0.35
+  suspensionLength: 0.8
+  springStrength: 65
+  suspensionDamping: 8
+  maxSuspensionAcceleration: 45
+  uprightStrength: 12
+  uprightDamping: 4
+  airStability: 0.25

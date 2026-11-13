@@ -79,14 +79,40 @@ Keep each round's model list short — each one is Dan's time.
   and what was changed.
 
 ## Controls
-<!-- Round 1, item 4: write the exact controller + keyboard mapping here,
-including the secondary (drift / carve) button and the invert-axis setting. -->
-TBD in Round 1.
+Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System only).
+
+| Action | Controller | Keyboard |
+|---|---|---|
+| Accelerate | RT | W / Up |
+| Brake / reverse | LT | S / Down |
+| Steer (banks in the air) | Left stick X | A / D, Left / Right |
+| Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
+| Boost (one shared meter) | A | Space |
+| Secondary: drift (car) / tighter carve (boat) | RB (or X) | Left Shift |
+| Reset to last safe anchor | Y | R |
+| Invert climb / dive (saved, PlayerPrefs `invertVertical`) | View (Back) | F2 |
+| Previous / next course (strip, 4 lanes) | D-pad left / right | F3 / F4 |
+
+After the finish, Reset starts the course again.
 
 ## Commands
-<!-- Fill in during Round 1: Unity batch build, -mute test run, launcher build,
-release publish. Exact and copy-pasteable. -->
-TBD in Round 1.
+Unity 6000.6.1f1 at `C:\Program Files\Unity\Hub\Editor\6000.6.1f1\Editor\Unity.exe`; Blender at `F:\blender\blender.exe`.
+Unity batch runs need the sandbox off (its package manager uses a named pipe).
+- Project setup (URP, Input System only, layers, materials, tuning assets, scene; safe to repeat):
+  `powershell -File Tools/Unity-Batch.ps1 -Log local/logs/setup.log -Method ShiftStorm.EditorTools.ProjectSetup.Run`
+- Vehicle model: `F:\blender\blender.exe -b -P Tools/Blender/shiftstorm_vehicle.py -- C:/Users/danmo/ShiftStorm`
+- Player build (`Builds/ShiftStorm/ShiftStorm.exe`):
+  `powershell -File Tools/Unity-Batch.ps1 -Log local/logs/build.log -Method ShiftStorm.EditorTools.BuildPlayer.Run -Extra '-buildVersion','0.1.0'`
+- Muted, windowless check in the built exe (`-batchmode -mute`, Below Normal; report + pictures in the folder):
+  `powershell -File Tools/Run-Check.ps1 -Check all -Out local/round1/check` (`strip`, `lanes`, `edge` or `all`).
+  Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
+- Game start options: `-course 0..4` (0 strip, 1 drive lane, 2 boat lane, 3 fly lane, 4 dive lane).
+- Launcher: `powershell -File Tools/Build-Launcher.ps1` (and `-CoreOnly` for `LauncherChecks.exe`) -> `Builds/Launcher/`.
+- Release (local draft, then the deliberate publish):
+  `python Tools/Release-Round.py --version 0.1.0 --build 1 --notes "..."` then
+  `python Tools/Publish-LauncherRelease.py Builds/Release/build-1/draft --publish --confirm-repository danemoll-jpg/ShiftStorm-Releases`
+  (version and build go up every round; the starter ZIP is `ShiftStorm-<version>-Full.zip` on the release).
+- Round-end disk clean-up: `python Tools/cleanup_round.py`
 
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**

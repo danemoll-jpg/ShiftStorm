@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a0d6c58cdea2c4d9b2f99236616c09, type: 3}
+  m_Name: Fly
+  m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.FlyTuning
+  entrySpeed: {x: 30, y: 48}
+  minSpeed: 26
+  cruiseSpeed: 38
+  topSpeed: 50
+  speedGain: 0.5
+  boostTopSpeed: 62
+  pitchRate: 40
+  maxPitchUp: 22
+  maxPitchDown: 28
+  pitchReturn: 18
+  rollRate: 110
+  maxBank: 55
+  levelRate: 70
+  bankTurnBonus: 10
+  entryPitch: {x: -6, y: 12}
+  groundClearance: 2.5
+  ceilingAboveStart: 40

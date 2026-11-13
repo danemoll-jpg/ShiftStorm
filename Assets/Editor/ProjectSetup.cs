@@ -1,0 +1,94 @@
+using System.IO;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace ShiftStorm.EditorTools
+{
+    // One-time / repeatable project setup, batch mode: "Unity -batchmode -quit -projectPath . -executeMethod ShiftStorm.EditorTools.ProjectSetup.Run".
+    // URP (Assets/Settings/URP.asset, copied from chastain_rush), Input System only, layers (8 Vehicle, 9 VehicleGhost, 10 Obstacle), player
+    // settings, the materials the gray boxes use (Resources/Materials), the tuning assets (Resources/Tuning, made only if missing so tuned
+    // values are never overwritten), the scene (Assets/Scenes/Main.unity) and the build list. Safe to run again.
+    public static class ProjectSetup
+    {
+        public static void Run()
+        {
+            // render pipeline
+            var urp = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>("Assets/Settings/URP.asset");
+            GraphicsSettings.defaultRenderPipeline = urp;
+            for (int i = 0; i < QualitySettings.names.Length; i++) { QualitySettings.SetQualityLevel(i, false); QualitySettings.renderPipeline = urp; }
+            // Input System only, player settings
+            var ps = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset")[0]);
+            ps.FindProperty("activeInputHandler").intValue = 1; ps.ApplyModifiedPropertiesWithoutUndo();
+            PlayerSettings.companyName = "ShiftStorm"; PlayerSettings.productName = "ShiftStorm";
+            PlayerSettings.fullScreenMode = FullScreenMode.FullScreenWindow; PlayerSettings.defaultScreenWidth = 1280; PlayerSettings.defaultScreenHeight = 800;
+            PlayerSettings.resizableWindow = true; PlayerSettings.runInBackground = false; PlayerSettings.visibleInBackground = false;
+            PlayerSettings.SetApplicationIdentifier(UnityEditor.Build.NamedBuildTarget.Standalone, "com.danemoll.shiftstorm");
+            PlayerSettings.colorSpace = ColorSpace.Linear;
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/GameIcon.png"); if (icon) PlayerSettings.SetIcons(UnityEditor.Build.NamedBuildTarget.Unknown, new[] { icon }, IconKind.Any);
+            // layers
+            var tm = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]); var layers = tm.FindProperty("layers");
+            layers.GetArrayElementAtIndex(8).stringValue = "Vehicle"; layers.GetArrayElementAtIndex(9).stringValue = "VehicleGhost"; layers.GetArrayElementAtIndex(10).stringValue = "Obstacle";
+            tm.ApplyModifiedPropertiesWithoutUndo();
+            // materials and tuning
+            Directory.CreateDirectory("Assets/Resources/Materials"); Directory.CreateDirectory("Assets/Resources/Tuning");
+            Mat("Road", new Color(.32f, .33f, .36f)); Mat("Ground", new Color(.42f, .62f, .30f)); Mat("Ramp", new Color(.85f, .62f, .25f)); Mat("Rock", new Color(.52f, .47f, .42f));
+            Mat("Stone", new Color(.66f, .62f, .52f)); Mat("Sand", new Color(.86f, .78f, .55f)); Mat("Barrier", new Color(.9f, .9f, .9f)); Mat("Gate", new Color(.95f, .85f, .2f));
+            Mat("Buoy", new Color(1f, .35f, .15f)); Mat("Coral", new Color(.95f, .45f, .55f)); Mat("Foam", new Color(.95f, .98f, 1f)); Mat("WetRamp", new Color(.35f, .7f, .8f));
+            Mat("Finish", new Color(.1f, .1f, .1f)); Mat("SignCar", new Color(.95f, .5f, .1f)); Mat("SignWing", new Color(.35f, .7f, 1f)); Mat("SignBoat", new Color(.1f, .75f, .7f)); Mat("SignSub", new Color(.15f, .2f, .55f));
+            Mat("Light", new Color(1f, .95f, .6f), emission: true);
+            Mat("Water", new Color(.1f, .62f, .72f, .55f), transparent: true); Mat("Waterfall", new Color(.85f, .95f, 1f, .45f), transparent: true);
+            Mat("VehicleBody", new Color(.95f, .45f, .1f)); Mat("VehicleTrim", new Color(.95f, .9f, .8f)); Mat("VehicleGlass", new Color(.35f, .65f, .9f, .7f), transparent: true);
+            Mat("VehicleTire", new Color(.08f, .08f, .09f)); Mat("VehicleWing", new Color(.96f, .96f, .96f)); Mat("VehicleFin", new Color(.1f, .6f, .65f)); Mat("VehicleMetal", new Color(.55f, .57f, .6f));
+            Tuning<ShiftTuning>("Shift"); Tuning<DriveTuning>("Drive"); Tuning<BoatTuning>("Boat"); Tuning<FlyTuning>("Fly"); Tuning<DiveTuning>("Dive");
+            // scene and build list
+            Directory.CreateDirectory("Assets/Scenes");
+            if (!File.Exists("Assets/Scenes/Main.unity"))
+            {
+                var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+                var sun = Object.FindAnyObjectByType<Light>(); if (sun) { sun.shadows = LightShadows.Soft; sun.intensity = 1.6f; sun.transform.rotation = Quaternion.Euler(48, -35, 0); }
+                RenderSettings.fog = true; RenderSettings.fogMode = FogMode.Exponential; RenderSettings.fogDensity = .0015f; RenderSettings.fogColor = new Color(.7f, .82f, .92f);
+                EditorSceneManager.SaveScene(scene, "Assets/Scenes/Main.unity");
+            }
+            EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/Main.unity", true) };
+            AssetDatabase.SaveAssets();
+            Debug.Log("[Setup] done: URP " + (urp ? "set" : "MISSING") + ", input handler 1 (Input System only), layers, materials, tuning, scene");
+        }
+
+        static void Tuning<T>(string name) where T : ScriptableObject
+        {
+            string path = $"Assets/Resources/Tuning/{name}.asset";
+            if (AssetDatabase.LoadAssetAtPath<T>(path)) return;
+            AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<T>(), path);
+        }
+
+        static void Mat(string name, Color color, bool transparent = false, bool emission = false)
+        {
+            string path = $"Assets/Resources/Materials/{name}.mat";
+            var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (!m) { m = new Material(Shader.Find("Universal Render Pipeline/Lit")); AssetDatabase.CreateAsset(m, path); }
+            m.SetColor("_BaseColor", color); m.SetFloat("_Smoothness", transparent ? .85f : .2f);
+            if (transparent)
+            {
+                m.SetFloat("_Surface", 1); m.SetFloat("_Blend", 0); m.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha); m.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+                m.SetFloat("_ZWrite", 0); m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT"); m.renderQueue = (int)RenderQueue.Transparent; m.SetOverrideTag("RenderType", "Transparent");
+                m.SetFloat("_Cull", 0);
+            }
+            if (emission) { m.EnableKeyword("_EMISSION"); m.SetColor("_EmissionColor", color * 2f); m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive; }
+            EditorUtility.SetDirty(m);
+        }
+    }
+
+    // The Blender vehicle (Tools/Blender/shiftstorm_vehicle.py) imports without axis rotations, no materials (FormAnimator / VehicleFactory set them).
+    public sealed class VehicleImport : AssetPostprocessor
+    {
+        void OnPreprocessModel()
+        {
+            if (!assetPath.EndsWith("ShiftVehicle.fbx")) return;
+            var mi = (ModelImporter)assetImporter;
+            mi.bakeAxisConversion = true; mi.globalScale = 1; mi.useFileScale = true; mi.importAnimation = false; mi.animationType = ModelImporterAnimationType.None;
+            mi.materialImportMode = ModelImporterMaterialImportMode.None; mi.importCameras = false; mi.importLights = false; mi.addCollider = false;
+        }
+    }
+}
