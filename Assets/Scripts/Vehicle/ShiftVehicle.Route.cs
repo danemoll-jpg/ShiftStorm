@@ -81,7 +81,7 @@ namespace ShiftStorm
             GuideTarget = MissedGate ? MissedGate.transform.position : sc ? sc.PointAt(scS + ahead, out _) : near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
 
             // the cue, most important first
-            if (Holding || Finished) return;
+            if (Holding || Finished || Time.time < MissCueUntil) return;
             if (MissedGate) ShowCue(returning ? $"THIS WAY: {MissedGate.label}" : $"TURN BACK: {MissedGate.label}", returning ? CueKind.Guide : CueKind.Wrong, .3f);
             else if (WrongWay) ShowCue("WRONG WAY - TURN AROUND", CueKind.Wrong, .3f);
             else if (OffRoute || OutOfBoundsFor > 0) ShowCue("THIS WAY", CueKind.Guide, .3f);

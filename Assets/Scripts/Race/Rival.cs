@@ -3,6 +3,26 @@ using UnityEngine;
 
 namespace ShiftStorm
 {
+    // Round 4 item 2: the AI's difficulty (Menu > Settings, default Easy). It changes only how the rivals drive, never their vehicle, and
+    // never looks at the player's place (no rubber-banding):
+    //   pace       the share of the form's top speed the driver holds (it lifts off above it); boost still adds its own speed on top
+    //   brake      multiplies the rival's braking margin (lower: brakes earlier and harder before a bend)
+    //   wobble     metres of slow side-to-side wander off its line (line accuracy), where the course is wide enough
+    //   boostMeter added to the meter a rival waits for before it boosts (Easy boosts rarely), straight: multiplies how straight it must be
+    //   mistakeEvery / mistakeSeconds  a lift off the throttle every so many seconds (random within +-40 %), this long
+    //   shortcut   multiplies how often it goes for its shortcut
+    public enum Difficulty { Easy, Normal, Hard }
+    public struct AiSkill
+    {
+        public float pace, brake, wobble, boostMeter, straight, mistakeEvery, mistakeSeconds, shortcut;
+        public static AiSkill For(Difficulty d) => d switch
+        {
+            Difficulty.Easy => new AiSkill { pace = .86f, brake = .86f, wobble = 2.5f, boostMeter = .4f, straight = .5f, mistakeEvery = 22f, mistakeSeconds = .9f, shortcut = .3f },
+            Difficulty.Normal => new AiSkill { pace = .95f, brake = .95f, wobble = 1.2f, boostMeter = .2f, straight = .8f, mistakeEvery = 45f, mistakeSeconds = .6f, shortcut = .7f },
+            _ => new AiSkill { pace = 1f, brake = 1f, wobble = 0f, boostMeter = 0f, straight = 1f, mistakeEvery = 0f, mistakeSeconds = 0f, shortcut = 1f },   // Hard = Round 3's AI
+        };
+    }
+
     // Round 3 item 4: a rival's identity and its two difficulty knobs (no rubber-banding: nothing here ever looks at the player's place).
     //   brakeMargin: the share of the cornering grip it plans bends with (lower = brakes earlier and harder before a bend)
     //   boostMeter / boostStraight: it boosts only with at least this much in the meter and when the path ahead turns less than this
@@ -35,16 +55,22 @@ namespace ShiftStorm
         public string Plan { get; private set; } = "";   // the shortcut chosen for this lap ("" = the safe line)
         public int ShortcutsTried { get; private set; }
         public float missOffset;       // checks only: aim this far to the side of a shortcut's entry (the deliberate miss)
+        public float shortcutOffset;   // checks only: drive this far off the shortcut's line inside it (the scrape run)
+        public bool useDifficulty = true;   // checks that measure the course itself (shortcuts) drive at Round 3's (Hard) level
+        public AiSkill Skill => useDifficulty ? AiSkill.For(Settings.Difficulty) : AiSkill.For(Difficulty.Hard);
+        public int Mistakes { get; private set; }
+        float nextMistake = -1, mistakeUntil = -1, launchAt = -1, startProgress; bool launched;
         float lastBackAt = -10; int backTries;
         float gridLane = float.NaN, slowFor, backUntil = -1, backSteer; public int Unsticks { get; private set; }
         float offset, sideStep; Shortcut planned; bool scDone; float scS; int lastTaken; System.Random rnd; int laps;
-        readonly HashSet<string> decided = new HashSet<string>();
+        readonly HashSet<string> decided = new HashSet<string>(); readonly List<float> hitTimes = new List<float>();
 
         void Start()
         {
             v = GetComponent<ShiftVehicle>(); input = v.Input; input.Scripted = true;
             rnd = new System.Random(rival != null ? rival.seed : 1);
-            v.Event += (kind, text) => { if (kind == "start") { gridLane = float.NaN; decided.Clear(); planned = null; scDone = false; Plan = ""; laps++; lastTaken = 0; } };
+            v.WallHit += (a, k, w) => hitTimes.Add(Time.time);
+            v.Event += (kind, text) => { if (kind == "start") { gridLane = float.NaN; decided.Clear(); planned = null; scDone = false; Plan = ""; laps++; lastTaken = 0; launched = false; launchAt = -1; nextMistake = -1; mistakeUntil = -1; } };
         }
 
         // look-ahead: shorter inside a shortcut underwater (a tunnel: follow its line, never cut its corners into the walls)
@@ -96,7 +122,7 @@ namespace ShiftStorm
                     var sc = c.shortcuts.Find(x => x.label == label);
                     if (!sc || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
                     decided.Add(label);
-                    if (rnd.NextDouble() < rival.shortcutRate) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} goes for the {sc.label}"); }
+                    if (rnd.NextDouble() < rival.shortcutRate * Skill.shortcut) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} goes for the {sc.label}"); }
                     else v.Note("plan", $"{v.RacerName} keeps to the safe line at the {sc.label}");
                     break;
                 }
@@ -106,6 +132,25 @@ namespace ShiftStorm
                 if (v.ShortcutsTaken.Count > lastTaken || (v.OnShortcut != planned && v.Progress > planned.mainTo - 5) || v.GatesPassed > planned.nextGate + (planned.replacesGate >= 0 ? 1 : 0)) scDone = true;
             }
 
+            var skill = Skill;
+            // Round 4 item 4: the launch. Each row waits a moment longer than the row ahead (0.15 s per 10 m back), and the racer keeps
+            // its grid lane for the first 200 m, so the grid opens out instead of four cars squeezing into the same lanes at GO.
+            if (!launched)
+            {
+                launched = true; var front = c.anchors[0]; startProgress = v.Progress;
+                launchAt = Time.time + Mathf.Max(0, front.progress - v.Progress) * .015f;
+                c.Project(p, v.Progress, out var lineAt, out var lineDir); gridLane = Vector3.Dot(p - lineAt, Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(lineDir, Vector3.up).normalized));
+            }
+            if (Time.time < launchAt) { Set(0, 0, 0, 0, false, false); return; }
+            // Round 4 item 2: small mistakes (a lift off the throttle), never near a form change
+            if (skill.mistakeEvery > 0)
+            {
+                if (nextMistake < 0) nextMistake = Time.time + skill.mistakeEvery * (.6f + .8f * (float)rnd.NextDouble());
+                if (Time.time >= nextMistake && mistakeUntil < Time.time && MaxOffset() > 0) { mistakeUntil = Time.time + skill.mistakeSeconds; nextMistake = Time.time + skill.mistakeEvery * (.6f + .8f * (float)rnd.NextDouble()); Mistakes++; }
+            }
+            // Round 4: missed the shortcut's way in (three wall hits in 1.5 s before getting onto it): give it up and take the main line
+            hitTimes.RemoveAll(t => Time.time - t > 1.5f);
+            if (planned && !scDone && v.OnShortcut != planned && hitTimes.Count >= 3) { v.Note("plan", $"{v.RacerName} gives up the {planned.label} (hitting rock)"); scDone = true; Plan = ""; hitTimes.Clear(); }
             float ahead = Ahead(speed);
             var look = PathAt(ahead, out _);
             // blocked (pinned against another car or a wall) on land or water: back out with the wheel turned the other way, as a player
@@ -127,6 +172,8 @@ namespace ShiftStorm
             float max = MaxOffset();
             var fwd3 = (look - p).normalized; var right = Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(fwd3, Vector3.up).normalized);
             float want = rival != null ? rival.lane : 0; float stepWant = 0;
+            if (!float.IsNaN(gridLane) && v.Progress < startProgress + 200f) want = gridLane;
+            else if (skill.wobble > 0) want += skill.wobble * Mathf.Sin(Time.time * .37f + (rival != null ? rival.seed : 0)) * Mathf.Sin(Time.time * .13f + 1.7f);
             if (Game.Instance && Game.Instance.Race)
                 foreach (var o in Game.Instance.Race.Racers)
                 {
@@ -138,6 +185,7 @@ namespace ShiftStorm
             offset = Mathf.MoveTowards(offset, Mathf.Clamp(want + sideStep, -max, max), 3f * Time.fixedDeltaTime);
             look += right * offset;
             if (missOffset != 0 && planned && !scDone && v.OnShortcut != planned && planned.entry.transform.InverseTransformPoint(p).z < -5) look += right * missOffset;
+            if (shortcutOffset != 0 && planned && !scDone && v.Progress >= planned.mainFrom) look += right * shortcutOffset;   // checks: the scrape run
 
             var fwd = Vector3.ProjectOnPlane(v.transform.forward, Vector3.up).normalized;
             var wantDir = Vector3.ProjectOnPlane(look - p, Vector3.up).normalized;
@@ -154,7 +202,7 @@ namespace ShiftStorm
             if (v.Mode == Mode.Drive || v.Mode == Mode.Boat)
             {
                 float turn = turnFlat * Mathf.Deg2Rad, r = turn > 1e-3f ? (d1 - d0) / turn : 1e4f;
-                float aLat = (v.Mode == Mode.Drive ? 27f : 15f) * (rival != null ? rival.brakeMargin : 1f), vmax = Mathf.Sqrt(aLat * r);
+                float aLat = (v.Mode == Mode.Drive ? 27f : 15f) * (rival != null ? rival.brakeMargin : 1f) * skill.brake, vmax = Mathf.Sqrt(aLat * r);
                 if (speed > vmax + 1.5f) { thr = 0; brk = Mathf.Clamp01((speed - vmax) / 8f); }
                 sec = v.Mode == Mode.Drive ? Mathf.Abs(err) > 22f && speed > 20f : Mathf.Abs(err) > 14f;
             }
@@ -162,13 +210,17 @@ namespace ShiftStorm
             {
                 // underwater the turn rate is the limit (v = r w): ease off the throttle before a tight bend (the tunnel's exit)
                 float turn = turnFlat * Mathf.Deg2Rad, r = turn > 1e-3f ? (d1 - d0) / turn : 1e4f;
-                float vmax = r * v.dive.turnRate * Mathf.Deg2Rad * .8f * (rival != null ? rival.brakeMargin : 1f);
+                float vmax = r * v.dive.turnRate * Mathf.Deg2Rad * .8f * (rival != null ? rival.brakeMargin : 1f) * skill.brake;
                 if (speed > vmax) thr = Mathf.Clamp(vmax / v.dive.topSpeed, .3f, 1f);
             }
             // boost: on a straight stretch with enough in the meter, never into a form change
             PathAt(Mathf.Max(80f, speed * 2.5f), out var a2);
             float straight = Vector3.Angle(a0, a2);
-            bool boost = rival != null && v.Boost >= (v.Boosting ? .05f : rival.boostMeter) && straight < rival.boostStraight && brk <= 0 && !v.Changing && Mathf.Abs(err) < 12f && MaxOffset() > 0;
+            bool boost = rival != null && v.Boost >= (v.Boosting ? .05f : Mathf.Min(1f, rival.boostMeter + skill.boostMeter)) && straight < rival.boostStraight * skill.straight && brk <= 0 && !v.Changing && Mathf.Abs(err) < 12f && MaxOffset() > 0;
+            // the pace it holds (lifting off above it), and a mistake: off the throttle for a moment
+            if (skill.pace < 1f && !boost && speed > skill.pace * v.TopSpeedNow) thr = 0;
+            if (Time.time < mistakeUntil) { thr = 0; boost = false; }
+            if (v.Mode == Mode.Dive && thr > 0) thr = Mathf.Min(thr, skill.pace);
             Set(thr, brk, steer, vert, boost, sec);
         }
 
@@ -187,8 +239,9 @@ namespace ShiftStorm
         public readonly List<(ShiftVehicle v, float time)> Finishers = new List<(ShiftVehicle, float)>();
         public const int PlayerSlot = 3;
         public static int RivalSlot(int k) => k;
-        // 2 x 2 grid behind the start anchor (the player starts at the back: a decent player still wins)
-        public static Vector3 GridSlot(int i) => new Vector3(i % 2 == 0 ? -4.5f : 4.5f, 0, -i * 7f);
+        // 2 x 2 grid behind the start anchor (the player starts at the back: a decent player still wins). Round 4 item 4: spaced wider
+        // (11 m across, 10 m between rows; build 4: 9 m, 7 m) so nobody is pinned at GO; the AI also launches row by row (RivalPilot).
+        public static Vector3 GridSlot(int i) => new Vector3(i % 2 == 0 ? -5.5f : 5.5f, 0, -i * 10f);
 
         public void Setup(bool race, ShiftVehicle player, List<ShiftVehicle> rivals)
         {
@@ -210,7 +263,8 @@ namespace ShiftStorm
             l.Sort((a, b) =>
             {
                 int fa = Finishers.FindIndex(f => f.v == a), fb = Finishers.FindIndex(f => f.v == b);
-                if (fa >= 0 || fb >= 0) return fa < 0 ? 1 : fb < 0 ? -1 : fa.CompareTo(fb);
+                if (fa >= 0 && fb >= 0) { int ct = Finishers[fa].time.CompareTo(Finishers[fb].time); return ct != 0 ? ct : fa.CompareTo(fb); }   // Round 4: by time (penalties included)
+                if (fa >= 0 || fb >= 0) return fa < 0 ? 1 : -1;
                 int c = b.RaceDistance.CompareTo(a.RaceDistance);
                 return c != 0 ? c : b.Progress.CompareTo(a.Progress);   // on the grid (before G0 counts): who is further along the line
             });

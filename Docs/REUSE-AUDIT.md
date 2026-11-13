@@ -229,3 +229,15 @@ Written new in Round 3: the settings file and the menu's Settings / Quit pages (
 and the race order (`Race/Rival.cs`, `VehicleFactory.MakeRival`), shortcuts (`Race/Shortcut.cs`, `ShiftVehicle.Shortcut.cs`, the Sky Arch
 slit and its updraft, the Coral Vault tunnel — switched off for build 4), scrapes in the air and underwater, the speed carried into a
 faster form and the wheels-down landing (item 3), the camera's eased speed reference, and the Round 3 checks (`Checks/CheckPilot.Round3.cs`).
+
+## 8. What ShiftStorm copied in Round 4
+
+| From | To (ShiftStorm) | Changed |
+|---|---|---|
+| TO `Resources/Audio/Sfx/house_hit_1.wav`, `house_hit_2.wav` | `Resources/Audio/Sfx/wall_hit_1.wav`, `wall_hit_2.wav` | Copied as they are, renamed. Imported by ShiftStorm's own audio rule (decompress on load, preloaded). Played on a wall hit, louder for a harder hit (`VehicleSound`). |
+
+Nothing copied from Chastain Rush in Round 4. Written new: walls that glance a racer off in every form (`Vehicle/ShiftVehicle.Walls.cs`,
+a frictionless hull, the camera's wall bump), near-miss gates with a time penalty (`ProgressGate.CrossedNear`, `ShiftVehicle.PassGate`),
+the AI difficulty setting (`Race/Rival.cs` `AiSkill`, `Core/Settings.cs`, Menu > Settings), the row-by-row launch and the wider grid, the
+start-line spline fix and the smooth road width (`World/ParadisePlunge.cs`), the Coral Vault tunnel back on, and the Round 4 checks
+(`Checks/CheckPilot.Round4.cs`).

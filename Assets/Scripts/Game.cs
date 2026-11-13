@@ -150,9 +150,10 @@ namespace ShiftStorm
                     Item("Quit game", () => ShowPage(Page.Quit));
                     break;
                 case Page.Settings:
-                    Item(InvertItem, () => { ShiftInput.Invert = !ShiftInput.Invert; ShowPage(Page.Settings, 0); });
-                    Item(ScreenItem, () => { ScreenSetting.Toggle(); ShowPage(Page.Settings, 1); });
-                    Item(StatsItem, () => { ToggleStats(); ShowPage(Page.Settings, 2); });
+                    Item(DifficultyItem, () => { Settings.Difficulty = (Difficulty)(((int)Settings.Difficulty + 1) % 3); ShowPage(Page.Settings, 0); });
+                    Item(InvertItem, () => { ShiftInput.Invert = !ShiftInput.Invert; ShowPage(Page.Settings, 1); });
+                    Item(ScreenItem, () => { ScreenSetting.Toggle(); ShowPage(Page.Settings, 2); });
+                    Item(StatsItem, () => { ToggleStats(); ShowPage(Page.Settings, 3); });
                     Item("Back", () => ShowPage(Page.Main));
                     break;
                 case Page.Quit:
@@ -163,6 +164,7 @@ namespace ShiftStorm
             MenuIndex = select >= 0 ? select : 0;
         }
         public string MenuTitle => MenuPage == Page.Main ? "MENU" : MenuPage == Page.Settings ? "SETTINGS" : "QUIT SHIFTSTORM?";
+        static string DifficultyItem => "AI difficulty: " + Settings.Difficulty + "   (Easy / Normal / Hard)";
         static string InvertItem => "Invert flight / dive controls: " + (ShiftInput.Invert ? "On" : "Off") + "   (View / F2)";
         static string ScreenItem => "Screen: " + (ScreenSetting.Fullscreen ? "Full screen" : "Windowed") + "   (Alt+Enter)";
         static string StatsItem => "FPS + speed readout: " + (Hud.StatsOn ? "On" : "Off") + "   (R3 / F1)";

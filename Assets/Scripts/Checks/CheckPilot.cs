@@ -93,10 +93,18 @@ namespace ShiftStorm
             if (!v.Holding) topSpeed[v.Mode] = Mathf.Max(topSpeed.TryGetValue(v.Mode, out var ts) ? ts : 0, v.Speed);
             if (coast) { input.sThrottle = input.sBrake = input.sSteer = input.sVertical = 0; input.sBoost = input.sSecondary = false; return; }
             if (guided) { Guided(); return; }
+            if (straight)
+            {
+                // Round 4: hold the heading (steer fixed), a height when asked, a speed
+                float vy0 = v.Body.linearVelocity.y; float ty0 = yOverride != null ? yOverride() : v.Body.position.y;
+                input.sSteer = straightSteer; input.sVertical = Mathf.Clamp((ty0 - v.Body.position.y) * .15f - vy0 * .12f, -1, 1);
+                input.sThrottle = holdSpeed > 0 ? (v.Speed < holdSpeed ? 1 : 0) : throttleCap; input.sBrake = 0; input.sBoost = false; input.sSecondary = false; return;
+            }
             var p = v.Body.position; var c = v.Course;
             float prog = v.Progress;
             float ahead = v.Mode == Mode.Dive ? Mathf.Max(14f, v.Speed * .9f) : Mathf.Max(18f, v.Speed * 1.1f);
-            var look = c.PointAt(prog + ahead, out _);
+            var look = c.PointAt(prog + ahead, out var lookDir);
+            if (laneOffset != 0) look += Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(lookDir, Vector3.up).normalized) * laneOffset;   // Round 4: a line beside the course line
             var fwd = Vector3.ProjectOnPlane(v.transform.forward, Vector3.up).normalized;
             var want = Vector3.ProjectOnPlane(look - p, Vector3.up).normalized;
             float err = Vector3.SignedAngle(fwd, want, Vector3.up);
@@ -137,7 +145,8 @@ namespace ShiftStorm
             input.sVertical = any && (v.Mode == Mode.Fly || v.Mode == Mode.Dive) ? Mathf.Clamp(pitch / 10f, -1, 1) : 0;
         }
 
-        void Clear() { guided = coast = false; holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
+        bool straight; float straightSteer, laneOffset;
+        void Clear() { straight = false; straightSteer = 0; laneOffset = 0; guided = coast = false; holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
         IEnumerator Until(Func<bool> done, float timeout) { float end = Time.time + timeout; while (!done() && Time.time < end) yield return null; }
         IEnumerator Wait(float s) { float end = Time.time + s; while (Time.time < end) yield return null; }
         void Line(string s) { report.AppendLine(s); Debug.Log("[Check] " + s); }
@@ -172,6 +181,13 @@ namespace ShiftStorm
             if (r3 || which == "race") yield return RaceCheck();
             if (r3 || which == "shortcuts") yield return Shortcuts();
             if (which == "soak") yield return Soak();
+            bool r4 = which == "round4";
+            if (r4 || which == "scan") yield return Scan();
+            if (r4 || which == "walls") yield return Walls();
+            if (r4 || which == "nearmiss") yield return NearMiss();
+            if (r4 || which == "starts") yield return Starts();
+            if (r4 || which == "difficulty") yield return DifficultyCheck();
+            if (which == "tunnel") yield return TunnelLaps();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();
             var au = CourseAudio.Instance;

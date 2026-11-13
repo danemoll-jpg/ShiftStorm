@@ -18,7 +18,13 @@ namespace ShiftStorm
             source = gameObject.AddComponent<AudioSource>(); source.clip = clip; source.loop = true; source.spatialBlend = spatial ? 1 : 0; source.volume = spatial ? .5f : .35f;
             if (spatial) { source.rolloffMode = AudioRolloffMode.Linear; source.minDistance = 6; source.maxDistance = 90; source.dopplerLevel = .3f; }
             source.Play();
+            // Round 4: a wall hit (ElevenLabs-made Tee'd Off impact, copied): louder for a harder hit
+            hits = new[] { Resources.Load<AudioClip>("Audio/Sfx/wall_hit_1"), Resources.Load<AudioClip>("Audio/Sfx/wall_hit_2") };
+            hitSource = gameObject.AddComponent<AudioSource>(); hitSource.playOnAwake = false; hitSource.spatialBlend = source.spatialBlend;
+            if (spatial) { hitSource.rolloffMode = AudioRolloffMode.Linear; hitSource.minDistance = 6; hitSource.maxDistance = 90; }
+            v.WallHit += (angle, keep, what) => { var c = hits[Random.Range(0, hits.Length)]; if (c) hitSource.PlayOneShot(c, Mathf.Lerp(.25f, .9f, Mathf.Clamp01((1 - keep) * 3f))); };
         }
+        AudioSource hitSource; AudioClip[] hits;
         void Update()
         {
             if (!source || !v) return;

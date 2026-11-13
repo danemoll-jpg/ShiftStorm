@@ -56,6 +56,13 @@ namespace ShiftStorm
                 float a = .05f + .07f * speedFrac, tt = Time.time * 23f;
                 transform.position += transform.right * ((Mathf.PerlinNoise(tt, 0) - .5f) * 2 * a) + transform.up * ((Mathf.PerlinNoise(0, tt) - .5f) * 2 * a);
             }
+            // Round 4: a wall hit reads as a hit: a short camera bump, bigger for a harder hit
+            float since = Time.time - target.LastWallAt;
+            if (target.LastWallAt > 0 && since < .3f)
+            {
+                float a = (.06f + (1 - target.LastWallKeep) * .8f) * (1 - since / .3f), tt = Time.time * 41f;
+                transform.position += transform.right * ((Mathf.PerlinNoise(tt, 3) - .5f) * 2 * a) + transform.up * ((Mathf.PerlinNoise(3, tt) - .5f) * 2 * a);
+            }
             // underwater look
             bool under = WaterVolume.SurfaceAt(transform.position, out float s, 0f) && transform.position.y < s;
             RenderSettings.fog = under || skyFogOn;

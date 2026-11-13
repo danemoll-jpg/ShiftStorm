@@ -58,7 +58,7 @@ namespace ShiftStorm
             yield return MenuTo("Settings"); yield return Press(() => input.sConfirm = true);
             bool onSettings = game.MenuPage == Game.Page.Settings;
             yield return MenuTo("Invert"); yield return Press(() => input.sConfirm = true); Capture("settings-invert-on");
-            string item = game.MenuItems[0];
+            string item = game.MenuItems.Find(x => x.StartsWith("Invert"));
             yield return MenuTo("Back"); yield return Press(() => input.sConfirm = true);
             yield return Press(() => input.sBack = true); bool closed = !game.MenuOpen;
             yield return Pitch(4, Mode.Fly, "on", x => fOn = x); yield return Pitch(5, Mode.Dive, "on", x => dOn = x);
@@ -245,7 +245,7 @@ namespace ShiftStorm
             var old = v.GetComponent<RivalPilot>(); if (old) Destroy(old);
             var p = v.gameObject.AddComponent<RivalPilot>();
             p.rival = new Rival { name = "check", brakeMargin = 1, boostMeter = 2, boostStraight = 0, shortcut = shortcuts, shortcutRate = 1, seed = 1 };
-            p.AlwaysOn = true; p.missOffset = miss; aiDrives = true; return p;
+            p.AlwaysOn = true; p.missOffset = miss; p.useDifficulty = false; aiDrives = true; return p;
         }
         void StopAi() { var p = v.GetComponent<RivalPilot>(); if (p) Destroy(p); aiDrives = false; }
         IEnumerator Leg(string label, string plan, int anchor, int gatesTarget, float miss, Action<float, string> done)

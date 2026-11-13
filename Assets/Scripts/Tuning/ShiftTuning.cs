@@ -40,8 +40,19 @@ namespace ShiftStorm
         public float wrongWaySeconds = .6f;           // ... for this long, while on the route
         public float offRouteDrive = 16f, offRouteBoat = 26f, offRouteFly = 55f, offRouteDive = 15f;   // further than this from the line: THIS WAY
         public float airOutOfBoundsSeconds = 4f;      // in the air, out of bounds to the side this long (THIS WAY meanwhile) before the reset
-        [Header("Scrapes (Round 3)")]
-        public float scrapeSpeedKeep = .55f;          // a scrape in the air or underwater keeps this much of the speed (never under the form's floor) ...
+        [Header("Scrapes (Round 3: the Sky Arch slit's buttress only, since Round 4)")]
+        public float scrapeSpeedKeep = .55f;          // a scrape on the slit's buttress keeps at most this much of the speed (never under the form's floor) ...
         public float scrapeSeconds = .8f;             // ... and the throttle is ignored this long
+        [Header("Walls (Round 4: glance off, never stop)")]
+        public float wallLossMin = .04f;              // speed lost by a fresh hit at a shallow angle ...
+        public float wallLossHeadOn = .40f;           // ... and by a head-on hit (90 deg); in between by (angle / 90) ^ wallLossExponent
+        public float wallLossExponent = 1.5f;
+        public float wallNudge = 2.5f;                // m/s pushed away from the wall on a fresh hit (30 % of it while pressing on along it)
+        public float wallSlideLossPerSecond = .1f;    // pressing on along a wall: this share of the speed per second
+        public float wallRepeatSeconds = .35f;        // a new hit costs the angle's loss again only after this long
+        [Range(0, 1)] public float wallNoseAlign = .8f;   // a car's nose is turned this share of the way along the wall when it points into it
+        [Header("Near-miss gates (Round 4)")]
+        public float nearMissPenalty = 3f;            // seconds added for each gate counted as a near miss
+        public float nearMissMargin = 1f;             // passing outside the frame but within this many gate widths (or heights) of it
     }
 }

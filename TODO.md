@@ -20,6 +20,57 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
+
+### Round 4 delivery (2026-11-13) — status per item
+Evidence: `Docs/Checks/round4/` (reports per check, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one
+heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run. Sound was never unmuted. No window opened.
+1. **Walls: glance off — done.** `ShiftVehicle.Walls.cs`: speed into the wall removed, speed along it kept minus 4 % (shallow) to 40 %
+   (head-on) by angle, 2.5 m/s nudge away, a car's nose turned 80 % along the wall and its spin removed, a steep hit always slides the
+   route's way; frictionless hull; hit sound + camera bump. Slit buttress keeps the Round 3 scrape rule (a scrape there still costs
+   +1.49 s against the safe line, the slit saves 1.57 s). Check (10 / 25 / 45 deg, every form): speed kept 0.25 s later car 98/95/86 %,
+   boat 99/95/88 %, plane 98/96/93 %, sub 101/96/92 %; no stop, no spin, 0 resets; 3 s held against a wall: car 106 m, boat 102 m, sub 92 m
+   forward. Found and fixed on the way: a reversing sub flipped by a floor glance (Round 1 E5), a corner counted as a hit every step.
+   Player lap (check pilot, no boost): 138.91 s (build 4: 137.6-141.0 s); in races 139.4-142.3 s.
+2. **Keeping up with the AI — done.** Menu > Settings > AI difficulty Easy / Normal / Hard, **default Easy**, saved in `settings.json`.
+   Changes only driving (pace held, braking, line wander, boost timing, small mistakes, shortcut rate), no rubber-banding. 3 races each:
+   Easy AI 154.6 s (+9 % on the check pilot's 142.3 s; pilot 1st 3 of 3), Normal 141.9 s (+1 %, pilot 1st 2 of 3), Hard 133.3 s (= Round 3's
+   AI with the new walls; pilot 1st 0 of 3).
+3. **Beams on the start / finish road — done.** Cause: the course spline looped back 8 m before G0 (uneven control points since the 1.7x
+   rescale); the promenade's barrier strips followed the loop diagonally across the road. Fixed (two even points), plus: road width and
+   barrier height now change smoothly (build 4 had barrier ends facing traffic at climb0 and the ramp), the climb's cliff wall stood 1 m
+   inside the road (moved out), the Fly sign's post stood on the ramp road (moved off), the finishing barriers overlapped the promenade's.
+   Scan of the whole lap: no collider inside the route except the take-off lips under the two jumps, the cave exit channel's roof (1.5 m
+   over the line) and the cave gates' glow frames (no collider). Pictures: `scan-start-line-*.jpg`.
+4. **Start-line shoving — done.** Grid 11 m across x 10 m between rows (was 9 x 7), the AI launches row by row (0.15 s per row) and keeps
+   its grid lane for 200 m. 25 starts: 0 resets, 0 back-outs, 0 wall hits, 0 touches in the first 10 s (Easy and Hard).
+5. **Coral Vault tunnel — done, but short of the target.** On again. Openings longer, edge past the line, tunnel 20 m wide, exit
+   narrowing smooth (to 17 m), the climb-out's right side open, stronger current; an AI that keeps hitting rock gives the shortcut up.
+   25 AI runs: 25 through, 0 stuck, 0 resets; deliberate miss +3.3 s (build 4 idea: grinding), forced scrape runs 4-6.5 m off its line
+   lose 0-6 s, never trapped. **Saves only 1.15 s** for a clean run (target 2-3 s): every AI run still touches the climb-out's walls
+   (2-3 glances, ~10 % each). Reshaping the climb-out wants a look in a window (Dan's OK). Chip takes it on some laps.
+6. **Near-miss gates — done.** Through a gate's plane outside the frame but within one gate width (8-30 m), right form, heading along the
+   route: counted, +3 s, "MISSED G4 +3 s" on the HUD, in the lap time, results and race order (finishers now ordered by time). Shortcut
+   sub-gates too, charged when the shortcut is finished. Check: road (G1), flight (G3, under its frame), water (G4), pool (G8) counted with
+   +3 s, no reset; the cave gates G6 / G7 fill the cave, nothing to pass beside. Far miss and wrong form (plane over G4): rejected (TURN
+   BACK, reset as before). The most a near miss can save anywhere: 1.32 s (G7) → penalty 3 s, so a near-miss lap is never faster. Same rule for the AI.
+7. **Regression + soak — done.** 50 AI laps on Normal (four AI cars, time scale 3): 50 of 50 within 300 s, 0 bad gate sequences, 0 resets
+   (Round 3: 27 Reset presses per 100 laps), laps 138.5 / 142.1 / 147.8 s, slit 9x, tunnel 6x. Round 1 (strip, lanes, E1-E6), Round 2 (lap, skip x3, Abi, best), Round 2b (nav x2, slow fps,
+   screen), Round 3 (settings, settings2, quit, quitresults exit 0, race x2, shortcuts, waterfall x5): all PASS on the final build.
+   Lanes' open-loop full-stick weave: drive 4 / boat 2 resets as in build 3.
+8. **Wrap-up — done.** This file, `CLAUDE.md` (Settings: difficulty; walls; near misses; checks), `Docs/REUSE-AUDIT.md` section 8,
+   commit + push, release `build-5` (0.4.0), disk cleaned.
+
+#### For Dan to check (Round 4)
+- **Walls:** brush the barriers, river banks, arch pillars and cave walls: a tad slower and bounced off, never stopped? Too soft / hard?
+- **Difficulty:** Easy is the default; can you stay with them now? Try Normal / Hard (Menu > Settings > AI difficulty).
+- **Start line:** no beams, no shoving at GO?
+- **Near misses:** clip just outside a frame: "MISSED Gx +3 s", no U-turn. Is 3 s fair? Is the band too wide / narrow?
+- **Coral Vault tunnel:** two holes in the cave floor after the first low curtain, back up before G7. Worth taking? It's only ~1 s;
+  the climb-out wants reshaping in a window (your OK).
+- **Wall hit sound / camera bump:** right amount? (the sound was never played here: all runs muted)
+- **Deck FPS** with four cars (R3), as before.
+
 - **Round 3 — Dan's three notes, AI rivals, shortcuts** (2026-11-13, release `build-4` / 0.3.0). Spec moved to `TODO-ARCHIVE.md`.
 
 ### Round 3 delivery (2026-11-13) — status per item
@@ -122,102 +173,8 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
-## Current Objective — Round 4: walls, keeping up, the start line, the tunnel, near-miss gates
-
-**Dan's notes after racing build 4 (2026-11-13), quoted:**
-1. "Brushing up against the wall shouldn't stop you. Should slow you a tad
-   and bounce you off."
-2. "Couldn't keep up with the other racers."
-3. "There are two beams in the middle of the road at the start/finish line."
-4. "Missing a gate should be a time penalty if you just miss it. Still not
-   allow you to cheat but just in case you miss it so you don't have to
-   circle back."
-Dan: fold these into the next round. Run unattended — don't stop to ask;
-anything needing a visible window or Dan's OK gets skipped and noted.
-
-1. **Walls: glance off, don't stop.** In every form (road edges, cliff
-   walls, arch / buttress, river banks, cave walls), a glancing hit should
-   cost a little speed and push you back along the wall, never stop you or
-   spin you. Only a near head-on hit costs real speed, and even then you
-   keep going.
-   - Make the hull slide along walls (low friction against course walls,
-     velocity into the wall removed, velocity along it kept minus a small
-     scrape loss — about 5–10 % for a glancing hit, scaled by angle), plus
-     a short sideways nudge away from the wall and a small camera bump /
-     scrape sound so it reads as a hit.
-   - No sticking on wall seams, corners or mesh edges; steering stays live.
-   - Keep the existing rule that a scrape in the slit costs more than the
-     shortcut saves.
-   *Check:* scripted hits at 10°, 25° and 45° in each form: speed kept
-   after each (report %), no stop, no spin, no reset; and a run that holds
-   against a wall for 3 s keeps moving forward.
-2. **Keeping up with the AI.** The AI drives the ideal line with perfect
-   boost timing; Dan, on the Deck, couldn't stay with them.
-   - Add a **difficulty setting** in Menu > Settings: Easy / Normal / Hard.
-     **Default: Easy.** Difficulty only changes how the AI drives —
-     braking margins, line accuracy, boost timing and how often they
-     make small mistakes — never their vehicle stats, and **no
-     rubber-banding**.
-   - Target lap times for the AI pack: Easy about 10 % slower than the
-     check pilot's safe lap without boost; Normal about equal to it; Hard =
-     today's AI.
-   - Item 1 should also help: report the player's lap before / after the
-     wall fix.
-   *Check:* AI lap times per difficulty (3 races each), next to the check
-   pilot's lap; the check pilot finishes 1st on Easy without boost.
-3. **The two beams on the start / finish road.** Nothing solid or
-   blocking may stand on the racing surface. Move the start / finish gate's
-   posts outside the road edges (a banner overhead is fine), and **check
-   every gate, sign, ring and route guide on the whole course** for posts
-   or beams inside the route's width (road, water lane, flight rings, cave
-   lights) — list any found and fix them.
-   *Check:* a scan of the course listing every collider inside the route
-   width (should be none except intended ones like the slit buttress);
-   a player-view picture of the start line.
-4. **Start-line shoving.** The Round 3 soak's worst spot: cars pushed
-   against the right edge at GO. Space the 2 × 2 grid and stagger the AI's
-   launch slightly so nobody gets pinned.
-   *Check:* 25 starts, 0 resets in the first 10 s.
-5. **Coral Vault low tunnel, back on.** Fix what made it unusable in
-   Round 3 (the sub catching the floor edge / chamber wall, a miss
-   grinding along it) — item 1's wall behaviour should help. Widen /
-   smooth the entry and exit, keep it demanding (early depth alignment,
-   tighter exit) and worth 2–3 s for a clean run. Chip uses it on some
-   laps.
-   *Check:* time saved (same entry speed, no boost), a deliberate miss and
-   a scrape run (lose time, never trapped), 25 AI laps through it with 0
-   stuck. If it still isn't right without a visible window, leave it off
-   and say exactly what's wrong.
-6. **A near-miss of a gate = time penalty, not a U-turn.** If you pass
-   just beside a gate (through its plane but outside the frame, within
-   about one gate-width of it), in the right form, and carry on along the
-   route, the gate counts with a **time penalty** added to your lap — no
-   need to circle back. Show it clearly ("MISSED G4 +3 s") on the HUD and
-   in the results.
-   - **Still no cheating:** a far miss (outside that margin), the wrong form
-     (e.g. flying over the cave instead of diving through G6), or skipping
-     a section keeps today's behaviour (THIS WAY / TURN BACK / reset).
-     Shortcut sub-gates follow the same near-miss rule.
-   - Penalty: start at 3 s; measure the biggest time a near miss could save
-     anywhere on the lap and set the penalty clearly above it (say the
-     number used). Same rule for the AI.
-   *Check:* a near miss at each kind of gate (road, flight ring, water,
-   cave) → counted with the penalty, no reset; a far miss and a
-   wrong-form pass → rejected as before; a lap with a near miss is never
-   faster than the clean lap.
-7. **Regression + short AI soak.** All Round 1 / 2 / 2b / 3 checks again;
-   50 AI laps on Normal: all finish within 2× target with valid gate
-   sequences.
-8. **Round wrap-up.** Per-item status for all 8 items (done / not done /
-   deferred, and why), "For Dan to check", update `CLAUDE.md` (Settings:
-   difficulty; wall behaviour), commit, push, publish release build 5
-   (0.4.0), clean the disk.
-
-### Defaults (unchanged)
-- Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
+## Current Objective
+None set: Round 5 is planned with Dan after he plays build 5 (0.4.0). Round 4's spec is in `TODO-ARCHIVE.md`.
 
 ## Next Steps (Do Not Start Yet)
 - **Art slice beyond Round 2's first pass** (finished Jurassic Par scenery, real

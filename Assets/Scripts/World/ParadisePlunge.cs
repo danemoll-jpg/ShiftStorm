@@ -25,6 +25,11 @@ namespace ShiftStorm
         static readonly (string n, float x, float y, float z)[] Points =
         {
             ("lineStart", 0, 2.9f, -60), ("start", 0, 2.9f, -20), ("G0", 0, 2.9f, 0),
+            // Round 4 item 3: two points after G0 so the spline's spacing is even there. Build 4 went straight from G0 to (20, 140): the
+            // tangent at G0 was four times the 20 m segment before it, so the line looped back on itself 8 m before G0 (sideways 2.5 m and
+            // backwards); the promenade's barrier strips, built along the line, followed the loop and cut diagonally across the start road
+            // (Dan's "two beams in the middle of the road at the start / finish line").
+            ("", 0, 2.9f, 20), ("", 4, 2.9f, 60),
             ("", 20, 2.9f, 140), ("promMid", -20, 2.9f, 300), ("", 18, 2.9f, 460), ("G1", 0, 2.9f, 580),
             ("climb0", 0, 3.4f, 640), ("corner1", 12, 5, 676), ("", 50, 8, 690), ("climbMid", 190, 18, 697), ("", 340, 28, 694), ("corner2", 392, 31, 676), ("", 410, 32, 636),
             ("rampStart", 412, 33, 600), ("lip", 412, 43, 556),
@@ -158,7 +163,28 @@ namespace ShiftStorm
         }
 
         // ---------------- road: promenade, climb, ramp; and the finishing road ----------------
-        static float HalfWidth(float p) => p < M("climb0") ? 13f : p < M("rampStart") - 10 ? 12.5f : 11f;   // Round 2b: wider for the new speeds
+        // Round 2b: wider for the new speeds. Round 4: the width (and the barriers' height) changes smoothly over 30 m instead of in steps,
+        // so no barrier end ever faces the traffic (build 4: 0.5 m and 1.5 m steps at climb0 and the ramp); the finishing road is 13 m like
+        // the promenade it overlaps at the start / finish (build 4: 14 m, its barriers 1 m outside the promenade's on the shared stretch).
+        static float HalfWidth(float p)
+        {
+            if (p >= M("landing") - 12) return 13f;
+            float a = M("climb0"), b = M("rampStart") - 10;
+            return p < b - 30 ? Mathf.Lerp(13f, 12.5f, Mathf.InverseLerp(a - 15, a + 15, p)) : Mathf.Lerp(12.5f, 11f, Mathf.InverseLerp(b - 30, b + 5, p));
+        }
+        public static float RoadHalfAt(float p) => HalfWidth(p);
+        static float BarrierTop(float p, bool right) => Mathf.Lerp(.8f, right ? 1.3f : 1.1f, Mathf.InverseLerp(M("climb0") - 15, M("climb0") + 15, p));
+        // cross-sections whose edges vary along the line
+        static List<MeshKit.Sample> SamplesW(float a, float b, Func<float, float> l, Func<float, float> r, Func<float, Vector3, float> top, Func<float, Vector3, float> bottom, float step = 4f)
+        {
+            var list = new List<MeshKit.Sample>(); int n = Mathf.Max(1, Mathf.CeilToInt((b - a) / step));
+            for (int i = 0; i <= n; i++)
+            {
+                float p = Mathf.Lerp(a, b, i / (float)n); var pt = At(p);
+                list.Add(new MeshKit.Sample { c = pt, right = Right(p), l = l(p), r = r(p), top = top(p, pt), bottom = bottom(p, pt) });
+            }
+            return list;
+        }
         static void Road()
         {
             var road = Mt(JurassicLook.Road); var rock = Mt(JurassicLook.Rock); var barrier = Mt(JurassicLook.Stone, true, default, .6f);
@@ -167,14 +193,15 @@ namespace ShiftStorm
             float[] cuts = { a, climb, M("rampStart") - 10, b };
             for (int k = 0; k < cuts.Length - 1; k++)
             {
-                float hw = HalfWidth(cuts[k] + 1), lo = k == 0 ? 1f : -1f;
-                MeshKit.Strip(root, "Road", Samples(cuts[k], cuts[k + 1], -hw, hw, (p, pt) => pt.y - .9f, (p, pt) => lo, 3f), road, rock);
+                float lo = k == 0 ? 1f : -1f;
+                MeshKit.Strip(root, "Road", SamplesW(cuts[k], cuts[k + 1], p => -HalfWidth(p), p => HalfWidth(p), (p, pt) => pt.y - .9f, (p, pt) => lo, 3f), road, rock);
                 // low barriers at both edges (the valley side a little higher on the climb)
-                MeshKit.Strip(root, "Barrier L", Samples(cuts[k], cuts[k + 1], -hw - .7f, -hw, (p, pt) => pt.y - .9f + (k == 0 ? .8f : 1.1f), (p, pt) => pt.y - 1.6f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
-                MeshKit.Strip(root, "Barrier R", Samples(cuts[k], cuts[k + 1], hw, hw + .7f, (p, pt) => pt.y - .9f + (k == 0 ? .8f : 1.3f), (p, pt) => pt.y - 1.6f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+                MeshKit.Strip(root, "Barrier L", SamplesW(cuts[k], cuts[k + 1], p => -HalfWidth(p) - .7f, p => -HalfWidth(p), (p, pt) => pt.y - .9f + BarrierTop(p, false), (p, pt) => pt.y - 1.6f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+                MeshKit.Strip(root, "Barrier R", SamplesW(cuts[k], cuts[k + 1], p => HalfWidth(p), p => HalfWidth(p) + .7f, (p, pt) => pt.y - .9f + BarrierTop(p, true), (p, pt) => pt.y - 1.6f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
             }
             // the hillside above the climb (left: the outside of both corners), mossy on top
-            MeshKit.Strip(root, "Climb cliff", Samples(climb + 10, M("rampStart") - 20, -40f, -11.5f, (p, pt) => pt.y + 9f, (p, pt) => -1f, 4f), Mt(JurassicLook.Moss), rock);
+            MeshKit.Strip(root, "Climb cliff", Samples(climb + 10, M("rampStart") - 20, -40f, -13.3f,   // Round 4: outside the barrier (build 4: -11.5, 1 m inside the road's edge)
+                 (p, pt) => pt.y + 9f, (p, pt) => -1f, 4f), Mt(JurassicLook.Moss), rock);
             // ramp: wind streamers either side
             for (int i = 0; i < 5; i++)
             {
@@ -183,9 +210,12 @@ namespace ShiftStorm
             }
             // the finishing road: from the landing to where the promenade's start piece begins (no overlap)
             float fa = M("landing") - 12, fb = M("lineEnd") - 81f;
-            MeshKit.Strip(root, "Finishing road", Samples(fa, fb, -14, 14, (p, pt) => RoadY, (p, pt) => 1f, 3f), road, rock);
-            MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fb, -14.7f, -14f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
-            MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fb, 14f, 14.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            MeshKit.Strip(root, "Finishing road", Samples(fa, fb, -13, 13, (p, pt) => RoadY, (p, pt) => 1f, 3f), road, rock);
+            // Round 4: the barriers end exactly where the promenade's begin (the line's first point), end to end with the same section; in
+            // build 4 they ran 55 m past it beside the promenade's, whose end face then stood in the way of a car sliding along the wall
+            float fbb = M("lineEnd") - Vector3.Distance(At(M("lineEnd")), c.line[0]);
+            MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fbb, -13.7f, -13f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fbb, 13f, 13.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
             // start / finish banner and grid lines
             var fin = new Vector3(0, RoadY, 0);
             Box(root, "Finish line", fin + Vector3.up * .03f, new Vector3(26, .06f, 2.2f), Mt(new Color(.1f, .1f, .1f)), null, false);
@@ -261,7 +291,7 @@ namespace ShiftStorm
             MeshKit.Strip(root, "Cave wall R", Samples(a, b, CaveHalf, CaveHalf + 5, (p, pt) => 1.0f, (p, pt) => CaveFloor - 2, 3f), rock);
             // Round 3: the floor has two openings on its left half (the Coral Vault tunnel's way down and back up)
             var sand = Mt(JurassicLook.Sand); float h0 = M("lo1") + HoleA.x, h1 = M("lo1") + HoleA.y, h2 = M("G7") + HoleB.x, h3 = M("G7") + HoleB.y;
-            var pieces = VaultTunnel ? new[] { (M("diveZone") - 10, h0, -CaveHalf - 1), (h0, h1, -1f), (h1, h2, -CaveHalf - 1), (h2, h3, -1f), (h3, b + 10, -CaveHalf - 1) } : new[] { (M("diveZone") - 10, b + 10, -CaveHalf - 1) };
+            var pieces = VaultTunnel ? new[] { (M("diveZone") - 10, h0, -CaveHalf - 1), (h0, h1, 1f), (h1, h2, -CaveHalf - 1), (h2, h3, 1f), (h3, b + 10, -CaveHalf - 1) } : new[] { (M("diveZone") - 10, b + 10, -CaveHalf - 1) };
             foreach (var (fa, fb, l) in pieces)
                 MeshKit.Strip(root, "Cave floor", Samples(fa, fb, l, CaveHalf + 1, (p, pt) => CaveFloor, (p, pt) => CaveFloor - 2, 4f), sand, rock);
             // the cliff over the portal, and the carved stone frame of the opening (its lintel just breaks the surface)
@@ -493,12 +523,11 @@ namespace ShiftStorm
             float[] cuts = { 0, M("climb0"), M("rampStart") - 10, M("lip") };
             for (int k = 0; k < cuts.Length - 1; k++)
             {
-                float hw = HalfWidth(cuts[k] + 1);
                 foreach (float s in new[] { -1f, 1f })
-                    MeshKit.Strip(scen, "Edge line", Samples(cuts[k], cuts[k + 1], s < 0 ? -hw + .5f : hw - 1.2f, s < 0 ? -hw + 1.2f : hw - .5f, (p, pt) => pt.y - .9f + .03f, (p, pt) => pt.y - .9f - .02f, 3f), edge, null, false);
+                    MeshKit.Strip(scen, "Edge line", SamplesW(cuts[k], cuts[k + 1], p => s < 0 ? -HalfWidth(p) + .5f : HalfWidth(p) - 1.2f, p => s < 0 ? -HalfWidth(p) + 1.2f : HalfWidth(p) - .5f, (p, pt) => pt.y - .9f + .03f, (p, pt) => pt.y - .9f - .02f, 3f), edge, null, false);
             }
             float fa = M("landing") - 12, fb = M("lineEnd") - 81f;
-            foreach (float s in new[] { -1f, 1f }) MeshKit.Strip(scen, "Edge line", Samples(fa, fb, s < 0 ? -13.5f : 12.8f, s < 0 ? -12.8f : 13.5f, (p, pt) => RoadY + .03f, (p, pt) => RoadY - .02f, 3f), edge, null, false);
+            foreach (float s in new[] { -1f, 1f }) MeshKit.Strip(scen, "Edge line", Samples(fa, fb, s < 0 ? -12.5f : 11.8f, s < 0 ? -11.8f : 12.5f, (p, pt) => RoadY + .03f, (p, pt) => RoadY - .02f, 3f), edge, null, false);
             // chevrons on the road, every 55 m, pointing the way
             var chev = new MeshKit.Batch(); var amber = new Color(1f, .62f, .15f);
             void Chevron(float p)
@@ -564,17 +593,20 @@ namespace ShiftStorm
                 h.transform.SetPositionAndRotation(new Vector3(q.x, y, q.z) + Right(p) * side, Facing(p));
                 WorldBuilder.Sign(h.transform, Vector3.zero, form, post);
             }
-            S(M("rampStart") - 22, 10.35f, At(M("rampStart") - 22).y - .9f + 1.1f, Mode.Fly, 5);
+            S(M("rampStart") - 22, 14.6f, At(M("rampStart") - 22).y - .9f, Mode.Fly, 6);   // Round 4: beside the road (build 4: 10.35 m, its post on the road)
             S(M("splash") - 110, -30, 1.4f, Mode.Boat, 13);
             S(M("diveZone") - 110, -23, 1.4f, Mode.Dive, 6);
             S(M("rampFoot") - 14, -15, Water, Mode.Drive, 5);
         }
         // ---------------- Round 3 item 5: the two shortcuts ----------------
-        static readonly Vector2 HoleA = new Vector2(20, 92), HoleB = new Vector2(-112, -26);
-        // Round 3: the Coral Vault tunnel is built and measured but switched off for build 4: in the checks a submarine following its line
-        // still caught the cave floor's edge, the chamber wall and the tunnel walls (-2.5 s instead of +2-3 s), and a deliberate miss could
-        // grind along it without reaching G7. Needs a look in a window before it is turned back on (TODO.md).
-        public const bool VaultTunnel = false;   // the cave floor openings, metres from lo1 / G7
+        // Round 4 item 5: the openings are longer (the way down starts 10 m after the curtain instead of 20, the way up ends 20 m before G7
+        // instead of 26) and their edge is past the line (1 m right of it instead of 1 m left), so a submarine diving on the tunnel's line
+        // has 7 m to the floor's edge instead of 5; the tunnel is wider (20 m, the exit 17 m; build 4: 18 / 13) and taller.
+        static readonly Vector2 HoleA = new Vector2(10, 96), HoleB = new Vector2(-116, -20);
+        // Round 3: built but switched off for build 4 (the sub caught the floor's edge, the chamber wall and the tunnel walls; a miss could
+        // grind along it). Round 4: back on: walls glance a racer off (ShiftVehicle.Walls), so a touch costs a little and never traps.
+        // "-noTunnel" (checks) builds the course without it.
+        public static bool VaultTunnel => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noTunnel") < 0;   // the cave floor openings, metres from lo1 / G7
         static readonly Color ShortcutColor = new Color(.75f, .4f, 1f, .9f);
         static void Shortcuts()
         {
@@ -601,10 +633,10 @@ namespace ShiftStorm
             var tk = new List<Vector3> { At(l1 - 10), A, Left(l1 + 45, 6, -22), Left(l1 + 72, 15, -27.5f), mid, Left(g7 - 98, 15, -27.5f), Left(g7 - 66, 6, -22), B, At(g7 - 5) };
             var sc = MakeShortcut("Coral Vault tunnel", tk, l1 - 10, g7 - 5, 7, -1, 10f, new Vector2(10, 8), new Vector2(8, 6), -1, -1, Mode.Dive);
             Tunnel(sc);
-            // a hot-spring current runs through the tunnel (about +5 m/s for a submarine riding it), the rest of its time saving
+            // a hot-spring current runs through the tunnel (Round 4: about +11 m/s for a submarine riding it; build 4: +5), the rest of its time saving
             for (float s = 50; s < sc.Length - 60; s += 20)
             {
-                var p0 = sc.PointAt(s, out var d0); var cz = Vol<CurrentZone>("Tunnel current", p0, Quaternion.LookRotation(d0), new Vector3(12, 9, 20)); cz.push = d0 * 4f;
+                var p0 = sc.PointAt(s, out var d0); var cz = Vol<CurrentZone>("Tunnel current", p0, Quaternion.LookRotation(d0), new Vector3(12, 9, 20)); cz.push = d0 * 9f;
             }
         }
         // the shortcut, its line and its entry / exit sub-gates (violet frames). entryAt: metres along its line (-2: 40 m before the
@@ -638,7 +670,10 @@ namespace ShiftStorm
         static void Tunnel(Shortcut sc)
         {
             var rock = Mt(JurassicLook.CaveRock); var sand = Mt(JurassicLook.Sand); float L = sc.Length;
-            float HW(float s) => s > L - 75 ? 6.5f : 9; float HH(float s) => s > L - 75 ? 4f : 5f;
+            // the exit narrows over 30 m (build 4 and the first Round 4 build: in one step, a wall face across the way)
+            float HW(float s) => Mathf.Lerp(10f, 8.5f, Mathf.InverseLerp(L - 95, L - 65, s)); float HH(float s) => Mathf.Lerp(5.5f, 4.5f, Mathf.InverseLerp(L - 95, L - 65, s));
+            // the climb-out turns right toward the main line while rising: its right side opens to 12 m (every AI run rode that wall at 8.5 m)
+            float HWR(float s) => Mathf.Lerp(10f, 12f, Mathf.InverseLerp(L - 120, L - 90, s));
             MeshKit.Sample? Sec(float s, float l, float r, Func<Vector3, float> top, Func<Vector3, float> bot, Func<Vector3, bool> keep)
             {
                 var p = sc.PointAt(s, out var d); var fl = new Vector3(d.x, 0, d.z); if (fl.sqrMagnitude < 1e-4f) fl = Vector3.forward;
@@ -657,10 +692,11 @@ namespace ShiftStorm
             {
                 float hw = HW(s), hh = HH(s);
                 bool below(Vector3 p) => p.y - hh < CaveFloor - .5f;
-                var f0 = Sec(s, -hw - 1, hw + 1, p => p.y - hh, p => p.y - hh - 2, below); if (f0.HasValue) fl0.Add(f0.Value);
+                float hwr = HWR(s);
+                var f0 = Sec(s, -hw - 1, hwr + 1, p => p.y - hh, p => p.y - hh - 2, below); if (f0.HasValue) fl0.Add(f0.Value);
                 var w0 = Sec(s, -hw - 3, -hw, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hh - 2, below); if (w0.HasValue) wl.Add(w0.Value);
-                var w1 = Sec(s, hw, hw + 3, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hh - 2, below); if (w1.HasValue) wr.Add(w1.Value);
-                var r0 = Sec(s, -hw - 3, hw + 3, p => p.y + hh + 2, p => p.y + hh, p => p.y + hh <= CaveFloor - 3.5f);   // starts well below the floor: no lip to catch
+                var w1 = Sec(s, hwr, hwr + 3, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hh - 2, below); if (w1.HasValue) wr.Add(w1.Value);
+                var r0 = Sec(s, -hw - 3, hwr + 3, p => p.y + hh + 2, p => p.y + hh, p => p.y + hh <= CaveFloor - 3.5f);   // starts well below the floor: no lip to catch
                 if (r0.HasValue) rf.Add(r0.Value); else if (lastRoof && rf.Count > 1) { MeshKit.Strip(root, "Tunnel roof", rf, rock); rf = new List<MeshKit.Sample>(); }
                 lastRoof = r0.HasValue;
                 if (!f0.HasValue && fl0.Count > 0) Flush();

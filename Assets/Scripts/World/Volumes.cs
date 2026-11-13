@@ -95,6 +95,20 @@ namespace ShiftStorm
         public bool Crossed(Vector3 from, Vector3 to) => Through(from, to, false);
         public bool CrossedBackward(Vector3 from, Vector3 to) => Through(from, to, true);
         public bool Allows(Mode m) => modes == null || modes.Length == 0 || System.Array.IndexOf(modes, m) >= 0;
+        // Round 4 item 6: forward through the gate's plane outside its frame, but within the near-miss band beside it: margin x the gate's
+        // width (or height), at least 8 m and at most 30 m beyond the frame's edge. outBy: how far outside the frame (m).
+        public Vector2 NearBand(float margin) => new Vector2(margin * Mathf.Clamp(2 * halfSize.x, 8, 30), margin * Mathf.Clamp(2 * halfSize.y, 8, 30));
+        public bool CrossedNear(Vector3 from, Vector3 to, float margin, out float outBy)
+        {
+            outBy = 0;
+            Vector3 a = transform.InverseTransformPoint(from), b = transform.InverseTransformPoint(to);
+            if (!(a.z < 0 && b.z >= 0)) return false;
+            float t = -a.z / (b.z - a.z); var hit = Vector3.Lerp(a, b, t); var band = NearBand(margin);
+            float ox = Mathf.Abs(hit.x) - halfSize.x, oy = Mathf.Abs(hit.y) - halfSize.y;
+            if (ox <= 0 && oy <= 0) return false;   // inside the frame: an ordinary pass
+            outBy = Mathf.Max(ox, oy);
+            return ox <= band.x && oy <= band.y;
+        }
         bool Through(Vector3 from, Vector3 to, bool backward)
         {
             Vector3 a = transform.InverseTransformPoint(from), b = transform.InverseTransformPoint(to);

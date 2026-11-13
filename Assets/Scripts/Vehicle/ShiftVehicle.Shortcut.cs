@@ -12,9 +12,10 @@ namespace ShiftStorm
         public readonly List<int> GateLog = new List<int>();
         float scS, scOffFor;
 
-        void EnterShortcut(Shortcut sc, Vector3 p)
+        readonly List<(string label, float outBy)> scPenalties = new List<(string, float)>();
+        void EnterShortcut(Shortcut sc, Vector3 p, float nearBy = -1)
         {
-            OnShortcut = sc; scOffFor = 0; scS = sc.Project(p, -1, out _, out _);
+            OnShortcut = sc; scOffFor = 0; scPenalties.Clear(); if (nearBy >= 0) scPenalties.Add((sc.entry.label, nearBy)); scS = sc.Project(p, -1, out _, out _);
             Progress = sc.MainProgress(scS);
             Note("shortcut", $"shortcut {sc.label}: in ({Mode}, {Speed:0} m/s)");
         }
@@ -26,8 +27,13 @@ namespace ShiftStorm
             Progress = sc.MainProgress(scS);
             float off = Vector3.Distance(p, at);
             scOffFor = off > sc.halfWidth * 1.6f ? scOffFor + Time.fixedDeltaTime : 0;
-            if (sc.exit.Crossed(lastPos, p))
+            float outBy = 0; bool nearExit = !sc.exit.Crossed(lastPos, p) && sc.exit.CrossedNear(lastPos, p, shared.nearMissMargin, out outBy) && sc.exit.Allows(Mode) && TravelAlong(p) > .5f;
+            if (sc.exit.Crossed(lastPos, p) || nearExit)
             {
+                // Round 4: a near miss of the entry or the exit frame counts with the penalty, charged when the shortcut is finished
+                if (nearExit) scPenalties.Add((sc.exit.label, outBy));
+                foreach (var (l, o) in scPenalties) { AddPenalty(l, o); Note("near miss", $"near miss of {l} ({o:0.0} m outside, +{shared.nearMissPenalty:0} s)"); }
+                scPenalties.Clear();
                 OnShortcut = null; ShortcutsTaken.Add(sc.label);
                 if (sc.replacesGate >= 0 && GatesPassed == sc.replacesGate)
                 {
@@ -41,7 +47,7 @@ namespace ShiftStorm
             bool backOut = sc.entry.CrossedBackward(lastPos, p);
             if (backOut || scOffFor > 1f)
             {
-                OnShortcut = null;
+                OnShortcut = null; scPenalties.Clear();
                 Note("shortcut", $"shortcut {sc.label}: left without finishing it ({(backOut ? "back out through the entry" : $"{off:0} m off its line")})");
                 Progress = Course.Project(p, sc.mainFrom, out at, out dir);
             }

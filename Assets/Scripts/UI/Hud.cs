@@ -78,7 +78,7 @@ namespace ShiftStorm
             UpdateGuide();
             boostFill.offsetMax = new Vector2(3 + 314 * v.Boost, -3); boostImage.color = v.Boosting ? new Color(1, .45f, .1f) : new Color(1, .78f, .15f);
             var c = v.Course; bool trial = c && c.timeTrial;
-            float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime;
+            float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime + v.Penalty;   // Round 4: near-miss penalties count at once
             timer.text = TimeTrial.Clock(time);
             int gates = c ? c.gates.Count : 0;
             info.text = $"{(c ? c.courseName : "")}\nGates {v.GatesPassed}/{gates}   lap {100f * v.RaceDistance / Mathf.Max(1, gates):0}%   resets {v.Resets}\nInvert {(ShiftInput.Invert ? "ON" : "off")}";
@@ -138,12 +138,12 @@ namespace ShiftStorm
                 {
                     var r = order[i]; int fi = race.Finishers.FindIndex(f => f.v == r);
                     string col = ColorUtility.ToHtmlStringRGB(r.Tint), t = fi >= 0 ? TimeTrial.Clock(race.Finishers[fi].time) : $"racing (gate {r.GatesPassed}/{c.gates.Count})";
-                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>   {t}{(r == v ? "</b>" : "")}");
+                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>   {t}{(r.Penalty > 0 ? $"  <color=#ffb070>(+{r.Penalty:0} s: {Missed(r)})</color>" : "")}{(r == v ? "</b>" : "")}");
                 }
                 sb.AppendLine();
             }
             sb.AppendLine($"<size=40><b>{TimeTrial.Clock(tt.Lap)}</b></size>{(tt.NewBest ? "   <color=#ffd34d><b>NEW BEST!</b></color>" : "")}");
-            sb.AppendLine($"best {TimeTrial.Clock(tt.Best != null ? tt.Best.lap : -1)}   resets {v.Resets}");
+            sb.AppendLine($"best {TimeTrial.Clock(tt.Best != null ? tt.Best.lap : -1)}   resets {v.Resets}{(v.Penalty > 0 ? $"   <color=#ffb070>penalty +{v.Penalty:0} s (missed {Missed(v)})</color>" : "")}");
             sb.AppendLine();
             for (int i = 0; i < c.segments.Count; i++)
             {
@@ -157,6 +157,7 @@ namespace ShiftStorm
             sb.AppendLine(); sb.Append("<size=17>D-pad / arrows: choose   A / Enter: go   Y / R: race again</size>");
             return sb.ToString();
         }
+        static string Missed(ShiftVehicle r) => string.Join(", ", r.NearMisses.ConvertAll(x => x.Split(' ')[0]));
         string MenuText()
         {
             var sb = new StringBuilder(); sb.AppendLine($"<b>{game.MenuTitle}</b>\n");

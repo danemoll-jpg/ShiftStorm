@@ -12,7 +12,7 @@ namespace ShiftStorm
         {
             var root = new GameObject("ShiftVehicle (player)");
             var col = root.AddComponent<BoxCollider>(); col.size = new Vector3(1.9f, .95f, 4.0f); col.center = new Vector3(0, .1f, 0);
-            var pm = new PhysicsMaterial("Hull") { dynamicFriction = .2f, staticFriction = .2f, bounciness = .05f, frictionCombine = PhysicsMaterialCombine.Minimum };
+            var pm = new PhysicsMaterial("Hull") { dynamicFriction = 0, staticFriction = 0, bounciness = 0, frictionCombine = PhysicsMaterialCombine.Minimum, bounceCombine = PhysicsMaterialCombine.Minimum };
             col.material = pm;
             root.AddComponent<Rigidbody>();
             root.AddComponent<ShiftInput>();
@@ -30,7 +30,7 @@ namespace ShiftStorm
         {
             var root = new GameObject($"ShiftVehicle (rival {r.name})");
             var col = root.AddComponent<BoxCollider>(); col.size = new Vector3(1.9f, .95f, 4.0f); col.center = new Vector3(0, .1f, 0);
-            col.material = new PhysicsMaterial("Hull") { dynamicFriction = .2f, staticFriction = .2f, bounciness = .05f, frictionCombine = PhysicsMaterialCombine.Minimum };
+            col.material = new PhysicsMaterial("Hull") { dynamicFriction = 0, staticFriction = 0, bounciness = 0, frictionCombine = PhysicsMaterialCombine.Minimum, bounceCombine = PhysicsMaterialCombine.Minimum };
             root.AddComponent<Rigidbody>();
             root.AddComponent<ShiftInput>().Scripted = true;
             var forms = MakeVisual(root.transform, Mode.Drive, 1f, false);

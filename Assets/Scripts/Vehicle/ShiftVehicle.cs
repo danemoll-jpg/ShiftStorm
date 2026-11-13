@@ -87,7 +87,7 @@ namespace ShiftStorm
         {
             Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
-            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
+            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); Penalty = 0; NearMisses.Clear(); Scrapes = 0; WallHits = 0; MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
             Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0, fromStart ? grid : default);
             OnShortcut = null; ShortcutsTaken.Clear(); GateLog.Clear(); scrapeUntil = -1;
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
@@ -137,7 +137,9 @@ namespace ShiftStorm
             if (GraceUntil > 0 && Time.time >= GraceUntil) { GraceUntil = -1; SetLayer(VehicleLayer); }
             var f = Vector3.ProjectOnPlane(Mode == Mode.Fly || Mode == Mode.Dive ? transform.forward : (Body.linearVelocity.sqrMagnitude > 4 && Vector3.Dot(Body.linearVelocity, transform.forward) > 0 ? Body.linearVelocity : transform.forward), Vector3.up);
             if (f.sqrMagnitude > 1e-3f) HeadingDeg = Mathf.Atan2(f.x, f.z) * Mathf.Rad2Deg;
+            stepVel = Body.linearVelocity;   // Round 4: the velocity going into the physics step (a wall hit is measured against it)
         }
+        Vector3 stepVel;
 
         // the speed carried into a faster form, eased in over the change; and the car pulled onto its wheels after a change into Drive
         void Carry(float dt)
@@ -251,6 +253,7 @@ namespace ShiftStorm
                     bool inside = sc.entry.transform.InverseTransformPoint(p).z > 0 && sc.exit.transform.InverseTransformPoint(p).z < 0 && Vector3.Distance(p, sc.entry.transform.position) < 60f
                                   && Vector3.Distance(p, sc.PointAt(sc.Project(p, -1, out _, out _), out _)) < sc.halfWidth * .8f && Course.Project(p, Progress, out var mainAt, out _) >= 0 && Vector3.Distance(p, mainAt) > sc.halfWidth;
                     if (sc.entry.Crossed(lastPos, p) || inside) { EnterShortcut(sc, p); break; }
+                    if (sc.entry.CrossedNear(lastPos, p, shared.nearMissMargin, out float nb) && Vector3.Dot(Body.linearVelocity.normalized, sc.entry.transform.forward) > .5f) { EnterShortcut(sc, p, nb); break; }
                 }
             }
             if (Progress > BestProgress) BestProgress = Progress;
@@ -258,9 +261,16 @@ namespace ShiftStorm
             {
                 var g = gates[GatesPassed];
                 if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); break; }
-                GatesPassed++; MissedGate = null; missedFor = 0; GateLog.Add(g.index);
-                Note("gate", $"gate {g.label} passed ({GatesPassed}/{gates.Count})");
-                if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime; Note("finish", $"finish in {FinishTime:0.00} s, {Resets} resets"); }
+                PassGate(g, "");
+            }
+            // Round 4 item 6: just beside the next gate (through its plane, outside the frame, inside the near-miss band), in a permitted
+            // form and carrying on along the route: it counts, with a time penalty. A far miss, the wrong form or a skipped section: as before.
+            if (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].CrossedNear(lastPos, p, shared.nearMissMargin, out float outBy))
+            {
+                var g = gates[GatesPassed];
+                if (!g.Allows(Mode)) { Note("rejected", $"near miss of {g.label} as {Mode} ({outBy:0.0} m outside): not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); }
+                else if (TravelAlong(p) < .5f) Note("rejected", $"near miss of {g.label} ({outBy:0.0} m outside) not heading along the route: not counted");
+                else { AddPenalty(g.label, outBy); PassGate(g, $" (near miss, {outBy:0.0} m outside, +{shared.nearMissPenalty:0} s)"); }
             }
             if (GatesPassed > 0 && GatesPassed < gates.Count && gates[GatesPassed - 1].CrossedBackward(lastPos, p)) Note("back through", $"back through {gates[GatesPassed - 1].label} (still {GatesPassed} gates)");
             lastPos = p;
@@ -272,32 +282,39 @@ namespace ShiftStorm
             }
             TrackRoute(p, at, dir);
         }
+        void PassGate(ProgressGate g, string how)
+        {
+            var gates = Course.gates;
+            GatesPassed++; MissedGate = null; missedFor = 0; GateLog.Add(g.index);
+            Note("gate", $"gate {g.label} passed{how} ({GatesPassed}/{gates.Count})");
+            if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime + Penalty; Note("finish", $"finish in {FinishTime:0.00} s{(Penalty > 0 ? $" (including +{Penalty:0} s for {NearMisses.Count} near misses)" : "")}, {Resets} resets"); }
+        }
+        // Round 4 item 6: near misses, each with ShiftTuning.nearMissPenalty seconds added to the lap
+        public float Penalty { get; private set; }
+        public float MissCueUntil { get; private set; } = -1;   // the near-miss cue holds over the direction cues this long
+        public readonly List<string> NearMisses = new List<string>();
+        void AddPenalty(string label, float outBy)
+        {
+            Penalty += shared.nearMissPenalty; NearMisses.Add(label); MissCueUntil = Time.time + 2f;
+            string shortName = label.Split(' ')[0];
+            ShowCue($"MISSED {shortName} +{shared.nearMissPenalty:0} s", CueKind.Warn, 2f);
+        }
+        // cos of the angle between the racer's travel and the route direction here (the line's, or the shortcut's)
+        float TravelAlong(Vector3 p)
+        {
+            var vel = Body.linearVelocity; var travel = vel.sqrMagnitude > 9f ? vel.normalized : transform.forward;
+            Vector3 a, b;
+            if (OnShortcut) { a = OnShortcut.PointAt(scS - 6, out _); b = OnShortcut.PointAt(scS + 6, out _); } else { a = Course.PointAt(Progress - 6, out _); b = Course.PointAt(Progress + 6, out _); }
+            var rd = b - a; if (rd.sqrMagnitude < 1e-4f) return 1;
+            bool air = Mode == Mode.Fly || Mode == Mode.Dive;
+            if (!air) { rd.y = 0; travel.y = 0; }
+            return Vector3.Dot(travel.normalized, rd.normalized);
+        }
         public enum CueKind { Guide, Warn, Wrong }
         public CueKind CueType { get; private set; }
         void ShowCue(string text, CueKind kind, float seconds = 1.5f) { Cue = text; CueType = kind; CueUntil = Time.time + seconds; }
 
         void SetLayer(int layer) { foreach (var t in GetComponentsInChildren<Transform>(true)) t.gameObject.layer = layer; }
 
-        // ---- Round 3: contacts. A scrape in the air or underwater costs speed (the form's own physics sets the velocity every step, so a
-        // wall would otherwise only slide it along): the speed drops to ShiftTuning.scrapeSpeedKeep of itself (never under the form's floor)
-        // and the throttle is ignored for scrapeSeconds. Checks listen to Contact (the waterfall recorder). ----
-        public event Action<Collision, bool> Contact;   // (contact, first touch)
-        public int Scrapes { get; private set; }
-        float scrapeUntil = -1, lastScrape = -1;
-        public bool Scraped => Time.time < scrapeUntil;
-        public bool ScrapedRecently => lastScrape > 0 && Time.time - lastScrape < 2f;   // the Sky Arch slit's updraft does not lift a plane that just scraped
-        void OnCollisionEnter(Collision c) { Contact?.Invoke(c, true); Scrape(c); }
-        void OnCollisionStay(Collision c) { Contact?.Invoke(c, false); }
-        void Scrape(Collision c)
-        {
-            if ((Mode != Mode.Fly && Mode != Mode.Dive) || Time.time - lastScrape < .4f || Holding || Time.time - ChangeStartedAt < .5f) return;
-            if (c.rigidbody && c.rigidbody.GetComponent<ShiftVehicle>()) return;   // a bump with another racer is physics only
-            if (Mode == Mode.Dive && DiveSpeed < 5f) return;   // creeping or reversing along a floor is not a scrape (Round 1 E5)
-            lastScrape = Time.time; Scrapes++; scrapeUntil = Time.time + shared.scrapeSeconds;
-            float before = Mode == Mode.Fly ? Airspeed : DiveSpeed;
-            if (Mode == Mode.Fly) Airspeed = Mathf.Max(fly.minSpeed, Airspeed * shared.scrapeSpeedKeep);
-            else DiveSpeed = Mathf.Max(Mathf.Min(DiveSpeed, dive.cruiseSpeed * .4f), DiveSpeed * shared.scrapeSpeedKeep);
-            Note("scrape", $"scrape on {c.collider.name} as {Mode}: {before:0} -> {(Mode == Mode.Fly ? Airspeed : DiveSpeed):0} m/s");
-        }
     }
 }
