@@ -174,7 +174,23 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
 ## Current Objective
-None set: Round 5 is planned with Dan after he plays build 5 (0.4.0). Round 4's spec is in `TODO-ARCHIVE.md`.
+**Round 5 — speed (draft, waiting for Dan's go-ahead).** Round 4's spec is in `TODO-ARCHIVE.md`.
+
+### Dan's review of build 5 (0.4.0), 2026-11-13
+1. Walls: "the wall bounce seems good now". 2. Keeping up: "still difficult keeping up. Still feels like I am moving slow".
+3. Start-line beams: gone. 4. Near miss +3 s: fair ("yes"). 5. Coral Vault tunnel: "not sure maybe". 6. Deck: 60 fps.
+
+### Round 5 items (draft)
+1. **Feel of speed.** Found while planning: the engine sound's pitch tops out at 45 m/s (`VehicleSound`), so above that (Drive 65,
+   Fly 80) speed has no sound cue; fix it per form's top speed and add a wind layer. Camera: stronger field-of-view rise, lower and
+   closer at speed, a bigger boost kick. Speed streaks / spray / bubbles per form. Regularly spaced roadside things (posts, palms, buoys,
+   stripes) so movement reads against the gray-box scenery. Check: before / after pictures at the same spots, frame time on the lap.
+2. **Real speed.** Faster acceleration out of corners and form changes (Drive 22 m/s^2 now) and +10-15 % top speeds in every form, AI on
+   the same tuning; lap target ~120-125 s (now ~139 s). Check: lap, walls, near-miss, start, soak still pass.
+3. **Easy really easy.** Easy AI ~20 % slower than the check pilot (now 9 %), Normal ~8 %, Hard as now; still no rubber-banding.
+   Check: 3 races per level.
+4. **Tunnel:** leave it as it is unless Dan asks (he's unsure); the climb-out reshape still needs a window and his OK.
+5. **Regression + soak, wrap-up, release build 6 (0.5.0).**
 
 ## Next Steps (Do Not Start Yet)
 - **Art slice beyond Round 2's first pass** (finished Jurassic Par scenery, real
