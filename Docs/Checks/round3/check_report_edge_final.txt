@@ -1,0 +1,23 @@
+ShiftStorm check 'edge', 2026-11-13 07:47, build 0.3.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+E1 low-speed ramp entry PASS: ramp at 10 m/s, flight entered at 48.2 m/s, reached the lagoon in Boat, resets 0
+E2 boosted water entry PASS: boat speed 50.0 m/s, level after 0.43 s, resets 0
+E3 steep nose-down water entry PASS: -50 deg, level after 0.24 s, resets 0
+E4 reset during a change PASS: reset 0.25 s into Drive->Fly; back in Fly; wing zone fired again: True
+E5 same trigger twice PASS: changes 1 (Boat->Dive), form Dive, resets 0
+E6 surfacing pool -> road PASS: changes Dive->Boat, Boat->Drive; Boat->Drive done 0.47 s before the wheels touched, resets 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 0.94 ms, 95th pct 1.29 ms, 99th pct 1.56 ms, worst 13.57 ms over 66043 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  e1-slow-ramp Drive->Fly  z   240.0  0.600 s  frames worst 13.57 / mean 1.09 ms
+  e1-slow-ramp Fly->Boat   z   500.5  0.600 s  frames worst 8.07 / mean 1.04 ms
+  e2-boost-water Fly->Boat   z   500.7  0.601 s  frames worst 4.23 / mean 1.05 ms
+  e3-nose-down Fly->Boat   z   500.4  0.600 s  frames worst 5.07 / mean 1.02 ms
+  e4-reset-mid Drive->Fly  z   240.2  cancelled by the reset  frames worst 6.76 / mean 0.94 ms
+  e4-reset-mid Drive->Fly  z   240.5  0.600 s  frames worst 5.01 / mean 1.09 ms
+  e5-twice     Boat->Dive  z   862.3  0.601 s  frames worst 6.50 / mean 1.05 ms
+  e6-surface-road Dive->Boat  z  1086.3  0.601 s  frames worst 2.42 / mean 1.03 ms
+  e6-surface-road Boat->Drive z  1201.6  0.601 s  frames worst 2.46 / mean 1.02 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 0, Abi lines: reset: trouble_1; waterfall: lucky_1
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

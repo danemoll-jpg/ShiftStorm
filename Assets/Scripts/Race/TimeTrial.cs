@@ -66,7 +66,8 @@ namespace ShiftStorm
             Lap = v.FinishTime; SegmentTimes.Clear(); float prev = 0;
             foreach (var s in v.Splits) { SegmentTimes.Add(s - prev); prev = s; }
             BestBefore = BestTimes.Get(v.Course.courseName);
-            NewBest = BestTimes.Submit(v.Course.courseName, Lap, SegmentTimes);
+            // Round 3: a race against the rivals shows the lap and splits but only a Time Trial (alone) sets the best lap
+            NewBest = !(Game.Instance && Game.Instance.RaceMode) && BestTimes.Submit(v.Course.courseName, Lap, SegmentTimes);
             Best = BestTimes.Get(v.Course.courseName);
             HasResults = true;
             v.Note("results", $"results: lap {Lap:0.00} s, {SegmentTimes.Count} splits, best {(Best != null ? Best.lap.ToString("0.00") : "-")} s{(NewBest ? " (NEW BEST)" : "")}");

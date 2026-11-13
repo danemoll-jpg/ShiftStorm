@@ -15,7 +15,7 @@ namespace ShiftStorm
     {
         public static Hud Instance { get; private set; }
         public ShiftVehicle v; public Game game;
-        Text mode, info, last, help, timer, segment, center, results, menu; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
+        Text mode, info, last, help, timer, segment, center, results, menu, place, note; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
         float lastSplitShown = -1; string splitLine = "";
 
         public static Hud Make(Camera cam, ShiftVehicle v, Game game)
@@ -48,18 +48,21 @@ namespace ShiftStorm
             center = Label(p, new Vector2(.5f, .5f), new Vector2(0, 120), 90, TextAnchor.MiddleCenter, new Vector2(1200, 120));
             help = Label(p, new Vector2(.5f, 0), new Vector2(0, 8), 16, TextAnchor.LowerCenter, new Vector2(1250, 26));
             help.color = new Color(1, 1, 1, .75f);
-            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu  View/F2 invert  R3/F1 FPS";
+            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu (Settings, Quit)  R3/F1 FPS";
+            // Round 3: race position (big, top left under the stats) and the one-time note on the first flight
+            place = Label(p, new Vector2(0, 1), new Vector2(24, -70), 54, TextAnchor.UpperLeft, new Vector2(400, 120)); place.supportRichText = true;
+            note = Label(p, new Vector2(.5f, .5f), new Vector2(0, -150), 30, TextAnchor.MiddleCenter, new Vector2(900, 40)); note.color = new Color(.75f, .95f, 1f);
             var bg = new GameObject("boost bg"); bg.transform.SetParent(p, false); var bgi = bg.AddComponent<Image>(); bgi.color = new Color(0, 0, 0, .55f);
             var br = bgi.rectTransform; br.anchorMin = br.anchorMax = br.pivot = new Vector2(0, 0); br.anchoredPosition = new Vector2(24, 40); br.sizeDelta = new Vector2(320, 22);
             var fill = new GameObject("boost"); fill.transform.SetParent(bg.transform, false); boostImage = fill.AddComponent<Image>(); boostImage.color = new Color(1, .78f, .15f);
             boostFill = boostImage.rectTransform; boostFill.anchorMin = boostFill.pivot = new Vector2(0, 0); boostFill.anchorMax = new Vector2(0, 1); boostFill.anchoredPosition = new Vector2(3, 0); boostFill.sizeDelta = new Vector2(0, -6);
             boostFill.offsetMin = new Vector2(3, 3); boostFill.offsetMax = new Vector2(3, -3);
             var bl = Label(bg.transform, new Vector2(0, .5f), new Vector2(330, 0), 18, TextAnchor.MiddleLeft, new Vector2(120, 22)); bl.text = "BOOST";
-            resultsPanel = Panel(p, new Vector2(620, 470), new Color(.05f, .07f, .06f, .82f));
-            results = Label(resultsPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 22, TextAnchor.MiddleCenter, new Vector2(600, 450)); results.supportRichText = true;
+            resultsPanel = Panel(p, new Vector2(680, 640), new Color(.05f, .07f, .06f, .82f));
+            results = Label(resultsPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 21, TextAnchor.MiddleCenter, new Vector2(660, 620)); results.supportRichText = true;
             resultsPanel.SetActive(false);
-            menuPanel = Panel(p, new Vector2(520, 420), new Color(.05f, .07f, .06f, .88f));
-            menu = Label(menuPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 26, TextAnchor.MiddleCenter, new Vector2(500, 400)); menu.supportRichText = true;
+            menuPanel = Panel(p, new Vector2(700, 560), new Color(.05f, .07f, .06f, .9f));
+            menu = Label(menuPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 26, TextAnchor.MiddleCenter, new Vector2(680, 540)); menu.supportRichText = true;
             menuPanel.SetActive(false);
         }
 
@@ -104,6 +107,13 @@ namespace ShiftStorm
             }
             else center.text = "";
             last.text = v.Finished ? $"FINISHED {TimeTrial.Clock(v.FinishTime)}  -  Y / R to race again" : v.LastEvent;
+            // race position
+            var race = game ? game.Race : null;
+            if (race && race.Active && c) { int pl = race.Place(v); place.text = $"{Race.Ordinal(pl)}<size=28> / {race.Racers.Count}</size>"; place.color = pl == 1 ? new Color(1, .85f, .3f) : Color.white; }
+            else place.text = "";
+            // the first flight of this game: where the invert setting is (until it has been set once)
+            if (v.Mode == Mode.Fly && !v.Holding && !firstFlightSeen && !Settings.InvertChosen) { firstFlightSeen = true; noteUntil = Time.time + 5f; }
+            note.text = Time.time < noteUntil ? "Invert controls: Menu > Settings" : "";
             // results
             var tt = game ? game.Trial : null;
             bool showResults = tt && tt.HasResults && v.Finished && !menuPanel.activeSelf;
@@ -115,10 +125,23 @@ namespace ShiftStorm
             if (open) menu.text = MenuText();
         }
 
+        bool firstFlightSeen; float noteUntil = -1;
+        public string NoteText => note ? note.text : "";
         string ResultsText(TimeTrial tt, Course c)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine($"<size=30><b>{c.courseName}</b></size>");
+            var sb = new StringBuilder(); var race = game.Race;
+            sb.AppendLine($"<size=30><b>{c.courseName}</b></size>{(race && race.Active ? $"   <size=24>RACE: <b>{Race.Ordinal(race.Place(v))}</b> of {race.Racers.Count}</size>" : "   <size=22>TIME TRIAL</size>")}");
+            if (race && race.Active)
+            {
+                var order = race.Order();
+                for (int i = 0; i < order.Count; i++)
+                {
+                    var r = order[i]; int fi = race.Finishers.FindIndex(f => f.v == r);
+                    string col = ColorUtility.ToHtmlStringRGB(r.Tint), t = fi >= 0 ? TimeTrial.Clock(race.Finishers[fi].time) : $"racing (gate {r.GatesPassed}/{c.gates.Count})";
+                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>   {t}{(r == v ? "</b>" : "")}");
+                }
+                sb.AppendLine();
+            }
             sb.AppendLine($"<size=40><b>{TimeTrial.Clock(tt.Lap)}</b></size>{(tt.NewBest ? "   <color=#ffd34d><b>NEW BEST!</b></color>" : "")}");
             sb.AppendLine($"best {TimeTrial.Clock(tt.Best != null ? tt.Best.lap : -1)}   resets {v.Resets}");
             sb.AppendLine();
@@ -129,12 +152,14 @@ namespace ShiftStorm
                 string col = t < 0 ? "#cccccc" : t <= s.target ? "#8cff8c" : "#ffb070";
                 sb.AppendLine($"{i + 1} {s.name,-17}  <color={col}>{(t >= 0 ? t.ToString("0.00") : "--")}</color>  target {s.target:0}{(float.IsNaN(vsBest) ? "" : $"  best {Delta(vsBest)}")}");
             }
-            sb.AppendLine(); sb.Append("<size=20>Y / R: race again     Menu / Esc: courses</size>");
+            sb.AppendLine();
+            for (int i = 0; i < Game.ResultsItems.Length; i++) { var it = Game.ResultsItems[i]; sb.Append(i == game.ResultsIndex ? $"<color=#ffd34d><b>> {it} <</b></color>   " : $"{it}   "); }
+            sb.AppendLine(); sb.Append("<size=17>D-pad / arrows: choose   A / Enter: go   Y / R: race again</size>");
             return sb.ToString();
         }
         string MenuText()
         {
-            var sb = new StringBuilder(); sb.AppendLine("<b>COURSES</b>\n");
+            var sb = new StringBuilder(); sb.AppendLine($"<b>{game.MenuTitle}</b>\n");
             var items = game.MenuItems;
             for (int i = 0; i < items.Count; i++) sb.AppendLine(i == game.MenuIndex ? $"<color=#ffd34d><b>> {items[i]} <</b></color>" : items[i]);
             sb.AppendLine("\n<size=18>D-pad / arrows: choose   A / Enter: go   B / Esc: back</size>");

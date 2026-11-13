@@ -28,6 +28,9 @@ namespace ShiftStorm
                 if (a == "-checkOut" && i + 1 < args.Length) Dir = args[i + 1];
                 else if (a == "-racerTestSave" && i + 1 < args.Length && Dir == null) Dir = args[i + 1];
             }
+            // Round 3: a check handed down by the launcher's hidden start-up check (the launcher passes no check arguments of its own; its
+            // child inherits this environment variable). Dan's own game never has it.
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SHIFTSTORM_CHECK"))) { Muted = true; Check = true; }
             if (!Muted) return;
             AudioListener.volume = 0f;
             Application.runInBackground = true;
@@ -39,6 +42,9 @@ namespace ShiftStorm
         // Sound on for one moment of a check, then off again (say which step and for how long in the report).
         public static void Hear(bool on)
         {
+            // Round 3: a check handed down by the launcher's hidden start-up check (the launcher passes no check arguments of its own; its
+            // child inherits this environment variable). Dan's own game never has it.
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SHIFTSTORM_CHECK"))) { Muted = true; Check = true; }
             if (!Muted) return;
             AudioListener.volume = on ? 1f : 0f;
             Debug.Log("[Quiet] sound " + (on ? "ON" : "off"));

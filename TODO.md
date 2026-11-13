@@ -20,6 +20,58 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 3 — Dan's three notes, AI rivals, shortcuts** (2026-11-13, release `build-4` / 0.3.0). Spec moved to `TODO-ARCHIVE.md`.
+
+### Round 3 delivery (2026-11-13) — status per item
+Evidence: `Docs/Checks/round3/` (reports per check, waterfall CSV traces before / after, pictures). Every run: built exe, `-batchmode -mute`,
+no window, Below Normal, one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run. Sound was
+never unmuted. No window was opened.
+1. **Flip flight controls — done.** Menu > Settings: "Invert flight / dive controls: On / Off" (with Screen and the FPS readout), saved
+   in `settings.json` (old PlayerPrefs taken over once); View / F2 still toggles it. "Invert controls: Menu > Settings" shows for 5 s on
+   the first flight until the setting has been chosen once; nothing asked at start-up. Check: stick pulled back 0.45 s: Fly +18.9 / Dive
+   +16.2 deg (nose up) -> after the menu toggle Fly -18.9 / Dive -16.2 deg; a second process read it back (Fly -18.9 deg).
+2. **Quit — done.** Menu > Quit game -> "Quit ShiftStorm? No / Yes" (No preselected); the results screen has Race again / Menu / Quit
+   game. Exit code 0 from the menu, from the results, and started by the launcher (its hidden start-up check on the 0.3.0 starter ZIP):
+   game "quit chosen", launcher "Child exit 0", launcher exit 0. A watchdog ends the process 6 s after Quit if the engine hangs.
+   Steam Game Mode on the Deck: not testable here (Dan).
+3. **Waterfall return "hung up a tad" — done; cause found.** Recorded every physics step, 5 runs (3 normal, boosted, slow). Not a
+   frame hitch (worst 13-18 ms, one frame per run), not the hull catching (no contact from the ramp foot to the wheels; landing loss
+   0.2-1.1 m/s). It was the change itself: the car left the lip at 44.5 m/s (68 % of its top speed; the boat's 89 %), floated 1.13 s
+   at a flat 44.4 m/s (throttle does nothing in the air), and at that moment the camera re-measured "fast" against the car's 65 m/s
+   instead of the boat's 50: field of view -3.4 deg and the camera 1.4 m closer = a visible stop; 1.5 s later only 46 m/s. Fix: into a
+   faster form the speed's share of the old top speed carries over, eased in over the change (all changes); the camera's speed
+   reference eases between forms; the car is pulled onto its wheels (airtime 1.13 -> 0.82 s) with a short visual spring, and keeps its
+   forward speed through the touch. After (5 runs): Boat->Drive 47.3 -> 62.1 m/s at the wheels, 61.8 m/s 1.5 s after (was 46.1), field of
+   view -0.1 to -0.5 deg, biggest drop 0.9-1.1 m/s, 0 frames over 16.7 ms.
+4. **Three AI rivals — done.** Rocket Rae (red), Chip "Showtime" Sterling (blue), Vivi (purple), TO models with Abi's seated clips; the
+   same vehicle, hull, tuning, boost meter, zones, gates and recovery, driven only through ShiftInput; bend speed planned ahead, side
+   step to pass, back out when pinned (then Reset, like a player). 2 x 2 grid, countdown, place on the HUD and rival dots on the strip,
+   results with order and times. No rubber-banding; knobs: braking margin, boost timing. Menu: Race (default) and Time Trial (alone,
+   the only best-lap mode). Check (3 races): Rae 2:11.5 (slit), Vivi 2:16-2:19, check pilot without boost 2:21 (3rd), Chip 2:21-2:28;
+   0 AI resets in the last races, 0 pass-throughs (hulls overlapping > 0.4 m).
+5. **Shortcuts — Sky Arch slit done; Coral Vault tunnel deferred.** Slit: a buttress from the arch's inner pillar with a 22 m slit
+   190 m beside the line, an updraft in it (108 m/s); stands in for G3, violet entry / exit sub-gates; the HUD guides into it. Saves
+   1.55 s (23.53 -> 21.98 s, same start, no boost); a scrape there costs +1.10 s against the safe line (more than the gain), not
+   trapped; full lap 139.17 -> 137.60 s. Geometry alone only gave ~0.7 s on this line, hence the updraft. Tunnel: built and measured,
+   switched off (`ParadisePlunge.VaultTunnel`): the sub still caught the floor edge / chamber wall (-2.5 s), a miss could grind along it.
+   Rae tries the slit on half her laps; Chip's tunnel plan is idle until the tunnel is back.
+6. **AI soak — done.** 100 AI laps (25 races of four AI cars, time scale 3, physics still 60 Hz steps): 100 of 100 finished within 300 s,
+   0 bad gate sequences, laps 131.5 / 138.6 / 153.8 s (min / median / max), slit taken 20 times. Worst stuck spot: the start line
+   (cars shoved against the right edge at GO). First soak: 12 resets there, worst lap stuck 21 s; now the AI backs out and then
+   presses Reset, worst lap 153.8 s; the shoving itself remains (27 Reset presses in 100 laps). Round 1 / 2 / 2b regression: all PASS
+   (E5 fixed after the new scrape rule caught a reversing sub).
+7. **Wrap-up — done.** This file, `CLAUDE.md` (controls, Settings / Quit, Race vs Time Trial, checks), `Docs/REUSE-AUDIT.md` section 7,
+   commit + push, release `build-4` (0.3.0), disk cleaned.
+
+#### For Dan to check (Round 3)
+- **Waterfall return:** does the dive -> boat -> car change still hang? It should spring onto the wheels and keep going at ~60 m/s.
+- **Settings:** Menu > Settings > Invert on the Deck; does View still toggle it there, or is it taken by Steam?
+- **Quit on the Deck from Steam (Game Mode):** does it return to Steam, no black screen? Also from the launcher.
+- **Race:** can you beat Rae (about 2:11 with the slit)? Too easy / hard? Note the start: cars still shove at GO (the soak's worst spot).
+- **Sky Arch slit:** do you spot it from the flight (violet frame left of the arch)? Is the updraft fun or too much?
+- **Coral Vault tunnel:** off for now; needs a look in a window (your OK) before it comes back.
+- **Deck FPS** with four cars and drivers (R3): mangrove, flight, waterfall.
+
 - **Round 2b — Deck fixes** (2026-11-13, release `build-3` / 0.2.1). Spec moved to `TODO-ARCHIVE.md`.
 
 ### Round 2b delivery (2026-11-13) — status per item
@@ -70,97 +122,8 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
-## Current Objective — Round 3: Dan's three notes, then AI rivals and shortcuts
-
-**Dan's notes after playing build 3 (2026-11-13), quoted:**
-- "Need to be able to flip flight controls"
-- "Need a way to quit game"
-- "The traverse from the submarine when you go back to being a car, it hung
-  up a tad"
-Dan (2026-11-13): do these three first, then the AI rivals and shortcuts
-(items 4–7), all in one round. Dan starts it before bed, so it runs
-unattended: **don't stop to ask.** Anything that would need a visible window
-or Dan's OK gets skipped, noted and left for him.
-
-1. **Flip flight controls, findable.** The invert toggle exists (View / F2)
-   but Dan didn't find it, and on the Steam Deck the View button may be
-   taken by Steam. Add a **Settings** page in the menu with "Invert
-   flight / dive controls: On / Off" (applies to flying and diving, saved),
-   alongside the Screen setting and the FPS readout. Keep the button as a
-   shortcut. Show a short on-screen note the first time you fly:
-   "Invert controls: Menu > Settings". Ask nothing at start-up.
-   *Check:* toggle in the menu → climb/dive direction flips in Fly and Dive,
-   survives a game restart.
-2. **Quit the game.** "Quit game" in the menu (Menu / Esc / the controller's
-   Menu button), with a quick "Quit? Yes / No" so it can't be hit by
-   accident, and the results screen gets a Quit too. Make sure the game
-   closes cleanly when started by the launcher (and from Steam on the Deck:
-   it should return to Game Mode, not leave a black screen).
-   *Check:* quit from the menu and from results; process exits with code 0;
-   from the launcher, the launcher also exits (or returns), as Chastain Rush
-   does.
-3. **The dive → boat → car change at the Waterfall Return "hung up a tad".**
-   Find out what Dan felt before fixing it — it could be:
-   - a frame hitch (something loading / building at that moment),
-   - the vehicle physically catching (hull or a part touching the water
-     ramp, the lip or the road edge; speed dropping suddenly),
-   - the change itself pausing (speed blend too strong, steering or
-     throttle easing in too slowly, camera lag).
-   Record a run through it (player-view pictures every few frames, speed,
-   frame time, contacts and form state each step) and say which it was, with
-   the numbers. Fix the real cause. The car form must take over smoothly
-   with no visible stop, and the landing should feel like springing onto
-   the wheels (concept: "the vehicle springs onto its wheels").
-   *Check:* before/after speed trace through the surfacing pool, the ramp
-   and the landing; no speed drop beyond the planned blend, no frame over
-   16.7 ms there, on 5 runs including a boosted one and a slow one.
-4. **Three AI rivals.** Same vehicle, same handling limits, boost supply,
-   transition zones, gates and recovery as the player — the AI uses the
-   player's controls (the Chastain Rush rule: read `RoadDriver.cs` /
-   `PlanePilot.cs` read-only for ideas, write ShiftStorm's own).
-   - Drivers: three other Tee'd Off characters from the audit (e.g. Rocket
-     Rae, Chip "Showtime" Sterling, Vivi), each with their own vehicle color
-     — cosmetic only, same stats. Reuse Abi's seated clips on them.
-   - Drive and boat along the racer line with side offsets for overtaking;
-     3D paths with target height / depth and look-ahead in the air and the
-     cave. Slow down **before** tight bends, not after hitting something.
-   - Grid start with the countdown; race position (1st–4th) on the HUD and
-     the route strip; results show the finishing order and times.
-   - **No rubber-banding.** One difficulty for now, tuned so a decent player
-     can win; difficulty, when added later, changes braking margins and
-     boost timing first.
-   - Race (vs AI) and Time Trial (alone) both in the menu.
-   *Check:* full races with the check pilot plus 3 AI; AI never stuck, no
-   AI passes through another or the player.
-5. **The two shortcuts**, per the concept (fixed geometry, discoverable
-   from the safe line, never mistaken for the only route):
-   - **Sky Arch inside slit:** a narrow opening beside the main arch, saves
-     1–2 s; a scrape loses at least the gain; both paths enter the same
-     lagoon approach gate.
-   - **Coral Vault low tunnel:** a low passage under the main cave chamber,
-     saves 2–3 s; needs early depth alignment and a tighter exit; both paths
-     rejoin before the surfacing pool.
-   - Each gets its own entry / exit sub-gates between the same main gates.
-   - AI: safe route by default; one rival tries each shortcut at a set rate,
-     choosing before the entry and sticking with it until the rejoin.
-   *Check:* measured time saved on each shortcut (same entry speed and
-   boost), full-lap comparison included; a deliberate miss uses normal
-   recovery and loses time without trapping the racer.
-6. **AI soak test.** 100 unattended AI laps (batch mode, muted, Below
-   Normal; spread over the night, one heavy job at a time). Pass: at least
-   95 finish within twice the target lap time, and **every counted finish
-   has a valid gate sequence**. Report stuck spots with positions and fix
-   the worst ones.
-7. **Round wrap-up.** Per-item status (done / not done / deferred, and why)
-   for all 7 items, "For Dan to check", update `CLAUDE.md` (Controls table
-   with the Settings page and Quit; Race vs Time Trial), commit, push,
-   publish release build 4 (0.3.0), clean the disk.
-
-### Defaults (unchanged)
-- Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
+## Current Objective
+Round 3 delivered (build 4, 0.3.0). Next round to be planned with Dan (see his checks below).
 
 ## Next Steps (Do Not Start Yet)
 - **Art slice beyond Round 2's first pass** (finished Jurassic Par scenery, real

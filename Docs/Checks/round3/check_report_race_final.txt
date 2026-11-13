@@ -1,0 +1,20 @@
+ShiftStorm check 'race', 2026-11-13 08:04, build 0.3.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+RACE 1: 1. Rocket Rae 2:11.55, 2. Vivi 2:15.95, 3. Abi 2:21.62, 4. Chip "Showtime" Sterling 2:28.67
+  player (check pilot, no boost) place every 10 s: 4 3 3 3 3 3 3 3 3 3 3 3 3 3 3; finished 3rd
+  Rocket Rae: 131.55 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan Sky Arch slit, taken Sky Arch slit
+  Chip "Showtime" Sterling: 148.67 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 1: [   9.93] reset (reset button, at -2.3 (x 14.5, y 2.4), 0 m/s, 15 m off the line) to the anchor at 68 m in Drive, backed out 3x, scrapes 0, shortcut plan none, taken none
+  Vivi: 135.95 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 1 PASS: AI never stuck True, no pass-through True
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.18 ms, 95th pct 1.59 ms, 99th pct 1.92 ms, worst 59.81 ms over 128419 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  race1        Drive->Fly  z   944.4  0.600 s  frames worst 4.51 / mean 1.22 ms
+  race1        Fly->Boat   z  -607.5  0.601 s  frames worst 6.40 / mean 1.22 ms
+  race1        Boat->Dive  z  -203.8  0.600 s  frames worst 2.48 / mean 1.15 ms
+  race1        Dive->Boat  z  -466.4  0.601 s  frames worst 2.27 / mean 1.14 ms
+  race1        Boat->Drive z  -304.5  0.600 s  frames worst 3.26 / mean 1.23 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; finish: quipgood_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

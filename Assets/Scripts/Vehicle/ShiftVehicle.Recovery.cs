@@ -13,13 +13,14 @@ namespace ShiftStorm
         void Recovery(float dt)
         {
             if (!Course) return;
-            if (Input.ConsumeReset()) { if (Finished) Begin(Course); else Recover("reset button"); return; }   // after the finish: start again
+            if (Input.ConsumeReset()) { if (Finished) { if (IsPlayer && Game.Instance) Game.Instance.Restart(); else if (IsPlayer) Begin(Course); } else Recover("reset button"); return; }   // after the finish: start again (the race too)
             if (Finished) return;
             var p = Body.position;
             // out of bounds: at once on land and water and below / above the course; in the air (a much wider corridor) after a few seconds of
             // THIS WAY, so a plane that strays is shown the way back before it is reset (Round 2b)
             bool fly = Mode == Mode.Fly;
-            if (Course.OutOfBounds(p, Progress, fly ? Course.AirHalfWidth : Course.halfWidth, out bool hard))
+            bool hard = false;
+            if (OnShortcut ? OnShortcut.OutOfBounds(p, Course, out hard) : Course.OutOfBounds(p, Progress, fly ? Course.AirHalfWidth : Course.halfWidth, out hard))
             {
                 OutOfBoundsFor += dt;
                 if (hard || !fly || OutOfBoundsFor > shared.airOutOfBoundsSeconds) { Recover("out of bounds"); return; }
@@ -58,17 +59,18 @@ namespace ShiftStorm
         }
 
         // Put the vehicle at an anchor in a form, at a speed along the anchor's facing; no change animation (the form snaps).
-        void Place(RecoveryAnchor anchor, Mode mode, float speed)
+        void Place(RecoveryAnchor anchor, Mode mode, float speed, Vector3 offset = default)
         {
-            Changing = false; Authority = 1; assistLeft = 0;
+            Changing = false; Authority = 1; assistLeft = 0; OnShortcut = null;
             Body.isKinematic = true;
-            transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
-            Body.position = anchor.transform.position; Body.rotation = anchor.transform.rotation;
+            var pos = anchor.transform.position + anchor.transform.rotation * offset;
+            transform.SetPositionAndRotation(pos, anchor.transform.rotation);
+            Body.position = pos; Body.rotation = anchor.transform.rotation;
             Body.isKinematic = false;
             Body.angularVelocity = Vector3.zero;
             var v = anchor.transform.forward * speed;
             Mode = mode; ChangeFrom = mode;
-            Body.linearVelocity = v;
+            Body.linearVelocity = v; scrapeUntil = -1; CarryTarget = -1; EnteredDriveAt = -1;
             switch (mode)
             {
                 case Mode.Drive: EnterDrive(speed); break;

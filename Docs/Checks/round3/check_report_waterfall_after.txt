@@ -1,0 +1,45 @@
+ShiftStorm check 'waterfall', 2026-11-13 05:33, build 0.3.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+WATERFALL (after): the run from the Coral Vault's last anchor through the surfacing pool, the water ramp, the curtain and the landing on the finishing road, recorded every physics step (60 Hz)
+  the place: pool surface zone z -459, water ramp z -377 (y -0.6) to its lip z -309 (y 5.0), Wheels-down zone z -299 +-6, finishing road from z -284 (y 2.0)
+  normal-1 (throttle 1.0): Dive->Boat at 38.0 m/s (z -467); on the ramp foot 48.8 m/s; Boat->Drive at 47.3 m/s, y 6.3, z -305 (3.38 s after surfacing); wheels down 0.80 s later at 62.1 m/s, vy -10.6, z -260
+    slowest 38.0 m/s at -0.20 s (Dive, z -474); biggest drop in 0.25 s: 0.9 m/s (62.1 -> 61.1) at +4.28 s (Drive, z -253, y 2.3, wheels 4, contacts "+Finishing road(7641)"); worst frame 15.7 ms at +0.02 s (Boat, changing); frames over 16.7 ms: 0 of 342 steps
+    first touches: +2.13s Boat +Water ramp(0) | +4.28s Drive +Finishing road(7641)
+    camera from 0.3 s before Boat->Drive to 1.5 s after: field of view 82.3 -> lowest 82.1 deg (-0.1), distance 10.94 -> nearest 9.97 m (-0.97); airtime lip to wheels 0.82 s; car speed 1.5 s after the change 61.8 m/s
+    speed every 0.1 s (s sub / b boat / d car): 38s 38s 38s 38s 38s 38b 40b 43b 45b 47b 49b 50b 50b 50b 50b 50b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 48b 48b 48b 48b 48b 48b 48b 48b 48b 47b 47b 48d 50d 52d 55d 57d 60d 62d 62d 62d 61d 61d 61d 62d 62d 62d 62d 62d 62d
+  normal-2 (throttle 1.0): Dive->Boat at 38.0 m/s (z -467); on the ramp foot 48.8 m/s; Boat->Drive at 47.4 m/s, y 6.2, z -304 (3.38 s after surfacing); wheels down 0.82 s later at 62.1 m/s, vy -10.8, z -258
+    slowest 38.0 m/s at -0.48 s (Dive, z -485); biggest drop in 0.25 s: 0.9 m/s (62.1 -> 61.2) at +4.28 s (Drive, z -253, y 2.4, wheels 4, contacts "Finishing road(5645)"); worst frame 12.3 ms at +3.42 s (Drive, changing); frames over 16.7 ms: 0 of 343 steps
+    first touches: +2.13s Boat +Water ramp(0) | +4.27s Drive +Finishing road(2713)
+    camera from 0.3 s before Boat->Drive to 1.5 s after: field of view 82.3 -> lowest 82.1 deg (-0.1), distance 10.92 -> nearest 9.94 m (-0.98); airtime lip to wheels 0.83 s; car speed 1.5 s after the change 61.9 m/s
+    speed every 0.1 s (s sub / b boat / d car): 38s 38s 38s 38s 38s 38b 40b 43b 45b 47b 49b 50b 50b 50b 50b 50b 50b 50b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 48b 48b 48b 48b 48b 48b 48b 48b 47b 47b 48d 50d 52d 55d 57d 60d 62d 62d 62d 61d 61d 61d 62d 62d 62d 62d 62d 62d 62d
+  normal-3 (throttle 1.0): Dive->Boat at 38.0 m/s (z -467); on the ramp foot 48.8 m/s; Boat->Drive at 47.3 m/s, y 6.3, z -305 (3.38 s after surfacing); wheels down 0.82 s later at 62.1 m/s, vy -10.8, z -259
+    slowest 38.0 m/s at -0.35 s (Dive, z -480); biggest drop in 0.25 s: 0.9 m/s (62.1 -> 61.1) at +4.28 s (Drive, z -253, y 2.3, wheels 4, contacts "+Finishing road(8861)"); worst frame 13.5 ms at +3.42 s (Drive, changing); frames over 16.7 ms: 0 of 343 steps
+    first touches: +4.28s Drive +Finishing road(8861)
+    camera from 0.3 s before Boat->Drive to 1.5 s after: field of view 82.3 -> lowest 82.1 deg (-0.1), distance 10.96 -> nearest 9.92 m (-1.05); airtime lip to wheels 0.83 s; car speed 1.5 s after the change 61.9 m/s
+    speed every 0.1 s (s sub / b boat / d car): 38s 38s 38s 38s 38s 38b 40b 43b 45b 47b 49b 50b 50b 50b 50b 50b 50b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 48b 48b 48b 48b 48b 48b 48b 48b 48b 47b 47b 48d 50d 52d 55d 57d 60d 62d 62d 62d 61d 61d 61d 62d 62d 62d 62d 62d 62d 62d
+  boosted (throttle 1.0, boost): Dive->Boat at 38.0 m/s (z -467); on the ramp foot 49.1 m/s; Boat->Drive at 47.8 m/s, y 6.2, z -305 (3.37 s after surfacing); wheels down 0.82 s later at 62.6 m/s, vy -10.8, z -258
+    slowest 38.0 m/s at -0.45 s (Dive, z -484); biggest drop in 0.25 s: 0.9 m/s (62.6 -> 61.7) at +4.27 s (Drive, z -253, y 2.3, wheels 4, contacts "+Finishing road(8840)"); worst frame 12.5 ms at +0.15 s (Boat, changing); frames over 16.7 ms: 0 of 342 steps
+    first touches: +4.27s Drive +Finishing road(8840)
+    camera from 0.3 s before Boat->Drive to 1.5 s after: field of view 82.7 -> lowest 82.2 deg (-0.5), distance 11.85 -> nearest 9.95 m (-1.90); airtime lip to wheels 0.83 s; car speed 1.5 s after the change 62.6 m/s
+    speed every 0.1 s (s sub / b boat / d car): 38s 38s 38s 38s 38s 38b 40b 43b 45b 47b 49b 50b 50b 50b 50b 50b 50b 50b 50b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 49b 48b 48b 48b 48b 48b 48b 48b 49d 51d 53d 56d 58d 61d 62d 62d 63d 62d 62d 62d 62d 62d 62d 63d 63d 63d
+  slow (throttle 0.5): Dive->Boat at 19.0 m/s (z -467); on the ramp foot 33.5 m/s; Boat->Drive at 36.9 m/s, y 6.2, z -305 (5.18 s after surfacing); wheels down 0.73 s later at 48.5 m/s, vy -10.4, z -273
+    slowest 19.0 m/s at -0.40 s (Dive, z -474); biggest drop in 0.25 s: 1.1 m/s (48.5 -> 47.3) at +6.02 s (Drive, z -268, y 2.3, wheels 4, contacts "+Finishing road(7343)"); worst frame 11.6 ms at +0.10 s (Boat, changing); frames over 16.7 ms: 0 of 446 steps
+    first touches: +6.02s Drive +Finishing road(7343)
+    camera from 0.3 s before Boat->Drive to 1.5 s after: field of view 78.0 -> lowest 78.0 deg (+0.0), distance 10.61 -> nearest 9.64 m (-0.97); airtime lip to wheels 0.75 s; car speed 1.5 s after the change 49.0 m/s
+    speed every 0.1 s (s sub / b boat / d car): 19s 19s 19s 19s 19s 19b 21b 23b 24b 25b 25b 26b 26b 27b 27b 27b 27b 27b 28b 28b 29b 29b 29b 30b 30b 30b 31b 31b 31b 32b 32b 32b 32b 33b 33b 33b 34b 34b 34b 34b 35b 35b 35b 35b 35b 35b 36b 36b 36b 36b 36b 36b 36b 37b 37b 37b 37b 37d 39d 41d 43d 45d 47d 48d 48d 48d 48d 48d 48d 48d 49d 49d 49d 49d 50d
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 6.50 ms, 95th pct 8.21 ms, 99th pct 10.81 ms, worst 49.20 ms over 9044 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  wf-after-normal-1 Dive->Boat  z  -466.5  0.604 s  frames worst 15.70 / mean 6.56 ms
+  wf-after-normal-1 Boat->Drive z  -304.6  0.604 s  frames worst 10.25 / mean 6.10 ms
+  wf-after-normal-2 Dive->Boat  z  -466.6  0.601 s  frames worst 11.91 / mean 6.70 ms
+  wf-after-normal-2 Boat->Drive z  -304.5  0.607 s  frames worst 12.34 / mean 6.96 ms
+  wf-after-normal-3 Dive->Boat  z  -466.5  0.604 s  frames worst 11.88 / mean 6.59 ms
+  wf-after-normal-3 Boat->Drive z  -304.5  0.600 s  frames worst 13.54 / mean 7.66 ms
+  wf-after-boosted Dive->Boat  z  -466.7  0.604 s  frames worst 12.48 / mean 6.83 ms
+  wf-after-boosted Boat->Drive z  -304.7  0.605 s  frames worst 12.07 / mean 6.25 ms
+  wf-after-slow Dive->Boat  z  -466.8  0.605 s  frames worst 11.59 / mean 6.47 ms
+  wf-after-slow Boat->Drive z  -304.6  0.606 s  frames worst 11.33 / mean 6.47 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 5, Abi lines: waterfall: laugh_1; waterfall: laugh_1; waterfall: laugh_1; waterfall: lucky_1; waterfall: lucky_1
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

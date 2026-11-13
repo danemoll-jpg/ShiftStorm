@@ -217,3 +217,15 @@ waterfall shader.
 Written new in Round 2b: the direction cues and guide target (`ShiftVehicle.Route.cs`), the gate frames and the guide (`Race/RouteGuide.cs`,
 `Shaders/Beacon.shader`), the HUD arrow / marker / route strip / speedometer / speed lines / stats (`UI/Hud.Guide.cs`), the camera's speed
 FOV and boost shake, the course rescale, and the `nav` / `slowfps` / `screen` checks.
+
+## 7. What ShiftStorm copied in Round 3
+
+| From | To (ShiftStorm) | Changed |
+|---|---|---|
+| TO `Art/Characters/Chip/Chip.fbx` + `Chip_basecolor.png`, `Rae/Rae.fbx` + `Rae_basecolor.png`, `Vivi/Vivi.fbx` + `Vivi_basecolor.png` | `Resources/Drivers/<Name>/` | Files copied as they are. Their `.fbx.meta` taken from TO (Humanoid, avatar from the model) with a new guid, `isReadable` on (the seat sizing bakes the mesh) and material import off (the game paints them, like Abi). Seated with Abi's shared Mixamo clips (`Driver.Make(v, name)`); no voice for rivals. |
+| CR `RoadDriver.cs`, `PlanePilot.cs` (read only, ideas) | — | Nothing copied. Ideas used in ShiftStorm's own `Race/Rival.cs` (`RivalPilot`): a look-ahead target on the racer line, speed planned from the bend ahead (v = sqrt(a r)), a height target in the air. |
+
+Written new in Round 3: the settings file and the menu's Settings / Quit pages (`Core/Settings.cs`, `Game.cs`), the rivals, their pilot
+and the race order (`Race/Rival.cs`, `VehicleFactory.MakeRival`), shortcuts (`Race/Shortcut.cs`, `ShiftVehicle.Shortcut.cs`, the Sky Arch
+slit and its updraft, the Coral Vault tunnel — switched off for build 4), scrapes in the air and underwater, the speed carried into a
+faster form and the wheels-down landing (item 3), the camera's eased speed reference, and the Round 3 checks (`Checks/CheckPilot.Round3.cs`).

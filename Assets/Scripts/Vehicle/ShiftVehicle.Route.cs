@@ -36,11 +36,17 @@ namespace ShiftStorm
         {
             float dt = Time.fixedDeltaTime;
             // the route direction, smoothed over a few metres either side (corners and the line's 3 m steps)
-            var a = Course.PointAt(Progress - 6, out _); var b = Course.PointAt(Progress + 6, out _);
+            var sc = OnShortcut;   // Round 3: on a shortcut the route is the shortcut's own line
+            var a = sc ? sc.PointAt(scS - 6, out _) : Course.PointAt(Progress - 6, out _); var b = sc ? sc.PointAt(scS + 6, out _) : Course.PointAt(Progress + 6, out _);
             var rd = b - a; RouteDir = rd.sqrMagnitude > 1e-4f ? rd.normalized : dir; RoutePoint = at;
             bool air = Mode == Mode.Fly || Mode == Mode.Dive;
             OffLine = air ? Vector3.Distance(p, at) : new Vector2(p.x - at.x, p.z - at.z).magnitude;
-            offFor = OffLine > OffRouteLimit ? offFor + dt : 0; OffRoute = offFor > .4f;
+            // Round 3: heading for a shortcut (near its line, before its entry frame) is not "off the route": no THIS WAY, and the arrow
+            // follows the shortcut
+            Shortcut near = null; float nearS = 0;
+            if (!sc) foreach (var s2 in Course.shortcuts)
+                    if (s2.nextGate == GatesPassed) { float ss = s2.Project(p, -1, out var a2, out _); if (ss > 5 && ss < s2.Length - 5 && Vector3.Distance(p, a2) < s2.halfWidth) { near = s2; nearS = ss; break; } }
+            offFor = OffLine > OffRouteLimit && !near ? offFor + dt : 0; OffRoute = offFor > .4f;
             // travel direction: the velocity when moving, else the nose
             var vel = Body.linearVelocity; var travel = vel.sqrMagnitude > 9f ? vel.normalized : transform.forward;
             var route = air ? RouteDir : Vector3.ProjectOnPlane(RouteDir, Vector3.up).normalized; if (!air) travel = Vector3.ProjectOnPlane(travel, Vector3.up).normalized;
@@ -53,7 +59,7 @@ namespace ShiftStorm
             var gates = Course.gates; var g = NextGate;
             // past the next gate without earning it: on the far side of its own plane, and its place on the line well behind
             bool past = false; float over = 0;
-            if (!Finished && g && !Changing && GatesPassed < gates.Count)
+            if (!Finished && g && !Changing && !sc && GatesPassed < gates.Count)
             {
                 over = Progress - g.progress;
                 past = over > shared.missedGateCueMeters && g.transform.InverseTransformPoint(p).z > 0;
@@ -72,7 +78,7 @@ namespace ShiftStorm
             float ahead = Mathf.Clamp(Speed * 1.6f, 45f, 170f);
             float aim = Progress + (OffRoute ? ahead * .6f : ahead);
             if (g) aim = Mathf.Min(aim, g.progress + 2f);
-            GuideTarget = MissedGate ? MissedGate.transform.position : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
+            GuideTarget = MissedGate ? MissedGate.transform.position : sc ? sc.PointAt(scS + ahead, out _) : near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
 
             // the cue, most important first
             if (Holding || Finished) return;

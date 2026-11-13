@@ -8,13 +8,16 @@ namespace ShiftStorm
     public sealed class VehicleSound : MonoBehaviour
     {
         AudioSource source; ShiftVehicle v;
+        public bool spatial;   // Round 3: a rival's hum is heard from where it is
         void Start()
         {
             v = GetComponent<ShiftVehicle>();
             const int rate = 44100; int n = rate / 2; var data = new float[n];
             for (int i = 0; i < n; i++) { float t = i / (float)rate; data[i] = .25f * Mathf.Sin(2 * Mathf.PI * 90 * t) + .12f * Mathf.Sin(2 * Mathf.PI * 180 * t) + .06f * Mathf.Sin(2 * Mathf.PI * 270 * t); }
             var clip = AudioClip.Create("Engine hum", n, 1, rate, false); clip.SetData(data, 0);
-            source = gameObject.AddComponent<AudioSource>(); source.clip = clip; source.loop = true; source.spatialBlend = 0; source.volume = .35f; source.Play();
+            source = gameObject.AddComponent<AudioSource>(); source.clip = clip; source.loop = true; source.spatialBlend = spatial ? 1 : 0; source.volume = spatial ? .5f : .35f;
+            if (spatial) { source.rolloffMode = AudioRolloffMode.Linear; source.minDistance = 6; source.maxDistance = 90; source.dopplerLevel = .3f; }
+            source.Play();
         }
         void Update()
         {

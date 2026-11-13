@@ -18,6 +18,11 @@ namespace ShiftStorm
         public float alignAssistSeconds = .45f;               // gentle, bounded alignment help after a change
         public float alignAssistMaxDegPerSecond = 80f;
         public float alignAssistMaxTotalDeg = 40f;
+        // Round 3 item 3 (the waterfall return "hung up a tad"): into a faster form, the speed's share of the old form's top speed carries
+        // over (1 = all of it, capped by the new form's entry range), eased in over the visual change instead of a kick
+        [Range(0, 1)] public float changeSpeedCarry = 1f;
+        public float wheelsDownExtraGravity = 7f;     // the car springs onto its wheels: extra pull down while airborne just after a change into Drive
+        public float wheelsDownSeconds = 2f;
         [Header("Recovery")]
         public float resetSpeed = 20f;                // a reset resumes at this modest speed
         public float graceSeconds = 1.5f;             // no collisions with obstacles after a reset
@@ -35,5 +40,8 @@ namespace ShiftStorm
         public float wrongWaySeconds = .6f;           // ... for this long, while on the route
         public float offRouteDrive = 16f, offRouteBoat = 26f, offRouteFly = 55f, offRouteDive = 15f;   // further than this from the line: THIS WAY
         public float airOutOfBoundsSeconds = 4f;      // in the air, out of bounds to the side this long (THIS WAY meanwhile) before the reset
+        [Header("Scrapes (Round 3)")]
+        public float scrapeSpeedKeep = .55f;          // a scrape in the air or underwater keeps this much of the speed (never under the form's floor) ...
+        public float scrapeSeconds = .8f;             // ... and the throttle is ignored this long
     }
 }

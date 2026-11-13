@@ -42,28 +42,33 @@ namespace ShiftStorm
         };
         const float LineCooldown = 8f, AnyCooldown = 3f;
 
-        public static Driver Make(ShiftVehicle v)
+        // Round 3: the rivals' drivers too (Tee'd Off's Chip, Rae and Vivi, copied to Resources/Drivers/<name>), with Abi's shared seated
+        // clips and no voice (only the player's driver speaks).
+        string modelPath = "Driver/Abigail", texPath = "Driver/Abigail_basecolor", who = "Abigail";
+        public static Driver Make(ShiftVehicle v, string character = null)
         {
-            var d = v.gameObject.AddComponent<Driver>(); d.v = v; d.forms = v.Forms; Instance = d;
-            d.Seat(); d.Voice();
+            var d = v.gameObject.AddComponent<Driver>(); d.v = v; d.forms = v.Forms;
+            if (character != null) { d.who = character; d.modelPath = $"Drivers/{character}/{character}"; d.texPath = $"Drivers/{character}/{character}_basecolor"; }
+            else Instance = d;
+            d.Seat(); if (character == null) d.Voice();
             return d;
         }
 
         // ---------------- the seat ----------------
         void Seat()
         {
-            var prefab = Resources.Load<GameObject>("Driver/Abigail");
-            if (!prefab || !forms) { Debug.LogWarning("[Driver] no Abigail model (Resources/Driver/Abigail): the cockpit stays empty"); return; }
+            var prefab = Resources.Load<GameObject>(modelPath);
+            if (!prefab || !forms) { Debug.LogWarning($"[Driver] no {who} model (Resources/{modelPath}): the cockpit stays empty"); return; }
             // the closed canopy's top, in the vehicle's own space (measured, not assumed: the Blender model may change)
             forms.Snap(Mode.Dive);
             var canopy = forms.PartTransform("Canopy"); float top = .87f;
             if (canopy) { var r = canopy.GetComponentInChildren<Renderer>(); if (r) top = transform.InverseTransformPoint(r.bounds.max).y; }
             CanopyTop = top;
-            model = Instantiate(prefab, forms.transform, false).transform; model.name = "Abi (driver)";
+            model = Instantiate(prefab, forms.transform, false).transform; model.name = who + " (driver)";
             model.localPosition = Vector3.zero; model.localRotation = Quaternion.identity; model.localScale = Vector3.one;
             foreach (var c in model.GetComponentsInChildren<Collider>(true)) Destroy(c);
             anim = model.GetComponentInChildren<Animator>();
-            if (!anim || !anim.isHuman) { Debug.LogWarning("[Driver] Abigail has no Humanoid avatar: no seated pose"); Destroy(model.gameObject); model = null; forms.Snap(Mode.Drive); return; }
+            if (!anim || !anim.isHuman) { Debug.LogWarning($"[Driver] {who} has no Humanoid avatar: no seated pose"); Destroy(model.gameObject); model = null; forms.Snap(Mode.Drive); return; }
             T(ref hips, HumanBodyBones.Hips); T(ref spine, HumanBodyBones.Spine); T(ref chest, HumanBodyBones.Chest); T(ref head, HumanBodyBones.Head);
             T(ref uaL, HumanBodyBones.LeftUpperArm); T(ref uaR, HumanBodyBones.RightUpperArm); T(ref laL, HumanBodyBones.LeftLowerArm); T(ref laR, HumanBodyBones.RightLowerArm);
             T(ref handL, HumanBodyBones.LeftHand); T(ref handR, HumanBodyBones.RightHand);
@@ -81,16 +86,16 @@ namespace ShiftStorm
             float s = Mathf.Clamp((top - .07f - seat.y) / Mathf.Max(.1f, headTop - hipsY), .5f, 1.05f);
             Place(seat, s); Scale = s; HeadTop = MaxY();
             if (!Animated) foreach (var b in new[] { hips, spine, chest, head, uaL, uaR, laL, laR, ulL, ulR, llL, llR }) if (b) seated[b] = b.localRotation;
-            Source = Animated ? $"Abigail.fbx (Tee'd Off), Humanoid, {ClipCount} shared Mixamo clips (Driving loop), scale {s:0.00}" : $"Abigail.fbx (Tee'd Off), Humanoid, fixed seated pose (no clips found), scale {s:0.00}";
+            Source = Animated ? $"{who}.fbx (Tee'd Off), Humanoid, {ClipCount} shared Mixamo clips (Driving loop), scale {s:0.00}" : $"{who}.fbx (Tee'd Off), Humanoid, fixed seated pose (no clips found), scale {s:0.00}";
             forms.Snap(Mode.Drive);
-            Debug.Log($"[Driver] Abi seated: scale {s:0.00}, head top {HeadTop:0.00} m, closed canopy top {top:0.00} m");
+            Debug.Log($"[Driver] {who} seated: scale {s:0.00}, head top {HeadTop:0.00} m, closed canopy top {top:0.00} m");
         }
         void T(ref Transform t, HumanBodyBones b) => t = anim.GetBoneTransform(b);
         // the clip graph, posed on Driving (the seat and the size are measured in that pose)
         void Graph()
         {
             Animated = true; anim.enabled = true; anim.applyRootMotion = false; anim.cullingMode = AnimatorCullingMode.AlwaysAnimate; anim.runtimeAnimatorController = null;
-            graph = PlayableGraph.Create("Abi driver"); graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+            graph = PlayableGraph.Create(who + " driver"); graph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             var output = AnimationPlayableOutput.Create(graph, "driver", anim);
             mixer = AnimationMixerPlayable.Create(graph, clips.Length);
             for (int i = 0; i < clips.Length; i++)
@@ -163,7 +168,7 @@ namespace ShiftStorm
         }
         void Paint()
         {
-            var tex = Resources.Load<Texture2D>("Driver/Abigail_basecolor");
+            var tex = Resources.Load<Texture2D>(texPath);
             var mat = JurassicLook.Textured(tex, true); mat.SetFloat("_OutlineScale", .5f);
             foreach (var r in model.GetComponentsInChildren<Renderer>(true)) { var ms = r.sharedMaterials; for (int i = 0; i < ms.Length; i++) ms[i] = mat; r.sharedMaterials = ms; }
         }

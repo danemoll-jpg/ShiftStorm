@@ -63,6 +63,17 @@ namespace ShiftStorm
         public static Vector3 PushAt(Vector3 p) { var sum = Vector3.zero; foreach (var c in All) if (c.Contains(p)) sum += c.push; return sum; }
     }
 
+    // Round 3: an updraft funnelled through the Sky Arch slit: a plane inside it is lifted to at least this airspeed (m/s), which then eases
+    // back to its normal speed as usual.
+    public sealed class SlipstreamZone : BoxVolume
+    {
+        public static readonly List<SlipstreamZone> All = new List<SlipstreamZone>();
+        void OnEnable() => All.Add(this);
+        void OnDisable() => All.Remove(this);
+        public float speed = 108;
+        public static float SpeedAt(Vector3 p) { float s = 0; foreach (var z in All) if (z.Contains(p)) s = Mathf.Max(s, z.speed); return s; }
+    }
+
     // A ramp a boat can climb on its hull (the surfacing pool's water ramp): full thrust and a hull hover, instead of the dry ground drag.
     public sealed class WetRamp : MonoBehaviour { }
 

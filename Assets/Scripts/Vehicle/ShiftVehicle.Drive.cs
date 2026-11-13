@@ -38,7 +38,12 @@ namespace ShiftStorm
                 float lift = Mathf.Clamp(compression * drive.springStrength - speed * drive.suspensionDamping, 0, drive.maxSuspensionAcceleration);
                 Body.AddForceAtPosition(transform.up * (lift / Wheels.Length), origin, ForceMode.Acceleration);
             }
-            if (GroundedWheels > 0 && FirstWheelContactAt < 0) FirstWheelContactAt = Time.time;
+            if (GroundedWheels > 0 && FirstWheelContactAt < 0)
+            {
+                FirstWheelContactAt = Time.time;
+                // Round 3: landing after a change into Drive, the body visibly springs on its wheels (a short damped dip, looks only)
+                if (EnteredDriveAt > 0 && Time.time - EnteredDriveAt < shared.wheelsDownSeconds) { bounceAt = Time.time; bounceAmp = Mathf.Clamp(-Body.linearVelocity.y * .03f, .06f, .25f); }
+            }
             bool grounded = GroundedWheels >= 2;
             Vector3 up = grounded ? normal.normalized : Vector3.up;
             Vector3 forward = Vector3.ProjectOnPlane(transform.forward, up).normalized, right = Vector3.Cross(up, forward);
@@ -74,5 +79,11 @@ namespace ShiftStorm
             Body.AddTorque((tilt * drive.uprightStrength - tiltVelocity * drive.uprightDamping) * level, ForceMode.Acceleration);
         }
         public float VisualSteer => steer;
+        float bounceAt = -100, bounceAmp;
+        void LateUpdate()
+        {
+            if (!Forms) return; float t = Time.time - bounceAt;
+            Forms.transform.localPosition = t >= 0 && t < .9f ? new Vector3(0, -bounceAmp * Mathf.Exp(-t / .16f) * Mathf.Cos(17f * t), 0) : Vector3.zero;
+        }
     }
 }

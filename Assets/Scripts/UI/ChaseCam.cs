@@ -21,6 +21,11 @@ namespace ShiftStorm
         public static void ResetSkyFog() { skyFog = RenderSettings.fogColor; skyDensity = RenderSettings.fogDensity; skyFogOn = RenderSettings.fog; skyRead = true; }
 
         void Start() { if (!skyRead) ResetSkyFog(); cam = GetComponent<Camera>(); }
+        // Round 3 item 3: the sense of speed (field of view, distance) is measured against a top speed that eases from one form's to the next
+        // (20 m/s per second) instead of jumping at the change: at the waterfall's Boat->Drive the old jump (50 -> 65 m/s) narrowed the view
+        // about 4 deg and pulled the camera in at the moment the car left the ramp, which read as a stop. Legacy: the build 3 camera (checks).
+        public static bool Legacy; float topRef = -1;
+        public float SpeedFrac { get; private set; }
 
         void LateUpdate()
         {
@@ -29,13 +34,14 @@ namespace ShiftStorm
             float wantD = m == Mode.Fly ? 11f : m == Mode.Dive ? 8.5f : m == Mode.Boat ? 8.5f : 7.5f;
             float wantH = m == Mode.Fly ? 3.4f : m == Mode.Dive ? 2.4f : m == Mode.Boat ? 3f : 2.6f;
             float wantP = m == Mode.Fly || m == Mode.Dive ? .45f : 0f;
-            float k = 1 - Mathf.Exp(-2.5f * Time.deltaTime);
+            float k = 1 - Mathf.Exp((Legacy ? -2.5f : -1.6f) * Time.deltaTime);
             distance = Mathf.Lerp(distance, wantD, k); height = Mathf.Lerp(height, wantH, k); pitchFollow = Mathf.Lerp(pitchFollow, wantP, k);
             var t = target.transform;
             var fwd = Quaternion.Euler(0, target.HeadingDeg, 0) * Vector3.forward;
             if (pitchFollow > .01f) fwd = Vector3.Slerp(fwd, t.forward, pitchFollow).normalized;
             var focus = t.position + Vector3.up * 1.2f;
-            float speedFrac = Mathf.Clamp01(target.Speed / Mathf.Max(1f, target.TopSpeedNow));
+            if (topRef < 0 || Legacy || target.Holding) topRef = target.TopSpeedNow; else topRef = Mathf.MoveTowards(topRef, target.TopSpeedNow, 20f * Time.deltaTime);
+            float speedFrac = Mathf.Clamp01(target.Speed / Mathf.Max(1f, topRef)); SpeedFrac = speedFrac;
             var wantOffset = -fwd * (distance + speedFrac * 1.6f) + Vector3.up * height;
             bool reset = target.Resets != lastResets || (t.position - lastTarget).sqrMagnitude > 30 * 30; lastResets = target.Resets; lastTarget = t.position;   // a reset or a restart (a jump) snaps
             if (!snapped || reset) { offset = wantOffset; velocity = Vector3.zero; snapped = true; }

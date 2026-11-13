@@ -19,7 +19,7 @@ namespace ShiftStorm
     //   (a second process with the same -saveDir). Round 2b: nav (the guided pilot: starts in the air off the line facing sideways, and
     //   facing backwards, and must find the route by the HUD alone; marker / arrow pictures in each form), slowfps (movement at a low frame
     //   rate), screen (the screen mode decided at start-up); round2b = nav + lap + skip + slowfps + screen.
-    public sealed class CheckPilot : MonoBehaviour
+    public sealed partial class CheckPilot : MonoBehaviour
     {
         Game game; ShiftVehicle v; ShiftInput input; Camera cam; RenderTexture rt; Texture2D grab; AudioMeter meter;
         const int W = 1280, H = 800;
@@ -88,6 +88,8 @@ namespace ShiftStorm
         void FixedUpdate()
         {
             if (!v || !v.Course) return;
+            Record();
+            if (aiDrives) return;   // Round 3: a RivalPilot drives the player's vehicle (shortcut and soak checks)
             if (!v.Holding) topSpeed[v.Mode] = Mathf.Max(topSpeed.TryGetValue(v.Mode, out var ts) ? ts : 0, v.Speed);
             if (coast) { input.sThrottle = input.sBrake = input.sSteer = input.sVertical = 0; input.sBoost = input.sSecondary = false; return; }
             if (guided) { Guided(); return; }
@@ -147,6 +149,7 @@ namespace ShiftStorm
         IEnumerator Run()
         {
             string which = "all"; var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, "-check"); if (i >= 0 && i + 1 < a.Length) which = a[i + 1];
+            var envCheck = Environment.GetEnvironmentVariable("SHIFTSTORM_CHECK"); if (i < 0 && !string.IsNullOrEmpty(envCheck)) which = envCheck;
             yield return Wait(1f);
             Line($"ShiftStorm check '{which}', {DateTime.Now:yyyy-MM-dd HH:mm}, build {Application.version}, {SystemInfo.graphicsDeviceName}, {W}x{H} off-screen");
             Line($"model: {VehicleFactory.ModelSource}; driver: {Driver.Instance?.Source}");
@@ -162,6 +165,14 @@ namespace ShiftStorm
             if (r1 || which == "strip") yield return Strip();
             if (r1 || which == "lanes") yield return Lanes();
             if (r1 || which == "edge") yield return Edges();
+            bool r3 = which == "round3";
+            if (r3 || which == "settings") yield return SettingsCheck();
+            if (which == "settings2") yield return Settings2();
+            if (which == "waterfall") yield return Waterfall();
+            if (r3 || which == "race") yield return RaceCheck();
+            if (r3 || which == "shortcuts") yield return Shortcuts();
+            if (which == "soak") yield return Soak();
+            if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();
             var au = CourseAudio.Instance;
             Line($"sound: music {(au ? au.MusicClip : "-")} {(au && au.MusicPlaying ? "playing" : "not playing")} (its own signal peak {(au ? au.MusicPeak : 0):0.000}), splashes played {(au ? au.Splashes : 0)}, Abi lines: {(Driver.Instance ? string.Join("; ", Driver.Instance.Spoken) : "-")}");

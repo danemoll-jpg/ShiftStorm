@@ -24,7 +24,7 @@ namespace ShiftStorm
         void StepDive(float dt)
         {
             var p = Body.position; var physics = gameObject.scene.GetPhysicsScene();
-            float target = Input.Brake > .05f ? -dive.reverseSpeed * Input.Brake : Boosting ? dive.boostTopSpeed : Input.Throttle * dive.topSpeed;
+            float target = Scraped ? dive.cruiseSpeed * .4f : Input.Brake > .05f ? -dive.reverseSpeed * Input.Brake : Boosting ? dive.boostTopSpeed : Input.Throttle * dive.topSpeed;
             DiveSpeed = Mathf.MoveTowards(DiveSpeed, target, (target < DiveSpeed ? dive.brakeGain : dive.speedGain) * Mathf.Max(4f, Mathf.Abs(target - DiveSpeed)) * dt);
             diveYawRate = Mathf.MoveTowards(diveYawRate, Input.Steer * Authority * dive.turnRate * Mathf.Clamp01(Mathf.Abs(DiveSpeed) / 4f + .3f), dive.turnRate * dive.turnResponse * dt);
             yawDeg += diveYawRate * dt * (DiveSpeed < -.5f ? -1 : 1);

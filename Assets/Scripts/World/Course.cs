@@ -16,6 +16,7 @@ namespace ShiftStorm
         public List<ProgressGate> gates = new List<ProgressGate>();
         public List<RecoveryAnchor> anchors = new List<RecoveryAnchor>();
         public List<Segment> segments = new List<Segment>();
+        public List<Shortcut> shortcuts = new List<Shortcut>();   // Round 3: alternative paths between main gates
         public float halfWidth = 45, minY = -30, maxY = 60, endMargin = 30;
         public float airHalfWidth;              // Round 2b: the allowed distance from the line in the air (0: halfWidth)
         public Mode startMode = Mode.Drive;

@@ -14,6 +14,10 @@ namespace ShiftStorm
     {
         public const int VehicleLayer = 8, GhostLayer = 9, ObstacleLayer = 10;
         public static ShiftVehicle Player { get; private set; }
+        public bool IsPlayer => Player == this;
+        public string RacerName = "Abi";                   // Round 3: who drives it (the HUD's standings, results)
+        public Color Tint = new Color(1f, .78f, .15f);     // its colour on the route strip and the standings (cosmetic only)
+        public static void MarkPlayer(ShiftVehicle v) => Player = v;
         public static int GroundMask => Physics.DefaultRaycastLayers & ~(1 << VehicleLayer) & ~(1 << GhostLayer);
 
         public ShiftTuning shared; public DriveTuning drive; public BoatTuning boat; public FlyTuning fly; public DiveTuning dive;
@@ -67,7 +71,6 @@ namespace ShiftStorm
             Body.mass = 1200; Body.linearDamping = 0; Body.angularDamping = .5f; Body.maxAngularVelocity = 5;
             Body.centerOfMass = new Vector3(0, -.35f, 0);
             SetLayer(VehicleLayer);
-            Player = this;
         }
         void OnDestroy() { if (Player == this) Player = null; }
 
@@ -79,12 +82,14 @@ namespace ShiftStorm
 
         // Start (or restart) on a course at its first anchor, in the course's start form, with the progress cleared.
         // A time trial (course.timeTrial, from its first anchor) holds the vehicle on the grid for the countdown; the clock starts at GO.
-        public void Begin(Course course, RecoveryAnchor at = null)
+        // grid (Round 3, a race): this racer's place on the grid, relative to the start anchor (x right, z forward, metres)
+        public void Begin(Course course, RecoveryAnchor at = null, Vector3 grid = default)
         {
             Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
             Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
-            Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0);
+            Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0, fromStart ? grid : default);
+            OnShortcut = null; ShortcutsTaken.Clear(); GateLog.Clear(); scrapeUntil = -1;
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
             BestProgress = lastBest = Progress; foreach (var g in course.gates) if (g.progress < Progress - 1f) GatesPassed++;
             held = course.timeTrial && fromStart && shared.countdownSeconds > 0;
@@ -98,7 +103,7 @@ namespace ShiftStorm
 
         void FixedUpdate()
         {
-            float dt = Time.fixedDeltaTime; FixedSteps++;
+            float dt = Time.fixedDeltaTime; if (IsPlayer) FixedSteps++;
             if (held)
             {
                 if (Time.time < HoldUntil) { Input.ConsumeReset(); return; }
@@ -118,6 +123,7 @@ namespace ShiftStorm
                 }
             }
             CheckZones();
+            Carry(dt);
             switch (Mode)
             {
                 case Mode.Drive: StepDrive(dt); break;
@@ -131,6 +137,30 @@ namespace ShiftStorm
             if (GraceUntil > 0 && Time.time >= GraceUntil) { GraceUntil = -1; SetLayer(VehicleLayer); }
             var f = Vector3.ProjectOnPlane(Mode == Mode.Fly || Mode == Mode.Dive ? transform.forward : (Body.linearVelocity.sqrMagnitude > 4 && Vector3.Dot(Body.linearVelocity, transform.forward) > 0 ? Body.linearVelocity : transform.forward), Vector3.up);
             if (f.sqrMagnitude > 1e-3f) HeadingDeg = Mathf.Atan2(f.x, f.z) * Mathf.Rad2Deg;
+        }
+
+        // the speed carried into a faster form, eased in over the change; and the car pulled onto its wheels after a change into Drive
+        void Carry(float dt)
+        {
+            if (Mode == Mode.Drive && EnteredDriveAt > 0 && Time.time - EnteredDriveAt < shared.wheelsDownSeconds)
+            {
+                var lv0 = Body.linearVelocity; float flat0 = new Vector2(lv0.x, lv0.z).magnitude;
+                if (FirstWheelContactAt < 0) { if (GroundedWheels == 0) Body.AddForce(Vector3.down * shared.wheelsDownExtraGravity, ForceMode.Acceleration); landKeep = flat0; }
+                // the spring takes the landing's downward speed, never the forward speed: for a moment after the first touch the flat speed
+                // is held at what it was in the air (the hull's touch on the road would otherwise brake it by about 3 m/s)
+                else if (Time.time - FirstWheelContactAt < .25f && flat0 < landKeep && flat0 > 1f) { var k = landKeep / flat0; Body.linearVelocity = new Vector3(lv0.x * k, lv0.y, lv0.z * k); }
+            }
+            if (CarryTarget < 0) return;
+            if (!Changing || Speed >= CarryTarget - .05f) { CarryTarget = -1; return; }
+            float step = carryRate * dt;
+            switch (Mode)
+            {
+                case Mode.Fly: Airspeed = Mathf.MoveTowards(Airspeed, CarryTarget, step); break;
+                case Mode.Dive: DiveSpeed = Mathf.MoveTowards(DiveSpeed, CarryTarget, step); break;
+                default:
+                    var lv = Body.linearVelocity; var flat = new Vector3(lv.x, 0, lv.z); if (flat.sqrMagnitude < 1) break;
+                    Body.AddForce(flat.normalized * Mathf.Min(step, CarryTarget - Speed), ForceMode.VelocityChange); break;
+            }
         }
 
         void UpdateBoost(float dt)
@@ -154,6 +184,11 @@ namespace ShiftStorm
             }
         }
 
+        public float TopOf(Mode m) => m == Mode.Drive ? drive.topSpeed : m == Mode.Boat ? boat.topSpeed : m == Mode.Fly ? fly.topSpeed : dive.topSpeed;
+        float EntryMax(Mode m) => m == Mode.Drive ? drive.entrySpeed.y : m == Mode.Boat ? boat.entrySpeed.y : m == Mode.Fly ? fly.entrySpeed.y : dive.entrySpeed.y;
+        public float CarryTarget { get; private set; } = -1;   // Round 3: the speed being eased in over a change into a faster form
+        float carryRate, landKeep; public float EnteredDriveAt { get; private set; } = -1;
+
         public void Change(Mode to, string why, bool animate = true)
         {
             var from = Mode; float speedIn = Speed;
@@ -164,6 +199,12 @@ namespace ShiftStorm
                 case Mode.Boat: EnterBoat(speedIn); break;
                 case Mode.Fly: EnterFly(speedIn, false); break;
                 case Mode.Dive: EnterDive(speedIn); break;
+            }
+            CarryTarget = -1; if (to == Mode.Drive) EnteredDriveAt = Time.time;
+            if (animate && shared.changeSpeedCarry > 0 && TopOf(to) > TopOf(from) && speedIn > 1f)
+            {
+                float want = Mathf.Min(speedIn * Mathf.Lerp(1, TopOf(to) / TopOf(from), shared.changeSpeedCarry), EntryMax(to));
+                if (want > Speed + .5f) { CarryTarget = want; carryRate = (want - Speed) / Mathf.Max(.1f, shared.changeSeconds); }
             }
             if (animate)
             {
@@ -198,14 +239,26 @@ namespace ShiftStorm
         void TrackProgress()
         {
             if (!Course) return;
-            var p = Body.position; var gates = Course.gates;
-            Progress = Course.Project(p, Progress, out var at, out var dir);
+            var p = Body.position; var gates = Course.gates; Vector3 at, dir;
+            if (OnShortcut) { ShortcutProgress(p, out at, out dir); if (!Course) return; }
+            else
+            {
+                Progress = Course.Project(p, Progress, out at, out dir);
+                foreach (var sc in Course.shortcuts)
+                {
+                    if (sc.nextGate != GatesPassed || !sc.entry.Allows(Mode)) continue;
+                    // through the entry frame, or (a racer that slipped in past the frame's edge) already inside the shortcut beyond it
+                    bool inside = sc.entry.transform.InverseTransformPoint(p).z > 0 && sc.exit.transform.InverseTransformPoint(p).z < 0 && Vector3.Distance(p, sc.entry.transform.position) < 60f
+                                  && Vector3.Distance(p, sc.PointAt(sc.Project(p, -1, out _, out _), out _)) < sc.halfWidth * .8f && Course.Project(p, Progress, out var mainAt, out _) >= 0 && Vector3.Distance(p, mainAt) > sc.halfWidth;
+                    if (sc.entry.Crossed(lastPos, p) || inside) { EnterShortcut(sc, p); break; }
+                }
+            }
             if (Progress > BestProgress) BestProgress = Progress;
-            while (GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
+            while (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
             {
                 var g = gates[GatesPassed];
                 if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); break; }
-                GatesPassed++; MissedGate = null; missedFor = 0;
+                GatesPassed++; MissedGate = null; missedFor = 0; GateLog.Add(g.index);
                 Note("gate", $"gate {g.label} passed ({GatesPassed}/{gates.Count})");
                 if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime; Note("finish", $"finish in {FinishTime:0.00} s, {Resets} resets"); }
             }
@@ -224,5 +277,27 @@ namespace ShiftStorm
         void ShowCue(string text, CueKind kind, float seconds = 1.5f) { Cue = text; CueType = kind; CueUntil = Time.time + seconds; }
 
         void SetLayer(int layer) { foreach (var t in GetComponentsInChildren<Transform>(true)) t.gameObject.layer = layer; }
+
+        // ---- Round 3: contacts. A scrape in the air or underwater costs speed (the form's own physics sets the velocity every step, so a
+        // wall would otherwise only slide it along): the speed drops to ShiftTuning.scrapeSpeedKeep of itself (never under the form's floor)
+        // and the throttle is ignored for scrapeSeconds. Checks listen to Contact (the waterfall recorder). ----
+        public event Action<Collision, bool> Contact;   // (contact, first touch)
+        public int Scrapes { get; private set; }
+        float scrapeUntil = -1, lastScrape = -1;
+        public bool Scraped => Time.time < scrapeUntil;
+        public bool ScrapedRecently => lastScrape > 0 && Time.time - lastScrape < 2f;   // the Sky Arch slit's updraft does not lift a plane that just scraped
+        void OnCollisionEnter(Collision c) { Contact?.Invoke(c, true); Scrape(c); }
+        void OnCollisionStay(Collision c) { Contact?.Invoke(c, false); }
+        void Scrape(Collision c)
+        {
+            if ((Mode != Mode.Fly && Mode != Mode.Dive) || Time.time - lastScrape < .4f || Holding || Time.time - ChangeStartedAt < .5f) return;
+            if (c.rigidbody && c.rigidbody.GetComponent<ShiftVehicle>()) return;   // a bump with another racer is physics only
+            if (Mode == Mode.Dive && DiveSpeed < 5f) return;   // creeping or reversing along a floor is not a scrape (Round 1 E5)
+            lastScrape = Time.time; Scrapes++; scrapeUntil = Time.time + shared.scrapeSeconds;
+            float before = Mode == Mode.Fly ? Airspeed : DiveSpeed;
+            if (Mode == Mode.Fly) Airspeed = Mathf.Max(fly.minSpeed, Airspeed * shared.scrapeSpeedKeep);
+            else DiveSpeed = Mathf.Max(Mathf.Min(DiveSpeed, dive.cruiseSpeed * .4f), DiveSpeed * shared.scrapeSpeedKeep);
+            Note("scrape", $"scrape on {c.collider.name} as {Mode}: {before:0} -> {(Mode == Mode.Fly ? Airspeed : DiveSpeed):0} m/s");
+        }
     }
 }

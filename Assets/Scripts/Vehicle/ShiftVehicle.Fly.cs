@@ -12,7 +12,7 @@ namespace ShiftStorm
         public float PitchDeg { get; private set; }
         public float RollDeg { get; private set; }
         public float Airspeed { get; private set; }
-        float yawDeg, ceilingY;
+        float yawDeg, ceilingY; bool inSlip;
         [System.NonSerialized] public float debugEntryPitch = float.NaN;   // checks only: force an extreme pitch (the nose-down water entry test)
 
         void EnterFly(float speedIn, bool placed)
@@ -32,9 +32,10 @@ namespace ShiftStorm
         {
             if (!float.IsNaN(debugEntryPitch)) { PitchDeg = debugEntryPitch; }
             float top = Boosting ? fly.boostTopSpeed : fly.topSpeed;
-            float target = Input.Brake > .05f ? fly.minSpeed : Mathf.Lerp(fly.cruiseSpeed, top, Mathf.Max(Input.Throttle, Boosting ? 1 : 0));
+            float target = Input.Brake > .05f || Scraped ? fly.minSpeed : Mathf.Lerp(fly.cruiseSpeed, top, Mathf.Max(Input.Throttle, Boosting ? 1 : 0));
             Airspeed += ((target - Airspeed) * fly.speedGain - 9.81f * Mathf.Sin(PitchDeg * Mathf.Deg2Rad) * .5f) * dt;
-            Airspeed = Mathf.Clamp(Airspeed, fly.minSpeed, fly.boostTopSpeed * 1.1f);
+            float lift = ScrapedRecently ? 0 : SlipstreamZone.SpeedAt(Body.position); if (lift > Airspeed) { if (!inSlip) Note("slipstream", $"updraft: {Airspeed:0} -> {lift:0} m/s"); Airspeed = lift; inSlip = true; } else inSlip = false;   // Round 3: the Sky Arch slit
+            Airspeed = Mathf.Clamp(Airspeed, fly.minSpeed, Mathf.Max(fly.boostTopSpeed * 1.1f, lift));
             float vin = Input.Vertical * Authority;
             if (float.IsNaN(debugEntryPitch))
             {

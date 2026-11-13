@@ -20,6 +20,31 @@ namespace ShiftStorm
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive;
             root.AddComponent<VehicleSound>();
+            ShiftVehicle.MarkPlayer(v); v.RacerName = "Abi"; v.Tint = new Color(.95f, .45f, .1f);
+            return v;
+        }
+
+        // Round 3: a rival: the same vehicle, hull, mass and tuning assets as the player's (cosmetic differences only: body colour and
+        // driver), driven by RivalPilot through its own ShiftInput, with a 3D engine hum.
+        public static ShiftVehicle MakeRival(Rival r, ShiftTuning shared, DriveTuning drive, BoatTuning boat, FlyTuning fly, DiveTuning dive)
+        {
+            var root = new GameObject($"ShiftVehicle (rival {r.name})");
+            var col = root.AddComponent<BoxCollider>(); col.size = new Vector3(1.9f, .95f, 4.0f); col.center = new Vector3(0, .1f, 0);
+            col.material = new PhysicsMaterial("Hull") { dynamicFriction = .2f, staticFriction = .2f, bounciness = .05f, frictionCombine = PhysicsMaterialCombine.Minimum };
+            root.AddComponent<Rigidbody>();
+            root.AddComponent<ShiftInput>().Scripted = true;
+            var forms = MakeVisual(root.transform, Mode.Drive, 1f, false);
+            var body = Resources.Load<Material>("Materials/VehicleBody");
+            if (body)
+            {
+                var m = new Material(body) { name = "VehicleBody " + r.name }; m.SetColor("_BaseColor", r.color); m.SetColor("_Color", r.color);
+                foreach (var rd in forms.GetComponentsInChildren<Renderer>(true)) { var ms = rd.sharedMaterials; for (int i = 0; i < ms.Length; i++) if (ms[i] == body) ms[i] = m; rd.sharedMaterials = ms; }
+            }
+            var v = root.AddComponent<ShiftVehicle>();
+            v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive; v.RacerName = r.name; v.Tint = r.color;
+            root.AddComponent<VehicleSound>().spatial = true;
+            Driver.Make(v, r.character);
+            var pilot = root.AddComponent<RivalPilot>(); pilot.rival = r;
             return v;
         }
 

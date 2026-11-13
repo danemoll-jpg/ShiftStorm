@@ -1,0 +1,25 @@
+ShiftStorm check 'shortcuts', 2026-11-13 07:54, build 0.3.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SHORTCUT Sky Arch slit: its line 1073 m from main progress 2279 to 3409 m (the main line there: 1130 m); entry / exit sub-gates; stands in for G3 arch exit; rejoins before G4 lagoon landing
+  from the anchor at 2245 m to G4 lagoon landing, the same start speed, no boost: safe line 23.53 s, resets 0, scrapes 0, shortcut not taken; shortcut 21.98 s, resets 0, scrapes 0, shortcut Sky Arch slit; deliberate miss (aimed 9 m beside its entry) 24.63 s, resets 0, scrapes 1, shortcut Sky Arch slit
+  SHORTCUT Sky Arch slit PASS: saves 1.55 s (target 1-2 s); the miss costs +1.10 s against the safe line, +2.65 s against the shortcut, not trapped
+SHORTCUT FULL LAP: the AI driver without boost, safe line 139.17 s, resets 0, scrapes 1, shortcuts none, gates 0 1 2 3 4 5 6 7 8 9 10; both shortcuts 137.60 s, resets 0, scrapes 1, shortcuts Sky Arch slit, gates 0 1 2 3 4 5 6 7 8 9 10; difference +1.57 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.07 ms, 95th pct 1.40 ms, 99th pct 1.64 ms, worst 38.03 ms over 329428 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  sc-safe      Fly->Boat   z  -607.0  0.601 s  frames worst 11.07 / mean 1.12 ms
+  sc-take      Fly->Boat   z  -606.3  0.601 s  frames worst 2.22 / mean 1.05 ms
+  sc-miss      Fly->Boat   z  -606.7  0.601 s  frames worst 2.36 / mean 1.06 ms
+  sc-lap-safe  Drive->Fly  z   945.1  0.600 s  frames worst 2.50 / mean 1.07 ms
+  sc-lap-safe  Fly->Boat   z  -607.4  0.601 s  frames worst 6.36 / mean 1.08 ms
+  sc-lap-safe  Boat->Dive  z  -203.8  0.600 s  frames worst 3.76 / mean 1.08 ms
+  sc-lap-safe  Dive->Boat  z  -466.5  0.601 s  frames worst 2.70 / mean 1.14 ms
+  sc-lap-safe  Boat->Drive z  -304.5  0.610 s  frames worst 38.03 / mean 1.22 ms
+  sc-lap-shortcuts Drive->Fly  z   945.1  0.601 s  frames worst 3.35 / mean 1.12 ms
+  sc-lap-shortcuts Fly->Boat   z  -607.1  0.601 s  frames worst 2.01 / mean 1.10 ms
+  sc-lap-shortcuts Boat->Dive  z  -203.7  0.601 s  frames worst 5.80 / mean 1.09 ms
+  sc-lap-shortcuts Dive->Boat  z  -466.5  0.600 s  frames worst 4.30 / mean 1.07 ms
+  sc-lap-shortcuts Boat->Drive z  -304.4  0.600 s  frames worst 2.31 / mean 1.11 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 7, Abi lines: waterfall: laugh_1; finish: win_1; waterfall: lucky_1; finish: quipgood_1
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

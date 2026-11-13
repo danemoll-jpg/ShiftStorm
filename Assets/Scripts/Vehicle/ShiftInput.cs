@@ -9,7 +9,7 @@ namespace ShiftStorm
     //             RB (or X) secondary: drift on land / tighter carve on water, Y reset, View (Back) invert on / off, D-pad left / right: next start.
     //   Keyboard: W / Up accelerate, S / Down brake / reverse, A / D or Left / Right steer, I / K climb / dive (I = up), Space boost,
     //             Left Shift secondary, R reset, F2 invert on / off, F3 / F4 previous / next start.
-    // Invert is saved in PlayerPrefs ("invertVertical"); a check run never writes it.
+    // Invert is saved in settings.json (Settings; Round 3, was PlayerPrefs "invertVertical"); also on the menu's Settings page.
     // Round 2, the course menu: Menu (Start) / Esc opens and closes it; D-pad up / down or Up / Down (W / S) move, A / Enter / Space choose,
     // B / Backspace go back. While it is open the race is paused, so these never reach the vehicle.
     // Round 2b: R3 (right stick click) / F1 shows or hides the FPS + speed readout; Alt+Enter switches full screen / windowed.
@@ -21,7 +21,7 @@ namespace ShiftStorm
         public float Vertical { get; private set; }   // + up (after the invert setting)
         public bool Boost { get; private set; }
         public bool Secondary { get; private set; }
-        public static bool Invert { get; private set; }
+        public static bool Invert { get => Settings.InvertVertical; set => Settings.InvertVertical = value; }
 
         InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter;
         bool resetRequested; int startStep;
@@ -32,13 +32,14 @@ namespace ShiftStorm
         public bool StatsPressed { get; private set; }
         public bool FullscreenPressed { get; private set; }
 
-        // Checks drive through this same path (ShiftVehicle reads only these properties).
-        [System.NonSerialized] public bool Scripted;
-        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary;
+        // Checks and the AI rivals drive through this same path (ShiftVehicle reads only these properties). sRawStick: sVertical is a stick
+        // position (pushed forward = +, as the pad gives it) and goes through the invert setting like a real stick (the invert check).
+        // The one-shot menu presses (sMenu, sMove, sConfirm, sBack) let a check work the menu as a player would.
+        [System.NonSerialized] public bool Scripted, sRawStick, sMenu, sConfirm, sBack;
+        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary; [System.NonSerialized] public int sMove;
 
         void Awake()
         {
-            Invert = !QuietRun.Check && PlayerPrefs.GetInt("invertVertical", 0) == 1;
             throttle = new InputAction("Accelerate", InputActionType.Value);
             throttle.AddBinding("<Gamepad>/rightTrigger").WithProcessor("axisDeadzone(min=0.1,max=1)"); throttle.AddBinding("<Keyboard>/w"); throttle.AddBinding("<Keyboard>/upArrow");
             brake = new InputAction("Brake", InputActionType.Value);
@@ -80,7 +81,10 @@ namespace ShiftStorm
             if (FullscreenPressed) ConfirmPressed = false;   // Alt+Enter is never a menu "choose"
             if (Scripted)
             {
-                Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Vertical = sVertical; Boost = sBoost; Secondary = sSecondary;
+                if (sMenu) MenuPressed = true; if (sConfirm) ConfirmPressed = true; if (sBack) BackPressed = true; if (sMove != 0) MenuMove = sMove;
+                sMenu = sConfirm = sBack = false; sMove = 0;
+                Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Boost = sBoost; Secondary = sSecondary;
+                Vertical = sRawStick ? (Invert ? sVertical : -sVertical) : sVertical;
                 return;
             }
             Throttle = throttle.ReadValue<float>(); Brake = brake.ReadValue<float>(); Steer = Mathf.Clamp(steer.ReadValue<float>(), -1, 1);
@@ -89,7 +93,7 @@ namespace ShiftStorm
             Vertical = Invert ? -v : v;
             Boost = boost.IsPressed(); Secondary = secondary.IsPressed();
             resetRequested |= reset.WasPressedThisFrame();
-            if (invert.WasPressedThisFrame()) { Invert = !Invert; PlayerPrefs.SetInt("invertVertical", Invert ? 1 : 0); PlayerPrefs.Save(); }
+            if (invert.WasPressedThisFrame()) Invert = !Invert;
             if (nextStart.WasPressedThisFrame()) startStep++;
             if (prevStart.WasPressedThisFrame()) startStep--;
         }

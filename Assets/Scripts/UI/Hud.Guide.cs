@@ -18,6 +18,7 @@ namespace ShiftStorm
         RectTransform arrow, marker, you, stripBar; Image arrowImage, markerImage; Text arrowLabel, markerLabel, climb, speedo, speedUnit, stats;
         Image speedBarFill; readonly List<Image> stripGates = new List<Image>(); readonly List<(RectTransform r, float angle, float phase, float len)> lines = new List<(RectTransform, float, float, float)>();
         Course stripFor; const float StripW = 760;
+        readonly List<Image> rivalDots = new List<Image>();   // Round 3: the rivals on the route strip, in their colours
         float fpsTime, worstMs, worstShown; int fpsFrames; float fpsShown; int stepsAtLast; float stepsPerFrame; readonly Queue<(float t, float ms)> recent = new Queue<(float, float)>();
         static Sprite arrowSprite, diamondSprite, dotSprite;
 
@@ -97,6 +98,16 @@ namespace ShiftStorm
             // route strip
             float L = Mathf.Max(1, c.Length);
             you.anchoredPosition = new Vector2(-StripW * .5f + Mathf.Clamp01(v.Progress / L) * StripW, -46);
+            var race = game ? game.Race : null; int dot = 0;
+            if (race && race.Active)
+                foreach (var r in race.Racers)
+                {
+                    if (r == v || !r) continue;
+                    if (dot >= rivalDots.Count) { var im = Img(you.parent, DotSprite, new Vector2(.5f, 1), Vector2.zero, new Vector2(16, 16), Color.white); im.rectTransform.localEulerAngles = new Vector3(0, 0, 180); rivalDots.Add(im); you.SetAsLastSibling(); }
+                    var d = rivalDots[dot++]; d.enabled = true; d.color = r.Tint;
+                    d.rectTransform.anchoredPosition = new Vector2(-StripW * .5f + Mathf.Clamp01(r.Progress / L) * StripW, -46);
+                }
+            for (int q = dot; q < rivalDots.Count; q++) rivalDots[q].enabled = false;
             for (int i = 0; i < stripGates.Count; i++)
             {
                 bool next = i == v.GatesPassed; var r = stripGates[i].rectTransform;
