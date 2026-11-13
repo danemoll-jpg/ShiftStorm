@@ -151,4 +151,6 @@ much faster, fullscreen by default.
   rubber-banding). Shortcuts: `Race/Shortcut.cs`; the Sky Arch slit (with its updraft) is on; the Coral Vault tunnel is built but off
   (`ParadisePlunge.VaultTunnel = false`) until tuned in a window. Scrapes in the air / underwater cost speed (`ShiftTuning.scrape*`).
 
-Current objective: see `TODO.md` (Round 3 delivered as build 4; next round to be planned with Dan).
+Current objective: **Round 4** (unattended): walls glance you off instead of stopping you, an AI difficulty setting (default Easy, no
+rubber-banding), nothing solid on the road at the start / finish (and anywhere else in the route), a cleaner grid start, the Coral
+Vault tunnel back on, and a just-missed gate counts with a time penalty instead of a U-turn. Release build 5 (0.4.0). See `TODO.md`.
