@@ -20,74 +20,7 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
-- **Round 1 — foundation and the four modes** (2026-11-13, release `build-1` / 0.1.0). Dan's review: tried on PC, "seems fine, everything felt intuitive"; Deck not tried yet. Driver / location picked (see Round 2). Round 1 spec moved to `TODO-ARCHIVE.md`.
-
-- **Round 2 — the full gray-box lap, Jurassic Par atmosphere** (2026-11-13, release `build-2` / 0.2.0). Dan's Deck test: runs, but no idea where to go ("wrong way" everywhere in the air), far too slow, not fullscreen. The Round 2 spec and per-item status are in `TODO-ARCHIVE.md`.
-
-- **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
-
-## Current Objective — Round 2b: fixes from Dan's Steam Deck test (delivered 2026-11-13, waiting on Dan's Deck test)
-
-**Dan's review of build 2 on the Steam Deck (2026-11-13):** "seems to play
-fine" (runs OK on the Deck), with three problems, quoted:
-- "I have no idea where to go. I am in the air flying in the direction I am
-  pointed but everywhere I try to go is telling me it is the wrong way. There
-  are no indicators whatsoever telling me where to go."
-- "It doesn't move nearly fast enough. It is incredibly slow."
-- "The game is not coming up fullscreen."
-Dan also downloaded Abigail's Mixamo clips (done, already used in build 2).
-Round 3 (AI and shortcuts) waits until these are fixed.
-
-1. **Always show the player where to go.** A first-time player must be able
-   to follow the lap with no help, in every form, especially in the air.
-   - A **next-gate marker**: every gate is a big, clearly visible ring/arch
-     (visible from far away, glowing, with the next one highlighted and the
-     one after it dimmer), plus an **on-screen arrow** pointing at the next
-     gate when it is off-screen or behind you.
-   - A **visible route**: track edges on the road; buoy lanes / foam lines on
-     water; a chain of rings or guide lights through the whole flight and
-     the whole cave, not just at gates.
-   - A small **minimap or route strip** showing your position and the
-     route ahead (pick the simpler one, say which).
-   - **Fix the "wrong way" cue:** only show it when you are really heading
-     backwards along the route (compare your heading with the route
-     direction at your position), never just because you are off the line
-     or in the air between gates. When you are off the route, show
-     "this way" with the arrow instead of "wrong way". Find and fix why Dan
-     got "wrong way" in every direction in the air, and say what it was.
-   *Check:* a new check-pilot run that starts in the air **off the line,
-   facing sideways**, and must find the route using only what's on screen
-   (arrow / next gate): no "wrong way" while it turns towards the route;
-   pictures from the player's view of the marker and arrow in each form.
-2. **Much faster.** Dan: "incredibly slow." Raise speeds a lot — start from
-   roughly 1.6× the current tuning (Drive about 65 m/s, Boat about 50,
-   Fly about 80, Dive about 38, boosts higher to match) and tune from there
-   so each form still handles. Add a stronger **sense of speed**: camera FOV
-   widening with speed, speed lines / wind streaks, a little camera shake
-   at boost, a speedometer on the HUD. **Rescale the course** (it's built
-   from the racer line) so the safe-line lap stays about 150 s at the new
-   speeds, and keep every change, ramp and landing working at the new
-   speeds (rerun all Round 1 edge cases and the Round 2 lap checks).
-   - Also make sure the game isn't slow *because* of the frame rate:
-     movement must not slow down when the frame rate drops (check the
-     fixed timestep / maximum allowed timestep), and add an **FPS + speed
-     readout** Dan can toggle (say which button) so he can report Deck
-     numbers.
-   *Check:* lap time and top speed per form, before vs after; Round 1 edge
-   cases all pass again.
-3. **Start fullscreen, on PC and Steam Deck.** Native resolution,
-   borderless fullscreen by default, whether started directly or by the
-   launcher, ignoring any old saved windowed setting. Do it the way
-   Chastain Rush does on the Deck (read-only reference), and check what the
-   launcher passes to the game. Add a fullscreen / windowed option to the
-   menu and Alt+Enter.
-   *Check:* report the screen mode and resolution the game sets at start-up
-   (logged), from the launcher and from the exe. Opening a visible window
-   to test this needs Dan's OK first — otherwise log it and leave the real
-   look to Dan.
-4. **Round wrap-up.** Per-item status, "For Dan to check", update
-   `CLAUDE.md` (new speeds, the toggle button, how fullscreen is set),
-   commit, push, publish release build 3 (0.2.1), clean the disk.
+- **Round 2b — Deck fixes** (2026-11-13, release `build-3` / 0.2.1). Spec moved to `TODO-ARCHIVE.md`.
 
 ### Round 2b delivery (2026-11-13) — status per item
 Evidence: `Docs/Checks/round2b/` (`check_report_all.txt`, `check_report_round2b_final.txt`, `check_report_best.txt`, player-view pictures).
@@ -123,7 +56,7 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
    (`launcher_startup.txt`). That remembered window is what the new start-up setting overrides. The real look: Dan.
 4. **Wrap-up — done.** This file, `CLAUDE.md`, `Docs/REUSE-AUDIT.md` section 6, commit + push, release `build-3` (0.2.1), disk cleaned.
 
-### For Dan to check (Round 2b)
+#### For Dan to check (Round 2b)
 - **Fullscreen:** start the game on the Deck (and from the launcher): does it fill the screen at 1280 x 800? Menu > Screen / Alt+Enter switch.
 - **Can you find the way?** Gold frame = next gate, cyan = the one after; the arrow when it's off to the side or behind; the strip at the top.
   Try leaving the route in the air on purpose: you should see THIS WAY and the arrow, never WRONG WAY unless you're really going backwards.
@@ -131,12 +64,105 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 - **Deck numbers:** press R3 (right stick) for FPS + speed; tell me the FPS in the mangrove, the flight and the waterfall return, and any hitches.
 - Is ~2:20 a lap still about right, and are the edge lines, chevrons, rings, buoys and cave lights too much / not enough?
 
+- **Round 1 — foundation and the four modes** (2026-11-13, release `build-1` / 0.1.0). Dan's review: tried on PC, "seems fine, everything felt intuitive"; Deck not tried yet. Driver / location picked (see Round 2). Round 1 spec moved to `TODO-ARCHIVE.md`.
+
+- **Round 2 — the full gray-box lap, Jurassic Par atmosphere** (2026-11-13, release `build-2` / 0.2.0). Dan's Deck test: runs, but no idea where to go ("wrong way" everywhere in the air), far too slow, not fullscreen. The Round 2 spec and per-item status are in `TODO-ARCHIVE.md`.
+
+- **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
+
+## Current Objective — Round 3: Dan's three notes, then AI rivals and shortcuts
+
+**Dan's notes after playing build 3 (2026-11-13), quoted:**
+- "Need to be able to flip flight controls"
+- "Need a way to quit game"
+- "The traverse from the submarine when you go back to being a car, it hung
+  up a tad"
+Dan (2026-11-13): do these three first, then the AI rivals and shortcuts
+(items 4–7), all in one round. Dan starts it before bed, so it runs
+unattended: **don't stop to ask.** Anything that would need a visible window
+or Dan's OK gets skipped, noted and left for him.
+
+1. **Flip flight controls, findable.** The invert toggle exists (View / F2)
+   but Dan didn't find it, and on the Steam Deck the View button may be
+   taken by Steam. Add a **Settings** page in the menu with "Invert
+   flight / dive controls: On / Off" (applies to flying and diving, saved),
+   alongside the Screen setting and the FPS readout. Keep the button as a
+   shortcut. Show a short on-screen note the first time you fly:
+   "Invert controls: Menu > Settings". Ask nothing at start-up.
+   *Check:* toggle in the menu → climb/dive direction flips in Fly and Dive,
+   survives a game restart.
+2. **Quit the game.** "Quit game" in the menu (Menu / Esc / the controller's
+   Menu button), with a quick "Quit? Yes / No" so it can't be hit by
+   accident, and the results screen gets a Quit too. Make sure the game
+   closes cleanly when started by the launcher (and from Steam on the Deck:
+   it should return to Game Mode, not leave a black screen).
+   *Check:* quit from the menu and from results; process exits with code 0;
+   from the launcher, the launcher also exits (or returns), as Chastain Rush
+   does.
+3. **The dive → boat → car change at the Waterfall Return "hung up a tad".**
+   Find out what Dan felt before fixing it — it could be:
+   - a frame hitch (something loading / building at that moment),
+   - the vehicle physically catching (hull or a part touching the water
+     ramp, the lip or the road edge; speed dropping suddenly),
+   - the change itself pausing (speed blend too strong, steering or
+     throttle easing in too slowly, camera lag).
+   Record a run through it (player-view pictures every few frames, speed,
+   frame time, contacts and form state each step) and say which it was, with
+   the numbers. Fix the real cause. The car form must take over smoothly
+   with no visible stop, and the landing should feel like springing onto
+   the wheels (concept: "the vehicle springs onto its wheels").
+   *Check:* before/after speed trace through the surfacing pool, the ramp
+   and the landing; no speed drop beyond the planned blend, no frame over
+   16.7 ms there, on 5 runs including a boosted one and a slow one.
+4. **Three AI rivals.** Same vehicle, same handling limits, boost supply,
+   transition zones, gates and recovery as the player — the AI uses the
+   player's controls (the Chastain Rush rule: read `RoadDriver.cs` /
+   `PlanePilot.cs` read-only for ideas, write ShiftStorm's own).
+   - Drivers: three other Tee'd Off characters from the audit (e.g. Rocket
+     Rae, Chip "Showtime" Sterling, Vivi), each with their own vehicle color
+     — cosmetic only, same stats. Reuse Abi's seated clips on them.
+   - Drive and boat along the racer line with side offsets for overtaking;
+     3D paths with target height / depth and look-ahead in the air and the
+     cave. Slow down **before** tight bends, not after hitting something.
+   - Grid start with the countdown; race position (1st–4th) on the HUD and
+     the route strip; results show the finishing order and times.
+   - **No rubber-banding.** One difficulty for now, tuned so a decent player
+     can win; difficulty, when added later, changes braking margins and
+     boost timing first.
+   - Race (vs AI) and Time Trial (alone) both in the menu.
+   *Check:* full races with the check pilot plus 3 AI; AI never stuck, no
+   AI passes through another or the player.
+5. **The two shortcuts**, per the concept (fixed geometry, discoverable
+   from the safe line, never mistaken for the only route):
+   - **Sky Arch inside slit:** a narrow opening beside the main arch, saves
+     1–2 s; a scrape loses at least the gain; both paths enter the same
+     lagoon approach gate.
+   - **Coral Vault low tunnel:** a low passage under the main cave chamber,
+     saves 2–3 s; needs early depth alignment and a tighter exit; both paths
+     rejoin before the surfacing pool.
+   - Each gets its own entry / exit sub-gates between the same main gates.
+   - AI: safe route by default; one rival tries each shortcut at a set rate,
+     choosing before the entry and sticking with it until the rejoin.
+   *Check:* measured time saved on each shortcut (same entry speed and
+   boost), full-lap comparison included; a deliberate miss uses normal
+   recovery and loses time without trapping the racer.
+6. **AI soak test.** 100 unattended AI laps (batch mode, muted, Below
+   Normal; spread over the night, one heavy job at a time). Pass: at least
+   95 finish within twice the target lap time, and **every counted finish
+   has a valid gate sequence**. Report stuck spots with positions and fix
+   the worst ones.
+7. **Round wrap-up.** Per-item status (done / not done / deferred, and why)
+   for all 7 items, "For Dan to check", update `CLAUDE.md` (Controls table
+   with the Settings page and Quit; Race vs Time Trial), commit, push,
+   publish release build 4 (0.3.0), clean the disk.
+
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
+### For Dan to check (fill in at end of round)
+- …
+
 ## Next Steps (Do Not Start Yet)
-- **Round 3 — three AI rivals and the two shortcuts** (Sky Arch inside slit,
-  Coral Vault low tunnel). Waits on a reliable lap.
 - **Art slice beyond Round 2's first pass** (finished Jurassic Par scenery, real
   transforming vehicle). Waits on a reliable lap. New character / organic models
   go through the manual Tripo pipeline in `CLAUDE.md`; the real vehicle is

@@ -137,4 +137,6 @@ much faster, fullscreen by default.
   would set. The launcher passes no screen arguments.
 - **Audio clips:** SFX and voice are imported with Preload Audio Data on (off caused first-play hitches); music streams.
 
-Current objective: **wait for Dan's Deck test of build 3.** Next: Round 3 (AI rivals, shortcuts) once he's happy with the lap.
+Current objective: **Round 3** (one unattended round): first Dan's three notes on build 3 (a Settings page with "invert flight / dive
+controls", a Quit option, and the dive -> boat -> car change at the Waterfall Return that "hung up a tad" — find the real cause first),
+then three AI rivals, the two shortcuts and a 100-lap AI soak test. Release build 4 (0.3.0).

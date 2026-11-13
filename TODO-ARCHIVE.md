@@ -268,3 +268,67 @@ Sound was never unmuted: the music, ambience, splashes and voice lines were chec
 - Abi: how she looks in the open cockpit and the canopy; do the clips (thumbs up at every change, clap, horn at GO) feel right or too much?
 - Sound: music, jungle/bubbles ambience, splashes, Abi's lines. Never heard during testing (always muted).
 - The course menu (Menu / Esc) and restart; best time kept between sessions.
+
+## Current Objective — Round 2b: fixes from Dan's Steam Deck test (delivered 2026-11-13, waiting on Dan's Deck test)
+
+**Dan's review of build 2 on the Steam Deck (2026-11-13):** "seems to play
+fine" (runs OK on the Deck), with three problems, quoted:
+- "I have no idea where to go. I am in the air flying in the direction I am
+  pointed but everywhere I try to go is telling me it is the wrong way. There
+  are no indicators whatsoever telling me where to go."
+- "It doesn't move nearly fast enough. It is incredibly slow."
+- "The game is not coming up fullscreen."
+Dan also downloaded Abigail's Mixamo clips (done, already used in build 2).
+Round 3 (AI and shortcuts) waits until these are fixed.
+
+1. **Always show the player where to go.** A first-time player must be able
+   to follow the lap with no help, in every form, especially in the air.
+   - A **next-gate marker**: every gate is a big, clearly visible ring/arch
+     (visible from far away, glowing, with the next one highlighted and the
+     one after it dimmer), plus an **on-screen arrow** pointing at the next
+     gate when it is off-screen or behind you.
+   - A **visible route**: track edges on the road; buoy lanes / foam lines on
+     water; a chain of rings or guide lights through the whole flight and
+     the whole cave, not just at gates.
+   - A small **minimap or route strip** showing your position and the
+     route ahead (pick the simpler one, say which).
+   - **Fix the "wrong way" cue:** only show it when you are really heading
+     backwards along the route (compare your heading with the route
+     direction at your position), never just because you are off the line
+     or in the air between gates. When you are off the route, show
+     "this way" with the arrow instead of "wrong way". Find and fix why Dan
+     got "wrong way" in every direction in the air, and say what it was.
+   *Check:* a new check-pilot run that starts in the air **off the line,
+   facing sideways**, and must find the route using only what's on screen
+   (arrow / next gate): no "wrong way" while it turns towards the route;
+   pictures from the player's view of the marker and arrow in each form.
+2. **Much faster.** Dan: "incredibly slow." Raise speeds a lot — start from
+   roughly 1.6× the current tuning (Drive about 65 m/s, Boat about 50,
+   Fly about 80, Dive about 38, boosts higher to match) and tune from there
+   so each form still handles. Add a stronger **sense of speed**: camera FOV
+   widening with speed, speed lines / wind streaks, a little camera shake
+   at boost, a speedometer on the HUD. **Rescale the course** (it's built
+   from the racer line) so the safe-line lap stays about 150 s at the new
+   speeds, and keep every change, ramp and landing working at the new
+   speeds (rerun all Round 1 edge cases and the Round 2 lap checks).
+   - Also make sure the game isn't slow *because* of the frame rate:
+     movement must not slow down when the frame rate drops (check the
+     fixed timestep / maximum allowed timestep), and add an **FPS + speed
+     readout** Dan can toggle (say which button) so he can report Deck
+     numbers.
+   *Check:* lap time and top speed per form, before vs after; Round 1 edge
+   cases all pass again.
+3. **Start fullscreen, on PC and Steam Deck.** Native resolution,
+   borderless fullscreen by default, whether started directly or by the
+   launcher, ignoring any old saved windowed setting. Do it the way
+   Chastain Rush does on the Deck (read-only reference), and check what the
+   launcher passes to the game. Add a fullscreen / windowed option to the
+   menu and Alt+Enter.
+   *Check:* report the screen mode and resolution the game sets at start-up
+   (logged), from the launcher and from the exe. Opening a visible window
+   to test this needs Dan's OK first — otherwise log it and leave the real
+   look to Dan.
+4. **Round wrap-up.** Per-item status, "For Dan to check", update
+   `CLAUDE.md` (new speeds, the toggle button, how fullscreen is set),
+   commit, push, publish release build 3 (0.2.1), clean the disk.
+
