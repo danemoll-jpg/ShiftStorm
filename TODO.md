@@ -20,7 +20,7 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
-None yet.
+- **Round 1 — foundation and the four modes** (2026-11-13, release `build-1` / 0.1.0). Delivery below; waiting on Dan's review.
 
 ## Current Objective — Round 1: foundation and the four modes
 
@@ -122,8 +122,40 @@ starting point; the transformation system, boating and diving are all new.
 - **Target hardware: Steam Deck, 60 fps.** Report frame times from the PC
   build for now; Dan checks the Deck.
 
-### For Dan to check (fill in at end of round)
-- …
+### Round 1 delivery (2026-11-13) — status per item
+Evidence: `Docs/Checks/round1/` (report `check_report.txt` + player-view pictures). Every run: built exe, `-batchmode -mute`, no window,
+Below Normal; measured audio output peak 0.000000 (AudioListener.volume 0) in every run.
+1. **Repo setup — done.** Unity 6000.6.1f1 URP, Input System only, `.gitignore`, `Docs/` (concept doc moved to `Docs/`, read), `-mute`
+   (`QuietRun.cs`). Check: batch setup and build with 0 compile errors; `-mute` runs report output level 0.
+2. **Launcher — done.** `ShiftStormLauncher.exe`, new key in `Builds/PublisherPrivate/`, catalog on ShiftStorm-Releases, README rewritten.
+   Check: extracted the published starter ZIP, launcher auto-check said "Up to date", started build 1, ready handshake PASS (hidden, muted).
+3. **Reuse audit — done.** `Docs/REUSE-AUDIT.md`, every path verified on disk; section 4 lists what was copied and changed.
+   Picks for Dan: drivers Rocket Rae / Chip "Showtime" Sterling / Vivi; locations Gull's Point Links / Lost City Links / Jurassic Par.
+4. **One controller, four modes — done.** `ShiftVehicle` (+ `.Drive/.Boat/.Fly/.Dive/.Recovery`), tuning in `Resources/Tuning/*.asset`,
+   shared boost meter on the HUD, invert setting, mapping in `CLAUDE.md`. Check: each lane driven 16 s (drift and carve seen, fly/dive
+   climb-dive weave), pictures `*-lane-b.jpg`. The drive lane's wide scripted weave left the lane once and auto-recovery reset it (correct).
+5. **Placeholder transforming vehicle — done.** `Tools/Blender/shiftstorm_vehicle.py`, 14 separate parts; one hull collider for all forms
+   (parts are visual only, so nothing half-open can catch a gate); physics hands over at the change's start. Check: every change on the
+   strip and in the edge cases timed 0.600 s (in 0.5-0.8). The strip has five changes, not six: D->F, F->B, B->Dv, Dv->B, B->D.
+6. **Transition strip — done.** Built at start-up (`WorldBuilder.cs`), signs carry the vehicle in its next form, zones fire once, gates
+   G0-G10 separate from zones, anchors and recovery. Check: one full run, finished in 50.9 s, 11/11 gates, 0 resets.
+7. **Edge cases — done, all PASS** (frame time worst / mean in the window around each change, PC CPU, off-screen):
+   1 low-speed ramp (10 m/s, flight entered at 30.1, 8.3 / 0.5 ms); 2 boosted water entry (boat 30.0 m/s, level in 0.38 s, 18.1 / 0.3 ms);
+   3 nose-down -50 deg entry (level in 0.25 s, 12.0 / 0.3 ms); 4 reset 0.25 s into a change (back in car form 3.3 m from the anchor, grace
+   on, wing zone fires again); 5 dive zone crossed forward, back and forward: 1 change, no boat/sub flip; 6 surfacing pool -> road: car
+   form complete 0.52 s before the wheels touched (10.9 ms worst). Whole run: mean 0.26 ms, 95th pct 0.44 ms, worst 42 ms (not at a change).
+   These are PC numbers in batch mode (CPU frame time, GPU not waited for): not Steam Deck numbers.
+8. **Wrap-up — done.** This file, `CLAUDE.md`, commit + push, release `build-1` published (ShiftStorm-Releases had no commits, so a
+   README was added there first: a release needs a commit to tag), disk cleaned.
+
+### For Dan to check
+- On the Deck: install `ShiftStorm-0.1.0-Full.zip` from ShiftStorm-Releases (non-Steam game, Proton Experimental); does it reach 60 fps,
+  especially at the five changes?
+- Drive the strip: does each change feel in control (0.6 s, steering live)? Is the car fun with the drift (RB)?
+- Boat: is the slide too broad / the current (side push near the buoys) readable? Diving: does it feel different from flying?
+- The default climb / dive direction (pull back = up) and the invert toggle (View button).
+- Pick a prototype driver and location from `Docs/REUSE-AUDIT.md` section 3.
+- Placeholder look: the folded wings still show at the sides in car form; the canopy tilts open in car / boat form. Fine for gray box?
 
 ## Next Steps (Do Not Start Yet)
 - **Round 2 — gray-box Paradise Plunge lap.** All eight segments (Beach
@@ -141,4 +173,6 @@ starting point; the transformation system, boating and diving are all new.
   the base lap works (concept doc).
 
 ## Technical Notes / Blockers
-- None yet.
+- Unity batch runs need the sandbox off (UPM named pipe). The world is built in code at start-up; there is no hand-made scene content.
+- Frame times from batch-mode checks are CPU only; a windowed or on-Deck measurement is needed for real GPU numbers (needs Dan's OK
+  for a visible window, or his Deck).

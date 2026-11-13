@@ -117,7 +117,7 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Nothing built yet. Repo is empty apart from these docs. Current objective:
-**Round 1 — foundation and the four modes** (repo + Unity project, launcher,
-reuse audit, one controller with four handling modes, placeholder
-transforming vehicle, transition test strip, edge-case checks, publish).
+Round 1 delivered 2026-11-13 (release `build-1`, 0.1.0 on ShiftStorm-Releases): Unity project, launcher,
+`Docs/REUSE-AUDIT.md`, one `ShiftVehicle` with Drive / Boat / Fly / Dive, Blender placeholder vehicle, gray-box transition strip
+and four mode lanes (built in code by `WorldBuilder.cs`), check pilot (`-check all`). All Round 1 checks pass; waiting on Dan's
+review, his driver / location pick, and Round 2 (gray-box Paradise Plunge lap).
