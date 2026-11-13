@@ -117,7 +117,10 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 delivered 2026-11-13 (release `build-1`, 0.1.0 on ShiftStorm-Releases): Unity project, launcher,
-`Docs/REUSE-AUDIT.md`, one `ShiftVehicle` with Drive / Boat / Fly / Dive, Blender placeholder vehicle, gray-box transition strip
-and four mode lanes (built in code by `WorldBuilder.cs`), check pilot (`-check all`). All Round 1 checks pass; waiting on Dan's
-review, his driver / location pick, and Round 2 (gray-box Paradise Plunge lap).
+Round 1 delivered 2026-11-13 (release `build-1`, 0.1.0): Unity project, launcher, `Docs/REUSE-AUDIT.md`, one `ShiftVehicle`
+with Drive / Boat / Fly / Dive, Blender placeholder vehicle, gray-box transition strip and four mode lanes (built in code by
+`WorldBuilder.cs`), check pilot (`-check all`). Dan tried it on PC: handling feels intuitive, no changes asked.
+
+Current objective: **Round 2 — the full gray-box Paradise Plunge lap with Jurassic Par atmosphere** (driver: Abi / Abigail;
+new course built in Jurassic Par's look and sound, not a reused Tee'd Off layout), plus ordered gates, time trial, results
+and Abi in the cockpit.
