@@ -23,7 +23,7 @@ namespace ShiftStorm
         public ShiftTuning shared; public DriveTuning drive; public BoatTuning boat; public FlyTuning fly; public DiveTuning dive;
         public Rigidbody Body { get; private set; }
         public ShiftInput Input { get; private set; }
-        public FormAnimator Forms { get; private set; }
+        public FormSet Forms { get; private set; }
         public Course Course { get; set; }
 
         public Mode Mode { get; private set; }
@@ -66,7 +66,7 @@ namespace ShiftStorm
 
         void Awake()
         {
-            Body = GetComponent<Rigidbody>(); Input = GetComponent<ShiftInput>(); Forms = GetComponentInChildren<FormAnimator>();
+            Body = GetComponent<Rigidbody>(); Input = GetComponent<ShiftInput>(); Forms = GetComponentInChildren<FormSet>();
             Body.interpolation = RigidbodyInterpolation.Interpolate; Body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             Body.mass = 1200; Body.linearDamping = 0; Body.angularDamping = .5f; Body.maxAngularVelocity = 5;
             Body.centerOfMass = new Vector3(0, -.35f, 0);

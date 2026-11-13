@@ -2,8 +2,9 @@ using UnityEngine;
 
 namespace ShiftStorm
 {
-    // Makes the player's vehicle and the small vehicle models on the signs. The model is Tools/Blender/shiftstorm_vehicle.py's FBX
-    // (Assets/Resources/Models/ShiftVehicle.fbx); if it is missing, a primitive copy with the same named parts is built instead (the fallback).
+    // Makes the player's vehicle, the rivals' and the small vehicle models on the signs. Round 5: the looks are a FormSet: the chosen design's
+    // four models (Tools/import_vehicles.py), and for any form it lacks the gray box: Tools/Blender/shiftstorm_vehicle.py's part model
+    // (Assets/Resources/Models/ShiftVehicle.fbx; if missing, a primitive copy with the same named parts, the fallback), posed per form.
     public static class VehicleFactory
     {
         public static string ModelSource { get; private set; } = "";
@@ -16,10 +17,10 @@ namespace ShiftStorm
             col.material = pm;
             root.AddComponent<Rigidbody>();
             root.AddComponent<ShiftInput>();
-            MakeVisual(root.transform, Mode.Drive, 1f, true);
+            MakeVisual(root.transform, Mode.Drive, 1f, true, VehicleDesigns.PlayerTint, true);
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive;
-            root.AddComponent<VehicleSound>();
+            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>();
             ShiftVehicle.MarkPlayer(v); v.RacerName = "Abi"; v.Tint = new Color(.95f, .45f, .1f);
             return v;
         }
@@ -33,38 +34,46 @@ namespace ShiftStorm
             col.material = new PhysicsMaterial("Hull") { dynamicFriction = 0, staticFriction = 0, bounciness = 0, frictionCombine = PhysicsMaterialCombine.Minimum, bounceCombine = PhysicsMaterialCombine.Minimum };
             root.AddComponent<Rigidbody>();
             root.AddComponent<ShiftInput>().Scripted = true;
-            var forms = MakeVisual(root.transform, Mode.Drive, 1f, false);
-            var body = Resources.Load<Material>("Materials/VehicleBody");
-            if (body)
-            {
-                var m = new Material(body) { name = "VehicleBody " + r.name }; m.SetColor("_BaseColor", r.color); m.SetColor("_Color", r.color);
-                foreach (var rd in forms.GetComponentsInChildren<Renderer>(true)) { var ms = rd.sharedMaterials; for (int i = 0; i < ms.Length; i++) if (ms[i] == body) ms[i] = m; rd.sharedMaterials = ms; }
-            }
+            MakeVisual(root.transform, Mode.Drive, 1f, false, r.color, true);
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive; v.RacerName = r.name; v.Tint = r.color;
-            root.AddComponent<VehicleSound>().spatial = true;
+            root.AddComponent<VehicleSound>().spatial = true; root.AddComponent<SpeedFx>();
             Driver.Make(v, r.character);
             var pilot = root.AddComponent<RivalPilot>(); pilot.rival = r;
             return v;
         }
 
-        public static FormAnimator MakeVisual(Transform parent, Mode mode, float scale, bool player = false)
+        // Round 5: the vehicle's looks: a FormSet (four whole models, swapped with an effect) of the chosen design; forms the design does
+        // not have are the gray box. Signs show the same design (no effect).
+        public static FormSet MakeVisual(Transform parent, Mode mode, float scale, bool player = false, Color? tint = null, bool effects = false)
+            => FormSet.Make(parent, Settings.Design, tint ?? VehicleDesigns.PlayerTint, mode, scale, effects);
+
+        // One gray-box form: the Blender part model (or its primitive fallback) posed for one form by its own FormAnimator (which also spins
+        // the wheels / propeller). A rival's body is its colour.
+        public static FormAnimator MakeGrayForm(Transform parent, Mode mode, Color tint)
         {
-            var forms = new GameObject("Forms"); forms.transform.SetParent(parent, false); forms.transform.localScale = Vector3.one * scale;
-            var anim = forms.AddComponent<FormAnimator>();
+            var holder = new GameObject("Gray " + mode); holder.transform.SetParent(parent, false);
+            var anim = holder.AddComponent<FormAnimator>();
             var prefab = Resources.Load<GameObject>("Models/ShiftVehicle");
             Transform model;
-            if (prefab) { model = Object.Instantiate(prefab, forms.transform, false).transform; model.name = "Model"; ModelSource = "Blender FBX (Resources/Models/ShiftVehicle)"; }
-            else { model = BuildFallback(forms.transform); ModelSource = "primitive fallback (no FBX found)"; }
+            if (prefab) { model = Object.Instantiate(prefab, holder.transform, false).transform; model.name = "Model"; ModelSource = "Blender FBX (Resources/Models/ShiftVehicle)"; }
+            else { model = BuildFallback(holder.transform); ModelSource = "primitive fallback (no FBX found)"; }
             foreach (var c in model.GetComponentsInChildren<Collider>(true)) Object.Destroy(c);
             // facing check: the front wheels must be ahead (+z); an import that came in backward is turned round here
             var fl = Find(model, "Wheel_FL"); var rl = Find(model, "Wheel_RL");
-            if (fl && rl && forms.transform.InverseTransformPoint(fl.position).z < forms.transform.InverseTransformPoint(rl.position).z) model.localRotation = Quaternion.Euler(0, 180, 0) * model.localRotation;
+            if (fl && rl && holder.transform.InverseTransformPoint(fl.position).z < holder.transform.InverseTransformPoint(rl.position).z) model.localRotation = Quaternion.Euler(0, 180, 0) * model.localRotation;
             Paint(model);
+            if (tint != VehicleDesigns.PlayerTint)
+            {
+                var body = Resources.Load<Material>("Materials/VehicleBody");
+                if (!tinted.TryGetValue(tint, out var m)) { m = new Material(body) { name = "VehicleBody " + tint }; m.SetColor("_BaseColor", tint); m.SetColor("_Color", tint); tinted[tint] = m; }
+                foreach (var rd in model.GetComponentsInChildren<Renderer>(true)) { var ms = rd.sharedMaterials; for (int i = 0; i < ms.Length; i++) if (ms[i] == body) ms[i] = m; rd.sharedMaterials = ms; }
+            }
             anim.Setup(model);
             anim.Snap(mode);
             return anim;
         }
+        static readonly System.Collections.Generic.Dictionary<Color, Material> tinted = new System.Collections.Generic.Dictionary<Color, Material>();
 
         static Transform Find(Transform root, string name) { foreach (var t in root.GetComponentsInChildren<Transform>(true)) if (t.name == name) return t; return null; }
 

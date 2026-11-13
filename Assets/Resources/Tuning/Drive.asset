@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caa2aa1dc9d65f8478a3d808896e7e50, type: 3}
   m_Name: Drive
   m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.DriveTuning
-  entrySpeed: {x: 6, y: 65}
-  topSpeed: 65
+  entrySpeed: {x: 6, y: 75}
+  topSpeed: 75
   reverseSpeed: 14
-  acceleration: 22
+  acceleration: 30
   reverseAcceleration: 9
-  braking: 40
+  braking: 46
   coastingDrag: 0.45
-  boostAcceleration: 16
-  boostTopSpeed: 82
+  boostAcceleration: 20
+  boostTopSpeed: 94
   slowSteerAngle: 30
   fastSteerAngle: 7
   wheelbase: 2.6
@@ -28,7 +28,7 @@ MonoBehaviour:
   yawResponse: 8
   highSpeedYawCap: 0.7
   lateralGrip: 8
-  maxGripAcceleration: 38
+  maxGripAcceleration: 44
   driftMinSpeed: 18
   driftGrip: 1.6
   driftMaxGrip: 15

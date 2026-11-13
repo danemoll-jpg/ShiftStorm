@@ -248,7 +248,10 @@ stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
      sparkles and spray (by form), with the model swapped at the effect's
      midpoint. Build this system now with the current placeholder forms as
      four separate models, so Tripo models drop straight in later. Keep one
-     hull collider, Abi seated in every form (a seat point per model), and
+     hull collider, Abi seated in every form (a seat point per model).
+     Vehicle models come **without glass** (Dan: Tripo gets glass wrong):
+     add a separate clear canopy per form in the game, shaped to the
+     cockpit rim, closed for the sub, optional elsewhere; and
      the shared timing point for the physics handover.
    - **Viewer for Dan:** a "Garage" screen in the menu that shows each form
      (and any imported design) turning slowly, with a button to cycle forms

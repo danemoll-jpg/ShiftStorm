@@ -69,6 +69,7 @@ namespace ShiftStorm
             frames.Add((Time.time, Time.unscaledDeltaTime, shotLastFrame, gpu, segNow));
             if (measure && !shotLastFrame && Time.unscaledDeltaTime > .05f) hitches.Add((Time.time - v.StartTime, Time.unscaledDeltaTime * 1000, segNow, v.LastEvent));
             shotLastFrame = false;
+            FeelSample();
             if (measure)
             {
                 if (!px) { px = new Texture2D(1, 1, TextureFormat.RGB24, false); draws = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count"); tris = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count"); batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count"); }
@@ -188,6 +189,10 @@ namespace ShiftStorm
             if (r4 || which == "starts") yield return Starts();
             if (r4 || which == "difficulty") yield return DifficultyCheck();
             if (which == "tunnel") yield return TunnelLaps();
+            bool r5 = which == "round5";
+            if (r5 || which == "garage") yield return GarageCheck();
+            if (r5) { yield return Lap(); yield return Strip(); }
+            FeelReport();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();
             var au = CourseAudio.Instance;

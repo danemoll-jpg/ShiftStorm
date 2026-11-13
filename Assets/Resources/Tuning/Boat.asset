@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78a6b3fb97e3dda49bbfaed6130f566f, type: 3}
   m_Name: Boat
   m_EditorClassIdentifier: Assembly-CSharp::ShiftStorm.BoatTuning
-  entrySpeed: {x: 10, y: 50}
+  entrySpeed: {x: 10, y: 58}
   verticalEntryKeep: 0.3
-  topSpeed: 50
-  acceleration: 22
-  braking: 18
+  topSpeed: 58
+  acceleration: 30
+  braking: 21
   reverseSpeed: 8
   drag: 0.03
-  boostAcceleration: 14
-  boostTopSpeed: 62
+  boostAcceleration: 17
+  boostTopSpeed: 72
   turnRate: 74
   turnResponse: 4
   slideGrip: 1.6

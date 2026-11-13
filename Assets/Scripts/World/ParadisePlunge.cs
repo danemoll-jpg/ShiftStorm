@@ -15,7 +15,7 @@ namespace ShiftStorm
     // Horseshoe: the road climbs round the outside of the island, the flight crosses the central valley to the far shore, the river curves back
     // and the flooded cave runs under the finishing road (the stacked sections Course.Project's progress window keeps apart). Sizes are metres;
     // water level is y = 0, the road's surface y = 2.
-    public static class ParadisePlunge
+    public static partial class ParadisePlunge
     {
         static Transform root, scen; static Course c;
         static readonly Dictionary<string, float> mark = new Dictionary<string, float>();
@@ -57,7 +57,7 @@ namespace ShiftStorm
             c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic";
             c.halfWidth = 75; c.airHalfWidth = 420; c.minY = -45; c.maxY = 130; c.endMargin = 40; c.startMode = Mode.Drive;
             MakeLine();
-            Land(); Road(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery();
+            Land(); Road(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery(); Polish();   // Round 5 item 6: the polished stretch
             Gates(); RouteMarks(); Zones(); Anchors(); Signs(); Segments(); Shortcuts();
             return c;
         }
@@ -534,6 +534,21 @@ namespace ShiftStorm
             {
                 var q = At(p); q.y -= .9f - .04f; var f = Facing(p); var fw = Flat(Dir(p)); var r = Right(p);
                 foreach (float s in new[] { -1f, 1f }) chev.Add(MeshKit.Cube, q + r * s * 1.5f - fw * 1.1f, f * Quaternion.Euler(0, -s * 38, 0), new Vector3(.9f, .05f, 4.6f), amber);
+            }
+            // Round 5 item 1: things at a steady rhythm beside and on the road, so movement reads against the scenery at 65+ m/s:
+            // white marker posts with an orange band every 20 m on both edges, and a dashed centre line (5 m dashes every 14 m)
+            var rhythm = new MeshKit.Batch(); var postWhite = new Color(.97f, .95f, .9f); var postBand = new Color(1f, .5f, .12f); var dash = new Color(.98f, .93f, .78f);
+            void Post(Vector3 at) { rhythm.Add(MeshKit.Cube, at + Vector3.up * 1f, Quaternion.identity, new Vector3(.4f, 2f, .4f), postWhite); rhythm.Add(MeshKit.Cube, at + Vector3.up * 1.6f, Quaternion.identity, new Vector3(.46f, .45f, .46f), postBand); }
+            void Rhythm(float a, float b, Func<float, float> half, Func<float, float> y)
+            {
+                for (float p = a; p < b; p += 20f) { var q = At(p); var r = Right(p); foreach (float sd in new[] { -1f, 1f }) Post(new Vector3(q.x, y(p), q.z) + r * sd * (half(p) + 1.1f)); }
+                for (float p = a + 4; p < b - 4; p += 14f) { var q = At(p); rhythm.Add(MeshKit.Cube, new Vector3(q.x, y(p) + .035f, q.z), Facing(p, false), new Vector3(.35f, .05f, 5f), dash); }
+            }
+            {
+                Rhythm(25, M("climb0") - 5, HalfWidth, p => At(p).y - .9f);
+                Rhythm(M("climb0") + 5, M("rampStart") - 15, HalfWidth, p => At(p).y - .9f);
+                Rhythm(M("G9") + 12, M("finish") - 12, p => 12.5f, p => RoadY);
+                rhythm.Object(scen, "Road rhythm (posts, centre dashes)", JurassicLook.VertexColored(false, new Color(.15f, .12f, .08f)), false, false);
             }
             for (float p = 40; p < M("lip") - 25; p += 55) Chevron(p);
             for (float p = M("G9") + 10; p < M("finish") - 15; p += 55) Chevron(p);

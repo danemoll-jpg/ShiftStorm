@@ -25,7 +25,7 @@ namespace ShiftStorm
         public readonly List<ShiftVehicle> Rivals = new List<ShiftVehicle>();
 
         // ---- the menu ----
-        public enum Page { Main, Settings, Quit }
+        public enum Page { Main, Settings, Quit, Garage }
         public bool MenuOpen { get; private set; }
         public Page MenuPage { get; private set; }
         public int MenuIndex { get; private set; }
@@ -59,7 +59,8 @@ namespace ShiftStorm
             Driver.Make(Player);
             foreach (var r in Rival.Roster) { var rv = VehicleFactory.MakeRival(r, Shared, Drive, Boat, Fly, Dive); Rivals.Add(rv); rv.gameObject.SetActive(false); }
             Cam = Camera.main; if (!Cam) { var cg = new GameObject("Main Camera"); cg.tag = "MainCamera"; Cam = cg.AddComponent<Camera>(); cg.AddComponent<AudioListener>(); }
-            Cam.farClipPlane = 2600; Cam.nearClipPlane = .2f; Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
+            Cam.farClipPlane = 2600; Cam.nearClipPlane = .2f;
+            { var cull = new float[32]; cull[ParadisePlunge.DetailLayer] = ParadisePlunge.DetailCullDistance; Cam.layerCullDistances = cull; Cam.layerCullSpherical = true; }   // Round 5: the polished stretch's detail Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
             if (!FindAnyObjectByType<AudioListener>()) Cam.gameObject.AddComponent<AudioListener>();
             Cam.gameObject.AddComponent<AudioMeter>();
             Cam.gameObject.AddComponent<ChaseCam>().target = Player;
@@ -131,10 +132,20 @@ namespace ShiftStorm
         }
 
         public void OpenMenu() { MenuOpen = true; Time.timeScale = 0; ShowPage(Page.Main); }
-        public void CloseMenu() { MenuOpen = false; Time.timeScale = 1; }
+        public void CloseMenu() { MenuOpen = false; Time.timeScale = 1; if (Garage.Active) Garage.Instance.Close(); }
+        public static string FormName(Mode m) => m == Mode.Drive ? "Car" : m == Mode.Boat ? "Boat" : m == Mode.Fly ? "Plane" : "Sub";
+        // Round 5: race with a design: saved, and every vehicle's (and sign's) models rebuilt in it, keeping each one's form
+        public void UseDesign(string design)
+        {
+            Settings.Design = design;
+            foreach (var fs in FindObjectsByType<FormSet>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (!Garage.Instance || fs != Garage.Instance.Shown) fs.Build(design);
+        }
+        public void ShowGarage() { OpenMenu(); ShowPage(Page.Garage); }
+        public void RefreshGarage(int select = 0) { if (MenuOpen && MenuPage == Page.Garage) ShowPage(Page.Garage, select); }
 
         void ShowPage(Page page, int select = -1)
         {
+            if (page != Page.Garage && Garage.Active) Garage.Instance.Close();
             MenuPage = page; MenuItems.Clear(); menuActions.Clear();
             void Item(string label, Action act) { MenuItems.Add(label); menuActions.Add(act); }
             var pp = Courses[0];
@@ -146,6 +157,7 @@ namespace ShiftStorm
                     Item($"Race: {pp.courseName}  (vs 3 rivals)", () => { CloseMenu(); StartCourse(0, true); });
                     Item($"Time Trial: {pp.courseName}  (alone)", () => { CloseMenu(); StartCourse(0, false); });
                     for (int k = 1; k < Courses.Count; k++) { int idx = k; Item(Courses[k].courseName + "  (test)", () => { CloseMenu(); StartCourse(idx, false); }); }
+                    Item("Garage (vehicle designs)", () => ShowPage(Page.Garage));
                     Item("Settings", () => ShowPage(Page.Settings));
                     Item("Quit game", () => ShowPage(Page.Quit));
                     break;
@@ -156,6 +168,16 @@ namespace ShiftStorm
                     Item(StatsItem, () => { ToggleStats(); ShowPage(Page.Settings, 3); });
                     Item("Back", () => ShowPage(Page.Main));
                     break;
+                case Page.Garage:
+                    {
+                        var gar = Garage.Get(); if (!Garage.Active) { gar.SetDesign(Settings.Design); gar.Open(Cam); }
+                        var names = VehicleDesigns.Names;
+                        Item($"Design: {gar.Design}   ({names.IndexOf(gar.Design) + 1} of {names.Count}, A: next)", () => { gar.NextDesign(); ShowPage(Page.Garage, 0); });
+                        Item($"Form: {FormName(gar.Form)} - {gar.FormInfo(gar.Form)}   (A: next, with the change)", () => { gar.NextForm(); ShowPage(Page.Garage, 1); });
+                        Item(gar.Design == Settings.Design ? "Racing with this design" : "Race with this design", () => { UseDesign(gar.Design); ShowPage(Page.Garage, 2); });
+                        Item("Back", () => ShowPage(Page.Main));
+                    }
+                    break;
                 case Page.Quit:
                     Item("No, keep playing", () => ShowPage(Page.Main));
                     Item("Yes, quit", Quit);
@@ -163,7 +185,7 @@ namespace ShiftStorm
             }
             MenuIndex = select >= 0 ? select : 0;
         }
-        public string MenuTitle => MenuPage == Page.Main ? "MENU" : MenuPage == Page.Settings ? "SETTINGS" : "QUIT SHIFTSTORM?";
+        public string MenuTitle => MenuPage == Page.Main ? "MENU" : MenuPage == Page.Settings ? "SETTINGS" : MenuPage == Page.Garage ? "GARAGE" : "QUIT SHIFTSTORM?";
         static string DifficultyItem => "AI difficulty: " + Settings.Difficulty + "   (Easy / Normal / Hard)";
         static string InvertItem => "Invert flight / dive controls: " + (ShiftInput.Invert ? "On" : "Off") + "   (View / F2)";
         static string ScreenItem => "Screen: " + (ScreenSetting.Fullscreen ? "Full screen" : "Windowed") + "   (Alt+Enter)";

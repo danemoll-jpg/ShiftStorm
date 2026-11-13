@@ -70,6 +70,7 @@ namespace ShiftStorm
         static string Form(Mode m) => m == Mode.Drive ? "CAR" : m == Mode.Boat ? "BOAT" : m == Mode.Fly ? "WINGS" : "SUB";
         static string Delta(float d) => (d >= 0 ? "+" : "-") + Mathf.Abs(d).ToString("0.00");
 
+        bool garageHidden;
         void Update()
         {
             if (!v) return;
@@ -122,6 +123,11 @@ namespace ShiftStorm
             // menu
             bool open = game && game.MenuOpen;
             if (open != menuPanel.activeSelf) menuPanel.SetActive(open);
+            // Round 5: the Garage hides the race HUD (everything but the menu) while it is open
+            bool gar = Garage.Active;
+            if (gar != garageHidden) { garageHidden = gar; foreach (Transform ch in transform) if (ch.gameObject != menuPanel) ch.gameObject.SetActive(!gar); }
+            // Round 5: in the Garage the menu sits low and narrow, the vehicle above it
+            if (open) { var mr = (RectTransform)menuPanel.transform; mr.anchoredPosition = gar ? new Vector2(0, -250) : Vector2.zero; mr.sizeDelta = gar ? new Vector2(900, 270) : new Vector2(700, 560); menu.rectTransform.sizeDelta = gar ? new Vector2(880, 260) : new Vector2(680, 540); menu.fontSize = gar ? 22 : 26; }
             if (open) menu.text = MenuText();
         }
 

@@ -241,3 +241,17 @@ a frictionless hull, the camera's wall bump), near-miss gates with a time penalt
 the AI difficulty setting (`Race/Rival.cs` `AiSkill`, `Core/Settings.cs`, Menu > Settings), the row-by-row launch and the wider grid, the
 start-line spline fix and the smooth road width (`World/ParadisePlunge.cs`), the Coral Vault tunnel back on, and the Round 4 checks
 (`Checks/CheckPilot.Round4.cs`).
+
+## 9. What ShiftStorm copied in Round 5
+
+| From | To (ShiftStorm) | Changed |
+|---|---|---|
+| TO `Scripts/Course/JurassicBuilder.cs` decorations "cliff", "boulder", "fern", "ptnest" | `World/ParadisePlunge.Polish.cs` (climb cliff ledges, arch rock stacks, lagoon beaches, the pterodactyl nest on the arch) | Rewritten at ShiftStorm's scale along the race line; same shapes and `ArtStyle_Jurassic` colours (`JurassicLook`), looks only (every collider stays the gray box's). |
+| TO `Waterfall` (JurassicBuilder.cs) | `ParadisePlunge.Fall` + `FallStreaks` | Same idea (sheet, mossy lip, foam pool, white streaks running down); uses ShiftStorm's Waterfall shader; optional rock cliff behind. |
+| TO `ArtStyle_Jurassic.asset` fog (linear, 140-820 m) and `cloudCount` 9 | `JurassicLook.FogStart / FogEnd` (190-1100 m, 1.35 x for the bigger course), `ChaseCam` keeps linear fog above water; 9 puffy clouds over the stretch | Scaled distances; clouds made of low spheres in TO's cloud / cloudShade colours. |
+
+Nothing copied from Chastain Rush in Round 5. Written new: the speed feel (`VehicleSound` pitch per form + wind, `ChaseCam` lower / closer /
+wider at speed + boost kick, `Vehicle/SpeedFx.cs` streaks, spray, bubbles, the road's posts and centre dashes), +15 % speeds (tuning assets),
+the AI levels (Easy ~20 % slower, Normal ~8 %), the swap-with-effect change (`Vehicle/FormSet.cs`), vehicle designs (`Vehicle/VehicleDesigns.cs`),
+the Garage (`UI/Garage.cs`), the one-command import (`Tools/import_vehicles.py`, `Tools/Blender/vehicle_import.py`, test stand-in
+`Tools/Blender/make_test_vehicle.py`) and the Round 5 checks (`Checks/CheckPilot.Round5.cs`).

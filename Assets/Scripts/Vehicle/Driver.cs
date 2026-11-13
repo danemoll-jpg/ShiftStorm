@@ -19,7 +19,7 @@ namespace ShiftStorm
         public float Scale { get; private set; }
         public float CanopyTop { get; private set; }
         public float HeadTop { get; private set; }
-        ShiftVehicle v; FormAnimator forms; Animator anim; Transform model;
+        ShiftVehicle v; FormSet forms; Animator anim; Transform model;
         Transform hips, spine, chest, head, uaL, uaR, laL, laR, handL, handR, ulL, ulR, llL, llR, footL, footR;
         readonly Dictionary<Transform, Quaternion> seated = new Dictionary<Transform, Quaternion>();
         float lean, cheer; SkinnedMeshRenderer[] skins; Vector3 seat;
@@ -64,7 +64,7 @@ namespace ShiftStorm
             var canopy = forms.PartTransform("Canopy"); float top = .87f;
             if (canopy) { var r = canopy.GetComponentInChildren<Renderer>(); if (r) top = transform.InverseTransformPoint(r.bounds.max).y; }
             CanopyTop = top;
-            model = Instantiate(prefab, forms.transform, false).transform; model.name = who + " (driver)";
+            model = Instantiate(prefab, forms.Pivot, false).transform; model.name = who + " (driver)";
             model.localPosition = Vector3.zero; model.localRotation = Quaternion.identity; model.localScale = Vector3.one;
             foreach (var c in model.GetComponentsInChildren<Collider>(true)) Destroy(c);
             anim = model.GetComponentInChildren<Animator>();
@@ -200,7 +200,12 @@ namespace ShiftStorm
             Destroy(mesh); return (outside, total, below);
         }
 
-        void Update() { if (Animated && model && v) UpdateGraph(); }
+        Vector3 seatApplied;
+        void Update()
+        {
+            if (model && forms && model.gameObject.activeSelf != forms.ShowDriver) model.gameObject.SetActive(forms.ShowDriver);   // a closed design hides her
+            if (Animated && model && v) UpdateGraph();
+        }
 
         void LateUpdate()
         {
@@ -209,12 +214,15 @@ namespace ShiftStorm
             lean = Mathf.Lerp(lean, v.Holding || v.Finished ? 0 : v.Input.Steer, k);
             if (Animated)   // the clip has posed her upper body this frame; legs stay forward in the racing seat (the clips sit on a chair), lean and look on top
             {
-                model.localPosition += seat - Local(hips.position);   // hips stay on the seat whatever height the clip sits at
+                // hips stay on the seat whatever height the clip sits at; Round 5: measured in the FormSet's pivot (she squashes and twirls with
+                // the change) and on the shown model's own Seat point
+                model.localPosition += seat + forms.SeatOffset - forms.Pivot.InverseTransformPoint(hips.position);
                 Legs();
                 if (spine) spine.rotation = Quaternion.AngleAxis(-lean * 6f, transform.forward) * spine.rotation;
                 if (head) head.rotation = Quaternion.AngleAxis(lean * 12f, transform.up) * head.rotation;
                 return;
             }
+            model.localPosition += forms.SeatOffset - seatApplied; seatApplied = forms.SeatOffset;
             cheer = Mathf.MoveTowards(cheer, v.Finished ? 1 : 0, Time.deltaTime * 2.5f);
             foreach (var kv in seated) kv.Key.localRotation = kv.Value;
             if (spine) spine.rotation = Quaternion.AngleAxis(-lean * 9f, transform.forward) * spine.rotation;

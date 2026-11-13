@@ -100,6 +100,7 @@ namespace ShiftStorm.EditorTools
             var ti = (TextureImporter)assetImporter;
             if (assetPath.Contains("Resources/Dinos/")) ti.maxTextureSize = 1024;
             else if (assetPath.Contains("Resources/Driver/")) ti.maxTextureSize = 2048;
+            else if (assetPath.Contains("Resources/Vehicles/")) { ti.maxTextureSize = 2048; ti.isReadable = true; }   // Round 5: readable (rival recolour)
         }
         void OnPreprocessAudio()
         {
@@ -140,7 +141,7 @@ namespace ShiftStorm.EditorTools
                 hm.importCameras = false; hm.importLights = false; hm.addCollider = false; hm.isReadable = true;
                 return;
             }
-            if (!assetPath.EndsWith("ShiftVehicle.fbx")) return;
+            if (!assetPath.EndsWith("ShiftVehicle.fbx") && !assetPath.Contains("Resources/Vehicles/")) return;   // Round 5: Tools/import_vehicles.py output too
             var mi = (ModelImporter)assetImporter;
             mi.bakeAxisConversion = true; mi.globalScale = 1; mi.useFileScale = true; mi.importAnimation = false; mi.animationType = ModelImporterAnimationType.None;
             mi.materialImportMode = ModelImporterMaterialImportMode.None; mi.importCameras = false; mi.importLights = false; mi.addCollider = false;

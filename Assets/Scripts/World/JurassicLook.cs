@@ -29,6 +29,9 @@ namespace ShiftStorm
         public static readonly Color Mud = new Color(0.4f, 0.32f, 0.22f), CaveRock = new Color(0.3f, 0.34f, 0.32f), Crystal = new Color(0.3f, 0.95f, 0.9f);
         public static readonly Color UnderwaterFog = new Color(0.07f, 0.27f, 0.25f); public const float UnderwaterDensity = .034f;
         public static readonly Color Haze = new Color(0.88f, 0.84f, 0.72f); public const float HazeDensity = .0021f;
+        // Round 5 item 6: Tee'd Off's own fog is linear (ArtStyle_Jurassic fogStart 140, fogEnd 820): clear close by, haze far off. Here 1.35 x that
+        // (the course is built bigger): from 190 m to 1100 m. The arch now reads from the ramp (~500 m: 34 % haze; exponential gave 65 %).
+        public const float FogStart = 190f, FogEnd = 1100f;
 
         static Material toon, outline, water, fall, sky;
         static readonly Dictionary<string, Material> cache = new Dictionary<string, Material>();
@@ -96,14 +99,14 @@ namespace ShiftStorm
             {
                 if (!sky) { var b = Resources.Load<Material>("Materials/Jurassic/Sky"); if (b) { sky = new Material(b); sky.SetColor("_Top", SkyTop); sky.SetColor("_Horizon", SkyHorizon); sky.SetColor("_Below", SkyBelow); } }
                 if (sky) RenderSettings.skybox = sky;
-                RenderSettings.fog = true; RenderSettings.fogMode = FogMode.Exponential; RenderSettings.fogColor = Haze; RenderSettings.fogDensity = HazeDensity;
+                RenderSettings.fog = true; RenderSettings.fogMode = FogMode.Linear; RenderSettings.fogStartDistance = FogStart; RenderSettings.fogEndDistance = FogEnd; RenderSettings.fogColor = Haze; RenderSettings.fogDensity = HazeDensity;
                 RenderSettings.ambientMode = AmbientMode.Flat; RenderSettings.ambientLight = Ambient;
                 if (sun) { sun.color = SunColor; sun.intensity = SunIntensity; sun.transform.rotation = Quaternion.Euler(SunAngles.x, SunAngles.y, 0); sun.shadows = LightShadows.Hard; }
                 ChaseCam.UnderwaterColor = UnderwaterFog; ChaseCam.UnderwaterDensity = UnderwaterDensity;
             }
             else
             {
-                RenderSettings.skybox = r1Sky; RenderSettings.fog = r1FogOn; RenderSettings.fogColor = r1Fog; RenderSettings.fogDensity = r1Density;
+                RenderSettings.skybox = r1Sky; RenderSettings.fog = r1FogOn; RenderSettings.fogMode = FogMode.Exponential; RenderSettings.fogColor = r1Fog; RenderSettings.fogDensity = r1Density;
                 RenderSettings.ambientMode = r1AmbientMode; RenderSettings.ambientLight = r1Ambient;
                 if (sun) { sun.color = r1Sun; sun.intensity = r1SunIntensity; sun.transform.rotation = r1SunRot; }
                 ChaseCam.UnderwaterColor = ChaseCam.DefaultUnderwater; ChaseCam.UnderwaterDensity = ChaseCam.DefaultUnderwaterDensity;

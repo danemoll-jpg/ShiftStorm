@@ -17,8 +17,8 @@ namespace ShiftStorm
         public float pace, brake, wobble, boostMeter, straight, mistakeEvery, mistakeSeconds, shortcut;
         public static AiSkill For(Difficulty d) => d switch
         {
-            Difficulty.Easy => new AiSkill { pace = .86f, brake = .86f, wobble = 2.5f, boostMeter = .4f, straight = .5f, mistakeEvery = 22f, mistakeSeconds = .9f, shortcut = .3f },
-            Difficulty.Normal => new AiSkill { pace = .95f, brake = .95f, wobble = 1.2f, boostMeter = .2f, straight = .8f, mistakeEvery = 45f, mistakeSeconds = .6f, shortcut = .7f },
+            Difficulty.Easy => new AiSkill { pace = .76f, brake = .8f, wobble = 3f, boostMeter = .6f, straight = .4f, mistakeEvery = 18f, mistakeSeconds = 1.1f, shortcut = .2f },
+            Difficulty.Normal => new AiSkill { pace = .87f, brake = .9f, wobble = 1.6f, boostMeter = .3f, straight = .7f, mistakeEvery = 35f, mistakeSeconds = .7f, shortcut = .6f },
             _ => new AiSkill { pace = 1f, brake = 1f, wobble = 0f, boostMeter = 0f, straight = 1f, mistakeEvery = 0f, mistakeSeconds = 0f, shortcut = 1f },   // Hard = Round 3's AI
         };
     }
@@ -218,8 +218,11 @@ namespace ShiftStorm
             float straight = Vector3.Angle(a0, a2);
             bool boost = rival != null && v.Boost >= (v.Boosting ? .05f : Mathf.Min(1f, rival.boostMeter + skill.boostMeter)) && straight < rival.boostStraight * skill.straight && brk <= 0 && !v.Changing && Mathf.Abs(err) < 12f && MaxOffset() > 0;
             // the pace it holds (lifting off above it), and a mistake: off the throttle for a moment
-            if (skill.pace < 1f && !boost && speed > skill.pace * v.TopSpeedNow) thr = 0;
-            if (Time.time < mistakeUntil) { thr = 0; boost = false; }
+            // Round 5: the pace cap and the mistakes start 600 m after the grid: at the faster launch (30 m/s2) a held-back Easy car right
+            // in front of the grid's back row was rammed in the first seconds (15 touches in 25 starts); the field now gets away cleanly
+            bool launchRun = v.Progress < startProgress + 600f;
+            if (skill.pace < 1f && !boost && !launchRun && speed > skill.pace * v.TopSpeedNow) thr = 0;
+            if (Time.time < mistakeUntil && !launchRun) { thr = 0; boost = false; }
             if (v.Mode == Mode.Dive && thr > 0) thr = Mathf.Min(thr, skill.pace);
             Set(thr, brk, steer, vert, boost, sec);
         }
