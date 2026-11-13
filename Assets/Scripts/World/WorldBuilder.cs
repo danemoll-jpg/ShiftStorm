@@ -9,13 +9,17 @@ namespace ShiftStorm
     // the vehicle in the form it is about to take (car, wing, boat, submarine).
     public static class WorldBuilder
     {
-        static Transform root;
+        static Transform root, tests;
+        public const float TestOffsetX = 3000f;
         static Material M(string n) => Resources.Load<Material>("Materials/" + n);
 
         public static List<Course> Build()
         {
             root = new GameObject("World (gray boxes)").transform;
-            var list = new List<Course> { BuildStrip(), DriveLane(new Vector3(400, 0, 0)), BoatLane(new Vector3(520, 0, 0)), FlyLane(new Vector3(640, 0, 0)), DiveLane(new Vector3(760, 0, 0)) };
+            // Round 2: Paradise Plunge first (course 0); the Round 1 strip and lanes follow for testing, moved 3 km east, clear of the lap
+            var lap = ParadisePlunge.Build(root);
+            tests = new GameObject("Test courses (Round 1)").transform; tests.SetParent(root, false); tests.position = new Vector3(TestOffsetX, 0, 0);
+            var list = new List<Course> { lap, BuildStrip(), DriveLane(new Vector3(400, 0, 0)), BoatLane(new Vector3(520, 0, 0)), FlyLane(new Vector3(640, 0, 0)), DiveLane(new Vector3(760, 0, 0)) };
             foreach (var c in list) c.Finish();
             return list;
         }
@@ -75,7 +79,7 @@ namespace ShiftStorm
             Box(g.transform, "post R", new Vector3(half.x - 1, 0, 0), new Vector3(.4f, Mathf.Min(half.y * 2, 14), .4f), "Gate", 0, false);
         }
         // A sign: post, colored board facing the oncoming racer, and the vehicle in the coming form, side-on.
-        static void Sign(Transform parent, Vector3 at, Mode form, float postHeight = 4)
+        public static void Sign(Transform parent, Vector3 at, Mode form, float postHeight = 4)
         {
             var s = new GameObject($"Sign {form}").transform; s.SetParent(parent, false); s.localPosition = at;
             Box(s, "post", new Vector3(0, postHeight * .5f, 0), new Vector3(.3f, postHeight, .3f), "Gate", 0, false);
@@ -90,7 +94,7 @@ namespace ShiftStorm
         }
         static Course NewCourse(string name, Vector3 origin)
         {
-            var g = new GameObject("Course " + name); g.transform.SetParent(root, false); g.transform.position = origin;
+            var g = new GameObject("Course " + name); g.transform.SetParent(tests, false); g.transform.localPosition = origin;
             var c = g.AddComponent<Course>(); c.courseName = name; return c;
         }
         static void Line(Course c, params Vector3[] pts) { foreach (var p in pts) c.line.Add(c.transform.TransformPoint(p)); }

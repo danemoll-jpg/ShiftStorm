@@ -25,5 +25,10 @@ namespace ShiftStorm
         public float stuckSpeed = 1.5f;
         public float noProgressSeconds = 15f;         // no new progress along the course this long: recover
         public float wrongWaterSeconds = .35f;        // a car or plane under the water outside a landing corridor: recover after this
+        [Header("Race (Round 2)")]
+        public float countdownSeconds = 3f;           // a time trial's countdown on the grid (3, 2, 1, GO)
+        public float missedGateCueMeters = 25f;       // this far past the next gate's place without earning it: the "go back" cue
+        public float missedGateResetMeters = 90f;     // this far past it, or ...
+        public float missedGateResetSeconds = 5f;     // ... this long with the cue showing: reset to the last anchor before that gate
     }
 }

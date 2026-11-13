@@ -41,6 +41,7 @@ namespace ShiftStorm
             Snap(Mode.Drive);
         }
         public int PartCount => parts.Count;
+        public Transform PartTransform(string name) { foreach (var p in parts) if (p.name == name) return p.t; return null; }
 
         // the pose of one part in one form: offset (vehicle space), rotation (vehicle space, applied after the rest rotation), scale factor
         static void Pose(Part p, Mode m, out Vector3 dPos, out Vector3 euler, out Vector3 scale)

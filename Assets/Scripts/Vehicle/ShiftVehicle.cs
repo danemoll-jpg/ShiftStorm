@@ -44,6 +44,14 @@ namespace ShiftStorm
         public float FinishTime { get; private set; } = -1;
         public int Resets { get; private set; }
         public float GraceUntil { get; private set; } = -1;
+        public float HoldUntil { get; private set; } = -1;          // a time trial's countdown: the vehicle waits on the grid until GO
+        public bool Holding => held;
+        public float RaceDistance => Course ? Course.RaceDistance(GatesPassed, Progress) : 0;
+        public readonly List<float> Splits = new List<float>();     // time from GO at the end of each course segment (Course.segments)
+        public ProgressGate MissedGate { get; private set; }         // the next gate when the racer has gone past it without earning it
+        public string Cue { get; private set; } = "";                // a return cue for the HUD ("missed gate ...", "wrong way")
+        public float CueUntil { get; private set; } = -1;
+        bool held; float missedFor;
 
         // Everything that happened, in order, for checks and the HUD's last line.
         public readonly List<string> Log = new List<string>();
@@ -70,20 +78,28 @@ namespace ShiftStorm
         }
 
         // Start (or restart) on a course at its first anchor, in the course's start form, with the progress cleared.
+        // A time trial (course.timeTrial, from its first anchor) holds the vehicle on the grid for the countdown; the clock starts at GO.
         public void Begin(Course course, RecoveryAnchor at = null)
         {
-            Course = course; at = at ? at : course.anchors[0];
+            Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
-            Boost = shared.boostStart; StartTime = Time.time; Log.Clear();
+            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0;
             Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0);
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
             BestProgress = lastBest = Progress; foreach (var g in course.gates) if (g.progress < Progress - 1f) GatesPassed++;
-            Note("start", $"start on {course.courseName} in {Mode}");
+            held = course.timeTrial && fromStart && shared.countdownSeconds > 0;
+            if (held) { HoldUntil = Time.time + shared.countdownSeconds; StartTime = HoldUntil; Body.isKinematic = true; } else HoldUntil = -1;
+            Note("start", $"start on {course.courseName} in {Mode}{(held ? $", countdown {shared.countdownSeconds:0} s" : "")}");
         }
 
         void FixedUpdate()
         {
             float dt = Time.fixedDeltaTime;
+            if (held)
+            {
+                if (Time.time < HoldUntil) { Input.ConsumeReset(); return; }
+                held = false; Body.isKinematic = false; Body.linearVelocity = Vector3.zero; Note("go", "GO");
+            }
             UpdateBoost(dt);
             if (Changing)
             {
@@ -172,20 +188,45 @@ namespace ShiftStorm
         }
 
         // ---- progress ----
+        // Progress is searched near the last progress (Course.Project with a hint), so the cave under the road is never mistaken for the road.
+        // Gates count in order, forward, inside their frame and in a permitted form; a backward crossing of the last gate is a "wrong way"
+        // cue; going past the next gate without earning it gives a return cue, then a reset (ShiftTuning.missedGate*).
         void TrackProgress()
         {
             if (!Course) return;
-            var p = Body.position;
-            Progress = Course.Project(p, out _, out _);
+            var p = Body.position; var gates = Course.gates;
+            Progress = Course.Project(p, Progress, out _, out _);
             if (Progress > BestProgress) BestProgress = Progress;
-            while (GatesPassed < Course.gates.Count && Course.gates[GatesPassed].Crossed(lastPos, p))
+            while (GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
             {
-                var g = Course.gates[GatesPassed]; GatesPassed++;
-                Note("gate", $"gate {g.label} passed ({GatesPassed}/{Course.gates.Count})");
-                if (GatesPassed == Course.gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime; Note("finish", $"finish in {FinishTime:0.00} s, {Resets} resets"); }
+                var g = gates[GatesPassed];
+                if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}"); break; }
+                GatesPassed++; MissedGate = null; missedFor = 0;
+                Note("gate", $"gate {g.label} passed ({GatesPassed}/{gates.Count})");
+                if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime; Note("finish", $"finish in {FinishTime:0.00} s, {Resets} resets"); }
             }
+            if (GatesPassed > 0 && GatesPassed < gates.Count && gates[GatesPassed - 1].CrossedBackward(lastPos, p)) { Note("wrong way", $"wrong way: back through {gates[GatesPassed - 1].label}"); ShowCue("WRONG WAY"); }
             lastPos = p;
+            var segs = Course.segments;
+            while (Splits.Count < segs.Count && GatesPassed >= segs[Splits.Count].gatesNeeded && Progress >= segs[Splits.Count].endProgress - 1f)
+            {
+                var sg = segs[Splits.Count]; float t = Time.time - StartTime, prev = Splits.Count > 0 ? Splits[Splits.Count - 1] : 0; Splits.Add(t);
+                Note("split", $"split {sg.name}: {t - prev:0.00} s (target {sg.target:0} s), total {t:0.00} s");
+            }
+            // missed gate: past the next gate's place without earning it
+            if (!Finished && GatesPassed < gates.Count && !Changing)
+            {
+                var g = gates[GatesPassed]; float over = Progress - g.progress;
+                if (over > shared.missedGateCueMeters)
+                {
+                    if (MissedGate != g) { MissedGate = g; missedFor = 0; Note("missed", $"missed gate {g.label} ({over:0} m past it, {Mode}): go back"); }
+                    missedFor += Time.fixedDeltaTime; ShowCue($"MISSED {g.label} - GO BACK");
+                    if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label}"); }
+                }
+                else if (MissedGate == g && over < 0) { MissedGate = null; missedFor = 0; }
+            }
         }
+        void ShowCue(string text) { Cue = text; CueUntil = Time.time + 1.5f; }
 
         void SetLayer(int layer) { foreach (var t in GetComponentsInChildren<Transform>(true)) t.gameObject.layer = layer; }
     }

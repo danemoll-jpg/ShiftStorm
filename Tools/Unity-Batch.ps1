@@ -3,6 +3,7 @@
 param([string]$Log = 'local/logs/unity.log', [string]$Method = '', [string[]]$Extra = @(), [int]$TimeoutMinutes = 30)
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+$Extra = @($Extra | ForEach-Object { $_ -split ',' } | Where-Object { $_ -ne '' })   # 'powershell -File' passes an array as one comma-joined string
 $unity = 'C:\Program Files\Unity\Hub\Editor\6000.6.1f1\Editor\Unity.exe'
 $logPath = Join-Path $root $Log; New-Item -ItemType Directory -Force (Split-Path $logPath) | Out-Null
 $uargs = @('-batchmode', '-quit', '-nographics', '-projectPath', $root, '-logFile', $logPath, '-job-worker-count', '4')

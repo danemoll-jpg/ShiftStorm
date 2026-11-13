@@ -183,3 +183,26 @@ For the Round 1 test strip, start with option 1 (beach promenade, cliff, lagoon)
 Written new (nothing to copy): boating and diving handling, the form-change framework (zones, speed blending, authority ramp, alignment
 assist), the form animator, recovery anchors and course progress, the gray-box strip and lanes, the check pilot, the Blender vehicle script.
 Nothing from Tee-dOff was copied in Round 1.
+
+## 5. What ShiftStorm copied in Round 2
+
+All from **TO** (Tee-dOff, read-only; files copied, nothing edited there). Paths: TO relative to `Assets/_Project/`, ShiftStorm relative to `Assets/`.
+
+| From (TO) | To (ShiftStorm) | Changed |
+|---|---|---|
+| `Resources/Shaders/ToonCommon.cginc`, `Toon.shader`, `ToonOutline.shader` | `Shaders/ShiftToon.hlsl`, `Toon.shader`, `ToonOutline.shader` | Rewritten for URP (HLSL, main light + its shadow map, URP fog, SRP-batcher buffer). The model is the same: 3 flat bands, `albedo x (band x sun x 0.85 + 0.25)`, inverted-hull outline that thins with distance. Added: a texture, a vertex-colour switch, emission, a per-material outline scale, shadow-caster and depth passes. |
+| `Resources/Shaders/ToonOcean.shader` | `Shaders/ToonWater.shader` | URP port; drawn from both sides (seen from below in the pool and gateway); `_Scale` added. |
+| `Resources/Shaders/Sky.shader` | `Shaders/Sky.shader` | URP port; Groovy Greens swirls dropped. |
+| `Resources/Tuning/ArtStyle_Jurassic.asset` (+ `ArtStyle.CreateJurassic`) | `Scripts/World/JurassicLook.cs` | Values copied as constants (sun, ambient, sky, toon bands, outline, water); fog is exponential (one fog mode for the whole build). |
+| `Scripts/Course/JurassicBuilder.cs` (tree kinds 8-10, palette) | `Scripts/World/ParadisePlunge.cs` (`Fern`, `Cycad`, `Boulder`), `JurassicLook` palette | The same shapes and colours, rebuilt on ShiftStorm's own `MeshKit.Batch` (no code copied); the course layout is new. |
+| `Art/Characters/Abigail/Abigail.fbx` (+ `.meta`, its Humanoid avatar), `Abigail_basecolor.png` | `Resources/Driver/` | Imported Humanoid without animation or materials; painted with the toon outline shader; texture capped at 2048. |
+| `Art/Characters/Dinos/{bronto,trike,trex,ptero}/*_mesh.asset`, `*_basecolor.png` | `Resources/Dinos/` | Static scenery (bind pose), toon textured; textures capped at 1024. Eyes, lids and rigs not copied. |
+| `Resources/Audio/Music/course_jurassic.ogg`, `course_jurassic_intro.ogg` | `Resources/Audio/Music/` | Streamed; intro then loop. |
+| `Resources/Audio/Sfx/amb_jungle, amb_bubbles, splash_1/2, amb_dino_call_1-3, amb_roar_far_1` (.wav) | `Resources/Audio/Sfx/` | Vorbis on import. |
+| `Resources/Audio/Voice/abigail/{win_1, quipgood_1-2, disaster_1-2, grunt_1, trouble_1, laugh_1, lucky_1}.ogg` | `Resources/Audio/Voice/abigail/` | Played with cooldowns (finish, reset, waterfall leap). |
+
+Also new in Round 2, not from Tee'd Off: the shared driver animations from Mixamo (Dan, `Resources/Drivers/Animations/`, 6 clips).
+
+Written new in Round 2: the Paradise Plunge course builder and its strips (`MeshKit`), stack-safe progress (`Course.Project` with a
+window), the gate rules (forms, wrong way, missed gate), the time trial and best times, the course menu, the driver seat pose, the
+waterfall shader.

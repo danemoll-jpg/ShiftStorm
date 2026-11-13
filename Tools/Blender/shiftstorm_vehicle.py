@@ -1,4 +1,4 @@
-"""ShiftStorm Round 1 placeholder transforming vehicle, built by script (hard-surface, simple shapes, separate parts).
+"""ShiftStorm placeholder transforming vehicle (Round 1; Round 2 enlarged the canopy for the driver), built by script (hard-surface, simple shapes, separate parts).
 Run: F:\\blender\\blender.exe -b -P Tools/Blender/shiftstorm_vehicle.py -- <repo root>
 Writes Assets/Resources/Models/ShiftVehicle.fbx and Docs/Checks/round1/vehicle_rest.png (a preview of the rest pose).
 
@@ -12,7 +12,7 @@ import bpy, bmesh, math, os, sys
 
 root = sys.argv[sys.argv.index("--") + 1] if "--" in sys.argv else os.getcwd()
 out_fbx = os.path.join(root, "Assets", "Resources", "Models", "ShiftVehicle.fbx")
-out_png = os.path.join(root, "Docs", "Checks", "round1", "vehicle_rest.png")
+out_png = os.path.join(root, "Docs", "Checks", "round2", "vehicle_rest.png")
 os.makedirs(os.path.dirname(out_fbx), exist_ok=True); os.makedirs(os.path.dirname(out_png), exist_ok=True)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -61,9 +61,17 @@ def wheel(name, at):
 
 # shared body and cockpit
 box("Body", (0, 0.05, 0), (1.8, 0.62, 3.9), (0, 0, 0), "body", 0.08, taper_front=(0.7, 0.55, -0.08))
-box("Cockpit", (0, 0.42, 0.05), (1.25, 0.28, 1.7), (0, 0.35, 0.05), "trim", 0.06)
+# Round 2: the cockpit is an open tub (four walls joined into one part) so the driver shows from the shoulders up
+tub = [box("CockpitL", (-0.585, 0.42, 0.05), (0.08, 0.28, 1.7), (0, 0.35, 0.05), "trim", 0.02),
+       box("CockpitR", (0.585, 0.42, 0.05), (0.08, 0.28, 1.7), (0, 0.35, 0.05), "trim", 0.02),
+       box("CockpitF", (0, 0.42, 0.86), (1.25, 0.28, 0.08), (0, 0.35, 0.05), "trim", 0.02),
+       box("CockpitB", (0, 0.46, -0.76), (1.25, 0.36, 0.1), (0, 0.35, 0.05), "trim", 0.02)]
+bpy.ops.object.select_all(action="DESELECT")
+for t in tub: t.select_set(True)
+bpy.context.view_layer.objects.active = tub[0]; bpy.ops.object.join(); tub[0].name = "Cockpit"; tub[0].data.name = "Cockpit"
 bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=B(0, 0.55, 0.15))
-can = bpy.context.active_object; can.scale = (0.52, 0.85, 0.32); finish(can, "Canopy", (0, 0.55, -0.62), "glass")
+# Round 2: a taller bubble so the driver (Abi, seated) fits under it closed: 1.1 m wide, 1.9 m long, top at y 1.10 (was 0.87)
+can = bpy.context.active_object; can.scale = (0.55, 0.95, 0.55); finish(can, "Canopy", (0, 0.55, -0.80), "glass")
 # wheels (axle along x), hinge at the hub
 for n, x, z in (("Wheel_FL", -1.0, 1.35), ("Wheel_FR", 1.0, 1.35), ("Wheel_RL", -1.0, -1.35), ("Wheel_RR", 1.0, -1.35)): wheel(n, (x, -0.45, z))
 # wings: root at the body side, swept slightly, reaching out 3 m

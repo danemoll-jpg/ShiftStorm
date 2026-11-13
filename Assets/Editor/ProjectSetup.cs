@@ -41,6 +41,15 @@ namespace ShiftStorm.EditorTools
             Mat("Water", new Color(.1f, .62f, .72f, .55f), transparent: true); Mat("Waterfall", new Color(.85f, .95f, 1f, .45f), transparent: true);
             Mat("VehicleBody", new Color(.95f, .45f, .1f)); Mat("VehicleTrim", new Color(.95f, .9f, .8f)); Mat("VehicleGlass", new Color(.35f, .65f, .9f, .7f), transparent: true);
             Mat("VehicleTire", new Color(.08f, .08f, .09f)); Mat("VehicleWing", new Color(.96f, .96f, .96f)); Mat("VehicleFin", new Color(.1f, .6f, .65f)); Mat("VehicleMetal", new Color(.55f, .57f, .6f));
+            // Round 2: Paradise Plunge's toon look (ShiftStorm/* shaders, URP ports of Tee'd Off's): base materials the runtime copies and colours
+            Directory.CreateDirectory("Assets/Resources/Materials/Jurassic");
+            foreach (var (n, sh) in new[] { ("Toon", "ShiftStorm/Toon"), ("ToonOutline", "ShiftStorm/ToonOutline"), ("ToonWater", "ShiftStorm/ToonWater"), ("Waterfall", "ShiftStorm/Waterfall"), ("Sky", "ShiftStorm/Sky") })
+            {
+                string path = $"Assets/Resources/Materials/Jurassic/{n}.mat"; var shader = Shader.Find(sh);
+                if (!shader) { Debug.LogError("[Setup] shader missing: " + sh); continue; }
+                var m = AssetDatabase.LoadAssetAtPath<Material>(path); if (!m) { m = new Material(shader); AssetDatabase.CreateAsset(m, path); } else m.shader = shader;
+                EditorUtility.SetDirty(m);
+            }
             Tuning<ShiftTuning>("Shift"); Tuning<DriveTuning>("Drive"); Tuning<BoatTuning>("Boat"); Tuning<FlyTuning>("Fly"); Tuning<DiveTuning>("Dive");
             // scene and build list
             Directory.CreateDirectory("Assets/Scenes");
@@ -81,10 +90,56 @@ namespace ShiftStorm.EditorTools
     }
 
     // The Blender vehicle (Tools/Blender/shiftstorm_vehicle.py) imports without axis rotations, no materials (FormAnimator / VehicleFactory set them).
+    // Round 2: Abi (Resources/Driver/Abigail.fbx, from Tee'd Off with its own Humanoid avatar settings) imports as Humanoid without
+    // animation or materials (Driver paints her with the toon shader); her and the dinosaurs' textures are capped in size (Steam Deck memory);
+    // music streams, ambience is compressed in memory, short sounds decompress on load.
     public sealed class VehicleImport : AssetPostprocessor
     {
+        void OnPreprocessTexture()
+        {
+            var ti = (TextureImporter)assetImporter;
+            if (assetPath.Contains("Resources/Dinos/")) ti.maxTextureSize = 1024;
+            else if (assetPath.Contains("Resources/Driver/")) ti.maxTextureSize = 2048;
+        }
+        void OnPreprocessAudio()
+        {
+            if (!assetPath.Contains("Resources/Audio/")) return;
+            var ai = (AudioImporter)assetImporter; var st = ai.defaultSampleSettings;
+            if (assetPath.Contains("/Music/")) { st.loadType = AudioClipLoadType.Streaming; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .6f; }
+            else if (assetPath.Contains("/amb_jungle") || assetPath.Contains("/amb_bubbles")) { st.loadType = AudioClipLoadType.CompressedInMemory; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .5f; }
+            else { st.loadType = AudioClipLoadType.DecompressOnLoad; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .6f; }
+            ai.defaultSampleSettings = st; ai.forceToMono = false; ai.loadInBackground = assetPath.Contains("/Music/");
+        }
+        // Round 2: the shared driver animations (Mixamo, "Without Skin", Resources/Drivers/Animations): Humanoid clips any driver can play.
+        // Driving and Sitting Idle loop; all keep the root in place (the seat holds the driver).
+        static bool IsDriverClip(string path) => path.Contains("Resources/Drivers/Animations/");
+        void OnPreprocessAnimation()
+        {
+            if (!IsDriverClip(assetPath)) return;
+            var mi = (ModelImporter)assetImporter; var clips = mi.defaultClipAnimations; bool loop = assetPath.EndsWith("Driving.fbx") || assetPath.EndsWith("Sitting Idle.fbx");
+            for (int i = 0; i < clips.Length; i++)
+            {
+                clips[i].loopTime = loop; clips[i].lockRootRotation = true; clips[i].lockRootHeightY = true; clips[i].lockRootPositionXZ = true;
+                clips[i].keepOriginalOrientation = true; clips[i].keepOriginalPositionY = true; clips[i].keepOriginalPositionXZ = true;
+            }
+            mi.clipAnimations = clips;
+        }
         void OnPreprocessModel()
         {
+            if (IsDriverClip(assetPath))
+            {
+                var am = (ModelImporter)assetImporter;
+                am.animationType = ModelImporterAnimationType.Human; am.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel; am.importAnimation = true;
+                am.materialImportMode = ModelImporterMaterialImportMode.None; am.importCameras = false; am.importLights = false;
+                return;
+            }
+            if (assetPath.EndsWith("Driver/Abigail.fbx"))
+            {
+                var hm = (ModelImporter)assetImporter;
+                hm.animationType = ModelImporterAnimationType.Human; hm.importAnimation = false; hm.materialImportMode = ModelImporterMaterialImportMode.None;
+                hm.importCameras = false; hm.importLights = false; hm.addCollider = false; hm.isReadable = true;
+                return;
+            }
             if (!assetPath.EndsWith("ShiftVehicle.fbx")) return;
             var mi = (ModelImporter)assetImporter;
             mi.bakeAxisConversion = true; mi.globalScale = 1; mi.useFileScale = true; mi.importAnimation = false; mi.animationType = ModelImporterAnimationType.None;

@@ -104,9 +104,13 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 - Player build (`Builds/ShiftStorm/ShiftStorm.exe`):
   `powershell -File Tools/Unity-Batch.ps1 -Log local/logs/build.log -Method ShiftStorm.EditorTools.BuildPlayer.Run -Extra '-buildVersion','0.1.0'`
 - Muted, windowless check in the built exe (`-batchmode -mute`, Below Normal; report + pictures in the folder):
-  `powershell -File Tools/Run-Check.ps1 -Check all -Out local/round1/check` (`strip`, `lanes`, `edge` or `all`).
+  `powershell -File Tools/Run-Check.ps1 -Check round2 -Out local/round2/check -Extra '-saveDir','local/round2/save'`
+  (`round2` = `lap` + `skip` + `abi`; `round1` = `strip` + `lanes` + `edge`; `all` = both; `best` = a second process reading the
+  best time saved by `lap`, same `-saveDir`). The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
-- Game start options: `-course 0..4` (0 strip, 1 drive lane, 2 boat lane, 3 fly lane, 4 dive lane).
+- Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
+  `-saveDir <dir>` puts the best-times file elsewhere (checks never touch Dan's own `besttimes.json`).
+- In game: Menu (Start) / Esc opens the course menu (resume, restart, pick a course); D-pad left / right still steps courses.
 - Launcher: `powershell -File Tools/Build-Launcher.ps1` (and `-CoreOnly` for `LauncherChecks.exe`) -> `Builds/Launcher/`.
 - Release (local draft, then the deliberate publish):
   `python Tools/Release-Round.py --version 0.1.0 --build 1 --notes "..."` then
@@ -121,6 +125,11 @@ Round 1 delivered 2026-11-13 (release `build-1`, 0.1.0): Unity project, launcher
 with Drive / Boat / Fly / Dive, Blender placeholder vehicle, gray-box transition strip and four mode lanes (built in code by
 `WorldBuilder.cs`), check pilot (`-check all`). Dan tried it on PC: handling feels intuitive, no changes asked.
 
-Current objective: **Round 2 — the full gray-box Paradise Plunge lap with Jurassic Par atmosphere** (driver: Abi / Abigail;
-new course built in Jurassic Par's look and sound, not a reused Tee'd Off layout), plus ordered gates, time trial, results
-and Abi in the cockpit.
+Round 2 delivered 2026-11-13 (release `build-2`, 0.2.0): the full Paradise Plunge lap in gray box (`ParadisePlunge.cs`, built from
+one racer line; the flooded cave runs under the finishing road, progress is searched in a window so stacked sections never
+mix), ordered gates G0-G10 with form permissions / wrong-way / missed-gate rules, time trial (countdown, splits, results, best
+time in `besttimes.json`, restart, course menu), Jurassic Par look (URP toon shaders ported from Tee'd Off in `Assets/Shaders`,
+`JurassicLook.cs`) and sound (`CourseAudio.cs`), Abi in an open cockpit (`Driver.cs`) on the shared Mixamo driver clips in
+`Resources/Drivers/Animations`, with her voice lines. Evidence: `Docs/Checks/round2/`.
+
+Current objective: see `TODO.md` (Round 3 is planned as three AI rivals and the two shortcuts; it waits on Dan's Round 2 review).

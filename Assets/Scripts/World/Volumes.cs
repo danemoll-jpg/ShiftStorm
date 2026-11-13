@@ -70,19 +70,24 @@ namespace ShiftStorm
     public sealed class RecoveryAnchor : MonoBehaviour
     {
         public Mode mode;
-        [System.NonSerialized] public float progress;
+        [System.NonSerialized] public float progress;   // set when placed by progress (Paradise Plunge), else projected by Course.Finish
         void OnDrawGizmos() { Gizmos.color = Color.green; Gizmos.DrawSphere(transform.position, .6f); Gizmos.DrawRay(transform.position, transform.forward * 4); }
     }
 
-    // A race-progress gate, separate from the form change zones (crossing water is not proof that a section was done). Passed in order only.
+    // A race-progress gate, separate from the form change zones (crossing water is not proof that a section was done). Passed in order only,
+    // forward only (its +Z), inside its frame, and (Round 2) only in a permitted form: a plane over the flooded cave never earns the dive gates.
     public sealed class ProgressGate : MonoBehaviour
     {
         public int index; public Vector2 halfSize = new Vector2(30, 25); public string label;
+        public Mode[] modes;   // permitted forms (null or empty: any)
         [System.NonSerialized] public float progress;
-        public bool Crossed(Vector3 from, Vector3 to)
+        public bool Crossed(Vector3 from, Vector3 to) => Through(from, to, false);
+        public bool CrossedBackward(Vector3 from, Vector3 to) => Through(from, to, true);
+        public bool Allows(Mode m) => modes == null || modes.Length == 0 || System.Array.IndexOf(modes, m) >= 0;
+        bool Through(Vector3 from, Vector3 to, bool backward)
         {
             Vector3 a = transform.InverseTransformPoint(from), b = transform.InverseTransformPoint(to);
-            if (!(a.z < 0 && b.z >= 0)) return false;
+            if (backward ? !(a.z >= 0 && b.z < 0) : !(a.z < 0 && b.z >= 0)) return false;
             float t = -a.z / (b.z - a.z); var hit = Vector3.Lerp(a, b, t);
             return Mathf.Abs(hit.x) <= halfSize.x && Mathf.Abs(hit.y) <= halfSize.y;
         }

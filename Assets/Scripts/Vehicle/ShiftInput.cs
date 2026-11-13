@@ -10,6 +10,8 @@ namespace ShiftStorm
     //   Keyboard: W / Up accelerate, S / Down brake / reverse, A / D or Left / Right steer, I / K climb / dive (I = up), Space boost,
     //             Left Shift secondary, R reset, F2 invert on / off, F3 / F4 previous / next start.
     // Invert is saved in PlayerPrefs ("invertVertical"); a check run never writes it.
+    // Round 2, the course menu: Menu (Start) / Esc opens and closes it; D-pad up / down or Up / Down (W / S) move, A / Enter / Space choose,
+    // B / Backspace go back. While it is open the race is paused, so these never reach the vehicle.
     public sealed class ShiftInput : MonoBehaviour
     {
         public float Throttle { get; private set; }
@@ -20,8 +22,12 @@ namespace ShiftStorm
         public bool Secondary { get; private set; }
         public static bool Invert { get; private set; }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart;
+        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back;
         bool resetRequested; int startStep;
+        public bool MenuPressed { get; private set; }
+        public int MenuMove { get; private set; }
+        public bool ConfirmPressed { get; private set; }
+        public bool BackPressed { get; private set; }
 
         // Checks drive through this same path (ShiftVehicle reads only these properties).
         [System.NonSerialized] public bool Scripted;
@@ -48,14 +54,21 @@ namespace ShiftStorm
             invert = new InputAction("Invert", InputActionType.Button); invert.AddBinding("<Gamepad>/select"); invert.AddBinding("<Keyboard>/f2");
             nextStart = new InputAction("Next start", InputActionType.Button); nextStart.AddBinding("<Gamepad>/dpad/right"); nextStart.AddBinding("<Keyboard>/f4");
             prevStart = new InputAction("Previous start", InputActionType.Button); prevStart.AddBinding("<Gamepad>/dpad/left"); prevStart.AddBinding("<Keyboard>/f3");
+            menu = new InputAction("Menu", InputActionType.Button); menu.AddBinding("<Gamepad>/start"); menu.AddBinding("<Keyboard>/escape");
+            menuUp = new InputAction("Menu up", InputActionType.Button); menuUp.AddBinding("<Gamepad>/dpad/up"); menuUp.AddBinding("<Keyboard>/upArrow"); menuUp.AddBinding("<Keyboard>/w");
+            menuDown = new InputAction("Menu down", InputActionType.Button); menuDown.AddBinding("<Gamepad>/dpad/down"); menuDown.AddBinding("<Keyboard>/downArrow"); menuDown.AddBinding("<Keyboard>/s");
+            confirm = new InputAction("Confirm", InputActionType.Button); confirm.AddBinding("<Gamepad>/buttonSouth"); confirm.AddBinding("<Keyboard>/enter"); confirm.AddBinding("<Keyboard>/space");
+            back = new InputAction("Back", InputActionType.Button); back.AddBinding("<Gamepad>/buttonEast"); back.AddBinding("<Keyboard>/backspace");
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back };
         void OnEnable() { foreach (var a in All) a.Enable(); }
         void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
 
         void Update()
         {
+            MenuPressed = menu.WasPressedThisFrame() && !Scripted; ConfirmPressed = confirm.WasPressedThisFrame(); BackPressed = back.WasPressedThisFrame();
+            MenuMove = (menuDown.WasPressedThisFrame() ? 1 : 0) - (menuUp.WasPressedThisFrame() ? 1 : 0);
             if (Scripted)
             {
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Vertical = sVertical; Boost = sBoost; Secondary = sSecondary;

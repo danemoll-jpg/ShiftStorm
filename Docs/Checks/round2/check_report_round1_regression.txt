@@ -1,0 +1,32 @@
+ShiftStorm check 'round1', 2026-11-13 02:32, build 0.2.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, fixed seated pose, scale 0.93
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STRIP PASS: finished True in 50.9 s, gates 11/11, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+LANE drive-lane: form Drive -> Drive (no change expected), top speed 34.5 m/s, drift/carve used, resets 1
+LANE boat-lane: form Boat -> Boat (no change expected), top speed 26.0 m/s, drift/carve used, resets 0
+LANE fly-lane: form Fly -> Fly (no change expected), top speed 57.7 m/s, climb/dive weave, resets 0
+LANE dive-lane: form Dive -> Dive (no change expected), top speed 28.0 m/s, climb/dive weave, resets 0
+E1 low-speed ramp entry PASS: ramp at 10 m/s, flight entered at 30.1 m/s, reached the lagoon in Boat, resets 0
+E2 boosted water entry PASS: boat speed 30.0 m/s, level after 0.38 s, resets 0
+E3 steep nose-down water entry PASS: -50 deg, level after 0.24 s, resets 0
+E4 reset during a change PASS: reset 0.25 s into Drive->Fly; back in Fly; wing zone fired again: True
+E5 same trigger twice PASS: changes 1 (Boat->Dive), form Dive, resets 0
+E6 surfacing pool -> road PASS: changes Dive->Boat, Boat->Drive; Boat->Drive done 0.49 s before the wheels touched, resets 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 0.75 ms, 95th pct 1.22 ms, 99th pct 2.28 ms, worst 411.98 ms over 262063 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  strip        Drive->Fly  z   240.4  0.601 s  frames worst 8.49 / mean 0.71 ms
+  strip        Fly->Boat   z   500.8  0.600 s  frames worst 9.73 / mean 0.71 ms
+  strip        Boat->Dive  z   862.2  0.601 s  frames worst 32.85 / mean 0.84 ms
+  strip        Dive->Boat  z  1086.2  0.600 s  frames worst 3.51 / mean 0.70 ms
+  strip        Boat->Drive z  1201.2  0.601 s  frames worst 8.08 / mean 0.78 ms
+  e1-slow-ramp Drive->Fly  z   240.1  0.601 s  frames worst 5.03 / mean 0.68 ms
+  e1-slow-ramp Fly->Boat   z   500.2  0.601 s  frames worst 19.65 / mean 2.22 ms
+  e2-boost-water Fly->Boat   z   500.5  0.601 s  frames worst 7.81 / mean 0.71 ms
+  e3-nose-down Fly->Boat   z   500.5  0.600 s  frames worst 6.52 / mean 0.69 ms
+  e4-reset-mid Drive->Fly  z   240.1  cancelled by the reset  frames worst 5.70 / mean 0.72 ms
+  e4-reset-mid Drive->Fly  z   240.4  0.601 s  frames worst 5.57 / mean 0.73 ms
+  e5-twice     Boat->Dive  z   862.1  0.600 s  frames worst 3.56 / mean 0.69 ms
+  e6-surface-road Dive->Boat  z  1086.2  0.600 s  frames worst 15.84 / mean 0.85 ms
+  e6-surface-road Boat->Drive z  1201.1  0.606 s  frames worst 25.23 / mean 7.89 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 0, Abi lines: waterfall: lucky_1; finish: quipgood_2; reset: disaster_2; reset: trouble_1; waterfall: lucky_1
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

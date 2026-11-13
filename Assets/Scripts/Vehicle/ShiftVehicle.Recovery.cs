@@ -16,7 +16,7 @@ namespace ShiftStorm
             if (Input.ConsumeReset()) { if (Finished) Begin(Course); else Recover("reset button"); return; }   // after the finish: start again
             if (Finished) return;
             var p = Body.position;
-            if (Course.OutOfBounds(p)) { Recover("out of bounds"); return; }
+            if (Course.OutOfBounds(p, Progress)) { Recover("out of bounds"); return; }
             bool asking = Input.Throttle > .3f || Input.Brake > .3f;
             stuckFor = asking && Speed < shared.stuckSpeed ? stuckFor + dt : 0;
             if (stuckFor > shared.stuckSeconds) { Recover("stuck"); return; }
@@ -35,6 +35,15 @@ namespace ShiftStorm
             Place(anchor, anchor.mode, shared.resetSpeed);
             GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer);
             Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}) to the anchor at {anchor.progress:0} m in {anchor.mode}");
+        }
+
+        // Checks only: put the vehicle somewhere by hand (the skip / out-of-order tests), in a form, at a speed along its facing. Race progress
+        // (gates, best progress) is kept: this is how a cheat would look to the race logic.
+        public void DebugPlace(Vector3 pos, Quaternion rot, Mode mode, float speed, float hint = -1)
+        {
+            var g = new GameObject("check place"); g.transform.SetPositionAndRotation(pos, rot); var a = g.AddComponent<RecoveryAnchor>(); a.mode = mode; a.progress = Course.Project(pos, hint >= 0 ? hint : Progress, out _, out _);
+            float best = BestProgress; Place(a, mode, speed); BestProgress = Mathf.Max(best, Progress); lastBest = BestProgress; Destroy(g);
+            Note("check", $"placed by the check at {p3(pos)} as {mode}");
         }
 
         // Put the vehicle at an anchor in a form, at a speed along the anchor's facing; no change animation (the form snaps).
@@ -58,7 +67,8 @@ namespace ShiftStorm
             }
             Forms?.Snap(mode);
             LastZone = null; stuckFor = wrongWaterFor = noProgressFor = 0; lastBest = BestProgress;
-            lastPos = Body.position; Progress = Course ? Course.Project(lastPos, out _, out _) : 0;
+            lastPos = Body.position; Progress = Course ? (anchor.progress > 0 ? anchor.progress : Course.Project(lastPos, out _, out _)) : 0;
+            MissedGate = null; missedFor = 0;
             HeadingDeg = anchor.transform.eulerAngles.y;
         }
     }

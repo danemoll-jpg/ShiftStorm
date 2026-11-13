@@ -1,0 +1,43 @@
+ShiftStorm check 'round2', 2026-11-13 02:43, build 0.2.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: Blender FBX (Resources/Models/ShiftVehicle); driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LAP: Paradise Plunge, line 4285 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 141.82 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            18.2 s    20 s  -1.8
+  2 Cliffside Climb     Driving            17.5 s    20 s  -2.5
+  3 Sky Arch            Flying             22.4 s    25 s  -2.6
+  4 Lagoon Landing      Boating            14.3 s    15 s  -0.7
+  5 Mangrove Run        Boating            22.4 s    20 s  +2.4
+  6 Sunken Gateway      Diving             11.3 s    10 s  +1.3
+  7 Coral Vault         Diving             20.9 s    25 s  -4.2
+  8 Waterfall Return    Dive-boat-drive    14.9 s    15 s  -0.1
+  log: [ 141.82] finish in 141.82 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 3.62 ms, 95th pct 5.90 ms, 99th pct 10.08 ms, worst 744.84 ms over 28789 frames (99 over 16.7 ms); peak draw calls 0, batches 0, triangles 3041k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      3.37 /   5.08 / 327.01 ms       0 draws     956k tris
+  Cliffside Climb      3.39 /   5.17 / 744.84 ms       0 draws    1500k tris
+  Sky Arch             3.44 /   5.64 / 103.40 ms       0 draws    2767k tris
+  Lagoon Landing       2.86 /   4.64 /  91.36 ms       0 draws     789k tris
+  Mangrove Run         4.41 /   5.94 / 589.66 ms       0 draws    3011k tris
+  Sunken Gateway       4.20 /   6.44 / 611.99 ms       0 draws    1555k tris
+  Coral Vault          3.21 /   5.68 / 645.51 ms       0 draws    1170k tris
+  Waterfall Return     4.97 /   9.23 /  69.25 ms       0 draws    3041k tris
+RESULTS PASS: shown True, lap 141.82 s, 8 splits, new best True, best on file 141.82 s (local/round2/save\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 141.82 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "MISSED G6 dive portal - GO BACK", then reset (missed gate G6 dive portal) to the anchor at 3198 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+ABI PASS: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.95; head top 1.03 m under a closed canopy top of 1.10 m; Drive: 0 below the hull; Boat: 0 below the hull; Fly: 0 below the hull; Dive: 0 of 24187 vertices outside the closed canopy above the body, 0 below the hull
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.76 ms, 95th pct 6.35 ms, 99th pct 10.51 ms, worst 746.61 ms over 64575 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   555.6  0.601 s  frames worst 18.93 / mean 5.81 ms
+  lap          Fly->Boat   z  -340.6  0.602 s  frames worst 12.90 / mean 3.48 ms
+  lap          Boat->Dive  z  -120.4  0.601 s  frames worst 10.32 / mean 4.26 ms
+  lap          Dive->Boat  z  -275.7  0.605 s  frames worst 12.99 / mean 5.75 ms
+  lap          Boat->Drive z  -180.7  0.604 s  frames worst 68.37 / mean 11.69 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; finish: quipgood_1; reset: trouble_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
