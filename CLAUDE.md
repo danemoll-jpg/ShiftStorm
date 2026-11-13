@@ -16,8 +16,9 @@ submarine during a race. Current target: Paradise Plunge proof of concept.
   - `C:\Users\danmo\Tee-dOff` — art style, characters, rigs, voices, music,
     environments to reuse.
 - **3D models:** Blender, scripted where possible (`Tools/Blender/*.py`).
-  Hard-surface things (including the transforming vehicle) are built by
-  script. People, creatures and organic props: **Tripo, made by Dan by hand in
+  Simple hard-surface things are built by script. **Vehicles are not**
+  (Dan, 2026-11-13: script-built vehicles weren't good enough in Woodstock
+  Rush / Chastain Rush): they come from Tripo, made by Dan, one model per form. People, creatures and organic props: **Tripo, made by Dan by hand in
   the Tripo web app** — there are no Tripo API credits, so never call a Tripo
   API. Meshy is not used any more.
 - **Animation:** Mixamo (Dan rigs and downloads; FBX, Humanoid in Unity).
@@ -171,4 +172,6 @@ much faster, fullscreen by default.
   - **Coral Vault tunnel back on** (`ParadisePlunge.VaultTunnel`, `-noTunnel` turns it off): wider openings, smooth narrowing, an open
     climb-out, a stronger current; an AI that keeps hitting rock gives up its shortcut. Saves about 1.2 s (not the 2-3 s aimed for).
 
-Current objective: **none set** — Round 5 is planned with Dan after he plays build 5 (0.4.0); see `TODO.md` ("For Dan to check").
+Current objective: **Round 5** (unattended): Part A speed (feel and real speed, Easy really easy), then Part B the first art slice
+(vehicle design stage 1: Tripo prompts for 3 directions, a swap-with-effect change, a Garage viewer; a polished Cliffside Climb -> Sky Arch -> Lagoon Landing stretch). Release build 6
+(0.5.0). See `TODO.md`.
