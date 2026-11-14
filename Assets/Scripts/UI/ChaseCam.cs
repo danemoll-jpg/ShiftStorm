@@ -10,6 +10,10 @@ namespace ShiftStorm
     // so it no longer drops back at the new speeds.
     public sealed class ChaseCam : MonoBehaviour
     {
+        static float shakeUntil, shakeAmp, shakeLen;
+        public static float LastShake { get; private set; } = -1;
+        public static void Shake(float amp, float seconds) { shakeAmp = Mathf.Max(amp, Time.time < shakeUntil ? shakeAmp : 0); shakeLen = seconds; shakeUntil = Time.time + seconds; LastShake = Time.time; }
+
         public ShiftVehicle target;
         float distance = 7.5f, height = 2.6f, pitchFollow, fov = 65f; Vector3 velocity, lastTarget, offset; bool snapped; int lastResets = -1; Camera cam;
         public const float BaseFov = 65f;
@@ -93,6 +97,8 @@ namespace ShiftStorm
                 float a = (.06f + (1 - target.LastWallKeep) * .8f) * (1 - since / .3f), tt = Time.time * 41f;
                 transform.position += transform.right * ((Mathf.PerlinNoise(tt, 3) - .5f) * 2 * a) + transform.up * ((Mathf.PerlinNoise(3, tt) - .5f) * 2 * a);
             }
+            // Round 8 item 1: a shake from the world (the T. rex's roar)
+            if (Time.time < shakeUntil) { float a = shakeAmp * (shakeUntil - Time.time) / Mathf.Max(.01f, shakeLen), tt = Time.time * 33f; transform.position += transform.right * ((Mathf.PerlinNoise(tt, 7) - .5f) * 2 * a) + transform.up * ((Mathf.PerlinNoise(7, tt) - .5f) * 2 * a); }
             // underwater look (set again just before this camera renders: BeforeRender)
             Fog();
         }

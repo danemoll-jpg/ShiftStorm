@@ -1,0 +1,49 @@
+{
+ "speaker": "chip",
+ "lines": [
+  {
+   "id": "disaster_1",
+   "text": "Nobody saw that. Right?"
+  },
+  {
+   "id": "disaster_2",
+   "text": "Cut! Cut! Take two!"
+  },
+  {
+   "id": "gasp_1",
+   "text": "Oh!"
+  },
+  {
+   "id": "lose_1",
+   "text": "The crowd still loves me."
+  },
+  {
+   "id": "messup_1",
+   "text": "Noooooo!"
+  },
+  {
+   "id": "messup_2",
+   "text": "Oh no, oh no!"
+  },
+  {
+   "id": "messup_3",
+   "text": "That is NOT going in the highlight reel!"
+  },
+  {
+   "id": "mishit_1",
+   "text": "I meant to do that."
+  },
+  {
+   "id": "quipgood_1",
+   "text": "And the crowd goes wild!"
+  },
+  {
+   "id": "trouble_2",
+   "text": "Who put that there?"
+  },
+  {
+   "id": "win_1",
+   "text": "Was there ever any doubt?"
+  }
+ ]
+}

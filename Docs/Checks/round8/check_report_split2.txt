@@ -1,0 +1,41 @@
+ShiftStorm check 'split', 2026-11-14 13:49, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SPLIT: top / bottom, player 1 Abi (camera (x:0.00, y:0.50, width:1.00, height:0.50)), player 2 Rocket Rae (camera (x:0.00, y:0.00, width:1.00, height:0.50)), racers Abi, Rocket Rae, Chip "Showtime" Sterling, Vivi
+  quality while split: LOD bias 2.00 -> 1.20, shadow distance 110 -> 66 m, far clip 2600 -> 1150 m, Detail layer cull 800 -> 500 m, texture mip limit 0 -> 1
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 0.9 m, P2 1.1 m (pause frame included)
+  closed again from player 2's Menu: menu open False, time scale 1
+  Abi [P1]: 126.87 s, place 2, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Rocket Rae [P2]: 125.00 s, place 1, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Chip "Showtime" Sterling: DNF, place 3, gates 7/11 (0 1 2 3 4 5 6) BAD SEQUENCE, resets 0
+  Vivi: DNF, place 4, gates 7/11 (0 1 2 3 4 5 6) BAD SEQUENCE, resets 0
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 124 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 2:05.00
+SPLIT pictures: 27 so far, player 2 changes pictured 7; sound: engine mix 0.7, P1 engine non-spatial, P2 engine non-spatial (0), listener on player 1's camera only (1 listener)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 9.29 ms, 95th pct 14.86 ms, 99th pct 16.59 ms, worst 29.41 ms over 10341 frames (86 over 16.7 ms); peak draw calls 0, batches 0, triangles 8604k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade     12.42 /  16.92 /  29.41 ms       0 draws    5910k tris
+  Cliffside Climb      7.95 /  10.48 /  13.33 ms       0 draws    6770k tris
+  Sky Arch             9.11 /  14.37 /  18.19 ms       0 draws    8604k tris
+  Lagoon Landing       7.55 /  13.14 /  14.57 ms       0 draws    4989k tris
+  Mangrove Run        11.75 /  13.66 /  18.17 ms       0 draws    4787k tris
+  Sunken Gateway       9.55 /  13.17 /  15.50 ms       0 draws    6411k tris
+  Coral Vault          6.54 /  11.94 /  15.46 ms       0 draws    5087k tris
+  Waterfall Return    13.00 /  14.98 /  18.26 ms       0 draws    8149k tris
+  (both views rendered every frame: the cost of a split-screen frame at 1280 x 800 on this PC)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.17  FOV 90.0  particles 80  speed 101 % of top
+  Fly   pitch 2.31  wind 0.19  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.00  wind 0.18  FOV 90.0  particles 145  speed 100 % of top
+  Dive  pitch 1.64  wind 0.05  FOV 90.0  particles 115  speed 112 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 10.24 ms, 95th pct 18.15 ms, 99th pct 20.23 ms, worst 59.57 ms over 12711 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  split        Drive->Fly  z   944.9  0.603 s  frames worst 17.74 / mean 14.70 ms
+  split        Fly->Boat   z  -606.1  0.604 s  frames worst 11.32 / mean 9.09 ms
+  split        Boat->Dive  z  -201.8  0.603 s  frames worst 15.42 / mean 13.01 ms
+  split        Dive->Boat  z  -466.8  0.602 s  frames worst 18.78 / mean 16.00 ms
+  split        Boat->Drive z  -304.5  0.604 s  frames worst 19.45 / mean 16.51 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 4, Abi lines: waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

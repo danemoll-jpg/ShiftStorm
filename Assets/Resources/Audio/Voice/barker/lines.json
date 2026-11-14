@@ -2,6 +2,174 @@
  "speaker": "TeedOff Barker",
  "lines": [
   {
+   "id": "arch_1",
+   "text": "Through the Sky Arch! Thread the needle, folks!"
+  },
+  {
+   "id": "arch_2",
+   "text": "The Sky Arch! Biggest rock in Paradise!"
+  },
+  {
+   "id": "behind_1",
+   "text": "The pack's getting away! Time to find some speed!"
+  },
+  {
+   "id": "behind_2",
+   "text": "Bringing up the rear, folks! But the race isn't over!"
+  },
+  {
+   "id": "behind_3",
+   "text": "A long way back! Hit that boost, my friend!"
+  },
+  {
+   "id": "boost_1",
+   "text": "Boost! Hold on to something!"
+  },
+  {
+   "id": "boost_2",
+   "text": "Kaboom! That's the boost, folks!"
+  },
+  {
+   "id": "bronto_1",
+   "text": "The brontosaurus herd is out for a stroll! Aren't they lovely?"
+  },
+  {
+   "id": "bronto_2",
+   "text": "Mind the long necks, folks! They have the right of way!"
+  },
+  {
+   "id": "bychip_1",
+   "text": "Chip Showtime Sterling slides on by! And he waves to the crowd!"
+  },
+  {
+   "id": "bychip_2",
+   "text": "Chip takes the place! Somebody cue the spotlight!"
+  },
+  {
+   "id": "byrae_1",
+   "text": "Rocket Rae muscles her way past! Look at those biceps go!"
+  },
+  {
+   "id": "byrae_2",
+   "text": "Here comes Rocket Rae! Full power, no brakes!"
+  },
+  {
+   "id": "byvivi_1",
+   "text": "Vivi glides past! Graceful as a swan, fast as a rocket!"
+  },
+  {
+   "id": "byvivi_2",
+   "text": "And Vivi takes the place! Without a hair out of place!"
+  },
+  {
+   "id": "canyon_1",
+   "text": "The car line through the jungle canyon! Past the long necks!"
+  },
+  {
+   "id": "canyon_2",
+   "text": "Down the canyon road! Rocks on the left, dinos on the right!"
+  },
+  {
+   "id": "catch_1",
+   "text": "Closing the gap! They're reeling them in, folks!"
+  },
+  {
+   "id": "catch_2",
+   "text": "Catching up fast! Somebody's been eating their vegetables!"
+  },
+  {
+   "id": "catch_3",
+   "text": "The gap is shrinking! Here they come!"
+  },
+  {
+   "id": "cliff_1",
+   "text": "The Cliff Gap! Fly, little car, fly!"
+  },
+  {
+   "id": "cliff_2",
+   "text": "Over the ravine! My heart's in my mouth, folks!"
+  },
+  {
+   "id": "close_1",
+   "text": "Side by side, folks! Nobody blink!"
+  },
+  {
+   "id": "close_2",
+   "text": "Wheel to wheel, wing to wing! This is racing!"
+  },
+  {
+   "id": "close_3",
+   "text": "Inches apart! I can't watch, but I can't look away!"
+  },
+  {
+   "id": "creek_1",
+   "text": "Over the creek! Don't look down, the fish are watching!"
+  },
+  {
+   "id": "creek_2",
+   "text": "Creek Jump! Splash-free, folks!"
+  },
+  {
+   "id": "down_1",
+   "text": "Ohhh, dropped a place! Plenty of island left, folks!"
+  },
+  {
+   "id": "down_2",
+   "text": "Lost a spot there! Time to dig deep!"
+  },
+  {
+   "id": "down_3",
+   "text": "Slipping back! Don't let them get away!"
+  },
+  {
+   "id": "fill_1",
+   "text": "What a day in Paradise, folks! Sun, sea and supercharged engines!"
+  },
+  {
+   "id": "fill_10",
+   "text": "Is it a car? Is it a boat? Folks, it's both, and more!"
+  },
+  {
+   "id": "fill_11",
+   "text": "Look at them go! This is why I love my job!"
+  },
+  {
+   "id": "fill_12",
+   "text": "Ladies and gentlemen, the race is on and the island is watching!"
+  },
+  {
+   "id": "fill_2",
+   "text": "Remember, folks, the dinosaurs were here first! Be polite!"
+  },
+  {
+   "id": "fill_3",
+   "text": "Car, boat, plane and submarine! One machine, four times the fun!"
+  },
+  {
+   "id": "fill_4",
+   "text": "I'd race too, but my hat doesn't fit in the cockpit!"
+  },
+  {
+   "id": "fill_5",
+   "text": "Step right up and watch the greatest race on the island!"
+  },
+  {
+   "id": "fill_6",
+   "text": "Smell that jungle air, folks! A little bit volcano, a little bit dinosaur!"
+  },
+  {
+   "id": "fill_7",
+   "text": "Keep your hands inside the vehicle at all times! Unless you're waving!"
+  },
+  {
+   "id": "fill_8",
+   "text": "Every shape a machine can take, and they're taking them all at full speed!"
+  },
+  {
+   "id": "fill_9",
+   "text": "Don't worry about the volcano, folks! It only rumbles on Tuesdays!"
+  },
+  {
    "id": "final_1",
    "text": "Here comes the final stretch! Who wants it most?"
   },
@@ -10,12 +178,24 @@
    "text": "Back on the road and heading for home, folks!"
   },
   {
+   "id": "final_3",
+   "text": "The finish line is in sight! Give it everything!"
+  },
+  {
+   "id": "gateway_1",
+   "text": "The Sunken Gateway! Ancient stones, ancient secrets!"
+  },
+  {
    "id": "go_1",
    "text": "And they're off!"
   },
   {
    "id": "go_2",
    "text": "Go, go, go! Off they go, folks!"
+  },
+  {
+   "id": "go_3",
+   "text": "Green light! Put the pedal down!"
   },
   {
    "id": "jump_1",
@@ -32,6 +212,26 @@
   {
    "id": "jump_4",
    "text": "Stuck it! Did you see that, ladies and gentlemen?"
+  },
+  {
+   "id": "jump_5",
+   "text": "Big air, folks! Big, big air!"
+  },
+  {
+   "id": "lagoon_1",
+   "text": "Lagoon Landing! Hope you packed your swimsuit!"
+  },
+  {
+   "id": "last_1",
+   "text": "Last place, but you finished! Next time, more boost!"
+  },
+  {
+   "id": "last_2",
+   "text": "Somebody has to bring up the rear! Better luck next race, folks!"
+  },
+  {
+   "id": "last_3",
+   "text": "Ohhh, last across the line! Step right up and try again!"
   },
   {
    "id": "lead_1",
@@ -58,8 +258,28 @@
    "text": "Upside down at full throttle! Marvelous!"
   },
   {
+   "id": "loop_4",
+   "text": "Loop-de-loop! Gravity takes a holiday, folks!"
+  },
+  {
    "id": "loopfail_1",
    "text": "Ohhh, not enough speed for the loop! Back you go!"
+  },
+  {
+   "id": "loopfail_2",
+   "text": "Not enough speed! The loop wins this round!"
+  },
+  {
+   "id": "loopfail_3",
+   "text": "Halfway up and back down again! Try it with more boost!"
+  },
+  {
+   "id": "mangrove_1",
+   "text": "Into the Mangrove Run! Mind the roots, folks!"
+  },
+  {
+   "id": "mangrove_2",
+   "text": "Twisting through the swamp! It's a jungle in there!"
   },
   {
    "id": "miss_1",
@@ -74,6 +294,42 @@
    "text": "Ohhh! So close, folks! Try again, try again!"
   },
   {
+   "id": "miss_4",
+   "text": "Missed the gate! Three seconds in the penalty box, folks!"
+  },
+  {
+   "id": "miss_5",
+   "text": "So close to the gate! The judges say penalty!"
+  },
+  {
+   "id": "nest_1",
+   "text": "Look at the nests! Dino eggs as big as beach balls!"
+  },
+  {
+   "id": "passchip_1",
+   "text": "Past Chip Sterling! Sorry Chip, the show goes on!"
+  },
+  {
+   "id": "passchip_2",
+   "text": "Chip gets passed! That's not in his script, folks!"
+  },
+  {
+   "id": "passrae_1",
+   "text": "Right past Rocket Rae! Rae won't like that one bit!"
+  },
+  {
+   "id": "passrae_2",
+   "text": "And Rocket Rae gets left in the dust!"
+  },
+  {
+   "id": "passvivi_1",
+   "text": "Past Vivi! Elegant, but not fast enough!"
+  },
+  {
+   "id": "passvivi_2",
+   "text": "Vivi gets overtaken! She'll be furious, darling!"
+  },
+  {
    "id": "photo_1",
    "text": "It's a photo finish! Somebody get me a camera!"
   },
@@ -82,12 +338,52 @@
    "text": "Neck and neck to the line! Too close to call!"
   },
   {
+   "id": "plesio_1",
+   "text": "A long-neck in the lagoon! Say hello, folks!"
+  },
+  {
+   "id": "plesio_2",
+   "text": "Something big is swimming down there! Don't splash it!"
+  },
+  {
+   "id": "podium_1",
+   "text": "A podium finish! Step right up and take a bow!"
+  },
+  {
+   "id": "podium_2",
+   "text": "Not first, but on the podium! The crowd still loves you!"
+  },
+  {
+   "id": "podium_3",
+   "text": "A fine finish, folks! A prize from the middle shelf!"
+  },
+  {
+   "id": "ptero_1",
+   "text": "Pterodactyls overhead! Watch your windscreen, folks!"
+  },
+  {
+   "id": "ptero_2",
+   "text": "Flying with the pterodactyls! They want a race!"
+  },
+  {
+   "id": "raptor_1",
+   "text": "Raptors running alongside! Are they racing too?"
+  },
+  {
+   "id": "raptor_2",
+   "text": "Those raptors are keeping up! Drive faster, please!"
+  },
+  {
    "id": "results_1",
    "text": "Thank you, thank you! Come back for the next race, folks!"
   },
   {
    "id": "results_2",
    "text": "Step right up and see the results!"
+  },
+  {
+   "id": "results_3",
+   "text": "And there we have it! What a race, ladies and gentlemen!"
   },
   {
    "id": "results_lost_1",
@@ -102,8 +398,20 @@
    "text": "Through the secret passage! Clever, clever!"
   },
   {
+   "id": "shortcut_3",
+   "text": "The secret way! Don't tell the others, folks!"
+  },
+  {
+   "id": "skeleton_1",
+   "text": "Fossils in the walls, folks! Don't end up as one!"
+  },
+  {
    "id": "splash_1",
    "text": "Into the creek! A little swim never hurt anyone!"
+  },
+  {
+   "id": "splash_2",
+   "text": "Swimming isn't racing, folks! Back you go!"
   },
   {
    "id": "start_1",
@@ -118,6 +426,10 @@
    "text": "Welcome to Paradise Plunge! Road, sky, lagoon and the deep blue below!"
   },
   {
+   "id": "start_4",
+   "text": "Hold on to your helmets! Paradise Plunge is about to go wild!"
+  },
+  {
    "id": "stay_1",
    "text": "No wings for this one! Keeping it on four wheels!"
   },
@@ -126,8 +438,120 @@
    "text": "Who needs wings? Not this daredevil!"
   },
   {
+   "id": "stay_3",
+   "text": "Staying a car! Down the canyon road we go!"
+  },
+  {
+   "id": "toboat_1",
+   "text": "Splashdown! Now it's a boat!"
+  },
+  {
+   "id": "toboat_2",
+   "text": "Hull down, engines roaring, it's boat time, folks!"
+  },
+  {
+   "id": "toboat_3",
+   "text": "Into the lagoon with a splash! Who brought towels?"
+  },
+  {
+   "id": "toboat_4",
+   "text": "Ahoy there! Full speed ahead through the water!"
+  },
+  {
+   "id": "tocar_1",
+   "text": "Wheels down! Back on the blacktop, folks!"
+  },
+  {
+   "id": "tocar_2",
+   "text": "And it's a car again! Rubber meets the road!"
+  },
+  {
+   "id": "tocar_3",
+   "text": "Out of the water and onto the road! What a machine!"
+  },
+  {
+   "id": "tocar_4",
+   "text": "Four wheels and a dream, ladies and gentlemen!"
+  },
+  {
+   "id": "toplane_1",
+   "text": "Wings out! Up, up and away!"
+  },
+  {
+   "id": "toplane_2",
+   "text": "It's a plane now, folks! Mind the pterodactyls!"
+  },
+  {
+   "id": "toplane_3",
+   "text": "Off the ramp and into the sky! Spectacular!"
+  },
+  {
+   "id": "toplane_4",
+   "text": "Look at it soar! The clouds are jealous, folks!"
+  },
+  {
+   "id": "tosub_1",
+   "text": "Down periscope! It's a submarine!"
+  },
+  {
+   "id": "tosub_2",
+   "text": "Diving deep into the flooded caves, folks!"
+  },
+  {
+   "id": "tosub_3",
+   "text": "Into the deep blue, where the fishies don't pay rent!"
+  },
+  {
+   "id": "tosub_4",
+   "text": "Hatches sealed! Glub glub, ladies and gentlemen!"
+  },
+  {
+   "id": "trex_1",
+   "text": "Look out for the T. rex! Don't feed it, folks!"
+  },
+  {
+   "id": "trex_2",
+   "text": "Is that T. rex smiling? I think it's smiling!"
+  },
+  {
+   "id": "trex_3",
+   "text": "The king of the cliffs is watching! Wave, but not too much!"
+  },
+  {
    "id": "trial_1",
    "text": "One racer, one clock, no excuses! Let's see that time, folks!"
+  },
+  {
+   "id": "trial_2",
+   "text": "The clock is ticking, folks! Every second counts on this island!"
+  },
+  {
+   "id": "trike_1",
+   "text": "Triceratops in the mangroves! Three horns and zero patience!"
+  },
+  {
+   "id": "trike_2",
+   "text": "Steer clear of the triceratops, folks! They don't do selfies!"
+  },
+  {
+   "id": "up_1",
+   "text": "Up a place! Keep it coming!"
+  },
+  {
+   "id": "up_2",
+   "text": "Climbing the order, folks! Who can stop them?"
+  },
+  {
+   "id": "up_3",
+   "text": "Another place gained! The crowd loves a comeback!"
+  },
+  {
+   "id": "vault_1",
+   "text": "The Coral Vault! Glowing crystals and things that go bump!"
+  },
+  {
+   "id": "vault_2",
+   "text": "Down in the deep! Watch those arches, folks!"
   },
   {
    "id": "wall_1",
@@ -140,6 +564,26 @@
   {
    "id": "wall_3",
    "text": "Mind the scenery, it was here first!"
+  },
+  {
+   "id": "wall_4",
+   "text": "Ooh! The scenery fights back, folks!"
+  },
+  {
+   "id": "wall_5",
+   "text": "Boing! Somebody check the paintwork!"
+  },
+  {
+   "id": "wall_6",
+   "text": "That's gonna cost a few seconds!"
+  },
+  {
+   "id": "waterfall_1",
+   "text": "Through the waterfall! Free car wash, folks!"
+  },
+  {
+   "id": "waterfall_2",
+   "text": "Bursting through the falls! Spectacular!"
   },
   {
    "id": "win_abi",
@@ -184,6 +628,10 @@
   {
    "id": "wings_2",
    "text": "It's a car! It's a plane! It's both, folks!"
+  },
+  {
+   "id": "wings_3",
+   "text": "The scenic route! Over the lake through the golden rings!"
   }
  ]
 }

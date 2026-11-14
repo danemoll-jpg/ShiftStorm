@@ -67,6 +67,120 @@ LINES = {
     "results_1": "[showman] Thank you, thank you! Come back for the next race, folks!",
     "results_2": "[showman] Step right up and see the results!",
     "trial_1": "[showman] One racer, one clock, no excuses! Let's see that time, folks!",
+    # ---- Round 8 item 2: he talks a lot more (a line every 6-10 s of racing): every form change, overtakes by rival name, places,
+    # near misses and penalties, walls, the loop, each jump, landmarks and dinosaurs, close racing, the last stretch, the finish by place
+    "trial_2": "[showman] The clock is ticking, folks! Every second counts on this island!",
+    "start_4": "[showman] Hold on to your helmets! Paradise Plunge is about to go wild!",
+    "go_3": "[shouting] Green light! Put the pedal down!",
+    "tocar_1": "[showman] Wheels down! Back on the blacktop, folks!",
+    "tocar_2": "[excited] And it's a car again! Rubber meets the road!",
+    "tocar_3": "[delighted] Out of the water and onto the road! What a machine!",
+    "tocar_4": "[showman] Four wheels and a dream, ladies and gentlemen!",
+    "toboat_1": "[showman] Splashdown! Now it's a boat!",
+    "toboat_2": "[excited] Hull down, engines roaring, it's boat time, folks!",
+    "toboat_3": "[delighted] Into the lagoon with a splash! Who brought towels?",
+    "toboat_4": "[showman] Ahoy there! Full speed ahead through the water!",
+    "toplane_1": "[shouting] Wings out! Up, up and away!",
+    "toplane_2": "[excited] It's a plane now, folks! Mind the pterodactyls!",
+    "toplane_3": "[showman] Off the ramp and into the sky! Spectacular!",
+    "toplane_4": "[delighted] Look at it soar! The clouds are jealous, folks!",
+    "tosub_1": "[showman] Down periscope! It's a submarine!",
+    "tosub_2": "[excited] Diving deep into the flooded caves, folks!",
+    "tosub_3": "[mysterious] Into the deep blue, where the fishies don't pay rent!",
+    "tosub_4": "[showman] Hatches sealed! Glub glub, ladies and gentlemen!",
+    "passrae_1": "[excited] Right past Rocket Rae! Rae won't like that one bit!",
+    "passrae_2": "[showman] And Rocket Rae gets left in the dust!",
+    "passchip_1": "[excited] Past Chip Sterling! Sorry Chip, the show goes on!",
+    "passchip_2": "[chuckles] Chip gets passed! That's not in his script, folks!",
+    "passvivi_1": "[excited] Past Vivi! Elegant, but not fast enough!",
+    "passvivi_2": "[showman] Vivi gets overtaken! She'll be furious, darling!",
+    "byrae_1": "[excited] Rocket Rae muscles her way past! Look at those biceps go!",
+    "byrae_2": "[showman] Here comes Rocket Rae! Full power, no brakes!",
+    "bychip_1": "[excited] Chip Showtime Sterling slides on by! And he waves to the crowd!",
+    "bychip_2": "[showman] Chip takes the place! Somebody cue the spotlight!",
+    "byvivi_1": "[excited] Vivi glides past! Graceful as a swan, fast as a rocket!",
+    "byvivi_2": "[showman] And Vivi takes the place! Without a hair out of place!",
+    "up_1": "[excited] Up a place! Keep it coming!",
+    "up_2": "[showman] Climbing the order, folks! Who can stop them?",
+    "up_3": "[delighted] Another place gained! The crowd loves a comeback!",
+    "down_1": "[sympathetic] Ohhh, dropped a place! Plenty of island left, folks!",
+    "down_2": "[showman] Lost a spot there! Time to dig deep!",
+    "down_3": "[chuckles] Slipping back! Don't let them get away!",
+    "close_1": "[excited] Side by side, folks! Nobody blink!",
+    "close_2": "[showman] Wheel to wheel, wing to wing! This is racing!",
+    "close_3": "[excited] Inches apart! I can't watch, but I can't look away!",
+    "behind_1": "[showman] The pack's getting away! Time to find some speed!",
+    "behind_2": "[sympathetic] Bringing up the rear, folks! But the race isn't over!",
+    "behind_3": "[showman] A long way back! Hit that boost, my friend!",
+    "catch_1": "[excited] Closing the gap! They're reeling them in, folks!",
+    "catch_2": "[showman] Catching up fast! Somebody's been eating their vegetables!",
+    "catch_3": "[excited] The gap is shrinking! Here they come!",
+    "creek_1": "[showman] Over the creek! Don't look down, the fish are watching!",
+    "creek_2": "[excited] Creek Jump! Splash-free, folks!",
+    "cliff_1": "[shouting] The Cliff Gap! Fly, little car, fly!",
+    "cliff_2": "[excited] Over the ravine! My heart's in my mouth, folks!",
+    "boost_1": "[excited] Boost! Hold on to something!",
+    "boost_2": "[showman] Kaboom! That's the boost, folks!",
+    "trex_1": "[shouting] Look out for the T. rex! Don't feed it, folks!",
+    "trex_2": "[nervous] Is that T. rex smiling? I think it's smiling!",
+    "trex_3": "[showman] The king of the cliffs is watching! Wave, but not too much!",
+    "bronto_1": "[delighted] The brontosaurus herd is out for a stroll! Aren't they lovely?",
+    "bronto_2": "[chuckles] Mind the long necks, folks! They have the right of way!",
+    "raptor_1": "[excited] Raptors running alongside! Are they racing too?",
+    "raptor_2": "[nervous] Those raptors are keeping up! Drive faster, please!",
+    "ptero_1": "[showman] Pterodactyls overhead! Watch your windscreen, folks!",
+    "ptero_2": "[excited] Flying with the pterodactyls! They want a race!",
+    "plesio_1": "[delighted] A long-neck in the lagoon! Say hello, folks!",
+    "plesio_2": "[mysterious] Something big is swimming down there! Don't splash it!",
+    "trike_1": "[chuckles] Triceratops in the mangroves! Three horns and zero patience!",
+    "trike_2": "[showman] Steer clear of the triceratops, folks! They don't do selfies!",
+    "nest_1": "[delighted] Look at the nests! Dino eggs as big as beach balls!",
+    "skeleton_1": "[mysterious] Fossils in the walls, folks! Don't end up as one!",
+    "arch_1": "[showman] Through the Sky Arch! Thread the needle, folks!",
+    "arch_2": "[excited] The Sky Arch! Biggest rock in Paradise!",
+    "lagoon_1": "[showman] Lagoon Landing! Hope you packed your swimsuit!",
+    "mangrove_1": "[showman] Into the Mangrove Run! Mind the roots, folks!",
+    "mangrove_2": "[excited] Twisting through the swamp! It's a jungle in there!",
+    "gateway_1": "[mysterious] The Sunken Gateway! Ancient stones, ancient secrets!",
+    "vault_1": "[mysterious] The Coral Vault! Glowing crystals and things that go bump!",
+    "vault_2": "[showman] Down in the deep! Watch those arches, folks!",
+    "waterfall_1": "[shouting] Through the waterfall! Free car wash, folks!",
+    "waterfall_2": "[excited] Bursting through the falls! Spectacular!",
+    "canyon_1": "[showman] The car line through the jungle canyon! Past the long necks!",
+    "canyon_2": "[excited] Down the canyon road! Rocks on the left, dinos on the right!",
+    "wall_4": "[wincing] Ooh! The scenery fights back, folks!",
+    "wall_5": "[chuckles] Boing! Somebody check the paintwork!",
+    "wall_6": "[sympathetic] That's gonna cost a few seconds!",
+    "miss_4": "[showman] Missed the gate! Three seconds in the penalty box, folks!",
+    "miss_5": "[sympathetic] So close to the gate! The judges say penalty!",
+    "loop_4": "[shouting] Loop-de-loop! Gravity takes a holiday, folks!",
+    "loopfail_2": "[sympathetic] Not enough speed! The loop wins this round!",
+    "loopfail_3": "[chuckles] Halfway up and back down again! Try it with more boost!",
+    "jump_5": "[excited] Big air, folks! Big, big air!",
+    "wings_3": "[showman] The scenic route! Over the lake through the golden rings!",
+    "stay_3": "[showman] Staying a car! Down the canyon road we go!",
+    "shortcut_3": "[sly] The secret way! Don't tell the others, folks!",
+    "splash_2": "[chuckles] Swimming isn't racing, folks! Back you go!",
+    "final_3": "[excited] The finish line is in sight! Give it everything!",
+    "fill_1": "[showman] What a day in Paradise, folks! Sun, sea and supercharged engines!",
+    "fill_2": "[delighted] Remember, folks, the dinosaurs were here first! Be polite!",
+    "fill_3": "[showman] Car, boat, plane and submarine! One machine, four times the fun!",
+    "fill_4": "[chuckles] I'd race too, but my hat doesn't fit in the cockpit!",
+    "fill_5": "[showman] Step right up and watch the greatest race on the island!",
+    "fill_6": "[delighted] Smell that jungle air, folks! A little bit volcano, a little bit dinosaur!",
+    "fill_7": "[showman] Keep your hands inside the vehicle at all times! Unless you're waving!",
+    "fill_8": "[excited] Every shape a machine can take, and they're taking them all at full speed!",
+    "fill_9": "[chuckles] Don't worry about the volcano, folks! It only rumbles on Tuesdays!",
+    "fill_10": "[showman] Is it a car? Is it a boat? Folks, it's both, and more!",
+    "fill_11": "[delighted] Look at them go! This is why I love my job!",
+    "fill_12": "[showman] Ladies and gentlemen, the race is on and the island is watching!",
+    "podium_1": "[showman] A podium finish! Step right up and take a bow!",
+    "podium_2": "[delighted] Not first, but on the podium! The crowd still loves you!",
+    "podium_3": "[showman] A fine finish, folks! A prize from the middle shelf!",
+    "last_1": "[sympathetic] Last place, but you finished! Next time, more boost!",
+    "last_2": "[chuckles] Somebody has to bring up the rear! Better luck next race, folks!",
+    "last_3": "[sympathetic] Ohhh, last across the line! Step right up and try again!",
+    "results_3": "[showman] And there we have it! What a race, ladies and gentlemen!",
 }
 # his Tee'd Off clips that fit a race (copied as they are): id here -> Tee'd Off file
 EXISTING = {
@@ -97,8 +211,11 @@ def to_ogg(mp3, path):
     tmp = path + ".mp3"
     with open(tmp, "wb") as f:
         f.write(mp3)
-    # trim leading / trailing silence, a short fade, mono 44.1 kHz Vorbis
-    af = "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse,afade=t=out:st=0:d=0.02:curve=tri"
+    # trim leading / trailing silence, a short fade at each end, level to -16 LUFS (Tee'd Off's voices and the music sit at -15 / -16),
+    # mono 44.1 kHz Vorbis. Round 8: build 8's filter had "afade=t=out:st=0:d=0.02": a fade-out from the clip's first sample, so every line
+    # recorded in Round 7 was silent after 20 ms (measured -43 LUFS): Dan's "can't hear most of Barnaby's lines". Those were re-recorded.
+    af = ("silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,"
+          "afade=t=in:d=0.03,areverse,afade=t=in:d=0.005,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100")
     subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", tmp, "-af", af, "-ac", "1", "-ar", "44100", "-c:a", "libvorbis", "-q:a", "5", path], check=True)
     os.remove(tmp)
 
@@ -115,10 +232,13 @@ def copy_existing():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--go", action="store_true")
-    ap.add_argument("--cap", type=int, default=4000)
+    ap.add_argument("--cap", type=int, default=12000)
+    ap.add_argument("--redo", action="store_true", help="re-record every ElevenLabs line (build 8's silent clips)")
     args = ap.parse_args()
+    if args.redo and not args.go:
+        args.redo = True
     os.makedirs(OUT, exist_ok=True)
-    todo = [(k, t) for k, t in LINES.items() if not os.path.exists(os.path.join(OUT, k + ".ogg"))]
+    todo = [(k, t) for k, t in LINES.items() if args.redo or not os.path.exists(os.path.join(OUT, k + ".ogg"))]
     est = sum(len(t) for _, t in todo)
     print(f"{len(LINES)} new lines, {len(todo)} not recorded yet (about {est} credits); {len(EXISTING)} Tee'd Off clips to copy")
     if not args.go:

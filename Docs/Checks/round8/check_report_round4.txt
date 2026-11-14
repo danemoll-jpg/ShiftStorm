@@ -1,0 +1,142 @@
+ShiftStorm check 'round4', 2026-11-14 13:21, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SCAN: every collider inside the route's clear width, every 2 m along the line: road = between the edge lines (half width - 1 m), 0.3-3.8 m over the surface; air = 22 m wide (the flight rings' size), from 1.5 m under the line to 11 m over it; water = the buoy lane (+-13 m), 1.6 m under to 2.4 m over the surface; cave = +-14 m, +-2.5 m around the line's depth; pool / ramp = +-10 m, 0.2-3.2 m over the line
+SCAN FOUND: 7 colliders inside the route's clear width:
+  Road (under Course Paradise Plunge, layer 0): road from 286 to 318 m, its centre +0.0 m from the line, bounds centre (0.0, 3.1, 176.2) size (26.0, 4.2, 77.8)
+  Barrier L (under Course Paradise Plunge, layer 10): road from 644 to 646 m, its centre +5.2 m from the line, bounds centre (5.6, 3.6, 594.7) size (6.7, 4.7, 109.5)
+  Barrier R (under Course Paradise Plunge, layer 10): road from 790 to 792 m, its centre -8.2 m from the line, bounds centre (7.6, 2.0, 517.4) size (1.3, 1.5, 44.9)
+  Road (under Course Paradise Plunge, layer 0): road from 872 to 904 m, its centre +0.0 m from the line, bounds centre (16.0, 3.1, 594.7) size (26.0, 4.2, 109.5)
+  Road (under Course Paradise Plunge, layer 0): road from 1560 to 1584 m, its centre +1.4 m from the line, bounds centre (173.9, 7.1, 1176.8) size (121.8, 16.1, 34.9)
+  Road (under Course Paradise Plunge, layer 0): road from 1584 to 1594 m, its centre +0.0 m from the line, bounds centre (238.6, 7.8, 1182.0) size (10.2, 17.7, 25.4)
+  Cave roof (under Course Paradise Plunge, layer 0): cave from 6802 to 6814 m, its centre +0.3 m from the line, bounds centre (-4.2, -0.3, -530.1) size (51.8, 2.5, 47.7)
+  sign Sign wings optional at 833 m (road): +15.5 m from the line, the route's edge at 7.9 m: outside
+  sign Sign Fly at 833 m (road): +15.5 m from the line, the route's edge at 7.9 m: outside
+  sign Sign canyon at 963 m (road): +16.0 m from the line, the route's edge at 13.0 m: outside
+  sign Sign Drive at 963 m (road): +16.0 m from the line, the route's edge at 13.0 m: outside
+  sign Sign Fly at 2139 m (road): +14.6 m from the line, the route's edge at 11.7 m: outside
+  sign Sign Fly at 2139 m (road): +14.6 m from the line, the route's edge at 11.7 m: outside
+  sign Sign Boat at 3930 m (air): -30.0 m from the line, the route's edge at 20.0 m: outside
+  sign Sign Boat at 3930 m (air): -30.0 m from the line, the route's edge at 20.0 m: outside
+  sign Sign Dive at 5526 m (water): -23.0 m from the line, the route's edge at 15.0 m: outside
+  sign Sign Dive at 5526 m (water): -23.0 m from the line, the route's edge at 15.0 m: outside
+  sign Sign Drive at 6932 m (pool/ramp): -15.0 m from the line, the route's edge at 12.0 m: outside
+  sign Sign Drive at 6932 m (pool/ramp): -15.0 m from the line, the route's edge at 12.0 m: outside
+  sign Sign wheels down at 1127 m (road): -14.9 m from the line, the route's edge at 13.0 m: outside
+  sign Sign Drive at 1127 m (road): -14.9 m from the line, the route's edge at 13.0 m: outside
+  gate frame G1 promenade exit (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+  gate frame G2 launch (road): posts at +-13.4 m, the route's edge at 11.0 m: outside
+  gate frame G3 arch exit (air): posts at +-43.2 m, the route's edge at 11.0 m: outside
+  gate frame G4 lagoon landing (water): posts at +-49.2 m, the route's edge at 15.0 m: outside
+  gate frame G5 mangrove exit (water): posts at +-17.5 m, the route's edge at 15.0 m: outside
+  gate frame G6 dive portal (cave): posts at +-14.4 m, the route's edge at 17.0 m: INSIDE or at the edge
+  gate frame G7 chamber exit (cave): posts at +-14.4 m, the route's edge at 17.0 m: INSIDE or at the edge
+  gate frame G8 surfacing pool (pool/ramp): posts at +-22.7 m, the route's edge at 12.0 m: outside
+  gate frame G9 road landing (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+  gate frame G10 finish (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+WALLS: each form driven straight into a course wall at 10, 25 and 45 deg (the angle measured from the real contact normal), the throttle holding the speed; kept = speed 0.25 s after the hit / speed just before it; the slowest speed and the heading's largest turn in the 1.5 s after (a spin would turn it far past the wall's direction); then 3 s steering into the wall
+  drive 10 deg into the finishing road barrier: hit Barrier R at 7 deg (rule keeps 95 %), 44.7 -> 45.1 m/s 0.25 s later = 101 % kept, slowest 35.3 m/s in 1.5 s, heading turned at most 42 deg (no spin: under 35), wall hits 2, resets 0  CHECK
+  drive 25 deg into the finishing road barrier: hit Barrier R at 19 deg (rule keeps 93 %), 45.2 -> 43.9 m/s 0.25 s later = 97 % kept, slowest 41.5 m/s in 1.5 s, heading turned at most 26 deg (no spin: under 50), wall hits 1, resets 0  OK
+  drive 45 deg into the finishing road barrier: hit Barrier R at 45 deg (rule keeps 83 %), 44.7 -> 40.0 m/s 0.25 s later = 90 % kept, slowest 37.3 m/s in 1.5 s, heading turned at most 49 deg (no spin: under 70), wall hits 3, resets 0  OK
+  drive held against the finishing road barrier for 3 s (steering into it, full throttle): moved 85 m forward along it, average 37.9 m/s, slowest 32.2 m/s, wall hits 1, resets 0  OK
+  boat  10 deg into the Mangrove river bank: hit River bank R at 10 deg (rule keeps 95 %), 35.1 -> 35.2 m/s 0.25 s later = 100 % kept, slowest 33.3 m/s in 1.5 s, heading turned at most 14 deg (no spin: under 35), wall hits 1, resets 0  OK
+  boat  25 deg into the Mangrove river bank: hit River bank R at 25 deg (rule keeps 91 %), 35.3 -> 34.7 m/s 0.25 s later = 98 % kept, slowest 32.1 m/s in 1.5 s, heading turned at most 29 deg (no spin: under 50), wall hits 1, resets 0  OK
+  boat  45 deg into the Mangrove river bank: hit River bank R at 45 deg (rule keeps 83 %), 35.0 -> 31.9 m/s 0.25 s later = 91 % kept, slowest 29.2 m/s in 1.5 s, heading turned at most 50 deg (no spin: under 70), wall hits 1, resets 0  OK
+  boat  held against the Mangrove river bank for 3 s (steering into it, full throttle): moved 117 m forward along it, average 40.4 m/s, slowest 32.6 m/s, wall hits 4, resets 0  OK
+  fly   10 deg into the Sky Arch pillar: hit Arch pillar at 5 deg (rule keeps 96 %), 70.8 -> 70.3 m/s 0.25 s later = 99 % kept, slowest 67.7 m/s in 1.5 s, heading turned at most 12 deg (no spin: under 35), wall hits 1, resets 0  OK
+  fly   25 deg into the Sky Arch pillar: hit Arch pillar at 11 deg (rule keeps 94 %), 70.5 -> 70.2 m/s 0.25 s later = 100 % kept, slowest 66.5 m/s in 1.5 s, heading turned at most 27 deg (no spin: under 50), wall hits 1, resets 0  OK
+  fly   45 deg into the Sky Arch pillar: hit Arch pillar at 26 deg (rule keeps 91 %), 70.4 -> 67.8 m/s 0.25 s later = 96 % kept, slowest 63.7 m/s in 1.5 s, heading turned at most 47 deg (no spin: under 70), wall hits 1, resets 0  OK
+  fly   held against a wall: n/a (the walls in the air are the arch's short pillars; a plane passes them in under a second)
+  dive  10 deg into the Coral Vault cave wall: hit Cave wall R at 8 deg (rule keeps 95 %), 29.6 -> 31.9 m/s 0.25 s later = 108 % kept, slowest 27.4 m/s in 1.5 s, heading turned at most 15 deg (no spin: under 35), wall hits 1, resets 0  OK
+  dive  25 deg into the Coral Vault cave wall: hit Cave wall R at 19 deg (rule keeps 93 %), 29.8 -> 30.2 m/s 0.25 s later = 101 % kept, slowest 27.8 m/s in 1.5 s, heading turned at most 30 deg (no spin: under 50), wall hits 1, resets 0  OK
+  dive  45 deg into the Coral Vault cave wall: hit Cave wall R at 40 deg (rule keeps 85 %), 30.1 -> 28.9 m/s 0.25 s later = 96 % kept, slowest 25.0 m/s in 1.5 s, heading turned at most 51 deg (no spin: under 70), wall hits 1, resets 0  OK
+  dive  held against the Coral Vault cave wall for 3 s (steering into it, full throttle): moved 103 m forward along it, average 34.5 m/s, slowest 28.3 m/s, wall hits 7, resets 0  OK
+WALLS CHECK
+NEAR MISS: a gate passed outside its frame but within 1.0 gate width (8-30 m) of it, in a permitted form, heading along the route, counts with +3 s; the band per gate:
+  G0 start: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  G1 promenade exit: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  G2 launch: frame +-13 x +-10 m, near-miss band to +-39 x +-30 m
+  G3 arch exit: frame +-42 x +-28 m, near-miss band to +-72 x +-58 m
+  G4 lagoon landing: frame +-48 x +-12 m, near-miss band to +-78 x +-36 m
+  G5 mangrove exit: frame +-22 x +-8 m, near-miss band to +-52 x +-24 m
+  G6 dive portal: frame +-17 x +-6 m, near-miss band to +-47 x +-18 m
+  G7 chamber exit: frame +-21 x +-10 m, near-miss band to +-51 x +-30 m
+  G8 surfacing pool: frame +-22 x +-10 m, near-miss band to +-52 x +-30 m
+  G9 road landing: frame +-15 x +-9 m, near-miss band to +-45 x +-27 m
+  G10 finish: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  road: G1 passed 3 m outside its post, on the grass beyond the barrier: counted, penalty +3 s, cue "MISSED G1 +3 s", resets 0; log: [   1.98] gate G1 promenade exit passed (near miss, 2.4 m outside, +3 s) (2/11)  PASS
+  flight: G3 passed 8 m under its frame (beside it the arch's pillars stand in the way): counted, penalty +3 s, cue "MISSED G3 +3 s", resets 0; log: [   2.48] gate G3 arch exit passed (near miss, 8.0 m outside, +3 s) (4/11)  PASS
+  water: G4 passed 8 m outside its frame on the lagoon: counted, penalty +3 s, cue "MISSED G4 +3 s", resets 0; log: [   1.96] gate G4 lagoon landing passed (near miss, 6.5 m outside, +3 s) (5/11)  PASS
+  pool: G8 passed 5 m outside its frame (the cave gates G6 / G7 fill the cave's cross-section: they cannot be passed beside): counted, penalty +3 s, cue "MISSED G8 +3 s", resets 0; log: [   0.75] gate G8 surfacing pool passed (near miss, 5.0 m outside, +3 s) (9/11)  PASS
+  far miss: G3 passed 15 m beyond the band: not counted, cue "", TURN BACK shown, resets 1 (missed gate G3 arch exit); log: [   3.73] missed gate G3 arch exit (40 m past it, Fly): turn back | [   5.53] reset (missed gate G3 arch exit, at 239.6 (x 255.8, y 51.4), 72 m/s, 90 m off the line) to the anchor at 2327 m in Fly  PASS (rejected)
+  wrong form: G4 (boat only) flown over as a plane 8 m above its frame: not counted, cue "", TURN BACK shown, resets 1 (missed gate G4 lagoon landing); log: [   3.03] missed gate G4 lagoon landing (41 m past it, Fly): turn back | [   4.55] reset (missed gate G4 lagoon landing, at -842.9 (x 762.6, y 19.9), 72 m/s, 20 m off the line) to the anchor at 2941 m in Fly  PASS (rejected)
+NEAR MISS PENALTY PASS: the most a near miss could save anywhere on the lap: 1.14 s at G7 chamber exit (320 m either side, 50.0 m shorter at 44 m/s); penalty 3 s (clearly above it: a lap with a near miss is never faster than the clean lap)
+NEAR MISS PASS
+STARTS: 25 race starts (the check pilot in Abi's car at the back, the 3 AI at Easy), the first 10 s after GO at time scale 3.0 (physics steps unchanged)
+STARTS PASS: 25 starts: resets in the first 10 s 0, AI back-outs 0, wall hits 5, racer-to-racer touches 16, closest two racers came 1.9 m (centres), field spread after 10 s 96-137 m
+DIFFICULTY: 3 races per level against the check pilot (Abi's car, no boost, the safe line), time scale 3.0 (physics steps unchanged)
+  Easy race 1: 1. Abi 126.8, 2. Rocket Rae 147.6, 3. Chip "Showtime" Sterling 149.5 [Lake flight], 4. Vivi 157.6 (1 resets); AI mistakes 8/8/9
+  Easy race 2: 1. Abi 132.6, 2. Rocket Rae 149.6, 3. Chip "Showtime" Sterling 152.2 [Lake flight], 4. Vivi 153.9; AI mistakes 16/16/18
+  Easy race 3: 1. Abi 126.3, 2. Rocket Rae 147.6, 3. Chip "Showtime" Sterling 150.1, 4. Vivi 156.1 (+3 penalty) (1 resets) [Lake flight]; AI mistakes 24/24/25
+DIFFICULTY Easy: AI pack mean 151.6 s (+18 % against the check pilot's 128.6 s); per rival Rocket 147.6/149.6/147.6, Chip 149.5/152.2/150.1, Vivi 157.6/153.9/156.1; check pilot 1st in 3 of 3
+  Normal race 1: 1. Abi 128.4, 2. Chip "Showtime" Sterling 135.1 [Coral Vault tunnel], 3. Vivi 136.5, 4. Rocket Rae 145.0 (1 resets) [Lake flight]; AI mistakes 27/27/28
+  Normal race 2: 1. Abi 125.5, 2. Rocket Rae 132.5 [Lake flight], 3. Chip "Showtime" Sterling 133.3 [Lake flight+Coral Vault tunnel], 4. Vivi 135.4; AI mistakes 30/30/32
+  Normal race 3: 1. Abi 125.9, 2. Vivi 135.0 [Lake flight], 3. Rocket Rae 136.4 (+3 penalty) (1 resets) [Lake flight+Sky Arch slit], 4. Chip "Showtime" Sterling 136.7; AI mistakes 33/34/36
+DIFFICULTY Normal: AI pack mean 136.2 s (+8 % against the check pilot's 126.6 s); per rival Rocket 145.0/132.5/136.4, Chip 135.1/133.3/136.7, Vivi 136.5/135.4/135.0; check pilot 1st in 3 of 3
+  Hard race 1: 1. Rocket Rae 120.5 [Lake flight], 2. Vivi 122.7, 3. Abi 125.2, 4. Chip "Showtime" Sterling 131.5 (1 resets) [Lake flight+Coral Vault tunnel]; AI mistakes 33/34/36
+  Hard race 2: 1. Chip "Showtime" Sterling 122.2 [Lake flight], 2. Vivi 122.7 [Lake flight], 3. Abi 124.9, 4. Rocket Rae 129.5 (+3 penalty) (1 resets); AI mistakes 33/34/36
+  Hard race 3: 1. Chip "Showtime" Sterling 121.2 [Coral Vault tunnel], 2. Vivi 122.6 (1 resets) [Lake flight], 3. Rocket Rae 123.8 (+3 penalty) (1 resets) [Lake flight+Sky Arch slit], 4. Abi 125.5; AI mistakes 33/34/36
+DIFFICULTY Hard: AI pack mean 124.1 s (-1 % against the check pilot's 125.2 s); per rival Rocket 120.5/129.5/123.8, Chip 131.5/122.2/121.2, Vivi 122.7/122.7/122.6; check pilot 1st in 0 of 3
+  Easy: AI pack mean 151.6 s (+18 % against the check pilot's 128.6 s); per rival Rocket 147.6/149.6/147.6, Chip 149.5/152.2/150.1, Vivi 157.6/153.9/156.1; check pilot 1st in 3 of 3
+  Normal: AI pack mean 136.2 s (+8 % against the check pilot's 126.6 s); per rival Rocket 145.0/132.5/136.4, Chip 135.1/133.3/136.7, Vivi 136.5/135.4/135.0; check pilot 1st in 3 of 3
+  Hard: AI pack mean 124.1 s (-1 % against the check pilot's 125.2 s); per rival Rocket 120.5/129.5/123.8, Chip 131.5/122.2/121.2, Vivi 122.7/122.7/122.6; check pilot 1st in 0 of 3
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.10 ms, 95th pct 5.37 ms, 99th pct 16.15 ms, worst 421.60 ms over 215571 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  diff-Easy-1  Drive->Fly  z   945.4  0.602 s  frames worst 22.14 / mean 3.82 ms
+  diff-Easy-1  Fly->Boat   z  -606.3  0.607 s  frames worst 27.76 / mean 3.62 ms
+  diff-Easy-1  Boat->Dive  z  -202.8  0.953 s  frames worst 193.61 / mean 9.08 ms  OUT OF 0.5-0.8 s
+  diff-Easy-1  Dive->Boat  z  -466.3  0.615 s  frames worst 35.58 / mean 5.98 ms
+  diff-Easy-1  Boat->Drive z  -304.8  0.823 s  frames worst 108.96 / mean 6.32 ms  OUT OF 0.5-0.8 s
+  diff-Easy-2  Drive->Fly  z   944.8  0.601 s  frames worst 9.25 / mean 2.27 ms
+  diff-Easy-2  Fly->Boat   z  -606.5  0.607 s  frames worst 8.36 / mean 2.76 ms
+  diff-Easy-2  Boat->Dive  z  -201.7  1.075 s  frames worst 166.40 / mean 7.49 ms  OUT OF 0.5-0.8 s
+  diff-Easy-2  Dive->Boat  z  -466.4  0.602 s  frames worst 71.65 / mean 6.08 ms
+  diff-Easy-2  Boat->Drive z  -305.0  0.902 s  frames worst 125.18 / mean 6.18 ms  OUT OF 0.5-0.8 s
+  diff-Easy-3  Drive->Fly  z   944.7  0.602 s  frames worst 98.18 / mean 7.25 ms
+  diff-Easy-3  Fly->Boat   z  -606.2  0.610 s  frames worst 14.54 / mean 3.59 ms
+  diff-Easy-3  Boat->Dive  z  -201.9  0.610 s  frames worst 65.01 / mean 4.48 ms
+  diff-Easy-3  Dive->Boat  z  -466.7  0.608 s  frames worst 24.76 / mean 4.84 ms
+  diff-Easy-3  Boat->Drive z  -304.3  0.603 s  frames worst 128.64 / mean 4.84 ms
+  diff-Normal-1 Drive->Fly  z   945.3  0.600 s  frames worst 106.32 / mean 7.13 ms
+  diff-Normal-1 Fly->Boat   z  -607.1  0.604 s  frames worst 7.49 / mean 2.79 ms
+  diff-Normal-1 Boat->Dive  z  -202.7  0.603 s  frames worst 34.15 / mean 4.68 ms
+  diff-Normal-1 Dive->Boat  z  -466.6  0.602 s  frames worst 109.00 / mean 5.33 ms
+  diff-Normal-1 Boat->Drive z  -304.3  0.603 s  frames worst 8.63 / mean 2.84 ms
+  diff-Normal-2 Drive->Fly  z   944.2  0.604 s  frames worst 132.37 / mean 4.89 ms
+  diff-Normal-2 Fly->Boat   z  -606.9  0.605 s  frames worst 77.87 / mean 6.74 ms
+  diff-Normal-2 Boat->Dive  z  -201.9  0.604 s  frames worst 12.04 / mean 3.08 ms
+  diff-Normal-2 Dive->Boat  z  -467.0  0.609 s  frames worst 21.19 / mean 3.57 ms
+  diff-Normal-2 Boat->Drive z  -304.6  0.603 s  frames worst 15.84 / mean 3.31 ms
+  diff-Normal-3 Drive->Fly  z   945.2  0.604 s  frames worst 8.43 / mean 2.58 ms
+  diff-Normal-3 Fly->Boat   z  -607.2  0.768 s  frames worst 54.62 / mean 4.31 ms
+  diff-Normal-3 Boat->Dive  z  -202.3  0.603 s  frames worst 6.69 / mean 2.94 ms
+  diff-Normal-3 Dive->Boat  z  -466.6  0.605 s  frames worst 8.69 / mean 2.41 ms
+  diff-Normal-3 Boat->Drive z  -305.2  0.600 s  frames worst 7.89 / mean 2.55 ms
+  diff-Hard-1  Drive->Fly  z   944.6  0.603 s  frames worst 9.51 / mean 2.79 ms
+  diff-Hard-1  Fly->Boat   z  -606.0  0.607 s  frames worst 118.58 / mean 5.57 ms
+  diff-Hard-1  Boat->Dive  z  -201.8  0.982 s  frames worst 82.48 / mean 6.36 ms  OUT OF 0.5-0.8 s
+  diff-Hard-1  Dive->Boat  z  -466.7  0.607 s  frames worst 9.85 / mean 2.68 ms
+  diff-Hard-1  Boat->Drive z  -304.3  0.910 s  frames worst 81.14 / mean 7.43 ms  OUT OF 0.5-0.8 s
+  diff-Hard-2  Drive->Fly  z   945.2  0.630 s  frames worst 25.39 / mean 5.15 ms
+  diff-Hard-2  Fly->Boat   z  -607.3  0.630 s  frames worst 124.18 / mean 12.27 ms
+  diff-Hard-2  Boat->Dive  z  -203.3  0.752 s  frames worst 122.20 / mean 11.87 ms
+  diff-Hard-2  Dive->Boat  z  -466.3  1.009 s  frames worst 99.13 / mean 14.51 ms  OUT OF 0.5-0.8 s
+  diff-Hard-2  Boat->Drive z  -304.9  0.603 s  frames worst 9.71 / mean 3.13 ms
+  diff-Hard-3  Drive->Fly  z   944.5  0.608 s  frames worst 26.71 / mean 4.26 ms
+  diff-Hard-3  Fly->Boat   z  -606.5  0.605 s  frames worst 28.22 / mean 4.01 ms
+  diff-Hard-3  Boat->Dive  z  -202.5  0.604 s  frames worst 10.30 / mean 2.89 ms
+  diff-Hard-3  Dive->Boat  z  -466.3  0.687 s  frames worst 178.26 / mean 52.27 ms
+  diff-Hard-3  Boat->Drive z  -304.9  0.602 s  frames worst 28.72 / mean 3.87 ms
+sound: music results playing (its own signal peak 0.000), splashes played 18, Abi lines: messup: skipped (Barker talking, penalty); messup: skipped (Barker talking, penalty); messup: skipped (Barker talking, penalty); messup: gasp_1; messup: skipped (another driver, reset: reset (missed gate G3 arch exit, at 239.6 (x 255.8, y 51.4), 72 m/s, 90 m off the line) to the anchor at 2327 m in Fly); messup: skipped (Barker talking, reset: reset (missed gate G4 lagoon landing, at -842.9 (x 762.6, y 19.9), 72 m/s, 20 m off the line) to the anchor at 2941 m in Fly); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: laugh_1; win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); last: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Sitting Disapproval, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

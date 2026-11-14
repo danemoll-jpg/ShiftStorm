@@ -71,6 +71,7 @@ namespace ShiftStorm
         public int PartCount => grayParts.TryGetValue(Mode.Drive, out var fa) ? fa.PartCount : 0;
         public GameObject ModelOf(Mode m) => models.TryGetValue(m, out var g) ? g : null;
         public bool IsImported(Mode m) => !grayParts.ContainsKey(m);
+        public Vector3 SeatOf(Mode m) => seats.TryGetValue(m, out var s) ? s : GraySeat;   // Round 8: each form's seat (the steering mechanism)
 
         void Show(Mode m)
         {

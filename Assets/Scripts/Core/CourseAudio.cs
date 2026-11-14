@@ -23,6 +23,8 @@ namespace ShiftStorm
         public bool MusicPlaying => (music && music.isPlaying) || (musicLoop && musicLoop.isPlaying) || (alt && alt.isPlaying) || (altLoop && altLoop.isPlaying);
         public string MusicClip => altNow != "" && (alt.isPlaying || altLoop.isPlaying) ? (altLoop.isPlaying ? altLoop.clip.name : alt.clip.name) : musicLoop && musicLoop.isPlaying ? musicLoop.clip.name : music && music.isPlaying ? music.clip.name : "";
         public float MusicPeak { get; private set; }
+        public const float MusicGain = 1.3f;
+        public AudioSource MusicSource => altNow != "" ? (altLoop.isPlaying ? altLoop : alt) : musicLoop.isPlaying ? musicLoop : music;
         public float MusicVolume => musicLoop ? Mathf.Max(musicLoop.volume, music.volume) : 0;
         public float MusicCutoff => lp ? lp.cutoffFrequency : 0;
         public string Track => altNow != "" ? altNow : "race";
@@ -97,9 +99,10 @@ namespace ShiftStorm
             jungle.volume = Mathf.Lerp(jungle.volume, (under ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
             // the mix by form (the player's own racer): louder and open in flight, muffled underwater, a lift at the waterfall exit
             var m = v ? v.Mode : Mode.Drive; bool bright = Time.time < brightUntil;
-            float vol = (under || m == Mode.Dive ? .3f : m == Mode.Fly ? .6f : .5f) + (bright ? .12f : 0);
+            // Round 8 item 6: music louder than build 8 (x1.3, +2.3 dB: road .65, flight .78, underwater .39) and ducked 8 dB under TeedOff Barker
+            float vol = ((under || m == Mode.Dive ? .3f : m == Mode.Fly ? .6f : .5f) + (bright ? .12f : 0)) * MusicGain * Caller.Duck;
             float cut = under || m == Mode.Dive ? 650f : 22000f;
-            float raceVol = altNow == "" ? vol * Settings.Music : 0, altVol = altNow != "" ? .55f * Settings.Music : 0;
+            float raceVol = altNow == "" ? vol * Settings.Music : 0, altVol = altNow != "" ? .55f * MusicGain * Settings.Music : 0;
             music.volume = musicLoop.volume = Mathf.Lerp(musicLoop.volume, raceVol, k);
             alt.volume = altLoop.volume = Mathf.Lerp(altLoop.volume, altVol, k);
             lp.cutoffFrequency = Mathf.Exp(Mathf.Lerp(Mathf.Log(lp.cutoffFrequency), Mathf.Log(altNow != "" ? 22000f : cut), k));

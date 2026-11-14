@@ -59,3 +59,14 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
 - 7 of his Tee'd Off clips reused: `winner_1`, `winner_3`, `winner_5`, `finale_1` (the winner), `great_2` (a big jump),
   `ohno_1` (a near miss), `ohno_3` (the results when you didn't win).
 - Words: `Assets/Resources/Audio/Voice/barker/lines.json` (subtitles on the HUD: "TeedOff Barker: ...").
+
+## Round 8 (2026-11-14)
+- **Volumes:** Music, Voices (TeedOff Barker + the drivers), **Engines** (new: engines + wind, default 60 %), Effects. An older
+  settings.json gets Engines = 60 % of its old Effects value (never more than 60 %). Music is 1.3x build 8's level (+2.3 dB).
+- **TeedOff Barker loud:** build 8's converter faded every new line out from its first sample (`afade=t=out:st=0`): his 39 ElevenLabs
+  lines were silent after 20 ms (-43 LUFS). All re-recorded (151 ElevenLabs lines now, 3,875 credits) + 7 Tee'd Off clips = 158;
+  every voice clip levelled to -16 LUFS (`Tools/Audio/normalize_voice.py`). Under his lines the music and engines duck 8 dB (`Caller.Duck`).
+- **Drivers' mess-ups:** per driver 3 new ElevenLabs lines ("Noooo!", "Oh no!", one in character) + 5 of their Tee'd Off clips (140 credits).
+- **Dinosaurs (positional, Effects volume):** T. rex roar (`trex_roar_1/2`), brontosaurus moo (`bronto_moo_1/2`), grunts
+  (`dino_grunt_1/2`, the triceratops; the raptors pitched up), pterodactyl calls (`amb_dino_call_2/3`).
+- **Finish by place:** 1st the cheer, applause and win jingle; a middle place a small clap; last an "aww" (`to_crowd_aww`), no applause.

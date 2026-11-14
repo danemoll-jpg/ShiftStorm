@@ -1,0 +1,69 @@
+{
+ "speaker": "abigail",
+ "lines": [
+  {
+   "id": "bogey_1",
+   "text": "Ugh. Unacceptable."
+  },
+  {
+   "id": "disaster_1",
+   "text": "No. No, no, no!"
+  },
+  {
+   "id": "gasp_1",
+   "text": "Ah!"
+  },
+  {
+   "id": "laugh_1",
+   "text": "Ha!"
+  },
+  {
+   "id": "lose_1",
+   "text": "Rematch. Now."
+  },
+  {
+   "id": "lucky_1",
+   "text": "Luck had nothing to do with it."
+  },
+  {
+   "id": "messup_1",
+   "text": "Noooooo!"
+  },
+  {
+   "id": "messup_2",
+   "text": "Oh no!"
+  },
+  {
+   "id": "messup_3",
+   "text": "Oh, come ON! Not now!"
+  },
+  {
+   "id": "mishit_1",
+   "text": "What was that?"
+  },
+  {
+   "id": "quipbad_1",
+   "text": "I'm not upset. I'm focused."
+  },
+  {
+   "id": "quipgood_1",
+   "text": "Try to keep up."
+  },
+  {
+   "id": "quipgood_2",
+   "text": "Precision. Look it up."
+  },
+  {
+   "id": "trouble_1",
+   "text": "That's not where I aimed."
+  },
+  {
+   "id": "water_1",
+   "text": "Seriously?"
+  },
+  {
+   "id": "win_1",
+   "text": "Told you. I don't lose."
+  }
+ ]
+}

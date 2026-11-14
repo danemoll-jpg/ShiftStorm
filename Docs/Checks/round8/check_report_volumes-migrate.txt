@@ -1,0 +1,11 @@
+ShiftStorm check 'volumes', 2026-11-14 12:25, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+VOLUMES (item 6): settings file local/round8/migrate\settings.json (exists): Music 100 %, Voices 60 %, Engines 50 %, Effects 80 %; playtest logs on
+  menu rows: AI difficulty: Easy   (Easy / Normal / Hard) | Invert flight / dive controls: Off   (View / F2) | Screen: Full screen   (Alt+Enter) | FPS + speed readout: Off   (R3 / F1) | Music volume: 100 %   (A: lower, 0 -> 100) | Voices volume (Barker, drivers): 60 %   (A: lower, 0 -> 100) | Engines volume: 50 %   (A: lower, 0 -> 100) | Effects volume: 80 %   (A: lower, 0 -> 100) | Save playtest logs: On | Open log folder   (C:\Users\danmo\ShiftStorm\local\round8\migrate\playtest) | Back
+  WOULD-BE LEVELS on the road at 69 m/s (source volumes, the muted listener aside): music 0.65 (Music x1.3 road .5 = .65 at 100 %), engine 0.21 (Engines 50 %: build 8 had ~.42 at Effects 100 %), wind 0.19, Barker voice 0.60, duck now 1.00
+  under a Barker line: music 0.26, engine 0.08, duck 0.40 (-8.0 dB)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 17.71 ms, 95th pct 49.22 ms, 99th pct 260.22 ms, worst 1469.01 ms over 1040 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

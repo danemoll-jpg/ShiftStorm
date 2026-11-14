@@ -1,0 +1,35 @@
+ShiftStorm check 'shortcuts', 2026-11-14 14:08, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SHORTCUT Sky Arch slit: its line 1073 m from main progress 2361 to 3491 m (the main line there: 1130 m); entry / exit sub-gates; stands in for G3 arch exit; rejoins before G4 lagoon landing
+  from the anchor at 2327 m to G4 lagoon landing, the same start speed, no boost: safe line 20.43 s, resets 0, scrapes 0, shortcut not taken; shortcut 19.43 s, resets 0, scrapes 0, shortcut Sky Arch slit; deliberate miss (aimed 9 m beside its entry) 34.54 s, resets 0, scrapes 6, shortcut not taken
+  SHORTCUT Sky Arch slit PASS: saves 1.00 s (target 1-2 s); the miss costs +14.11 s against the safe line, +15.11 s against the shortcut, not trapped
+SHORTCUT Lake flight: its line 296 m from main progress 903 to 1179 m (the main line there: 276 m); entry / exit sub-gates; stands in for no main gate; rejoins before G1 promenade exit
+  from the anchor at 5749 m to G7 chamber exit, the same start speed, no boost: safe line 21.39 s, resets 0, scrapes 0, shortcut not taken; shortcut 21.39 s, resets 0, scrapes 0, shortcut not taken; deliberate miss (aimed 6 m beside its entry) 21.40 s, resets 0, scrapes 0, shortcut not taken
+  SHORTCUT Lake flight FAIL: saves 0.00 s (target 2-3 s); the miss costs +0.00 s against the safe line, +0.00 s against the shortcut, not trapped
+SHORTCUT Coral Vault tunnel: its line 457 m from main progress 6185 to 6674 m (the main line there: 489 m); entry / exit sub-gates; stands in for no main gate; rejoins before G7 chamber exit
+  from the anchor at 5749 m to G7 chamber exit, the same start speed, no boost: safe line 21.39 s, resets 0, scrapes 0, shortcut not taken; shortcut 19.48 s, resets 0, scrapes 2, shortcut Coral Vault tunnel; deliberate miss (aimed 6 m beside its entry) 20.34 s, resets 0, scrapes 3, shortcut Coral Vault tunnel
+  SHORTCUT Coral Vault tunnel PASS: saves 1.92 s (target 2-3 s); the miss costs -1.05 s against the safe line, +0.87 s against the shortcut, not trapped
+SHORTCUT FULL LAP: the AI driver without boost, safe line 124.25 s, resets 0, scrapes 0, shortcuts Lake flight, gates 0 1 2 3 4 5 6 7 8 9 10; both shortcuts 121.37 s, resets 0, scrapes 2, shortcuts Lake flight, Sky Arch slit, Coral Vault tunnel, gates 0 1 2 3 4 5 6 7 8 9 10; difference +2.88 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.35 ms, 95th pct 1.88 ms, 99th pct 2.41 ms, worst 121.48 ms over 333077 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  sc-safe      Fly->Boat   z  -606.2  0.600 s  frames worst 9.02 / mean 1.44 ms
+  sc-take      Fly->Boat   z  -607.2  0.601 s  frames worst 2.74 / mean 1.37 ms
+  sc-miss      Fly->Boat   z  -606.1  0.600 s  frames worst 3.24 / mean 1.35 ms
+  sc-lap-safe  Drive->Fly  z   653.0  0.600 s  frames worst 3.41 / mean 1.40 ms
+  sc-lap-safe  Fly->Drive  z   906.9  0.601 s  frames worst 3.26 / mean 1.41 ms
+  sc-lap-safe  Drive->Fly  z   945.0  0.600 s  frames worst 4.43 / mean 1.42 ms
+  sc-lap-safe  Fly->Boat   z  -606.2  0.600 s  frames worst 8.20 / mean 1.36 ms
+  sc-lap-safe  Boat->Dive  z  -202.5  0.600 s  frames worst 3.70 / mean 1.41 ms
+  sc-lap-safe  Dive->Boat  z  -466.4  0.600 s  frames worst 5.96 / mean 1.43 ms
+  sc-lap-safe  Boat->Drive z  -305.1  0.601 s  frames worst 5.98 / mean 1.38 ms
+  sc-lap-shortcuts Drive->Fly  z   653.0  0.600 s  frames worst 8.12 / mean 1.42 ms
+  sc-lap-shortcuts Fly->Drive  z   906.9  0.601 s  frames worst 3.54 / mean 1.41 ms
+  sc-lap-shortcuts Drive->Fly  z   944.7  0.600 s  frames worst 5.33 / mean 1.35 ms
+  sc-lap-shortcuts Fly->Boat   z  -607.0  0.601 s  frames worst 2.69 / mean 1.36 ms
+  sc-lap-shortcuts Boat->Dive  z  -202.3  0.600 s  frames worst 8.74 / mean 1.36 ms
+  sc-lap-shortcuts Dive->Boat  z  -466.8  0.601 s  frames worst 2.83 / mean 1.30 ms
+  sc-lap-shortcuts Boat->Drive z  -304.8  0.601 s  frames worst 6.94 / mean 1.36 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 7, Abi lines: messup: bogey_1; messup: skipped (another driver, wall hit (5 deg)); messup: skipped (another driver, wall hit (1 deg)); messup: skipped (another driver, wall hit (2 deg)); messup: skipped (cooldown); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

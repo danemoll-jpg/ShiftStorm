@@ -87,6 +87,7 @@ namespace ShiftStorm
             CourseAudio.Make(Cam.gameObject, Player);
             Caller.Make(this).Watch(Player);   // Round 7: TeedOff Barker calls the race
             GameSounds.Make(Cam.gameObject, this).Watch(Player);   // Round 7: the sound pass
+            PlaytestLog.Make(this);   // Round 8 item 10: playtest logs
             Trial = gameObject.AddComponent<TimeTrial>(); Trial.v = Player;
             Race = gameObject.AddComponent<Race>();
             Hud.Make(Cam, Player, this);
@@ -96,6 +97,14 @@ namespace ShiftStorm
             int start = 0; int i = Array.IndexOf(a, "-course"); if (i >= 0 && i + 1 < a.Length) int.TryParse(a[i + 1], out start);
             bool race = Array.IndexOf(a, "-race") >= 0 || (!QuietRun.Check && Array.IndexOf(a, "-trial") < 0);
             StartCourse(Mathf.Clamp(start, 0, Courses.Count - 1), race);
+            // Round 8 item 8: every pipeline, mesh and texture made now (start-up), not at first sight mid-race
+            if (Array.IndexOf(a, "-noWarmup") < 0)
+            {
+                var was = new List<bool>(); foreach (var rv in Rivals) { was.Add(rv.gameObject.activeSelf); rv.gameObject.SetActive(true); }
+                var sets = new List<FormSet> { Player.Forms }; foreach (var rv in Rivals) sets.Add(rv.Forms);
+                JurassicLook.Apply(true); Warmup.Run(Courses[0], Cam, sets); JurassicLook.Apply(Courses[CourseIndex].look == "jurassic");
+                for (int k = 0; k < Rivals.Count; k++) Rivals[k].gameObject.SetActive(was[k]);
+            }
             Debug.Log($"[Screen] at the first frame: {Screen.fullScreenMode} {Screen.width} x {Screen.height}, desktop {Display.main.systemWidth} x {Display.main.systemHeight}, current resolution {Screen.currentResolution.width} x {Screen.currentResolution.height}");
             Debug.Log($"[Time] fixed step {Time.fixedDeltaTime * 1000:0.00} ms, maximum frame catch-up {Time.maximumDeltaTime:0.00} s, target frame rate {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount}");
             Debug.Log($"[Game] ready: {Courses.Count} courses, model {VehicleFactory.ModelSource}, driver {Driver.Instance?.Source}, {Rivals.Count} rivals, muted {QuietRun.Muted}, listener volume {AudioListener.volume}");
@@ -274,13 +283,17 @@ namespace ShiftStorm
                     Item(InvertItem, () => { ShiftInput.Invert = !ShiftInput.Invert; ShowPage(Page.Settings, 1); });
                     Item(ScreenItem, () => { ScreenSetting.Toggle(); ShowPage(Page.Settings, 2); });
                     Item(StatsItem, () => { ToggleStats(); ShowPage(Page.Settings, 3); });
+                    // Round 8 item 6: four volumes (Music, Voices = TeedOff Barker + the drivers, Engines, Effects); item 10: playtest logs
                     Item($"Music volume: {Settings.Music * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("music"); ShowPage(Page.Settings, 4); });
-                    Item($"Effects volume: {Settings.Effects * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("sfx"); ShowPage(Page.Settings, 5); });
-                    Item($"Voices volume: {Settings.Voices * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("voice"); ShowPage(Page.Settings, 6); });
+                    Item($"Voices volume (Barker, drivers): {Settings.Voices * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("voice"); ShowPage(Page.Settings, 5); });
+                    Item($"Engines volume: {Settings.Engines * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("engine"); ShowPage(Page.Settings, 6); });
+                    Item($"Effects volume: {Settings.Effects * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("sfx"); ShowPage(Page.Settings, 7); });
+                    Item("Save playtest logs: " + (Settings.PlaytestLogs ? "On" : "Off"), () => { Settings.PlaytestLogs = !Settings.PlaytestLogs; ShowPage(Page.Settings, 8); });
+                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 9); });
                     if (SplitScreen.Active)
                     {
-                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 7); });
-                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 8); });
+                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 10); });
+                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 11); });
                     }
                     Item("Back", () => ShowPage(Page.Main));
                     break;

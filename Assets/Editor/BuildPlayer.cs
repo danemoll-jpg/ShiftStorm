@@ -22,8 +22,11 @@ namespace ShiftStorm.EditorTools
             var model = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Models/ShiftVehicle.fbx");
             if (model) foreach (var n in new[] { "Wheel_FL", "Wheel_RL", "Wing_L", "Wing_R", "Tail", "Canopy" }) { var t = model.transform.Find(n); Debug.Log($"[Build] model part {n}: {(t ? t.localPosition.ToString("F2") + " rot " + t.localEulerAngles.ToString("F0") : "MISSING")}"); }
             else Debug.LogWarning("[Build] no vehicle FBX: the game uses its primitive fallback");
-            Directory.CreateDirectory("Builds/ShiftStorm");
-            var options = new BuildPlayerOptions { scenes = new[] { "Assets/Scenes/Main.unity" }, locationPathName = "Builds/ShiftStorm/ShiftStorm.exe", target = BuildTarget.StandaloneWindows64, options = BuildOptions.None };
+            // Round 8 item 8: "-development" makes a profiling build (Builds/ShiftStormDev: ProfilerRecorder sees the engine's markers) for the
+            // hitch hunt; the release build never has it
+            bool dev = Array.IndexOf(Environment.GetCommandLineArgs(), "-development") >= 0; string outDir = dev ? "Builds/ShiftStormDev" : "Builds/ShiftStorm";
+            Directory.CreateDirectory(outDir);
+            var options = new BuildPlayerOptions { scenes = new[] { "Assets/Scenes/Main.unity" }, locationPathName = outDir + "/ShiftStorm.exe", target = BuildTarget.StandaloneWindows64, options = dev ? BuildOptions.Development : BuildOptions.None };
             var report = BuildPipeline.BuildPlayer(options);
             Debug.Log($"[Build] {report.summary.result}: {report.summary.totalSize / 1e6:0.0} MB, {report.summary.totalErrors} errors, {report.summary.totalTime.TotalSeconds:0} s");
             if (report.summary.result != BuildResult.Succeeded) EditorApplication.Exit(1);

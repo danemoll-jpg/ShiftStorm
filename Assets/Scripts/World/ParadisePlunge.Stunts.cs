@@ -88,7 +88,7 @@ namespace ShiftStorm
         // ---------------- build ----------------
         static void Stunts()
         {
-            BuildLoop(); foreach (var j in Jumps) BuildJump(j);
+            BuildLoop(); foreach (var j in Jumps) BuildJump(j); Canyon();
         }
 
         static void BuildLoop()
@@ -193,16 +193,53 @@ namespace ShiftStorm
             }
         }
 
+        // Round 8 item 7: the car line's own road after the Lake Jump: a jungle canyon (mossy rock walls both sides, ferns on top, boulders,
+        // a fallen log arch high over it) from the landing's end to 70 m before the wheels-down zone, so the two choices see different
+        // places: the car the canyon (and the long-necks grazing beyond its east wall), the plane the beach, the lake's herd and the rings.
+        // the east wall runs from the landing's end nearly to G1; the west wall only where the plane is well out to the west (it crosses
+        // that side to come back to the road, so the west wall ends 60 m before the wheels-down zone)
+        public static float CanyonFrom => M("jC") + 40 + 30;
+        public static float CanyonTo => M("G1") - 20;
+        static float CanyonWestFrom => M("jC") + 40 + 75;
+        static float CanyonWestTo => M("G1") - 75 - 60;
+        static void Canyon()
+        {
+            var g = new GameObject("Jungle canyon (car line)"); g.transform.SetParent(root, false);
+            var rock = Mt(JurassicLook.Rock, true, default, 1.2f); var dark = Mt(JurassicLook.RockDark, true, default, 1.2f); var moss = Mt(JurassicLook.Moss, true, default, 1.2f);
+            float a = CanyonFrom, b = CanyonTo; var green = new MeshKit.Batch(); var rnd = new System.Random(81);
+            float R(float lo, float hi) => lo + (float)rnd.NextDouble() * (hi - lo);
+            for (float p = a; p < b; p += 9f)
+            {
+                var q = At(p); var r = Right(p); var f = Facing(p); float hw = HalfWidth(p);
+                foreach (float sd in new[] { -1f, 1f })
+                {
+                    float sa = sd < 0 ? CanyonWestFrom : a, sb = sd < 0 ? CanyonWestTo : b; if (p < sa || p > sb) continue;
+                    float h = R(11, 16) * Mathf.SmoothStep(.4f, 1f, Mathf.Min((p - sa) / 30f, (sb - p) / 30f)), off = hw + 6f + R(0, 1.5f);
+                    var at = new Vector3(q.x, RoadY + h * .5f - .5f, q.z) + r * sd * (off + 3f);
+                    Box(g.transform, "canyon wall", at, new Vector3(6f, h, 10f), (int)(p / 9) % 3 == 0 ? dark : rock, f * Quaternion.Euler(0, R(-6, 6), sd * R(2, 6)), true, ShiftVehicle.ObstacleLayer);
+                    Box(g.transform, "canyon moss", at + Vector3.up * (h * .5f + .4f), new Vector3(6.6f, .9f, 10.4f), moss, f, false);
+                    if (rnd.NextDouble() < .6) Fern(green, new Vector3(q.x, RoadY + h, q.z) + r * sd * (off + R(2, 5)), R(.9f, 1.4f), R(0, 360));
+                }
+            }
+            // a fallen tree across the canyon, high over the road (looks only)
+            { float p = (CanyonWestFrom + CanyonWestTo) * .5f; var q = At(p); var r = Right(p); Box(g.transform, "canyon log", new Vector3(q.x, RoadY + 17.5f, q.z), new Vector3(HalfWidth(p) * 2 + 14, 1.6f, 1.6f), Mt(JurassicLook.FernTrunk, true), Quaternion.LookRotation(Flat(Dir(p))) * Quaternion.Euler(0, 0, 4), false); }
+            green.Object(scen, "Canyon ferns", JurassicLook.VertexColored(true), false, false).layer = DetailLayer;
+            // the sign at its mouth
+            var hs = new GameObject("Sign canyon"); hs.transform.SetParent(scen, false); var sq = At(a - 10); hs.transform.SetPositionAndRotation(new Vector3(sq.x, RoadY, sq.z) + Right(a - 10) * 16f, Facing(a - 10)); WorldBuilder.Sign(hs.transform, Vector3.zero, Mode.Drive, 5);
+        }
+
         // the choice jump's flight branch: out over the lake through three rings and back to the road before G1 (Shortcut "Lake flight")
         static void LakeFlight()
         {
             float lip = M("jC"), rejoin = M("G1") - 75; var a = At(lip); var b = At(rejoin);
             var up = Vector3.up; float y0 = RoadY;
             // a climb over the lake-side beach and back (first runs: a 95 m swing out over the lake needed turns tighter than the plane's
-            // ~170 m turning circle at 80 m/s; climbing and diving it does quickly): never more than 20 m to the side, up to 26 m up
-            Vector3 L(float p, float side, float h) => At(p) - Right(p) * side + up * h;
-            var ctrl = new List<Vector3> { a + up * 1.5f, L(lip + 40, 0, 8), L(lip + 90, 7, 16), L(lip + 150, 16, 24), L(lip + 205, 20, 26), L(lip + 255, 15, 21),
-                                           L(rejoin - 45, 5, 10), b + up * 6f, At(rejoin + 12) + up * 5f };
+            // ~170 m turning circle at 80 m/s; climbing and diving it does quickly). Round 8 item 7: the car line now bends inland through
+            // the canyon, so this one swings the other way: out west over the beach and the wading herd, up to 32 m from the car line and
+            // 25 m up, over the canyon's west wall only where the wall has ended (the last quarter), down to the wheels-down zone.
+            Vector3 L(float t, float side, float h) { float p = Mathf.Lerp(lip, rejoin, t); return At(p) - Right(p) * side + up * h; }
+            var ctrl = new List<Vector3> { a + up * 1.5f, L(.12f, 4, 8), L(.3f, 20, 17), L(.45f, 30, 23), L(.62f, 34, 25), L(.8f, 24, 18), L(.93f, 8, 9),
+                                           b + up * 6f, At(rejoin + 12) + up * 5f };
             for (int i = 0; i < ctrl.Count; i++) { var p = ctrl[i]; p.y = Mathf.Max(p.y, y0 + 2); ctrl[i] = p; }
             var sc = MakeShortcut("Lake flight", ctrl, lip, rejoin + 12, 1, -1, 45f, new Vector2(16, 12), new Vector2(18, 12), 70f, 30f, Mode.Fly);
             sc.choice = true;

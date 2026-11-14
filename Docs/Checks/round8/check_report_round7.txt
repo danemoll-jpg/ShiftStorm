@@ -1,0 +1,70 @@
+ShiftStorm check 'round7', 2026-11-14 13:00, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LOOP: radius 24 m (car centre), 16 m side shift, line through it 152 m (progress 642 -> 794), boost pad 70 m before it tops up to 72 m/s
+LOOP full speed (from the anchor, the pilot's line, no boost) PASS: in at 10 m/s, over the top 68 m/s, through, resets 0, wrong-way cues 0, gates 1
+LOOP slow entry (placed after the pad at 34 m/s, throttle on, no boost) PASS: in at 22 m/s, over the top 50 m/s, through, resets 0, wrong-way cues 0, gates 1
+LOOP very slow entry (placed at 15 m/s, coasting) PASS: in at 6 m/s, over the top - m/s, too slow: slid back, resets 1 (too slow for the loop), back at the anchor at 523 m in Drive, wrong-way cues 0, gates 1
+LOOP views: pictures at 90 / 180 / 270 / 345 deg in Chase, Far chase, First person, Front (Far chase through, First person through, Front through)
+LOOP AI (Easy) PASS: 25/25 runs through the loop, 0 stuck / reset; slowest entry 71 m/s
+JUMP Creek Jump: lip at 317 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 40 m over a creek, no wings
+  JUMP Creek Jump PASS: 57 m/s up the kicker, 1.95 s in the air, 59 m/s at the touch -> 61 m/s after it, resets 0
+  JUMP Creek Jump (boost) PASS: 73 m/s up the kicker, 2.38 s in the air, 75 m/s at the touch -> 75 m/s after it, resets 0
+  JUMP Creek Jump short / slow (28 m/s, coasting) PASS: reset after 6.0 s (into the water outside the landing corridor), back at 188 m in Drive at 36 m/s
+JUMP Lake Jump: lip at 903 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 40 m over a creek, the choice jump (LB / E: wings)
+JUMP Cliff Gap: lip at 1593 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 36 m over a ravine, no wings
+  JUMP Cliff Gap PASS: 58 m/s up the kicker, 2.00 s in the air, 59 m/s at the touch -> 60 m/s after it, resets 0
+  JUMP Cliff Gap (boost) PASS: 74 m/s up the kicker, 2.42 s in the air, 74 m/s at the touch -> 74 m/s after it, resets 0
+  JUMP Cliff Gap short / slow (28 m/s, coasting) FAIL: neither across nor reset in 12 s
+CHOICE (Lake Jump): car line 276 m of road from the lip to the rejoin; fly line 296 m (rings, entry / exit sub-gates, wheels-down zone before G1)
+  car line PASS: 5.78 s from the lip to G1, resets 0, wings 0, changes , shortcut none, penalty 0 s, gates 1
+  fly line PASS: 4.62 s from the lip to G1, resets 0, wings 1, changes Drive->Fly Fly->Drive, shortcut Lake flight, penalty 0 s, gates 1
+  CHOICE balance: fly +1.17 s faster than the car line (20 %) (aim: about equal, the fly line slightly faster)
+  LB late PASS: pressed 0.4 s after the 1 s window -> still Drive, logged "wings pressed: nothing here (after the window)"
+  LB elsewhere PASS: pressed on the start straight and in the air off the Creek Jump -> Drive, 2 presses ignored, wings used 0
+CALLER: TeedOff Barker, 158 clips; effects: 17 kinds played so far, missing files: none
+CALLER race: Abi finished 1st in 127.7 s; 23 lines:
+  386.7 trial trial_2 (Abi)  "The clock is ticking, folks! Every second counts on this island!"
+  389.7 go go_3 (Abi)  "Green light! Put the pedal down!"
+  396.7 bronto bronto_1 (Abi)  "The brontosaurus herd is out for a stroll! Aren't they lovely?"
+  402.7 ptero ptero_1 (Abi)  "Pterodactyls overhead! Watch your windscreen, folks!"
+  407.7 passchip passchip_1 (Abi)  "Past Chip Sterling! Sorry Chip, the show goes on!"
+  413.6 trex trex_1 (Abi)  "Look out for the T. rex! Don't feed it, folks!"
+  417.9 raptor raptor_1 (Abi)  "Raptors running alongside! Are they racing too?"
+  424.6 toplane toplane_3 (Abi)  "Off the ramp and into the sky! Spectacular!"
+  430.0 arch arch_1 (Abi)  "Through the Sky Arch! Thread the needle, folks!"
+  434.2 nest nest_1 (Abi)  "Look at the nests! Dino eggs as big as beach balls!"
+  444.0 lagoon lagoon_1 (Abi)  "Lagoon Landing! Hope you packed your swimsuit!"
+  448.5 plesio plesio_2 (Abi)  "Something big is swimming down there! Don't splash it!"
+  457.6 fill fill_9 (Abi)  "Don't worry about the volcano, folks! It only rumbles on Tuesdays!"
+  464.3 mangrove mangrove_1 (Abi)  "Into the Mangrove Run! Mind the roots, folks!"
+  469.7 trike trike_1 (Abi)  "Triceratops in the mangroves! Three horns and zero patience!"
+  479.5 tosub tosub_1 (Abi)  "Down periscope! It's a submarine!"
+  483.4 gateway gateway_1 (Abi)  "The Sunken Gateway! Ancient stones, ancient secrets!"
+  489.3 vault vault_1 (Abi)  "The Coral Vault! Glowing crystals and things that go bump!"
+  495.3 skeleton skeleton_1 (Abi)  "Fossils in the walls, folks! Don't end up as one!"
+  503.8 fill fill_11 (Abi)  "Look at them go! This is why I love my job!"
+  509.3 waterfall waterfall_1 (Abi)  "Through the waterfall! Free car wash, folks!"
+  514.5 win win_abi (Abi)  "Abi takes it! The crowd goes wild!"
+  518.9 results results_3 (Abi)  "And there we have it! What a race, ladies and gentlemen!"
+CALLER PASS: 23 lines from 22 pools (trial, go, bronto, ptero, passchip, trex, raptor, toplane, arch, nest, lagoon, plesio, fill, mangrove, trike, tosub, gateway, vault, skeleton, waterfall, win, results), 0 clips again within 20 s; skipped: creek: talking x1; jump: talking x2; loop: just spoke x1; wings: talking x1; passvivi: talking x1; up: talking x2; tocar: just spoke x1; cliff: talking x1; close: talking x1; lead: talking x1; passrae: talking x1; toboat: talking x2; shortcut: talking x1; tocar: talking x1; final: talking x1
+SOUNDS played in the race: beep 3, go 1, pad 1, loop 1, loopcrowd 1, air 5, land 2, gate 11, whoosh 7, wings 2, ring 4, wheels 2, hull 2, seal 1, finish 1, applause 1, win 1
+  Car   engine pitch 0.70-2.02, engine volume 0.15; music volume 0.35, low-pass 22000 Hz (773 samples)
+  Boat  engine pitch 1.44-2.00, engine volume 0.13; music volume 0.39, low-pass 21728 Hz (673 samples)
+  Plane engine pitch 1.83-2.31, engine volume 0.13; music volume 0.48, low-pass 22000 Hz (353 samples)
+  Sub   engine pitch 1.40-1.50, engine volume 0.14; music volume 0.22, low-pass 695 Hz (470 samples)
+  volumes from Settings: music 1.0, effects 1.0, voices 1.0; music clip results
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.42 ms, 95th pct 3.98 ms, 99th pct 13.86 ms, worst 354.69 ms over 216152 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  choice-fly   Drive->Fly  z   652.3  0.602 s  frames worst 125.05 / mean 3.38 ms
+  choice-fly   Fly->Drive  z   907.2  0.606 s  frames worst 12.04 / mean 1.82 ms
+  caller       Drive->Fly  z   658.7  0.608 s  frames worst 186.94 / mean 4.90 ms
+  caller       Fly->Drive  z   905.4  0.602 s  frames worst 6.62 / mean 2.08 ms
+  caller       Drive->Fly  z   944.5  0.601 s  frames worst 7.34 / mean 2.37 ms
+  caller       Fly->Boat   z  -607.1  0.601 s  frames worst 25.00 / mean 2.47 ms
+  caller       Boat->Dive  z  -202.0  0.602 s  frames worst 126.66 / mean 3.88 ms
+  caller       Dive->Boat  z  -466.6  0.600 s  frames worst 128.63 / mean 2.53 ms
+  caller       Boat->Drive z  -305.2  0.600 s  frames worst 7.15 / mean 2.23 ms
+sound: music results playing (its own signal peak 0.000), splashes played 2, Abi lines: messup: skipped (Barker talking, reset: reset (too slow for the loop, at 540.5 (x 0.0, y 2.9), 15 m/s, 0 m off the line) to the anchor at 512 m in Drive); water: water_1; waterfall: skipped (Barker talking); win: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -11,7 +11,7 @@ namespace ShiftStorm
     public static class VehicleDesigns
     {
         public const string GrayBox = "Gray box";
-        [System.Serializable] public sealed class Design { public string name; public string[] forms; public bool driver = true; public bool Has(Mode m) => forms != null && System.Array.IndexOf(forms, FileName(m)) >= 0; }
+        [System.Serializable] public sealed class Design { public string name; public string[] forms; public bool driver = true; public string[] steering; public bool Has(Mode m) => forms != null && System.Array.IndexOf(forms, FileName(m)) >= 0; }
         [System.Serializable] sealed class Index { public Design[] designs; }
         static List<Design> list;
 

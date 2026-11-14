@@ -1,0 +1,21 @@
+ShiftStorm check 'steering', 2026-11-14 12:36, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STEERING (item 4): Car wheel, Boat helm, Plane yoke, Sub levers; at (0.00, 0.46, 0.24) in the vehicle (the hands' centre in the Driving pose), grips 0.25 m apart
+  Car left: wheel at 119 deg, hands 5 / 20 cm off the grips, IK 1.00
+  Car centre: wheel at 0 deg, hands 8 / 8 cm off the grips, IK 1.00
+  Car right: wheel at -119 deg, hands 21 / 3 cm off the grips, IK 1.00
+  Boat left: helm at 109 deg, hands 16 / 16 cm off the grips, IK 1.00
+  Boat centre: helm at 0 deg, hands 9 / 9 cm off the grips, IK 1.00
+  Boat right: helm at -110 deg, hands 17 / 15 cm off the grips, IK 1.00
+  Plane left: yoke at 35 deg, hands 10 / 11 cm off the grips, IK 1.00
+  Plane centre: yoke at 0 deg, hands 7 / 7 cm off the grips, IK 1.00
+  Plane right: yoke at -35 deg, hands 6 / 0 cm off the grips, IK 1.00
+  Sub left: levers at -31 deg, hands 1 / 16 cm off the grips, IK 1.00
+  Sub centre: levers at 0 deg, hands 11 / 11 cm off the grips, IK 1.00
+  Sub right: levers at 31 deg, hands 21 / 7 cm off the grips, IK 1.00
+STEERING CHECK: worst hand-to-grip distance 21.5 cm over every form and angle; the mechanism swaps with the model at the change's midpoint (it follows the shown model)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.58 ms, 95th pct 2.88 ms, 99th pct 4.86 ms, worst 130.37 ms over 11760 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

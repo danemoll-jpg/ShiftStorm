@@ -34,8 +34,12 @@ namespace ShiftStorm
             // the Creek Jump (lip jA), the loop (loopIn; its control points are inserted by Controls(), the exit lane 16 m to the right),
             // the Lake Jump with its wings choice (lip jC), then back to the old line before G1. Every jump lands on a straight.
             ("jA", 0, 2.9f, 126.5f), ("promMid", 0, 2.9f, 200), ("loopApp", 0, 2.9f, 282), ("loopIn", 0, 2.9f, 317.6f),
-            ("loopOut", 9.41f, 2.9f, 317.6f), ("", 9.41f, 2.9f, 345), ("jC", 9.41f, 2.9f, 382), ("", 9.41f, 2.9f, 430), ("", 7, 2.9f, 485), ("", 3, 2.9f, 535), ("G1", 0, 2.9f, 580),
-            ("climb0", 0, 3.4f, 640), ("corner1", 12, 5, 676), ("", 50, 8, 690), ("climbMid", 190, 18, 697), ("", 340, 28, 694), ("corner2", 392, 31, 676), ("", 410, 32, 636),
+            ("loopOut", 9.41f, 2.9f, 317.6f), ("", 9.41f, 2.9f, 345), ("jC", 9.41f, 2.9f, 382), ("", 9.41f, 2.9f, 430),
+            // Round 8 item 7: the Lake Jump's two choices go different ways. The car line bends inland through a jungle canyon ("canyonIn" ..
+            // "canyonOut": rock walls, long-necks grazing at its mouth) and the climb starts further east (G1, climb0, corner1 moved east by
+            // up to 22 m, build-2 metres); the fly line (LakeFlight) swings out west over the beach and the lake's herd through the rings.
+            ("canyonIn", 13, 2.9f, 470), ("", 20, 2.9f, 510), ("canyonOut", 26, 2.9f, 545), ("G1", 29, 2.9f, 580),
+            ("climb0", 30, 3.4f, 640), ("corner1", 38, 5, 674), ("", 66, 8, 689), ("climbMid", 190, 18, 697), ("", 340, 28, 694), ("corner2", 392, 31, 676), ("", 410, 32, 636),
             ("rampStart", 412, 33, 600), ("lip", 412, 43, 556),
             ("", 412, 48, 530), ("", 350, 52, 400), ("arch", 225, 52, 260), ("", 205, 47, 110), ("", 250, 37, -30), ("", 330, 24, -150), ("", 400, 10, -270), ("splash", 430, .6f, -380),
             ("", 436, .6f, -440), ("", 452, .6f, -505), ("", 432, .6f, -575), ("", 365, .6f, -600), ("lagoonEnd", 300, .6f, -588),
@@ -61,7 +65,7 @@ namespace ShiftStorm
             c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic";
             c.halfWidth = 75; c.airHalfWidth = 420; c.minY = -45; c.maxY = 130; c.endMargin = 40; c.startMode = Mode.Drive;
             MakeLine();
-            Land(); Road(); Stunts(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery(); Polish(); Polish2();   // Round 7 item 4: the rest of the lap   // Round 5 item 6: the polished stretch
+            Land(); Road(); Stunts(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery(); Polish(); Polish2(); Dinosaurs();   // Round 8 item 1: the dinosaurs   // Round 7 item 4: the rest of the lap   // Round 5 item 6: the polished stretch
             Gates(); RouteMarks(); Zones(); Anchors(); Signs(); Segments(); Shortcuts();
             return c;
         }
@@ -503,22 +507,12 @@ namespace ShiftStorm
             b.Add(MeshKit.LowSphere, p + Vector3.up * (th * .3f) + rot * new Vector3(tr * .6f, 0, tr * .3f), rot, new Vector3(tr * 1.3f, th * .8f, tr * 1.2f), JurassicLook.RockDark);
             b.Add(MeshKit.LowSphere, p + Vector3.up * (th * .85f), rot, new Vector3(tr * 1.7f, th * .35f, tr * 1.5f), JurassicLook.Moss);
         }
-        // a Tee'd Off dinosaur mesh (copied to Resources/Dinos), standing still, sized by its height; a primitive stand-in when it is missing
+        // a Tee'd Off dinosaur, sized by its height (a pterodactyl: by its wingspan, 2.5 x the old height). Round 8: the animated, rigged model
+        // (DinoActor, idle: breathing, looking round, tail sway), no longer the static mesh; a primitive stand-in when it is missing
         static GameObject Dino(string kind, Vector3 at, float yaw, float height)
         {
-            var mesh = Resources.Load<Mesh>($"Dinos/{kind}_mesh"); var tex = Resources.Load<Texture2D>($"Dinos/{kind}_basecolor");
-            var g = new GameObject("Dino " + kind); g.transform.SetParent(scen, false);
-            if (!mesh)
-            {
-                var b = new MeshKit.Batch(); b.Add(MeshKit.LowSphere, at + Vector3.up * height * .5f, Quaternion.Euler(0, yaw, 0), new Vector3(height * .5f, height * .5f, height), JurassicLook.Moss);
-                b.Object(g.transform, "stand-in", JurassicLook.VertexColored(true)); return g;
-            }
-            var child = new GameObject("model"); child.transform.SetParent(g.transform, false);
-            child.AddComponent<MeshFilter>().sharedMesh = mesh; var mr = child.AddComponent<MeshRenderer>(); mr.sharedMaterial = JurassicLook.Textured(tex, true);
-            var bb = mesh.bounds; float k = height / Mathf.Max(bb.size.y, .01f);
-            child.transform.localScale = Vector3.one * k; child.transform.localPosition = new Vector3(-bb.center.x * k, -bb.min.y * k, -bb.center.z * k);
-            g.transform.SetPositionAndRotation(at, Quaternion.Euler(0, yaw, 0));
-            return g;
+            var d = DinoActor.Make(scen, kind, DinoActor.Kind.Idle, at, at, kind == "ptero" ? height * 2.5f : height, "", "standing " + kind, yaw);
+            return d.gameObject;
         }
 
         // ---------------- race logic: gates, zones, anchors, signs, segments ----------------
@@ -678,14 +672,22 @@ namespace ShiftStorm
             // narrower (10 x 7 m instead of 14 x 9). About 2 s at diving speed; both paths pass G7.
             if (!VaultTunnel) return;
             float l1 = M("lo1"), g7 = M("G7"); Vector3 Left(float p, float d, float y) { var pt = At(p) - Right(p) * d; pt.y = y; return pt; }
-            var A = At(l1 + 15); var B = At(g7 - 35); var mid = (A + B) * .5f; mid.y = -27;
-            var tk = new List<Vector3> { At(l1 - 10), A, Left(l1 + 45, 6, -22), Left(l1 + 72, 15, -27.5f), mid, Left(g7 - 98, 15, -27.5f), Left(g7 - 66, 6, -22), B, At(g7 - 5) };
+            // Round 8 item 9: reshaped. Build 8's line followed the cave's loop 15 m to its left (460 m against the main line's 489 m) and
+            // climbed out turning right while rising 18 m in 30 m: every run glanced the climb-out walls (~2.6 hits a run) and it saved
+            // only ~1.15 s. Now: down through the first opening, then a straight chord across the inside of the loop at -27 m, the turn
+            // made at depth in the widest part, and a straight climb-out along the main line's direction (16 m up over 65 m, 14 deg)
+            // through the second opening; the current runs the whole chord. Still demanding: two rock columns stand in the chord, the
+            // climb-out is a 19 m wide slot with a 1 m lip each side of the opening.
+            var A = At(l1 + 15); var B = At(g7 - 35); var dn0 = Left(l1 + 50, 6, -23); var dn1 = Left(g7 - 102, 4, -26);
+            var tk = new List<Vector3> { At(l1 - 10), A, dn0, Vector3.Lerp(dn0, dn1, .5f) + Vector3.down * 2.5f, dn1, Left(g7 - 72, 2, -21.5f), B, At(g7 - 5) };
             var sc = MakeShortcut("Coral Vault tunnel", tk, l1 - 10, g7 - 5, 7, -1, 10f, new Vector2(10, 8), new Vector2(8, 6), -1, -1, Mode.Dive);
             Tunnel(sc);
             // a hot-spring current runs through the tunnel (Round 4: about +11 m/s for a submarine riding it; build 4: +5), the rest of its time saving
-            for (float s = 50; s < sc.Length - 60; s += 20)
+            // Round 8 item 9: stronger (17 m/s, build 8: 9) and longer (from 30 m in to 40 m before the exit): the chord is only ~30 m shorter
+            // than the main line, so the current carries most of the 2-3 s
+            for (float s = 30; s < sc.Length - 40; s += 20)
             {
-                var p0 = sc.PointAt(s, out var d0); var cz = Vol<CurrentZone>("Tunnel current", p0, Quaternion.LookRotation(d0), new Vector3(12, 9, 20)); cz.push = d0 * 9f;
+                var p0 = sc.PointAt(s, out var d0); var cz = Vol<CurrentZone>("Tunnel current", p0, Quaternion.LookRotation(d0), new Vector3(16, 11, 20)); cz.push = d0 * 17f;
             }
         }
         // the shortcut, its line and its entry / exit sub-gates (violet frames). entryAt: metres along its line (-2: 40 m before the
@@ -720,9 +722,13 @@ namespace ShiftStorm
         {
             var rock = Mt(JurassicLook.CaveRock); var sand = Mt(JurassicLook.Sand); float L = sc.Length;
             // the exit narrows over 30 m (build 4 and the first Round 4 build: in one step, a wall face across the way)
-            float HW(float s) => Mathf.Lerp(10f, 8.5f, Mathf.InverseLerp(L - 95, L - 65, s)); float HH(float s) => Mathf.Lerp(5.5f, 4.5f, Mathf.InverseLerp(L - 95, L - 65, s));
-            // the climb-out turns right toward the main line while rising: its right side opens to 12 m (every AI run rode that wall at 8.5 m)
-            float HWR(float s) => Mathf.Lerp(10f, 12f, Mathf.InverseLerp(L - 120, L - 90, s));
+            // Round 8 item 9: 11 m half width through the chord, 9.5 m in the climb-out (build 8: 10 / 8.5), 5.5 m half height throughout
+            float HW(float s) => Mathf.Lerp(11f, 9.5f, Mathf.InverseLerp(L - 110, L - 80, s)); float HH(float s) => 5.5f;
+            // the first check (25 runs, 57 touches): every run met the right wall at ~48 deg where the descent turns into the chord, and the
+            // floor at the bottom of the descent: there the right side opens to 15 m and the floor drops 2.5 m (a bowl), easing back by 140 m
+            float Bowl(float s) => Mathf.Max(Mathf.Clamp01(Mathf.Min(Mathf.InverseLerp(10, 35, s), Mathf.InverseLerp(150, 110, s))),
+                                             Mathf.Clamp01(Mathf.Min(Mathf.InverseLerp(L - 190, L - 160, s), Mathf.InverseLerp(L - 45, L - 75, s))));   // and where the chord turns into the climb-out (the second run: 3.5 touches there at the faster current)
+            float HWR(float s) => HW(s) + 4f * Bowl(s); float HB(float s) => HH(s) + 2.5f * Bowl(s);
             MeshKit.Sample? Sec(float s, float l, float r, Func<Vector3, float> top, Func<Vector3, float> bot, Func<Vector3, bool> keep)
             {
                 var p = sc.PointAt(s, out var d); var fl = new Vector3(d.x, 0, d.z); if (fl.sqrMagnitude < 1e-4f) fl = Vector3.forward;
@@ -741,10 +747,10 @@ namespace ShiftStorm
             {
                 float hw = HW(s), hh = HH(s);
                 bool below(Vector3 p) => p.y - hh < CaveFloor - .5f;
-                float hwr = HWR(s);
-                var f0 = Sec(s, -hw - 1, hwr + 1, p => p.y - hh, p => p.y - hh - 2, below); if (f0.HasValue) fl0.Add(f0.Value);
-                var w0 = Sec(s, -hw - 3, -hw, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hh - 2, below); if (w0.HasValue) wl.Add(w0.Value);
-                var w1 = Sec(s, hwr, hwr + 3, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hh - 2, below); if (w1.HasValue) wr.Add(w1.Value);
+                float hwr = HWR(s), hb = HB(s);
+                var f0 = Sec(s, -hw - 1, hwr + 1, p => p.y - hb, p => p.y - hb - 2, below); if (f0.HasValue) fl0.Add(f0.Value);
+                var w0 = Sec(s, -hw - 3, -hw, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hb - 2, below); if (w0.HasValue) wl.Add(w0.Value);
+                var w1 = Sec(s, hwr, hwr + 3, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hb - 2, below); if (w1.HasValue) wr.Add(w1.Value);
                 var r0 = Sec(s, -hw - 3, hwr + 3, p => p.y + hh + 2, p => p.y + hh, p => p.y + hh <= CaveFloor - 3.5f);   // starts well below the floor: no lip to catch
                 if (r0.HasValue) rf.Add(r0.Value); else if (lastRoof && rf.Count > 1) { MeshKit.Strip(root, "Tunnel roof", rf, rock); rf = new List<MeshKit.Sample>(); }
                 lastRoof = r0.HasValue;
@@ -759,6 +765,12 @@ namespace ShiftStorm
                 foreach (float k in new[] { -1f, 1f }) lights.Add(MeshKit.Cube, p + rr * k * (HW(s) - 1.2f), Quaternion.LookRotation(d), Vector3.one * .7f, n % 2 == 0 ? ShortcutColor : new Color(.35f, 1f, .9f));
             }
             lights.Object(scen, "Tunnel guide lights", GateMarker.Beacon, false, false);
+            // two rock columns in the chord, off the line (5.5 m each side, alternately): a racer on the line passes between, a wide one glances off
+            for (int i = 0; i < 2; i++)
+            {
+                float s = L * (.42f + i * .16f); var p = sc.PointAt(s, out var d); var rr = Vector3.Cross(Vector3.up, new Vector3(d.x, 0, d.z).normalized);
+                Box(root, "Tunnel column", p + rr * (i == 0 ? 7.5f : -7.5f), new Vector3(3f, HH(s) * 2 + 3, 3f), Mt(JurassicLook.CaveRock, true), Quaternion.LookRotation(new Vector3(d.x, 0, d.z)), true, ShiftVehicle.ObstacleLayer);
+            }
         }
 
         static void Segments()

@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 1; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; }   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
+        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; }   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -27,6 +27,14 @@ namespace ShiftStorm
             {
                 if (d != null) return d;
                 try { if (File.Exists(FilePath)) d = JsonUtility.FromJson<Data>(File.ReadAllText(FilePath)); } catch (Exception e) { Debug.LogWarning("[Settings] could not read " + FilePath + ": " + e.Message); }
+                if (d != null && d.version < 2)
+                {
+                    // Round 8 item 6: a build 1-8 file had one Effects volume for engines and effects: engines now have their own, quieter
+                    // (60 % of what the old Effects was, never louder than the new default); music, voices and effects keep their values
+                    d.engineVol = Mathf.Min(EngineDefault, Mathf.RoundToInt(Mathf.Clamp(d.sfxVol, 0, 10) * .6f)); d.version = 2; d.playtestLogs = true;
+                    Debug.Log($"[Settings] settings.json from an older build: Engines volume set to {d.engineVol * 10} % (Effects was {d.sfxVol * 10} %)");
+                    if (!QuietRun.Check) Save();
+                }
                 if (d == null)
                 {
                     d = new Data();
@@ -55,12 +63,16 @@ namespace ShiftStorm
         public static float Music => Mathf.Clamp(D.musicVol, 0, 10) / 10f;
         public static float Effects => Mathf.Clamp(D.sfxVol, 0, 10) / 10f;
         public static float Voices => Mathf.Clamp(D.voiceVol, 0, 10) / 10f;
+        public static float Engines => Mathf.Clamp(D.engineVol, 0, 10) / 10f;
+        public const int EngineDefault = 6;
+        // Round 8 item 10: playtest logs (Menu > Settings), on by default; a check run reads the default and saves nothing
+        public static bool PlaytestLogs { get => D.playtestLogs; set { D.playtestLogs = value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] playtest logs {(value ? "on" : "off")}"); } }
         public static int Step(string which)
         {
             int Next(int x) => x <= 0 ? 10 : Mathf.Max(0, x - 2);
-            if (which == "music") D.musicVol = Next(D.musicVol); else if (which == "sfx") D.sfxVol = Next(D.sfxVol); else D.voiceVol = Next(D.voiceVol);
+            if (which == "music") D.musicVol = Next(D.musicVol); else if (which == "sfx") D.sfxVol = Next(D.sfxVol); else if (which == "engine") D.engineVol = Next(D.engineVol); else D.voiceVol = Next(D.voiceVol);
             if (!QuietRun.Check) Save();
-            int v = which == "music" ? D.musicVol : which == "sfx" ? D.sfxVol : D.voiceVol; Debug.Log($"[Settings] {which} volume {v * 10} %"); return v;
+            int v = which == "music" ? D.musicVol : which == "sfx" ? D.sfxVol : which == "engine" ? D.engineVol : D.voiceVol; Debug.Log($"[Settings] {which} volume {v * 10} %"); return v;
         }
         // Round 4: the AI's difficulty (how the rivals drive, never their vehicle). A check may set it for its run only ("-difficulty
         // Easy|Normal|Hard"), without saving.

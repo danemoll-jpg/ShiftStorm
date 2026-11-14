@@ -101,7 +101,7 @@ namespace ShiftStorm
             if (!fresh) return;
             lastGlanceAt = Time.time; WallHits++; if (air) Scrapes++;
             LastWallAt = Time.time; LastWallKeep = keep; LastWallAngle = angle;
-            Note("wall", $"wall {c.collider.name} as {Mode}: {angle:0} deg, {sp:0.0} -> {newSp:0.0} m/s ({keep * 100:0} % kept){(slit && air ? ", slit scrape (Round 3 rule)" : "")}");
+            Note("wall", $"wall {c.collider.name} as {Mode} at {Progress:0} m: {angle:0} deg, {sp:0.0} -> {newSp:0.0} m/s ({keep * 100:0} % kept){(slit && air ? ", slit scrape (Round 3 rule)" : "")}");
             WallHit?.Invoke(angle, keep, c.collider.name);
         }
     }

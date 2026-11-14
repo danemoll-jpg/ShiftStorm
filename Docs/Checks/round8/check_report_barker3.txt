@@ -1,0 +1,49 @@
+ShiftStorm check 'barker', 2026-11-14 13:51, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BARKER (item 2): 158 clips in 53 pools; drivers' lines loaded: Abigail 17 (mess-ups 8), Rae 12 (mess-ups 7), Chip 13 (mess-ups 8), Vivi 13 (mess-ups 8)
+  forced a reset at 26.2 s (the Cliffside Climb)
+BARKER PASS: race 133.4 s, 22 lines during it (9.9 per minute, one every 6.1 s), 24 with the start and results; longest silence 7.5 s; overlaps 0 (cut-ins by GO / the winner, the line before stopped: 0); repeats 0; pools: go 1, bronto 1, ptero 1, tocar 1, boost 2, trex 1, raptor 1, toplane 1, arch 1, nest 1, plesio 1, fill 2, mangrove 1, trike 1, gateway 1, vault 1, skeleton 1, catch 1, passchip 1, waterfall 1, win 1, podium 1
+       0.0 s  go        go_2 (2.7 s)
+       6.3 s  bronto    bronto_2 (3.9 s)
+      11.4 s  ptero     ptero_1 (3.7 s)
+      17.1 s  tocar     tocar_2 (3.6 s)
+      22.9 s  boost     boost_1 (2.1 s)
+      26.2 s  trex      trex_1 (3.2 s)
+      30.6 s  raptor    raptor_1 (3.7 s)
+      36.1 s  toplane   toplane_4 (3.5 s)
+      41.3 s  arch      arch_1 (3.0 s)
+      45.6 s  nest      nest_1 (4.6 s)
+      57.1 s  boost     boost_2 (2.6 s)
+      60.9 s  plesio    plesio_2 (3.7 s)
+      71.4 s  fill      fill_9 (5.5 s)
+      78.1 s  mangrove  mangrove_2 (3.3 s)
+      82.6 s  trike     trike_2 (4.2 s)
+      94.4 s  fill      fill_5 (3.8 s)
+      99.3 s  gateway   gateway_1 (4.7 s)
+     105.2 s  vault     vault_1 (4.8 s)
+     111.3 s  skeleton  skeleton_1 (3.0 s)
+     115.6 s  catch     catch_1 (2.7 s)
+     123.2 s  passchip  passchip_1 (4.2 s)
+     128.6 s  waterfall waterfall_1 (3.5 s)
+     132.3 s  win       win_any_2 (3.5 s)
+     137.0 s  podium    podium_3 (3.7 s)
+  skipped calls (why): talking 74, just spoke 22, cooldown 10, every clip used this race 2
+  LEVELS (would-be: each clip's signal at its play position x its source volume, the muted listener aside; 800 samples while he talks): Barker -20.6 dBFS, music -27.3 (between his lines -20.9), player's engine -36.0 (between -28.6); Barker over the music by 6.7 dB, over the engine by 15.4 dB; the duck: music -6.4 dB, engine -7.4 dB
+MESS-UPS (item 3) PASS: 1 yells in the race (29.4 s Abigail mishit_1); overlapping Barker: 0; Barker cut a driver off 0 times
+  Abigail: 8 mess-up lines + 2 water; this race: messup: mishit_1; waterfall: skipped (Barker talking)
+  Rae: 7 mess-up lines + 2 water; this race: 
+  Chip: 8 mess-up lines + 2 water; this race: 
+  Vivi: 8 mess-up lines + 2 water; this race: 
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.68 ms, 95th pct 2.48 ms, 99th pct 3.12 ms, worst 66.99 ms over 84222 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  barker       Drive->Fly  z   652.9  0.601 s  frames worst 11.49 / mean 1.78 ms
+  barker       Fly->Drive  z   906.6  0.602 s  frames worst 9.89 / mean 1.60 ms
+  barker       Drive->Fly  z   944.6  0.600 s  frames worst 7.25 / mean 1.65 ms
+  barker       Fly->Boat   z  -606.0  0.600 s  frames worst 3.56 / mean 1.72 ms
+  barker       Boat->Dive  z  -202.5  0.600 s  frames worst 2.83 / mean 1.61 ms
+  barker       Dive->Boat  z  -466.5  0.602 s  frames worst 66.99 / mean 2.05 ms
+  barker       Boat->Drive z  -304.6  0.601 s  frames worst 6.30 / mean 1.93 ms
+sound: music results playing (its own signal peak 0.000), splashes played 2, Abi lines: messup: mishit_1; waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

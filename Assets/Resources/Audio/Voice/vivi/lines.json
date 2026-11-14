@@ -1,0 +1,53 @@
+{
+ "speaker": "vivi",
+ "lines": [
+  {
+   "id": "disaster_1",
+   "text": "I simply cannot!"
+  },
+  {
+   "id": "disaster_2",
+   "text": "This is a tragedy!"
+  },
+  {
+   "id": "gasp_1",
+   "text": "Oh my!"
+  },
+  {
+   "id": "lose_1",
+   "text": "Second place suits no one."
+  },
+  {
+   "id": "messup_1",
+   "text": "Noooooo!"
+  },
+  {
+   "id": "messup_2",
+   "text": "Oh no!"
+  },
+  {
+   "id": "messup_3",
+   "text": "My hair! Darling, my HAIR!"
+  },
+  {
+   "id": "mishit_1",
+   "text": "My nail!"
+  },
+  {
+   "id": "quipgood_1",
+   "text": "Darling, that was effortless."
+  },
+  {
+   "id": "trouble_1",
+   "text": "Darling, no."
+  },
+  {
+   "id": "water_1",
+   "text": "Not the water! My shoes!"
+  },
+  {
+   "id": "win_1",
+   "text": "Champagne for everyone!"
+  }
+ ]
+}

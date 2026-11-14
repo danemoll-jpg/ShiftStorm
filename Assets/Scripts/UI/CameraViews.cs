@@ -100,7 +100,8 @@ namespace ShiftStorm
             // (following her twirling head looked across her shoulder)
             if (!v.Changing) eyeLocal = t.InverseTransformPoint(eye);
             else eye = t.TransformPoint(eyeLocal + Vector3.up * .12f);
-            return Mounted(v, eye, Quaternion.Euler(v.Mode == Mode.Fly ? 4 : 7, Mathf.Clamp(v.Body.angularVelocity.y * Mathf.Rad2Deg * .2f, -10, 10), 0), fallback.fov + 4f, View.FirstPerson);
+            return Mounted(v, eye, Quaternion.Euler(v.Mode == Mode.Fly ? 8 : 12,   // Round 8: a little more down: the steering mechanism in view
+                 Mathf.Clamp(v.Body.angularVelocity.y * Mathf.Rad2Deg * .2f, -10, 10), 0), fallback.fov + 4f, View.FirstPerson);
         }
         // ---------- front: just ahead of the nose, bumper level (a little higher on the water) ----------
         Pose FrontView(ShiftVehicle v, Pose fallback)

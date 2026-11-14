@@ -41,6 +41,7 @@ namespace ShiftStorm
         int sleepMs;   // slowfps: a sleep in every frame (a low frame rate)
         readonly Dictionary<Mode, float> topSpeed = new Dictionary<Mode, float>();
         readonly List<(float t, float ms, string seg, string ev)> hitches = new List<(float, float, string, string)>();
+        HitchProbe probe;   // Round 8 item 8
 
         void Start()
         {
@@ -68,8 +69,9 @@ namespace ShiftStorm
             if (FrameTimingManager.GetLatestTimings(1, timing) > 0) gpu = (float)timing[0].gpuFrameTime;
             frames.Add((Time.time, Time.unscaledDeltaTime, shotLastFrame, gpu, segNow));
             if (measure && !shotLastFrame && Time.unscaledDeltaTime > .05f) hitches.Add((Time.time - v.StartTime, Time.unscaledDeltaTime * 1000, segNow, v.LastEvent));
+            if (measure) { if (probe == null) { probe = new HitchProbe(); probe.Start(); } if (!shotLastFrame) probe.Frame(Time.unscaledDeltaTime * 1000, 50f, $"at {Time.time - v.StartTime:0.0} s ({segNow})"); }
             shotLastFrame = false;
-            FeelSample();
+            FeelSample(); DinoSample(); ProgShots();   // Round 8
             if (measure)
             {
                 if (!px) { px = new Texture2D(1, 1, TextureFormat.RGB24, false); draws = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count"); tris = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count"); batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count"); }
@@ -203,6 +205,14 @@ namespace ShiftStorm
             if (r7 || which == "choice") yield return ChoiceCheck();
             if (which == "stuntlaps") yield return StuntLaps();
             if (r7 || which == "caller") yield return CallerCheck();
+            bool r8 = which == "round8";
+            if (r8 || which == "dinos") yield return DinosCheck();
+            if (which == "hitch") yield return Lap();
+            if (r8 || which == "barker") yield return BarkerCheck();
+            if (r8 || which == "places") yield return PlacesCheck();
+            if (r8 || which == "steering") yield return SteeringCheck();
+            if (r8 || which == "volumes") yield return VolumesCheck();
+            if (r8 || which == "choice8") yield return Choice8();
             FeelReport();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();
@@ -290,6 +300,12 @@ namespace ShiftStorm
             foreach (var l in v.Log) if (l.Contains("missed") || l.Contains("rejected") || l.Contains("wrong way") || l.Contains("reset") || l.Contains("back through")) Line("  log: " + l);
             RenderReport(c);
             hitches.Sort((a, b) => b.ms.CompareTo(a.ms));
+            if (probe != null)
+            {
+                Line($"  HITCHES (item 8): {(probe.HasMarkers ? "engine markers read (development build)" : "no engine markers (release build): GC and allocation counters only")}; blamed (largest marker of the frame before): {string.Join(", ", probe.Blame.OrderByDescending(kv => kv.Value).Select(kv => $"{kv.Key} x{kv.Value}"))}");
+                foreach (var k in probe.Kept.Take(30)) Line("    " + k);
+                probe.Stop(); probe = null;
+            }
             Line($"  frames over 50 ms during the lap: {hitches.Count}{(hitches.Count > 0 ? "; worst: " + string.Join("; ", hitches.GetRange(0, Mathf.Min(6, hitches.Count)).ConvertAll(h => $"{h.ms:0} ms at {h.t:0.0} s ({h.seg}, after \"{h.ev}\")")) : "")}");
             // results, best saved, restart
             var tt = game.Trial;

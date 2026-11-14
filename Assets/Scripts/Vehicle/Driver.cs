@@ -32,16 +32,39 @@ namespace ShiftStorm
         int oneShot = -1; float oneShotEnd; public bool Animated { get; private set; } public int ClipCount { get; private set; }
         public readonly List<string> Played = new List<string>();
 
-        // voice
+        // voice (Round 8 item 3: every driver speaks, in their own Tee'd Off voice: copied clips + new ElevenLabs lines in Resources/Audio/Voice/<who>)
         AudioSource voice; readonly Dictionary<string, AudioClip[]> lines = new Dictionary<string, AudioClip[]>(); readonly Dictionary<string, float> nextOf = new Dictionary<string, float>();
         float nextAny; public readonly List<string> Spoken = new List<string>();
-        static readonly Dictionary<string, string[]> LineNames = new Dictionary<string, string[]>
+        public static readonly List<string> AllSpoken = new List<string>();   // every driver's lines in this run, "t who pool clip length" (checks)
+        public float SpeakingUntil { get; private set; } = -1;
+        public static float AnySpeakingUntil;   // the latest a driver's line runs to (the Caller treats it as talking)
+        // pool -> clip names, per driver (the folder's lower-case name); mess-ups: Round 8 item 3 (Dan: "Noooo" or "oh no!", or in character)
+        static readonly Dictionary<string, Dictionary<string, string[]>> LineNames = new Dictionary<string, Dictionary<string, string[]>>
         {
-            { "finish", new[] { "win_1", "quipgood_1", "quipgood_2" } },
-            { "reset", new[] { "disaster_1", "disaster_2", "grunt_1", "trouble_1" } },
-            { "waterfall", new[] { "laugh_1", "lucky_1" } },
+            ["abigail"] = new Dictionary<string, string[]> {
+                { "win", new[] { "win_1", "quipgood_1", "quipgood_2" } }, { "last", new[] { "lose_1", "quipbad_1" } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "mishit_1", "gasp_1", "bogey_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_1" } },
+                { "waterfall", new[] { "laugh_1", "lucky_1" } } },
+            ["rae"] = new Dictionary<string, string[]> {
+                { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "water_1", "messup_1" } } },
+            ["chip"] = new Dictionary<string, string[]> {
+                { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "messup_2", "disaster_1" } } },
+            ["vivi"] = new Dictionary<string, string[]> {
+                { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_2" } } },
         };
-        const float LineCooldown = 8f, AnyCooldown = 3f;
+        public static string[] MessupNames(string folder) => LineNames.TryGetValue(folder, out var t) && t.TryGetValue("messup", out var m) ? m : new string[0];
+        const float LineCooldown = 8f, AnyCooldown = 3f, MessupCooldown = 5f, NearPlayer = 70f;
+        Steering steering; float ik; public float IkWeight => ik;
+        public Steering Steering => steering;
+        public int FinishPlace { get; private set; }   // the place this driver finished in (0: not finished / no race)
+        public string FinishReaction { get; private set; } = "";
+        public static readonly List<Driver> All = new List<Driver>();
+        public string Who => who;
+        public int LinesLoaded { get; private set; }
+        public int LinesIn(string pool) => lines.TryGetValue(pool, out var l) ? l.Length : 0;
 
         // Round 3: the rivals' drivers too (Tee'd Off's Chip, Rae and Vivi, copied to Resources/Drivers/<name>), with Abi's shared seated
         // clips and no voice (only the player's driver speaks).
@@ -51,7 +74,7 @@ namespace ShiftStorm
             var d = v.gameObject.AddComponent<Driver>(); d.v = v; d.forms = v.Forms;
             if (character != null) { d.who = character; d.modelPath = $"Drivers/{character}/{character}"; d.texPath = $"Drivers/{character}/{character}_basecolor"; }
             else Instance = d;
-            d.Seat(); if (character == null) d.Voice();
+            d.Seat(); d.Voice(); All.Add(d);
             return d;
         }
 
@@ -88,6 +111,17 @@ namespace ShiftStorm
             Place(seat, s); Scale = s; HeadTop = MaxY();
             if (!Animated) foreach (var b in new[] { hips, spine, chest, head, uaL, uaR, laL, laR, ulL, ulR, llL, llR }) if (b) seated[b] = b.localRotation;
             Source = Animated ? $"{who}.fbx (Tee'd Off), Humanoid, {ClipCount} shared Mixamo clips (Driving loop), scale {s:0.00}" : $"{who}.fbx (Tee'd Off), Humanoid, fixed seated pose (no clips found), scale {s:0.00}";
+            // Round 8 item 4: the steering mechanism where her hands are in the Driving pose (the pivot's space, at the gray seat)
+            if (handL && handR)
+            {
+                Vector3 a = forms.Pivot.InverseTransformPoint(handL.position), b = forms.Pivot.InverseTransformPoint(handR.position);
+                var mid = (a + b) * .5f; float span = Vector3.Distance(a, b);
+                var hp = forms.Pivot.InverseTransformPoint(hips.position);
+                // Round 8: a little up and forward of the clip's hands (nearer the cockpit rim, so it shows in first person)
+                mid.y = Mathf.Clamp(mid.y + .12f, hp.y + .2f * s, hp.y + .6f * s); mid.z = Mathf.Clamp(mid.z + .13f, hp.z + .22f * s, hp.z + .6f * s); mid.x = 0;   // (arms reach ~0.2 m past the clip's hands)
+                steering = Steering.Make(v, mid, span);
+                Debug.Log($"[Driver] {who}: steering at {mid.ToString("F2")} (hands {span:0.00} m apart in the Driving pose)");
+            }
             forms.Snap(Mode.Drive);
             Debug.Log($"[Driver] {who} seated: scale {s:0.00}, head top {HeadTop:0.00} m, closed canopy top {top:0.00} m");
         }
@@ -125,7 +159,6 @@ namespace ShiftStorm
             float sum = 0; foreach (var w in weight) sum += w; if (sum > 1e-4f) for (int i = 0; i < weight.Length; i++) weight[i] /= sum;
             Apply();
         }
-        void OnDestroy() { if (graph.IsValid()) graph.Destroy(); }
         Vector3 Local(Vector3 world) => transform.InverseTransformPoint(world);
         Vector3 W(Vector3 localDir) => transform.TransformDirection(localDir.normalized);
         // point a bone so its child lies along a direction (vehicle space: x right, y up, z forward)
@@ -206,6 +239,7 @@ namespace ShiftStorm
         {
             if (model && forms && model.gameObject.activeSelf != forms.ShowDriver) model.gameObject.SetActive(forms.ShowDriver);   // a closed design hides her
             if (Animated && model && v) UpdateGraph();
+            TryPending();
         }
 
         void LateUpdate()
@@ -221,6 +255,7 @@ namespace ShiftStorm
                 Legs();
                 if (spine) spine.rotation = Quaternion.AngleAxis(-lean * 6f, transform.forward) * spine.rotation;
                 if (head) head.rotation = Quaternion.AngleAxis(lean * 12f, transform.up) * head.rotation;
+                ArmsToGrips();
                 return;
             }
             model.localPosition += forms.SeatOffset - seatApplied; seatApplied = forms.SeatOffset;
@@ -228,6 +263,7 @@ namespace ShiftStorm
             foreach (var kv in seated) kv.Key.localRotation = kv.Value;
             if (spine) spine.rotation = Quaternion.AngleAxis(-lean * 9f, transform.forward) * spine.rotation;
             if (head) head.rotation = Quaternion.AngleAxis(lean * 14f, transform.up) * head.rotation;
+            ArmsToGrips();
             if (cheer > .01f)
                 foreach (var (u, l, s) in new[] { (uaL, laL, -1f), (uaR, laR, 1f) })
                 {
@@ -236,34 +272,122 @@ namespace ShiftStorm
                 }
         }
 
+        // ---------------- Round 8 item 4: hands on the steering ----------------
+        // Two-bone IK per arm (upper arm, forearm) to the shown mechanism's grips, the elbows bent down and out; eased off for the one-shot
+        // gestures (clap, thumbs up, honk, disappointed) and after the finish.
+        void ArmsToGrips()
+        {
+            var m = steering ? steering.Shown : null;
+            bool want = m != null && oneShot < 0 && !v.Finished && forms.ShowDriver;
+            ik = Mathf.MoveTowards(ik, want ? 1 : 0, Time.deltaTime / .25f);
+            if (ik <= 0 || m == null) return;
+            TwoBone(uaL, laL, handL, m.gripL.position, -1, ik); TwoBone(uaR, laR, handR, m.gripR.position, 1, ik);
+        }
+        void TwoBone(Transform upper, Transform lower, Transform hand, Vector3 target, float side, float w)
+        {
+            if (!upper || !lower || !hand) return;
+            Vector3 s0 = upper.position; float a = Vector3.Distance(s0, lower.position), b = Vector3.Distance(lower.position, hand.position);
+            var to = target - s0; float d = Mathf.Clamp(to.magnitude, Mathf.Abs(a - b) + 1e-3f, (a + b) * .999f); var dir = to.normalized;
+            var pole = transform.right * side * .7f - transform.up * .7f - transform.forward * .2f;   // elbows down and out
+            var n = Vector3.Cross(dir, pole); if (n.sqrMagnitude < 1e-6f) n = transform.right; n.Normalize();
+            float cosA = Mathf.Clamp((a * a + d * d - b * b) / (2 * a * d), -1, 1), sinA = Mathf.Sqrt(1 - cosA * cosA);
+            var elbow = s0 + (dir * cosA + Vector3.Cross(n, dir) * sinA) * a;
+            var full = Quaternion.FromToRotation(lower.position - s0, elbow - s0) * upper.rotation;
+            upper.rotation = Quaternion.Slerp(upper.rotation, full, w);
+            var fullL = Quaternion.FromToRotation(hand.position - lower.position, target - lower.position) * lower.rotation;
+            lower.rotation = Quaternion.Slerp(lower.rotation, fullL, w);
+        }
+        // check helper: how far each hand is from its grip (m)
+        public (float l, float r) GripError() { var m = steering ? steering.Shown : null; if (m == null || !handL || !handR) return (-1, -1); return (Vector3.Distance(handL.position, m.gripL.position), Vector3.Distance(handR.position, m.gripR.position)); }
+
         // ---------------- voice ----------------
+        string Folder => who == "Abigail" ? "abigail" : who.ToLowerInvariant();
         void Voice()
         {
             voice = gameObject.AddComponent<AudioSource>(); voice.spatialBlend = 0; voice.volume = .95f; voice.playOnAwake = false;
             int n = 0;
-            foreach (var kv in LineNames)
-            {
-                var list = new List<AudioClip>(); foreach (var name in kv.Value) { var c = Resources.Load<AudioClip>("Audio/Voice/abigail/" + name); if (c) list.Add(c); }
-                lines[kv.Key] = list.ToArray(); n += list.Count;
-            }
+            if (LineNames.TryGetValue(Folder, out var table))
+                foreach (var kv in table)
+                {
+                    var list = new List<AudioClip>(); foreach (var name in kv.Value) { var c = Resources.Load<AudioClip>($"Audio/Voice/{Folder}/{name}"); if (c && !list.Contains(c)) list.Add(c); }
+                    lines[kv.Key] = list.ToArray(); n += list.Count;
+                }
+            LinesLoaded = n;
             v.Event += (kind, text) =>
             {
-                if (kind == "finish") { Say("finish"); PlayOnce(Clap); }
-                else if (kind == "reset") { Say("reset"); PlayOnce(Grumble); }
+                if (kind == "finish") StartCoroutine(FinishReact());
+                else if (kind == "reset") { MessUp(text.Contains("water") || text.Contains("creek") ? "water" : "messup", "reset: " + text); PlayOnce(Grumble); }
                 else if (kind == "go") PlayOnce(Horn);
-                else if (kind == "change") { if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive) Say("waterfall"); PlayOnce(Thumbs); }
+                else if (kind == "start") { FinishPlace = 0; FinishReaction = ""; }
+                else if (kind == "gate" && text.Contains("near miss")) MessUp("messup", "penalty");
+                else if (kind == "missed") MessUp("messup", "missed gate");
+                else if (kind == "change") { if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive && v.Human) Say("waterfall"); PlayOnce(Thumbs); }
             };
-            Debug.Log($"[Driver] voice: {n} Abigail lines loaded");
+            v.Stunt += st => { if (st == "loopfail") MessUp("messup", "loop failed"); };
+            v.WallHit += (angle, keep, what) => { if (keep < .7f && !v.Finished && !v.Holding) MessUp("messup", $"wall hit ({angle:0} deg)"); };
+            Debug.Log($"[Driver] voice: {n} {who} lines loaded");
         }
-        public bool Say(string what)
+        // the finish: a reaction by place (Round 8 item 5: 1st claps, 2nd-3rd thumbs up, last is disappointed, never clapping)
+        System.Collections.IEnumerator FinishReact()
+        {
+            yield return null; yield return null;   // the race has added this finisher
+            var g = Game.Instance; var race = g ? g.Race : null; bool raced = race && race.Active && race.Racers.Contains(v);
+            int place = raced ? race.Finishers.FindIndex(f => f.v == v) + 1 : 1, field = raced ? race.Racers.Count : 1;
+            if (raced && place <= 0) place = race.Place(v);
+            FinishPlace = raced ? place : 0;
+            if (!raced) { var tt = g ? g.TrialOf(v) : null; yield return null; bool best = tt && tt.NewBest; FinishReaction = best ? "clap (time trial, new best)" : "thumbs up (time trial)"; PlayOnce(best ? Clap : Thumbs); if (best && v.Human) Say("win"); }
+            else if (place == 1) { FinishReaction = "clap (1st)"; PlayOnce(Clap); if (v.Human) Say("win"); }
+            else if (place < field) { FinishReaction = $"thumbs up ({Race.Ordinal(place)})"; PlayOnce(Thumbs); }
+            else { FinishReaction = $"disappointed ({Race.Ordinal(place)}, last)"; PlayOnce(Grumble); if (v.Human) Say("last"); }
+            v.Note("reaction", $"{who} finished {(raced ? Race.Ordinal(place) + " of " + field : "the time trial")}: {FinishReaction}");
+        }
+        // a mess-up yell: the people's own drivers always, a rival only near a person's racer; never over TeedOff Barker (he narrates)
+        public void MessUp(string pool, string why)
+        {
+            if (!v.Course || !v.Course.timeTrial || v.Holding) return;
+            if (!v.Human)
+            {
+                var g = Game.Instance; bool near = false;
+                if (g) foreach (var h in g.Humans) if (h && h.Body && Vector3.Distance(h.Body.position, v.Body.position) < NearPlayer) near = true;
+                if (!near) return;
+            }
+            if (Time.time < AnySpeakingUntil) { Spoken.Add($"{pool}: skipped (another driver, {why})"); return; }
+            // Barker mid-line: the yell waits (up to 6 s) for his line to end, and he starts nothing new meanwhile (PendingYell)
+            if (Caller.Instance && Caller.Instance.Talking) { pendPool = pool; pendWhy = why; pendUntil = Time.time + 6f; PendingYell = true; return; }
+            if (Say(pool, false, MessupCooldown)) v.Note("messup", $"{who} reacts: {why}");
+        }
+        string pendPool, pendWhy; float pendUntil = -1;
+        public static bool PendingYell { get; private set; }
+        void TryPending()
+        {
+            if (pendUntil < 0) return;
+            if (Time.time > pendUntil) { Spoken.Add($"{pendPool}: skipped (Barker talking, {pendWhy})"); pendUntil = -1; PendingYell = false; return; }
+            if (Caller.Instance && Caller.Instance.Talking) return;
+            pendUntil = -1; PendingYell = false; nextAny = 0;
+            if (Say(pendPool, false, MessupCooldown)) v.Note("messup", $"{who} reacts (after Barker's line): {pendWhy}");
+        }
+        public bool Say(string what, bool force = false, float cooldown = LineCooldown)
         {
             if (!lines.TryGetValue(what, out var set) || set.Length == 0) return false;
             float now = Time.time;
-            if (now < nextAny || (nextOf.TryGetValue(what, out var t) && now < t)) { Spoken.Add($"{what}: skipped (cooldown)"); return false; }
-            var clip = set[Random.Range(0, set.Length)]; voice.volume = .95f * Settings.Voices; voice.PlayOneShot(clip);
-            nextAny = now + AnyCooldown; nextOf[what] = now + LineCooldown; Spoken.Add($"{what}: {clip.name}");
-            v.Note("voice", $"Abi says {clip.name} ({what})");
+            if (!force && (now < nextAny || (nextOf.TryGetValue(what, out var t) && now < t))) { Spoken.Add($"{what}: skipped (cooldown)"); return false; }
+            if (Caller.Instance && Caller.Instance.Talking && !force) { Spoken.Add($"{what}: skipped (Barker talking)"); return false; }
+            AudioClip clip = set[Random.Range(0, set.Length)];
+            for (int k = 0; k < 4 && set.Length > 1 && Spoken.Count > 0 && Spoken[Spoken.Count - 1].EndsWith(clip.name); k++) clip = set[Random.Range(0, set.Length)];
+            voice.Stop(); voice.clip = clip; voice.volume = .95f * Settings.Voices * (v.Human ? 1f : .85f); voice.Play();
+            nextAny = now + AnyCooldown; nextOf[what] = now + cooldown; Spoken.Add($"{what}: {clip.name}");
+            SpeakingUntil = now + clip.length; AnySpeakingUntil = Mathf.Max(AnySpeakingUntil, SpeakingUntil);
+            AllSpoken.Add($"{now:0.00} {who} {what} {clip.name} {clip.length:0.00}");
+            v.Note("voice", $"{who} says {clip.name} ({what})");
             return true;
         }
+        // TeedOff Barker cuts in: a driver's line stops (he has priority)
+        public static void Hush()
+        {
+            foreach (var d in All) if (d && d.voice && d.voice.isPlaying) { d.voice.Stop(); if (d.SpeakingUntil > Time.time) { AllSpoken.Add($"{Time.time:0.00} {d.who} cut by Barker"); d.SpeakingUntil = Time.time; } }
+            AnySpeakingUntil = Mathf.Min(AnySpeakingUntil, Time.time);
+        }
+        public AudioSource VoiceSource => voice;
+        void OnDestroy() { All.Remove(this); if (graph.IsValid()) graph.Destroy(); }
     }
 }

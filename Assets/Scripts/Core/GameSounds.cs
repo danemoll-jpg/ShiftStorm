@@ -77,7 +77,11 @@ namespace ShiftStorm
                     case "gate": Play(text.Contains("near miss") ? "miss" : "gate", text.Contains("near miss") ? .6f : .45f, text.Contains("G10") ? 1.25f : 1f); break;
                     case "shortcut": Play("ring", .5f); break;
                     case "go": Play("go", .55f); break;
-                    case "finish": Play("finish", .6f); Play("applause", .4f); if (game.Race && game.Race.Active) Play(game.Race.Finishers.Count <= 1 ? "win" : "lost", .7f); break;
+                    case "finish":
+                        // Round 8 item 5: by place: 1st the cheer, applause and the win jingle; a middle place a small clap; last an "aww" (no applause)
+                        { var race = game.Race; int place = race && race.Active ? race.Finishers.Count : 1, field = race && race.Active ? race.Racers.Count : 1; bool last = place == field && field > 1;
+                          if (!last) { Play("finish", .6f); Play("applause", .4f); } if (race && race.Active) Play(place <= 1 ? "win" : last ? "miss" : "lost", .7f); }
+                        break;
                     case "reset": if (text.Contains("water")) Play("splash", .6f); Play("reset", .35f); break;
                 }
             };

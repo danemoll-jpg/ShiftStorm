@@ -103,7 +103,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Effects / Voices volume (A steps 100 -> 80 ... 0 -> 100 %, saved). Quit game asks "No / Yes" (No is preselected) and exits
+Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker + drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
 with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
 starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
 back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
@@ -133,6 +133,11 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   inside rock / on the water surface). Round 7: `round7` = `loop` (full / slow / very slow entries, pictures at 4 points in every view, 25 AI
   runs, `-loopRuns N`) + `jumps` (each plain jump with and without boost, a slow one) + `choice` (car line vs fly line timed, LB late, LB
   elsewhere) + `caller` (a race: caller lines, effects, engine and music mix per form); `stuntlaps` (`-races N` x 4 AI, grid to G2, Normal).
+  Round 8: `round8` = `dinos` (the lap counting dinosaurs seen per segment, route clearance, roars; + Lap) + `barker` (a race: lines / min, longest
+  silence, overlaps, repeats, would-be levels, mess-ups) + `places` (1st / middle / last: reaction clip + results line) + `steering` (every form,
+  first person + chase, full left / centre / right, hands-to-grips) + `volumes` (the four volumes, a migrated old settings.json via `-saveDir`, the
+  duck) + `choice8` (Lake Jump car vs fly + canyon / lake pictures); `hitch` = the lap alone (HitchProbe: engine markers per long frame,
+  best in the development build: BuildPlayer `-development` -> `Builds/ShiftStormDev`, Run-Check `-Exe`). `-noDinos`, `-noWarmup` for comparisons.
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -155,6 +160,8 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `python Tools/Publish-LauncherRelease.py Builds/Release/build-1/draft --publish --confirm-repository danemoll-jpg/ShiftStorm-Releases`
   (version and build go up every round; the starter ZIP is `ShiftStorm-<version>-Full.zip` on the release).
 - Round-end disk clean-up: `python Tools/cleanup_round.py`
+- Voices (Round 8): `python Tools/Audio/caller_lines.py` (Barker; `--go`, `--redo` re-records all), `python Tools/Audio/driver_lines.py` (drivers'
+  mess-ups), then `python Tools/Audio/normalize_voice.py` (every voice clip to -16 LUFS). Playtest logs: `python Tools/playtest_summary.py <folder> [--out x.md]`.
 
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
@@ -232,11 +239,26 @@ much faster, fullscreen by default.
     four Suno songs, Music / Effects / Voices volumes. **TeedOff Barker** calls the race (`Race/Caller.cs`, clips in `Resources/Audio/Voice/barker`).
   - New sound files must be imported with Preload Audio Data on (the importer rule now sets it).
 
+- **Round 8 (build 9, 0.8.0):**
+  - **Dinosaurs** (`World/Dinos.cs`, `World/ParadisePlunge.Dinos.cs`): Tee'd Off's rigged bronto / T. rex / trike / ptero built at run time from
+    `Resources/Dinos/<style>_rig.bytes`, Tee'd Off's ModelCreature animation copied (`DinoPose`), behaviours in `DinoActor` (graze, wade, swim,
+    raptors run alongside, the T. rex roars on the climb's cliff with a camera shake, pterodactyls swoop); 46 along the lap + nests, footprints,
+    cave fossils; every path kept off the racer line at build time; drawn within 650 m, shadows within 140 m. Stand-ins: raptor (small T. rex),
+    plesiosaur (swimming bronto); Tripo prompts in `Docs/MODELS-NEEDED.md`.
+  - **TeedOff Barker** (`Race/Caller.cs`): Round 7's ElevenLabs lines were silent (converter fade bug) - all re-recorded; 158 clips in 53 pools,
+    every voice at -16 LUFS; a line every ~6 s (landmarks, dinos, overtakes by name, places, form changes, fill-ins), never two at once, no
+    repeats in a race; music and engines duck 8 dB under him (`Caller.Duck`).
+  - **Drivers** (`Vehicle/Driver.cs`): every driver speaks in their own voice; mess-up yells (wall, reset, penalty, missed gate, loop fail; rivals
+    only near a person's racer), never over Barker (a yell waits for his line); finish reaction by place (1st clap, middle thumbs up, last
+    disappointed). **Steering mechanism** (`Vehicle/Steering.cs`): wheel / helm / yoke / levers per form (+ stick, handlebars; designs.json
+    "steering" or a "Steering" empty in a model), hands on it by two-bone IK.
+  - **Lake Jump paths:** the car line bends inland through a jungle canyon (`Canyon()`; G1 / climb0 / corner1 moved east), the fly line swings
+    out west over the beach and the lake (`LakeFlight`); about equal time. **Coral Vault tunnel** reshaped (straight chord, straight climb-out,
+    a bowl at the first turn, a 17 m/s current). **Warm-up** (`Core/Warmup.cs`): the course rendered from ~100 views at start-up (DX12 pipelines).
+  - **Playtest logs** (`Core/PlaytestLog.cs`): `<data>/playtest/session-*.jsonl`, one record per race per player.
+
 Dan reviewed build 7: "everything good so far."
 
 Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes became Round 8.
 
-Current objective: **Round 8** — more (animated) dinosaurs so it reads as Jurassic Par, TeedOff Barker louder and talking more,
-driver mess-up reactions, a visible steering mechanism per form, results reactions by place, Music / Voices / Engines / Effects
-volumes (engines quieter), choice jumps with different paths, hitch fix, the Coral Vault tunnel reshape (Dan's OK for a visible window for that item
-only), playtest logging. Release build 9 (0.8.0). See `TODO.md`.
+Round 8 delivered as build 9 (0.8.0), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").

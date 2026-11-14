@@ -1,0 +1,88 @@
+ShiftStorm check 'dinos', 2026-11-14 12:12, build 0.8.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+DINOS (item 1): 46 dinosaurs (bronto 17, trike 11, trex 2, ptero 11, raptor 4, plesio 1), 8 nests / footprints / fossils; stand-ins (no model yet): raptor, plesio
+  rigs: bronto 20.7k tris, trex 20.7k tris, trike 20.9k tris, ptero 20.5k tris; left out at build time (too near the line): ptero flight ptero 2: 29 m from the line at 3047 m; trike finish trike: 19 m from the line at 5899 m
+  ROUTE CLEARANCE: the nearest any dinosaur's path comes to the racer line: 8.0 m (standing ptero; walkers on the ground plan (in 3D where the line passes 20+ m over them), pterodactyls in 3D)  CHECK
+LAP: Paradise Plunge, line 7358 m, 11 gates, 8 segments, 21 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 124.75 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            18.4 s    20 s  -1.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.5 s    20 s  -0.5
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 76.2 m/s (170 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 124.75] finish in 124.75 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 5.22 ms, 95th pct 8.48 ms, 99th pct 15.95 ms, worst 105.41 ms over 17736 frames (164 over 16.7 ms); peak draw calls 0, batches 0, triangles 5321k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      5.99 /   8.08 /  81.60 ms       0 draws    3161k tris
+  Cliffside Climb      4.10 /   6.73 /  48.42 ms       0 draws    4656k tris
+  Sky Arch             5.34 /   7.95 /  55.97 ms       0 draws    5321k tris
+  Lagoon Landing       3.60 /   5.24 /  27.77 ms       0 draws    1743k tris
+  Mangrove Run         7.87 /  10.30 / 105.41 ms       0 draws    4782k tris
+  Sunken Gateway       5.69 /   8.48 /  73.87 ms       0 draws    3164k tris
+  Coral Vault          3.71 /   5.92 /  57.02 ms       0 draws    2490k tris
+  Waterfall Return     9.41 /  17.49 /  97.11 ms       0 draws    4716k tris
+  HITCHES (item 8): engine markers read (development build); blamed (largest marker of the frame before): Update.ScriptRunBehaviourUpdate x29, (GC collection) x1
+    83 ms at 1.5 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    67 ms at 8.8 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 3 MB
+    50 ms at 33.0 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    54 ms at 38.4 s (Sky Arch): Update.ScriptRunBehaviourUpdate 9; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    61 ms at 39.1 s (Sky Arch): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    58 ms at 42.5 s (Sky Arch): Update.ScriptRunBehaviourUpdate 6, FixedUpdate.PhysicsFixedUpdate 2; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    50 ms at 68.0 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 5; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    63 ms at 68.2 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    68 ms at 68.3 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 62; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    107 ms at 68.4 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    55 ms at 69.5 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    73 ms at 74.4 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    79 ms at 74.5 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 72; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    52 ms at 82.3 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    75 ms at 85.8 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    50 ms at 90.9 s (Sunken Gateway): Update.ScriptRunBehaviourUpdate 5; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    75 ms at 95.2 s (Sunken Gateway): Update.ScriptRunBehaviourUpdate 5; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    56 ms at 95.2 s (Sunken Gateway): Update.ScriptRunBehaviourUpdate 4; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    58 ms at 102.1 s (Coral Vault): Update.ScriptRunBehaviourUpdate 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    56 ms at 106.7 s (Coral Vault): Update.ScriptRunBehaviourUpdate 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    99 ms at 117.5 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 26; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    69 ms at 117.6 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    62 ms at 118.3 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    83 ms at 119.3 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    71 ms at 120.5 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    51 ms at 120.6 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    69 ms at 120.8 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    69 ms at 121.3 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 6 MB
+    71 ms at 121.4 s (Waterfall Return): Update.ScriptRunBehaviourUpdate 8; GC collections 1, allocated last frame 0 KB, heap 6 MB
+  frames over 50 ms during the lap: 29; worst: 107 ms at 68.4 s (Mangrove Run, after "split Lagoon Landing: 11.83 s (target 15 s), total 66.97 s"); 99 ms at 117.5 s (Waterfall Return, after "split Coral Vault: 17.62 s (target 25 s), total 113.58 s"); 83 ms at 1.5 s (Beach Promenade, after "GO"); 83 ms at 119.3 s (Waterfall Return, after "gate G8 surfacing pool passed (9/11)"); 79 ms at 74.5 s (Mangrove Run, after "split Lagoon Landing: 11.83 s (target 15 s), total 66.97 s"); 75 ms at 95.2 s (Sunken Gateway, after "gate G6 dive portal passed (7/11)")
+RESULTS PASS: shown True, lap 124.75 s, 8 splits, new best False, best on file 124.58 s (local/round8/save\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 124.58 s
+  DINOS SEEN per segment on the lap (player view, in range, not behind rock): distinct / most at once / which
+    Beach Promenade     30 / 20   ptero x8, bronto x11, raptor x4, trike x5, trex x2
+    Cliffside Climb     12 /  9   trex x1, trike x3, ptero x4, bronto x4
+    Sky Arch            36 / 16   bronto x10, trike x9, ptero x11, raptor x4, trex x1, plesio x1
+    Lagoon Landing       5 /  3   plesio x1, ptero x1, trike x3
+    Mangrove Run        18 /  9   trike x8, bronto x3, ptero x2, trex x1, raptor x4
+    Sunken Gateway      10 /  9   bronto x2, trex x1, ptero x1, raptor x4, trike x2
+    Coral Vault          0 /  0   
+    Waterfall Return    24 / 16   trike x4, bronto x8, ptero x7, trex x1, raptor x4
+  DINOS 7 of 8 segments: a group seen in 7 of 8 segments; fossils / nests / footprints per segment: Beach Promenade 2, Mangrove Run 1, Coral Vault 5; T. rex roars 1, last camera shake yes
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.28  FOV 90.0  particles 80  speed 102 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 105  speed 100 % of top
+  Boat  pitch 2.00  wind 0.24  FOV 90.0  particles 140  speed 100 % of top
+  Dive  pitch 1.50  wind 0.07  FOV 90.0  particles 113  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 5.68 ms, 95th pct 10.44 ms, 99th pct 17.19 ms, worst 107.14 ms over 22928 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.7  0.600 s  frames worst 22.60 / mean 9.21 ms
+  lap          Fly->Boat   z  -607.4  0.603 s  frames worst 25.01 / mean 5.47 ms
+  lap          Boat->Dive  z  -202.4  0.600 s  frames worst 25.13 / mean 7.29 ms
+  lap          Dive->Boat  z  -466.5  0.615 s  frames worst 99.40 / mean 13.37 ms
+  lap          Boat->Drive z  -305.2  0.601 s  frames worst 71.06 / mean 12.61 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

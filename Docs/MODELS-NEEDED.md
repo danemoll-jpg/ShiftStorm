@@ -2,6 +2,46 @@
 
 Keep each round's list short; each item is Dan's time.
 
+## Round 8 — two dinosaurs Tee'd Off doesn't have (Tripo, by hand) — optional, stand-ins in the game now
+
+**Status (2026-11-14): written, not made.** Jurassic Par's other dinosaurs (brontosaurus, T. rex, triceratops, pterodactyl) are Tee'd
+Off's rigged models, now animated in the race. Two the course wants have no model anywhere: the game uses stand-ins meanwhile (the
+raptor is the T. rex at 2.6 m tall; the plesiosaur is a brontosaurus swimming with its body under water). Make these only if the
+stand-ins read badly in the race; nothing waits on them.
+
+**What Code does with them:** clean up in Blender (size, origin at the feet / belly, facing +Z, LOD), rig with Tee'd Off's
+`rig_dino.py`-style bones (Code writes the bones; no Mixamo: Mixamo's rigs are humanoid only), animate in code like the others
+(walk cycle, tail, neck, head), replace the stand-ins, keep the stand-ins as the fallback.
+
+### Shared for both images
+- Style: Tee'd Off's Jurassic Par dinosaurs (`Tee-dOff/Art/Characters/concepts/dinos/*.png`): chunky, friendly cartoon proportions,
+  big expressive eyes, smooth hand-painted cel-shaded colours, soft rounded shapes, no scars, no gore, no realistic scales.
+- **Full body, side view (left side) plus a 3/4 front view**, standing in a neutral pose (legs straight under the body, tail
+  straight out behind, mouth closed, eyes open), **plain light background**, the whole animal in frame with a margin, **no props, no
+  ground, no shadow, no text**.
+
+### 1. Raptor — `Art/Incoming/Dinos/Raptor/Raptor.glb`
+- Prompt: *"Cartoon velociraptor for a family racing game, Tee'd Off toon style: chunky friendly proportions, big round eyes with a
+  cheeky grin (mouth closed), short arms with three blunt claws, long straight tail held out level, strong running legs, feathered
+  crest on the head and a few feather tufts on the arms, warm orange body with dark brown tiger stripes on the back and a cream
+  belly, hand-painted cel-shaded colours, smooth surfaces, full body, standing neutral pose, side view, plain light grey
+  background, no props, no ground, no text."*
+- Design note: they run alongside the road in a pack of four; they must read at 30-60 m and at speed, so a bold stripe pattern and a
+  clear silhouette (crest, tail) matter more than detail. About 2.5 m tall, 4.5 m long.
+- Tripo: **Image to Model**, textured, **low-poly / standard** (not detailed: four of them on screen), **GLB**, about 15-20k faces.
+- Animations: none from Mixamo (code animates the legs, tail, head).
+
+### 2. Plesiosaur — `Art/Incoming/Dinos/Plesiosaur/Plesiosaur.glb`
+- Prompt: *"Cartoon plesiosaur for a family racing game, Tee'd Off toon style: a round friendly body, a very long graceful neck
+  with a small smiling head and big gentle eyes, four large paddle flippers, a short tapering tail, teal-blue back fading to a
+  pale cream belly with soft darker spots along the back, hand-painted cel-shaded colours, smooth surfaces, full body, neutral pose
+  with the neck raised in a gentle S curve and the flippers out to the sides, side view, plain light grey background, no water, no
+  props, no text."*
+- Design note: it swims in the Lagoon Landing with its body under the surface and its neck up (seen from the boat at 60-120 m),
+  so the neck and head carry it. About 14 m long.
+- Tripo: **Image to Model**, textured, **standard**, **GLB**, about 20k faces.
+- Animations: none from Mixamo (code paddles the flippers and sways the neck).
+
 ## Round 5 — Abi's transforming machine, stage 1: three design directions (Tripo, by hand)
 
 **Status (2026-11-13): DECIDED — Dan picked Direction 2, "Jetstream".** He made the four Jetstream images (car, boat, plane,

@@ -280,3 +280,19 @@ checks (`Checks/CheckPilot.Round6.cs`: bind with virtual gamepads, split race, v
 | `Assets/Resources/Audio/Voice/barker/` (7 of 46 clips) | TO `Resources/Audio/Voice/barker` (winner_1/3/5, finale_1, great_2, ohno_1, ohno_3) | renamed to the caller's pools |
 | `Assets/Resources/Drivers/Barnaby/` | TO `Assets/_Project/Art/Characters/Barnaby` (model, texture, "Standing Arguing") | none (metas copied with them) |
 Docs/SOUNDS.md lists every sound and where it is used.
+
+## Round 8 copies (2026-11-14)
+- **Tee'd Off dinosaurs, rigged** (read-only, copied): `Assets/_Project/Art/Characters/Dinos/{bronto,trex,trike,ptero}/<style>_rig.bytes`
+  (its Meshy mesh + the skeleton and weights from its `Tools/Characters/rig_dino.py`) -> `Assets/Resources/Dinos/<style>_rig.bytes`.
+  ShiftStorm builds the skinned mesh at run time (`World/Dinos.cs` `DinoRig`, the same steps as Tee'd Off's editor `DinoImport.Import`:
+  bones from the bone heads, bind poses, UV flip), because ShiftStorm's world is built in code. Changed: no eye lids / blinks (not
+  copied), Bone2 skinning, a size by height, ShiftStorm's toon material.
+- **Tee'd Off's `ModelCreature` animation** (`Scripts/Characters/ModelCreature.cs`) -> `DinoPose` in `World/Dinos.cs`: walk cycle by speed,
+  tail sway, neck look, breathing, roar / chomp, the brontosaurus's neck down, the pterodactyl's wing beats. Changed: no cat / cow /
+  blink parts; a flap strength; driven by ShiftStorm's `DinoActor` behaviours (graze, wade, swim, run alongside, roar, swoop).
+- **Tee'd Off dinosaur sounds** (`Resources/Audio/Sfx`): `trex_roar_1/2`, `trex_growl_1/2`, `bronto_moo_1/2`, `dino_grunt_1/2`,
+  `amb_roar_far_2`, `trex_step_1`, `bronto_step_1` (ElevenLabs-made for Tee'd Off).
+- **Tee'd Off voice clips for the drivers' reactions** (`Resources/Audio/Voice/<who>`): Abi, Rae, Chip, Vivi: `disaster_1/2`,
+  `mishit_1`, `gasp_1`, `trouble_1/2`, `bogey_1` (Abi), `water_1`, `lose_1`, `win_1`, `quipgood_1/2`, `quipbad_1` (Abi) — levelled to
+  -16 LUFS (`Tools/Audio/normalize_voice.py`). New: 3 lines each in their own Tee'd Off ElevenLabs voices (`Tools/Audio/driver_lines.py`).
+- Nothing copied from chastain_rush or Hostile-Horizon this round.

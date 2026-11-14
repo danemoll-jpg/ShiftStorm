@@ -52,6 +52,7 @@ namespace ShiftStorm
         public float Pitch => source ? source.pitch : 0;
         public float EngineVolume => source ? source.volume : 0;
         public float WindVolume => wind ? wind.volume : 0;
+        public AudioSource EngineSource => source;   // Round 8: the check's mix meter
         void Update()
         {
             if (!source || !v) return;
@@ -62,7 +63,8 @@ namespace ShiftStorm
             // 0 .. 1 over the form's top speed, on to ~1.25 at the boost top speed: the pitch keeps climbing all the way
             else pitch = Mathf.Lerp(.7f, 2.0f, Mathf.Clamp01(frac)) * k + Mathf.Max(0, frac - 1) * 1.2f + (v.Boosting ? .12f : 0);
             float load = Mathf.Clamp01(.55f + .45f * v.Input.Throttle + (v.Boosting ? .2f : 0));
-            float fx = (spatial ? 1 : Mix) * Settings.Effects * (spatial ? 1.3f : 1f), step = Time.deltaTime / .35f;
+            // Round 8 item 6: the engines (and the wind) have their own volume (Settings.Engines, default 60 %) and duck under TeedOff Barker
+            float fx = (spatial ? 1 : Mix) * Settings.Engines * Caller.Duck * (spatial ? 1.3f : 1f), step = Time.deltaTime / .35f;
             for (int i = 0; i < 4; i++)
             {
                 float want = (i == m ? formVol[i] * load : 0) * fx;
@@ -72,7 +74,7 @@ namespace ShiftStorm
             if (wind)
             {
                 float f = Mathf.Clamp01(frac * .9f), want = (v.Mode == Mode.Dive ? .12f : .55f) * f * f + (v.Boosting ? .08f : 0);
-                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix * Settings.Effects, Time.deltaTime * 1.5f);
+                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix * Settings.Engines * Caller.Duck, Time.deltaTime * 1.5f);
                 wind.pitch = (v.Mode == Mode.Dive ? .55f : .8f) + .5f * f;
             }
         }
