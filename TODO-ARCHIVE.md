@@ -650,3 +650,63 @@ stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
 ### For Dan to check
 - See "For Dan to check (Round 5)" under Completed Tasks.
 
+## Current Objective — Round 6: split screen and camera views
+
+**Dan's review of build 6 (0.5.0), 2026-11-13:** "Looks good. Plays fine."
+(Jetstream, speed, the polished stretch: no changes asked.)
+
+**Dan's asks, quoted:** "Is it possible to throw in split screen so I can try
+with a friend? Woodstock Rush and Chastain Rush has this. Also they have it
+so you change your pov, can you do that here as well."
+
+Reference (read-only, copy and adapt, never edit): `chastain_rush`'s split
+screen (`SplitScreen` and the per-device binding in `VehicleInput.cs`) and
+`CameraViews.cs` (Chase / Far chase / First person / Front, cycled with X).
+Make it work the way Dan already knows from those games. Run unattended —
+don't stop to ask; anything needing a visible window or Dan's OK gets skipped
+and noted.
+
+1. **Two-player split screen.**
+   - Menu: "2 Players" (Race and Time Trial). Player 2 joins by pressing A
+     on a second controller (keyboard counts as a device on PC); each player
+     is bound to their own device, as in Chastain Rush. On the Deck: the
+     Deck's own controls + one external controller.
+   - Layout like Chastain Rush (say which: top/bottom or side by side);
+     each half has its own camera, HUD, arrow, route strip, place,
+     speedometer, cues ("THIS WAY", "MISSED G4 +3 s") and Abi-style driver
+     reactions.
+   - Player 1 = Abi in Jetstream green; Player 2 picks a driver (Rae, Chip
+     or Vivi) and gets that colour; the other two AI racers fill the field
+     (option: 0–2 AI). Results show both players clearly.
+   - Pause / menu from either controller pauses both. Settings like invert
+     are **per player**.
+   - Sound: one shared mix, both engines audible but not doubled-loud.
+   - Performance: two views is the heaviest case. Add split-screen quality
+     cuts (draw distance, shadows, detail layer, texture quality) like
+     Chastain Rush's Deck scaling; PC must hold 60 fps; report PC frame times
+     and give Dan a short Deck check list.
+   *Check:* two scripted players race a full lap with 2 AI: both finish with
+   valid gate sequences, each HUD shows its own player's data, pictures of
+   both halves in each form.
+2. **Camera views (POV), per player.** Cycle with **X** (keyboard **V**), as
+   in Woodstock Rush / Chastain Rush: Chase (current), Far chase, First
+   person / cockpit (from Abi's eyes, the canopy edge and Jetstream nose in
+   view), Front / bumper. Every view works in all four forms and through the
+   change; the choice is remembered (per player). Right stick looks around,
+   as in Chastain Rush.
+   - **Button change:** X is currently a second button for drift / carve
+     (RB is the main one). Free X for the view, keep drift / carve on RB
+     (and Left Shift). Update the Controls table in `CLAUDE.md`.
+   *Check:* pictures of each view in each form; no view clips through
+   walls, water surface or the cave ceiling badly; the change effect still
+   reads in first person.
+3. **Regression + 50-lap AI soak (Normal), wrap-up, release build 7
+   (0.6.0).** Per-item status for all 3 items, "For Dan to check", update
+   `CLAUDE.md`, commit, push, publish, clean the disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check
+- See "For Dan to check (Round 6)" above.
+

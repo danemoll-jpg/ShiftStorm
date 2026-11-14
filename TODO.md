@@ -263,76 +263,178 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
-## Current Objective — Round 6: split screen and camera views
+## Current Objective — Round 7: music prompts first, loops and big jumps, then course art and sound
 
-**Dan's review of build 6 (0.5.0), 2026-11-13:** "Looks good. Plays fine."
-(Jetstream, speed, the polished stretch: no changes asked.)
+**Dan's review of build 7 (0.6.0), 2026-11-14:** "everything good so far."
 
-**Dan's asks, quoted:** "Is it possible to throw in split screen so I can try
-with a friend? Woodstock Rush and Chastain Rush has this. Also they have it
-so you change your pov, can you do that here as well."
+**Dan's ask, quoted:** "Can we integrate Loops and some big jumps for cars?
+all jumps will be a flight or even have a choice a jump if to continue as car
+or fly."
 
-Reference (read-only, copy and adapt, never edit): `chastain_rush`'s split
-screen (`SplitScreen` and the per-device binding in `VehicleInput.cs`) and
-`CameraViews.cs` (Chase / Far chase / First person / Front, cycled with X).
-Make it work the way Dan already knows from those games. Run unattended —
-don't stop to ask; anything needing a visible window or Dan's OK gets skipped
-and noted.
+Run unattended — don't stop to ask; anything needing a visible window or
+Dan's OK gets skipped and noted. Keep the concept's rule: no flying anywhere
+you like — wings only where the course offers them.
 
-1. **Two-player split screen.**
-   - Menu: "2 Players" (Race and Time Trial). Player 2 joins by pressing A
-     on a second controller (keyboard counts as a device on PC); each player
-     is bound to their own device, as in Chastain Rush. On the Deck: the
-     Deck's own controls + one external controller.
-   - Layout like Chastain Rush (say which: top/bottom or side by side);
-     each half has its own camera, HUD, arrow, route strip, place,
-     speedometer, cues ("THIS WAY", "MISSED G4 +3 s") and Abi-style driver
-     reactions.
-   - Player 1 = Abi in Jetstream green; Player 2 picks a driver (Rae, Chip
-     or Vivi) and gets that colour; the other two AI racers fill the field
-     (option: 0–2 AI). Results show both players clearly.
-   - Pause / menu from either controller pauses both. Settings like invert
-     are **per player**.
-   - Sound: one shared mix, both engines audible but not doubled-loud.
-   - Performance: two views is the heaviest case. Add split-screen quality
-     cuts (draw distance, shadows, detail layer, texture quality) like
-     Chastain Rush's Deck scaling; PC must hold 60 fps; report PC frame times
-     and give Dan a short Deck check list.
-   *Check:* two scripted players race a full lap with 2 AI: both finish with
-   valid gate sequences, each HUD shows its own player's data, pictures of
-   both halves in each form.
-2. **Camera views (POV), per player.** Cycle with **X** (keyboard **V**), as
-   in Woodstock Rush / Chastain Rush: Chase (current), Far chase, First
-   person / cockpit (from Abi's eyes, the canopy edge and Jetstream nose in
-   view), Front / bumper. Every view works in all four forms and through the
-   change; the choice is remembered (per player). Right stick looks around,
-   as in Chastain Rush.
-   - **Button change:** X is currently a second button for drift / carve
-     (RB is the main one). Free X for the view, keep drift / carve on RB
-     (and Left Shift). Update the Controls table in `CLAUDE.md`.
-   *Check:* pictures of each view in each form; no view clips through
-   walls, water surface or the cave ceiling badly; the change effect still
-   reads in first person.
-3. **Regression + 50-lap AI soak (Normal), wrap-up, release build 7
-   (0.6.0).** Per-item status for all 3 items, "For Dan to check", update
-   `CLAUDE.md`, commit, push, publish, clean the disk.
+**Dan (2026-11-14):** "go ahead and do the course art and sounds. But at the
+top of the list the music prompt so I can create it and integrate it. We want
+the same kind of cartoony songs from the golf game."
+
+0. **Music prompts for Dan — do this before anything else.**
+   Write `Docs/AUDIO-NEEDED.md`, commit and push it, then **post the music
+   prompts to Dan in the chat right away** (copy-pasteable), and carry on
+   with items 1–5 without waiting.
+   - **Match Tee'd Off's music.** Read-only, look in `Tee-dOff` for how its
+     songs were made (saved Suno prompts, style tags, lyrics files, notes,
+     file names and lengths of `Art/Music/*.mp3`, especially
+     `course_jurassic`, `course_seaside`, `course_atlantis`, `title`). Base
+     the new prompts on what you find, and say what you based them on. The
+     songs must sound like they belong in the same cartoony golf game,
+     just with racing energy.
+   - **Suno songs (long, Dan makes them in Suno):**
+     1. **Paradise Plunge race theme** — the main race song, Jurassic Par
+        jungle flavour, upbeat and driving, loops cleanly, about 2–3 min.
+     2. **Menu / Garage theme** — the same melody, relaxed.
+     3. **Results / victory song** — short and bright (or an ElevenLabs
+        sting if better).
+     For each: a Suno style prompt (genre, instruments, tempo, mood, in
+     Suno's tag style), instrumental or not (say which; match Tee'd Off),
+     the length to aim for, how to make it loop, and the exact file name
+     and folder to save to (e.g. `Art/Incoming/Music/`).
+   - **Sound effects are NOT on Dan's list** (Dan, 2026-11-14: "code can
+     choose sound effects I am more concerned about picking the music").
+     Code picks and makes them itself in item 5. `AUDIO-NEEDED.md` is
+     music only.
+   - When Dan says he's done (or files appear in the named folders), import
+     them at the next sensible point (finish the current item first);
+     anything not made yet keeps its placeholder.
+
+1. **Loop-the-loop on the road.** One big loop on the Beach Promenade (the
+   start / finish road), built into the course line, in the Jurassic Par
+   look (mossy stone / wooden track, glowing edge lines).
+   - Car-only stick-to-track physics inside the loop (gravity towards the
+     track surface while on it), a boost pad before the entry so a normal
+     run always makes it, steering limited to keep you on the track.
+   - Too slow (e.g. boost-starved after a crash): you don't fall like a
+     stone — you slide back down / drop gently and get a quick reset at
+     the loop's entry anchor, never stuck.
+   - Camera follows smoothly through the loop in every view (Chase, Far,
+     First person, Front), in split screen too.
+   - Gates / progress: the loop's upside-down part must not confuse race
+     progress or "wrong way".
+   *Check:* full-speed, slow (no boost) and very slow entries; AI through the
+   loop 25 times with 0 stuck; pictures from the player's view at 4 points
+   of the loop.
+2. **Big car jumps — most stay a car, some give a choice.** Dan's
+   correction (2026-11-14): "not all jumps should be flight. some should
+   give you a choice." So, three new big jumps on the road parts (say
+   where you put them; suggested: two on the Beach Promenade, one on the
+   Cliffside Climb before the main launch ramp):
+   - **Two plain car jumps:** big, satisfying airtime as a car, wide
+     landing ramp, keeps your speed. No wings — LB does nothing here.
+   - **One choice jump** (pick the spot with room for a short flight
+     branch), as below.
+   **On the choice jump:**
+   - Off the lip you're a car in the air. A **"Wings" button: LB**
+     (keyboard **E**) during the first part of the airtime (HUD prompt
+     "LB: FLY") turns you into the plane — otherwise you stay a car and land
+     on the landing ramp across the gap.
+   - **Car line:** long, satisfying airtime, a wide landing ramp, keeps
+     your speed.
+   - **Fly line:** a short flight branch with its own rings / sub-gates
+     that rejoins the road at the next main gate (auto change back to car
+     in a marked zone, like the Waterfall Return). Both lines about equal
+     in time; the fly line can be slightly faster but riskier (rings to
+     thread). Same near-miss / far-miss rules as other gates.
+   - LB does nothing anywhere else (the main Cliffside launch stays an
+     automatic flight, as now).
+   - AI: picks car or fly before the lip and sticks to it; on Normal
+     roughly half fly.
+   *Check:* each plain jump (airtime, landing speed kept, no reset); both
+   lines on the choice jump: time each, no reset; pressing LB late
+   (after the window) does nothing; a short / slow jump still lands safely
+   or resets cleanly; AI 25 laps through all three jumps with 0 stuck.
+3. **Keep the lap honest.** The loop and jumps add time: keep the safe-line
+   lap around 130 s (it's ~120–125 s now). Update the route strip, minimap
+   arrow and segment splits for the new parts.
+   *Check:* lap time and splits, before / after.
+4. **Course art for the rest of the lap**, to the standard of the Round 5
+   polished stretch (Cliffside Climb → Sky Arch → Lagoon Landing): Beach
+   Promenade (with the new loop and jumps), Mangrove Run, Sunken Gateway,
+   Coral Vault (the flooded cave), Waterfall Return, and the finish. Ported
+   Tee'd Off Jurassic Par scenery (cycads, tree ferns, mossy cliffs and
+   boulders, swamp, hot springs, waterfalls, dinosaurs and pterodactyls as
+   scenery), toon water and foam, underwater light shafts / bubbles in the
+   cave, splash and spray effects. Copy from Tee-dOff, never edit it.
+   Readability first: gates, rings, the shortcuts, the jumps' landing
+   ramps and every change stay clear. Missing essential models: Tripo
+   prompts in `Docs/MODELS-NEEDED.md` for Dan, don't wait.
+   *Check:* player-view pictures through every segment next to Tee'd Off's
+   Jurassic Par; Code says what still doesn't match. Frame time on the full
+   lap with four cars, single and split screen (PC); Deck check list for Dan.
+5. **Sound pass.** Wire every sound into the game: engine / motor /
+   propeller / sub per form with pitch over the full speed range, the
+   change sound, wind, splashes, ring chimes, boost, wall scrapes, loop and
+   jump whooshes, countdown, finish. Music: the race theme with the
+   concept's touch — more energy in flight, muffled / softer underwater,
+   bright again at the waterfall exit (filters / mix, not separate songs).
+   **Code chooses the sound effects itself:** Tee'd Off's sound library
+   first, then **Chastain Rush's** (`C:\Users\danmo\chastain_rush`: cars,
+   planes, engines, skids, crowd) and **Hostile Horizon's**
+   (`C:\Users\danmo\Hostile-Horizon`, a spaceship game — jets, whooshes,
+   boosts, sci-fi changes) (Dan, 2026-11-14; all read-only copies), Chastain Rush's `VehicleSoundSynthesis.cs`
+   for engines if it fits, and ElevenLabs only if an API key is already set
+   in the environment (`ELEVENLABS_API_KEY`; never print or commit it) —
+   don't ask Dan for sounds. List what each sound is and where it came from.
+   Music: Dan's new songs where they exist, Tee'd Off placeholders otherwise.
+   A Settings page volume: Music / Effects / Voices. In split screen one
+   shared mix (as in Round 6).
+   *Check:* sounds are checked as triggered and levels logged (runs stay
+   muted); list exactly what Dan should listen for.
+5b. **Barnaby is the official race caller** (Dan, 2026-11-14). His name is
+   **"TeedOff Barker"** — use that name everywhere the player sees it
+   (booth sign, results, credits, subtitles); "Barnaby" is only the
+   folder / id in Tee'd Off's cast (`Tee-dOff/Assets/_Project/Art/Characters/Barnaby/`;
+   his voice clips under `Resources/Audio/Voice/<id>/`, read-only).
+   - Calls with cooldowns and variety: countdown / GO, the start, a lead
+     change, a big jump or the loop, the choice jump (flew / stayed a car),
+     a shortcut taken, a near-miss penalty, a wall hit, last stretch, photo
+     finish, the winner and the results. Split screen: one caller for both.
+   - Use his existing Tee'd Off clips wherever a line fits (list which).
+   - New racing lines in his voice: find how Tee'd Off made his voice
+     (ElevenLabs voice name / ID or notes, read-only). If an
+     `ELEVENLABS_API_KEY` is already set, generate them yourself; if not,
+     put the line list (short, funny, Tee'd Off-style) with the voice to
+     use in `Docs/AUDIO-NEEDED.md` **after the music** as a lower-priority
+     list for Dan, and use existing clips meanwhile.
+   - If cheap: Barnaby's model in a small booth / on a podium at the start
+     line or on the results screen.
+   *Check:* lines triggered and logged in a race (runs stay muted); none
+   repeats within its cooldown; list what Dan should listen for.
+6. **Regression (incl. split screen and camera views) + 50-lap AI soak
+   (Normal), wrap-up, release build 8 (0.7.0).** Per-item status for all 8
+   items (0–6, 5b), "For Dan to check", update `CLAUDE.md` (Controls: LB / E =
+   Wings on the choice jump; Settings: volumes), commit, push, publish, clean
+   the disk.
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check
-- See "For Dan to check (Round 6)" above.
+### For Dan to check (fill in at end of round)
+- …
 
 ## Next Steps (Do Not Start Yet)
 - **More vehicle designs** (Dan, 2026-11-13: "we can add different designs
   later"). Tee Shot and Mudlark prompts are parked in `Docs/MODELS-NEEDED.md`;
   the concept wants each driver's machine to fit their personality, so a
   natural use is giving rivals their own designs. Deferred, not decided against.
-- **Rest of the course art** (Beach Promenade, Mangrove Run, the cave, the
-  Waterfall Return) to the standard Round 5 sets on its polished stretch.
-  Waits on Dan's review of that stretch and the vehicle design. New character / organic models
-  go through the manual Tripo pipeline in `CLAUDE.md`; the real vehicle comes
-  from Tripo too (Dan's models, `Tools/import_vehicles.py`).
+- **Coral Vault tunnel climb-out reshape** (saves ~1 s, target 2–3 s): needs a
+  look in a visible window, with Dan's OK.
+- **More tracks** from the concept: Clockwork Cascade (driving + boating),
+  Cloud Orchard (driving + flying), Lantern Reef (boating + diving), each in
+  a Tee'd Off setting — after Paradise Plunge is finished.
+- **Playtest** (concept's evaluation plan): a few players of mixed skill,
+  first attempt + three practice runs, per-mode questions; Code can log
+  segment times, resets, missed gates and shortcut choices for it.
 - **Later experiment:** optional submerged bypass in Mangrove Run — only after
   the base lap works (concept doc).
 

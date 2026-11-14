@@ -15,6 +15,7 @@ submarine during a race. Current target: Paradise Plunge proof of concept.
     plane controllers (separate vehicles, no shape-changing vehicle).
   - `C:\Users\danmo\Tee-dOff` — art style, characters, rigs, voices, music,
     environments to reuse.
+  - `C:\Users\danmo\Hostile-Horizon` — spaceship game; sound effects to reuse.
 - **3D models:** Blender, scripted where possible (`Tools/Blender/*.py`).
   Simple hard-surface things are built by script. **Vehicles are not**
   (Dan, 2026-11-13: script-built vehicles weren't good enough in Woodstock
@@ -213,4 +214,8 @@ much faster, fullscreen by default.
   - **Camera views** (`UI/CameraViews.cs`, from Chastain Rush's): X / V cycles Chase / Far chase / First person (Abi's eyes, her head folded
     away) / Front, per player, saved ("view", "view2"); right stick looks around. Chase now keeps out of the cave walls underwater.
 
-Dan has not reviewed build 7 yet. Next objective: see `TODO.md`.
+Dan reviewed build 7: "everything good so far."
+
+Current objective: **Round 7** — first the music prompts for Dan (`Docs/AUDIO-NEEDED.md`, Tee'd Off-style cartoony songs; Code chooses sound effects itself),
+then a loop-the-loop and three big car jumps (one with a fly choice on LB / E), then course art for the rest of the lap, a full
+sound pass (Tee'd Off + Chastain Rush + Hostile Horizon sounds) and Barnaby, "TeedOff Barker", as the race caller. Release build 8 (0.7.0). See `TODO.md`.
