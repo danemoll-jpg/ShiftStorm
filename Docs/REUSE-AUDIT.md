@@ -255,3 +255,16 @@ wider at speed + boost kick, `Vehicle/SpeedFx.cs` streaks, spray, bubbles, the r
 the AI levels (Easy ~20 % slower, Normal ~8 %), the swap-with-effect change (`Vehicle/FormSet.cs`), vehicle designs (`Vehicle/VehicleDesigns.cs`),
 the Garage (`UI/Garage.cs`), the one-command import (`Tools/import_vehicles.py`, `Tools/Blender/vehicle_import.py`, test stand-in
 `Tools/Blender/make_test_vehicle.py`) and the Round 5 checks (`Checks/CheckPilot.Round5.cs`).
+
+## 10. What ShiftStorm copied in Round 6
+
+| From (chastain_rush, read-only) | To (ShiftStorm) | Changed |
+|---|---|---|
+| `Split/SplitScreen.cs` (`SplitScreen`, `SplitSession`) | `Split/SplitScreen.cs` | Same shape: per-player device, second camera made with `CopyFrom` + URP data, top / bottom (player 1 on top) or left / right, per-view cuts (LOD bias x0.6, shadow distance x0.6) restored at the end, pause on a pulled-out controller and rebind when one comes back. Added: far clip 1150 m, Detail layer culled at 500 m, textures one mip down; one shared engine mix (`VehicleSound.Mix` 0.7). Left behind: Free Roam / stunt modes, AI player 2, names, per-player garages, minimap, weather layers. |
+| `Menus/GameMenus.Split.cs` (setup page, `UpdateSplitJoin`, `Join`) | `Game.cs` (Page.Split, `OpenSplitPage`, `SplitJoin`, `Join`) | Player 1 = the device that opened the page; A (or Start) on another controller, or Enter on an unused keyboard, joins player 2. Rows trimmed to ShiftStorm's: player 2's driver, AI racers 0-2, screen layout, Race / Time Trial. While the page is up player 1's input is bound to player 1's device only (CR restricts the UI actions). |
+| `Racer/VehicleInput.cs` `Bind` / per-device bindings, view and look actions | `Vehicle/ShiftInput.cs` (`Bind`, `Create`, `ConsumeView`, `Look`) | ShiftStorm's own actions kept; X / V view moved off drift / carve (RB / Left Shift stay); invert per player (`MyInvert`, settings.json `invertVertical2`). |
+| `Racer/CameraViews.cs` (Chase / Far chase / First person / Front, blend, FreeLook) | `UI/CameraViews.cs` | Same four views and 0.35 s blend, Far chase 1.5 back / 1.55 up, right-stick look (pulled back = behind). Changed: eyes from Abi's Humanoid head bone with the head folded away in her own first person (one skinned mesh), the head views follow the vehicle body not the change's twirl, a clear-of-walls cast for Far chase and look-around, never in the water surface's plane; per player saved in settings.json (`view`, `view2`), not PlayerPrefs. Left behind: mouse look, trailer / winner / helicopter views. |
+
+Written new: per-camera underwater fog (`ChaseCam.BeforeRender`) and gate colours (`RouteGuide`), the HUD once per half (`Hud.Relayout`,
+player 2's PAUSED), player 2's vehicle (`VehicleFactory.MakePlayer2`), the split race / trial setup in `Game.StartCourse`, and the Round 6
+checks (`Checks/CheckPilot.Round6.cs`: bind with virtual gamepads, split race, views).

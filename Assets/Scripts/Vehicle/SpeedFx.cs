@@ -20,7 +20,7 @@ namespace ShiftStorm
         void Start()
         {
             v = GetComponent<ShiftVehicle>();
-            if (v.IsPlayer)
+            if (v.Human)   // Round 6: both players in split screen
             {
                 streaks = Make("Streaks", new Vector3(0, 1.8f, 16f), 300, false);
                 var sh = streaks.shape; sh.shapeType = ParticleSystemShapeType.Box; sh.scale = new Vector3(18f, 9f, 26f);

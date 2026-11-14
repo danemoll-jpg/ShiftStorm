@@ -89,13 +89,16 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Steer (banks in the air) | Left stick X | A / D, Left / Right |
 | Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
 | Boost (one shared meter) | A | Space |
-| Secondary: drift (car) / tighter carve (boat) | RB (or X) | Left Shift |
+| Secondary: drift (car) / tighter carve (boat) | RB | Left Shift |
+| Camera view: Chase / Far chase / First person / Front (per player, saved) | X | V |
+| Look around (pulled back = look behind) | Right stick | - |
 | Reset to last safe anchor | Y | R |
-| Invert climb / dive (saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
+| Invert climb / dive (per player, saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
 | Previous / next course (strip, 4 lanes) | D-pad left / right | F3 / F4 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
-| Menu: Resume, Restart, Race, Time Trial, test courses, Garage, Settings, Quit game | Menu (Start) | Esc |
+| Menu: Resume, Restart, Race, Time Trial, test courses, 2 Players, Garage, Settings, Quit game | Menu (Start), either player | Esc |
+| 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
 Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout. Quit game asks "No / Yes" (No is preselected) and exits
@@ -122,7 +125,10 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   save) + `starts` (25 race starts, `-starts N`) + `difficulty` (`-races N` per level); `tunnel` (`-legs N` AI runs through the Coral
   Vault tunnel + scrape runs). Round 5: `round5` = `garage` (every design x form in the Garage, mid-change pictures, Race with this
   design; `-testDesign _Test` adds the import test's design) + `lap` (now also the speed feel per form: engine pitch, wind, FOV,
-  particles) + `strip`. Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
+  particles) + `strip`. Round 6: `round6` = `bind` (two virtual gamepads: join, per-device input, X view, per-player invert, pause from player 2, a pad
+  pulled out) + `split` (two scripted players + 2 AI, a full lap, both HUDs sampled, pictures of both halves, split frame times;
+  `-leftRight` for the side-by-side layout) + `views` (one lap per camera view, pictures per form and mid-change, look-behind, frames
+  inside rock / on the water surface). Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
 - Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
@@ -144,7 +150,7 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0), Round 4 (build 5, 0.4.0) and Round 5 (build 6, 0.5.0) are delivered: four-mode vehicle, full gray-box Paradise
+Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0), Round 4 (build 5, 0.4.0) and Round 5 (build 6, 0.5.0) and Round 6 (build 7, 0.6.0) are delivered: four-mode vehicle, full gray-box Paradise
 Plunge lap in the Jurassic Par look and sound, ordered gates, time trial, Abi in the cockpit; Round 2b: where to go (glowing gate frames,
 next gold / after cyan, HUD arrow + marker + route strip, route guides in every form, direction cues from the heading against the route),
 much faster, fullscreen by default.
@@ -197,7 +203,14 @@ much faster, fullscreen by default.
     lagoon beaches, foam, clouds; Detail layer (11) culled beyond 800 m; looks only (colliders unchanged). Jurassic fog is now linear
     190-1100 m (TO's 140-820 x 1.35).
 
-Dan reviewed build 6: "Looks good. Plays fine."
+- **Round 6 (build 7, 0.6.0):**
+  - **Split screen** (`Split/SplitScreen.cs`, from Chastain Rush's): Menu > 2 Players; player 1 = the device that opened the page, player 2
+    joins with A on another controller (Enter on an unused keyboard); each `ShiftInput` bound to its own device (`ShiftInput.Bind`).
+    Player 2 picks Rae / Chip / Vivi (their colour and driver), 0-2 AI racers; Race or Time Trial; top / bottom (player 1 on top, default)
+    or left / right (saved, `settings.json` "splitLeftRight"). One `Hud` per half (player 2's shows PAUSED; the menu is on player 1's half,
+    either player works it), per-camera underwater fog and gate colours, per-player invert ("invertVertical2"). Split cuts: LOD bias x0.6,
+    shadows x0.6, far clip 1150 m, Detail layer 500 m, textures one mip down; engines at 0.7 each (`VehicleSound.Mix`). A pulled-out pad pauses.
+  - **Camera views** (`UI/CameraViews.cs`, from Chastain Rush's): X / V cycles Chase / Far chase / First person (Abi's eyes, her head folded
+    away) / Front, per player, saved ("view", "view2"); right stick looks around. Chase now keeps out of the cave walls underwater.
 
-Current objective: **Round 6 — two-player split screen and camera views (POV, cycled with X / V)**, the way Woodstock Rush /
-Chastain Rush do them. X moves from drift / carve (stays on RB) to the view button. Release build 7 (0.6.0). See `TODO.md`.
+Dan has not reviewed build 7 yet. Next objective: see `TODO.md`.

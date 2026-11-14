@@ -13,6 +13,9 @@ namespace ShiftStorm
         AudioSource source, wind; ShiftVehicle v;
         public bool spatial;   // Round 3: a rival's hum is heard from where it is
         public static bool Legacy;   // build 5's pitch (checks)
+        // Round 6 (split screen): both players' engines and wind are heard (one shared mix, both non-spatial), each at this share so two
+        // are not twice as loud: 0.7 each (two equal sounds add up to about 1.4x in level, ~ +3 dB, not +6)
+        public static float Mix = 1; float baseVol;
         void Start()
         {
             v = GetComponent<ShiftVehicle>();
@@ -21,7 +24,7 @@ namespace ShiftStorm
             var clip = AudioClip.Create("Engine hum", n, 1, rate, false); clip.SetData(data, 0);
             source = gameObject.AddComponent<AudioSource>(); source.clip = clip; source.loop = true; source.spatialBlend = spatial ? 1 : 0; source.volume = spatial ? .5f : .35f;
             if (spatial) { source.rolloffMode = AudioRolloffMode.Linear; source.minDistance = 6; source.maxDistance = 90; source.dopplerLevel = .3f; }
-            source.Play();
+            source.Play(); baseVol = source.volume;
             if (!spatial)
             {
                 // wind: 2 s of low-passed noise with a slow swell, looped (the loop point is cross-faded)
@@ -43,6 +46,7 @@ namespace ShiftStorm
         void Update()
         {
             if (!source || !v) return;
+            source.volume = baseVol * (spatial ? 1 : Mix);
             float k = v.Mode == Mode.Fly ? 1.15f : v.Mode == Mode.Dive ? .75f : 1f;
             if (Legacy) { source.pitch = Mathf.Lerp(.7f, 1.8f, Mathf.Clamp01(v.Speed / 45f)) * k * (v.Boosting ? 1.15f : 1f); return; }
             // 0 .. 1 over the form's top speed, on to ~1.25 at the boost top speed: the pitch keeps climbing all the way
@@ -51,7 +55,7 @@ namespace ShiftStorm
             if (wind)
             {
                 float f = Mathf.Clamp01(frac * .9f), want = (v.Mode == Mode.Dive ? .12f : .55f) * f * f + (v.Boosting ? .08f : 0);
-                wind.volume = Mathf.MoveTowards(wind.volume, want, Time.deltaTime * 1.5f);
+                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix, Time.deltaTime * 1.5f);
                 wind.pitch = (v.Mode == Mode.Dive ? .55f : .8f) + .5f * f;
             }
         }

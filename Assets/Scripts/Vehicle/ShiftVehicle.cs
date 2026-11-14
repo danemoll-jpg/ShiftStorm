@@ -15,6 +15,7 @@ namespace ShiftStorm
         public const int VehicleLayer = 8, GhostLayer = 9, ObstacleLayer = 10;
         public static ShiftVehicle Player { get; private set; }
         public bool IsPlayer => Player == this;
+        public bool Human;   // Round 6: driven by a person (player 1, or player 2 in split screen): never by RivalPilot, has the speed streaks
         public string RacerName = "Abi";                   // Round 3: who drives it (the HUD's standings, results)
         public Color Tint = new Color(1f, .78f, .15f);     // its colour on the route strip and the standings (cosmetic only)
         public static void MarkPlayer(ShiftVehicle v) => Player = v;

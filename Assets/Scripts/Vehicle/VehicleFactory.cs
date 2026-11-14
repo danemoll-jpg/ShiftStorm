@@ -21,7 +21,7 @@ namespace ShiftStorm
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive;
             root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>();
-            ShiftVehicle.MarkPlayer(v); v.RacerName = "Abi"; v.Tint = new Color(.95f, .45f, .1f);
+            ShiftVehicle.MarkPlayer(v); v.Human = true; v.RacerName = "Abi"; v.Tint = new Color(.95f, .45f, .1f);
             return v;
         }
 
@@ -40,6 +40,23 @@ namespace ShiftStorm
             root.AddComponent<VehicleSound>().spatial = true; root.AddComponent<SpeedFx>();
             Driver.Make(v, r.character);
             var pilot = root.AddComponent<RivalPilot>(); pilot.rival = r;
+            return v;
+        }
+
+        // Round 6 (split screen): player 2's vehicle: the same vehicle, hull and tuning, in the colour and with the driver of the rival
+        // player 2 picked (Rae, Chip or Vivi), driven by player 2's own device through its ShiftInput (player 2's invert and camera view)
+        public static ShiftVehicle MakePlayer2(Rival r, ShiftTuning shared, DriveTuning drive, BoatTuning boat, FlyTuning fly, DiveTuning dive)
+        {
+            var root = new GameObject($"ShiftVehicle (player 2, {r.character})");
+            var col = root.AddComponent<BoxCollider>(); col.size = new Vector3(1.9f, .95f, 4.0f); col.center = new Vector3(0, .1f, 0);
+            col.material = new PhysicsMaterial("Hull") { dynamicFriction = 0, staticFriction = 0, bounciness = 0, frictionCombine = PhysicsMaterialCombine.Minimum, bounceCombine = PhysicsMaterialCombine.Minimum };
+            root.AddComponent<Rigidbody>();
+            root.AddComponent<ShiftInput>().player = 2;
+            MakeVisual(root.transform, Mode.Drive, 1f, false, r.color, true);
+            var v = root.AddComponent<ShiftVehicle>();
+            v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive; v.Human = true; v.RacerName = r.name; v.Tint = r.color;
+            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>();
+            Driver.Make(v, r.character);
             return v;
         }
 

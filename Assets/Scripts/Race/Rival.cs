@@ -110,7 +110,7 @@ namespace ShiftStorm
 
         void FixedUpdate()
         {
-            if (!v || !v.Course || (v.IsPlayer && !AlwaysOn)) return;
+            if (!v || !v.Course || (v.Human && !AlwaysOn)) return;
             if (v.Holding) { Set(0, 0, 0, 0, false, false); return; }
             if (v.Finished) { Set(0, .4f, 0, 0, false, false); return; }
             var c = v.Course; var p = v.Body.position; float speed = v.Speed;

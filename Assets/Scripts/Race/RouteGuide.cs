@@ -56,16 +56,26 @@ namespace ShiftStorm
         public int State => state;
     }
 
+    // Round 6 (split screen): each camera shows its own player's gates (next gold, after cyan): the frames are set again just before each
+    // camera renders, for the player that camera follows.
     public sealed class RouteGuide : MonoBehaviour
     {
         public ShiftVehicle v;
-        void LateUpdate()
+        void OnEnable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += BeforeRender;
+        void OnDisable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= BeforeRender;
+        void LateUpdate() => Apply(v);
+        void BeforeRender(UnityEngine.Rendering.ScriptableRenderContext ctx, Camera c)
         {
-            if (!v || !v.Course) return;
+            if (!SplitScreen.Active) return;
+            var chase = c.GetComponent<ChaseCam>(); if (chase && chase.target) Apply(chase.target);
+        }
+        static void Apply(ShiftVehicle who)
+        {
+            if (!who || !who.Course) return;
             foreach (var m in GateMarker.All)
             {
-                if (m.course != v.Course) { m.Set(3); continue; }
-                int i = m.gate.index, passed = v.GatesPassed;
+                if (m.course != who.Course) { m.Set(3); continue; }
+                int i = m.gate.index, passed = who.GatesPassed;
                 m.Set(i < passed ? 3 : i == passed ? 1 : i == passed + 1 ? 2 : 0);
             }
         }

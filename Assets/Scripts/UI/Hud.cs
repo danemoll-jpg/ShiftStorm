@@ -18,12 +18,29 @@ namespace ShiftStorm
         Text mode, info, last, help, timer, segment, center, results, menu, place, note; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
         float lastSplitShown = -1; string splitLine = "";
 
-        public static Hud Make(Camera cam, ShiftVehicle v, Game game)
+        // Round 6 (split screen): one HUD per half, each on its player's camera (a Screen Space - Camera canvas fills that camera's half).
+        // player: 0 the one player, 1 / 2 in split screen. Player 2's HUD has no menu of its own (the menu is on player 1's half; either
+        // player works it) and shows PAUSED while it is open. Hud.Instance is player 1's.
+        public int player; CanvasScaler scaler; Canvas canvasRef;
+        public static Hud Make(Camera cam, ShiftVehicle v, Game game, int player = 0)
         {
             var go = new GameObject("HUD"); var canvas = go.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = cam; canvas.planeDistance = .5f;
             var scaler = go.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1280, 720); scaler.matchWidthOrHeight = 1;
-            var h = go.AddComponent<Hud>(); h.v = v; h.game = game; h.cam = cam; Instance = h; h.Build(go.transform); h.BuildGuide(go.transform); return h;
+            var h = go.AddComponent<Hud>(); h.v = v; h.game = game; h.cam = cam; h.player = player; h.scaler = scaler; h.canvasRef = canvas; if (player != 2) Instance = h;
+            h.Build(go.transform); h.BuildGuide(go.transform); h.Relayout(); return h;
+        }
+        // the canvas for the camera's share of the screen: whole (1280 x 720 reference, as before); top / bottom halves (1280 x 600: a
+        // little smaller); left / right halves (960 wide, by width)
+        public void Relayout()
+        {
+            if (!scaler) return;
+            bool split = SplitScreen.Active, lr = split && SplitScreen.LeftRight;
+            scaler.referenceResolution = !split ? new Vector2(1280, 720) : lr ? new Vector2(960, 720) : new Vector2(1280, 600);
+            scaler.matchWidthOrHeight = lr ? 0 : 1;
+            if (resultsPanel) resultsPanel.transform.localScale = Vector3.one * (split && !lr ? .82f : 1f);
+            if (menuPanel) menuPanel.transform.localScale = Vector3.one * (split && !lr ? .92f : 1f);
+            if (help) help.enabled = !split;
         }
         Text Label(Transform p, Vector2 anchor, Vector2 pos, int size, TextAnchor align, Vector2 box)
         {
@@ -48,7 +65,7 @@ namespace ShiftStorm
             center = Label(p, new Vector2(.5f, .5f), new Vector2(0, 120), 90, TextAnchor.MiddleCenter, new Vector2(1200, 120));
             help = Label(p, new Vector2(.5f, 0), new Vector2(0, 8), 16, TextAnchor.LowerCenter, new Vector2(1250, 26));
             help.color = new Color(1, 1, 1, .75f);
-            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu (Settings, Quit)  R3/F1 FPS";
+            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  X/V view  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu (Settings, Quit)  R3/F1 FPS";
             // Round 3: race position (big, top left under the stats) and the one-time note on the first flight
             place = Label(p, new Vector2(0, 1), new Vector2(24, -70), 54, TextAnchor.UpperLeft, new Vector2(400, 120)); place.supportRichText = true;
             note = Label(p, new Vector2(.5f, .5f), new Vector2(0, -150), 30, TextAnchor.MiddleCenter, new Vector2(900, 40)); note.color = new Color(.75f, .95f, 1f);
@@ -74,6 +91,9 @@ namespace ShiftStorm
         void Update()
         {
             if (!v) return;
+            if (player == 2 && menuPanel.activeSelf) menuPanel.SetActive(false);
+            // Round 6: the HUD's plane just past the camera's near clip, so the cockpit in first person (near clip 5 cm) never covers it
+            if (canvasRef && cam) canvasRef.planeDistance = Mathf.Min(.5f, cam.nearClipPlane + .02f);
             string extra = v.Drifting ? "  DRIFT" : v.Carving ? "  CARVE" : "";
             mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}{extra}";
             UpdateGuide();
@@ -82,7 +102,7 @@ namespace ShiftStorm
             float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime + v.Penalty;   // Round 4: near-miss penalties count at once
             timer.text = TimeTrial.Clock(time);
             int gates = c ? c.gates.Count : 0;
-            info.text = $"{(c ? c.courseName : "")}\nGates {v.GatesPassed}/{gates}   lap {100f * v.RaceDistance / Mathf.Max(1, gates):0}%   resets {v.Resets}\nInvert {(ShiftInput.Invert ? "ON" : "off")}";
+            info.text = $"{(c ? c.courseName : "")}\nGates {v.GatesPassed}/{gates}   lap {100f * v.RaceDistance / Mathf.Max(1, gates):0}%   resets {v.Resets}\nInvert {(v.Input.MyInvert ? "ON" : "off")}{(SplitScreen.Active ? $"   view {ViewName}" : "")}";
             // the segment now, and the last split against its target
             if (trial && c.segments.Count > 0)
             {
@@ -115,13 +135,14 @@ namespace ShiftStorm
             // the first flight of this game: where the invert setting is (until it has been set once)
             if (v.Mode == Mode.Fly && !v.Holding && !firstFlightSeen && !Settings.InvertChosen) { firstFlightSeen = true; noteUntil = Time.time + 5f; }
             note.text = Time.time < noteUntil ? "Invert controls: Menu > Settings" : "";
+            if (player == 2 && game && game.MenuOpen) { center.fontSize = 70; center.color = new Color(1, .85f, .3f); center.text = "PAUSED"; }
             // results
-            var tt = game ? game.Trial : null;
+            var tt = game ? game.TrialOf(v) : null;
             bool showResults = tt && tt.HasResults && v.Finished && !menuPanel.activeSelf;
             if (showResults != resultsPanel.activeSelf) resultsPanel.SetActive(showResults);
             if (showResults) results.text = ResultsText(tt, c);
             // menu
-            bool open = game && game.MenuOpen;
+            bool open = game && game.MenuOpen && player != 2;
             if (open != menuPanel.activeSelf) menuPanel.SetActive(open);
             // Round 5: the Garage hides the race HUD (everything but the menu) while it is open
             bool gar = Garage.Active;
@@ -131,6 +152,12 @@ namespace ShiftStorm
             if (open) menu.text = MenuText();
         }
 
+        string ViewName { get { var cv = cam ? cam.GetComponent<CameraViews>() : null; return cv ? cv.CurrentName : "-"; } }
+        // checks (Round 6): what this half shows
+        public string SpeedText => speedo ? speedo.text : ""; public string PlaceText => place ? place.text : ""; public string TimerText => timer ? timer.text : "";
+        public string ModeText => mode ? mode.text : ""; public string CenterText => center ? center.text : ""; public string InfoText => info ? info.text : "";
+        public bool ResultsShown => resultsPanel && resultsPanel.activeSelf; public string ResultsBody => results ? results.text : "";
+        public Camera Cam => cam;
         bool firstFlightSeen; float noteUntil = -1;
         public string NoteText => note ? note.text : "";
         string ResultsText(TimeTrial tt, Course c)
@@ -144,7 +171,8 @@ namespace ShiftStorm
                 {
                     var r = order[i]; int fi = race.Finishers.FindIndex(f => f.v == r);
                     string col = ColorUtility.ToHtmlStringRGB(r.Tint), t = fi >= 0 ? TimeTrial.Clock(race.Finishers[fi].time) : $"racing (gate {r.GatesPassed}/{c.gates.Count})";
-                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>   {t}{(r.Penalty > 0 ? $"  <color=#ffb070>(+{r.Penalty:0} s: {Missed(r)})</color>" : "")}{(r == v ? "</b>" : "")}");
+                    string who = SplitScreen.Active ? (r == game.Player ? "  <b>[P1]</b>" : r == game.Player2 ? "  <b>[P2]</b>" : "") : "";
+                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>{who}   {t}{(r.Penalty > 0 ? $"  <color=#ffb070>(+{r.Penalty:0} s: {Missed(r)})</color>" : "")}{(r == v ? "</b>" : "")}");
                 }
                 sb.AppendLine();
             }
@@ -159,6 +187,7 @@ namespace ShiftStorm
                 sb.AppendLine($"{i + 1} {s.name,-17}  <color={col}>{(t >= 0 ? t.ToString("0.00") : "--")}</color>  target {s.target:0}{(float.IsNaN(vsBest) ? "" : $"  best {Delta(vsBest)}")}");
             }
             sb.AppendLine();
+            if (SplitScreen.Active && !game.AllHumansFinished) { sb.Append("<color=#ffd34d>Waiting for the other player to finish...</color>"); return sb.ToString(); }
             for (int i = 0; i < Game.ResultsItems.Length; i++) { var it = Game.ResultsItems[i]; sb.Append(i == game.ResultsIndex ? $"<color=#ffd34d><b>> {it} <</b></color>   " : $"{it}   "); }
             sb.AppendLine(); sb.Append("<size=17>D-pad / arrows: choose   A / Enter: go   Y / R: race again</size>");
             return sb.ToString();
@@ -167,6 +196,8 @@ namespace ShiftStorm
         string MenuText()
         {
             var sb = new StringBuilder(); sb.AppendLine($"<b>{game.MenuTitle}</b>\n");
+            var miss = SplitScreen.Session ? SplitScreen.Session.MissingText : null; if (miss != null) sb.AppendLine($"<color=#ff7060><b>{miss}</b></color>\n");
+            if (!string.IsNullOrEmpty(game.MenuNote)) sb.AppendLine($"<size=20><color=#9fe8ff>{game.MenuNote}</color></size>\n");
             var items = game.MenuItems;
             for (int i = 0; i < items.Count; i++) sb.AppendLine(i == game.MenuIndex ? $"<color=#ffd34d><b>> {items[i]} <</b></color>" : items[i]);
             sb.AppendLine("\n<size=18>D-pad / arrows: choose   A / Enter: go   B / Esc: back</size>");

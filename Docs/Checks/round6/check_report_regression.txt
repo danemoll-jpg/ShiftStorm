@@ -1,0 +1,510 @@
+ShiftStorm check 'best', 2026-11-13 20:36, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BEST SURVIVES A RESTART PASS: a new game process read local/round6/reg/save2\besttimes.json: best lap 122.76 s set 2026-11-13 20:32, 8 splits; the HUD's time trial has it: 122.76
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 0.88 ms, 95th pct 0.88 ms, 99th pct 0.88 ms, worst 0.88 ms over 2 frames; GPU time not available in batch mode
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'quit', 2026-11-13 20:29, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+QUIT FROM THE MENU: Quit page shown True, "No" chosen by default True; No went back to the menu True
+  choosing "Yes, quit" now; the process must end with exit code 0 (Run-Check / the launcher report it)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, AudioListener.volume 0
+ShiftStorm check 'quitresults', 2026-11-13 20:29, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+QUIT FROM RESULTS: results shown True (finished True in 5.08 s), selected "Quit game", then the Quit page: True
+  choosing "Yes, quit" now; the process must end with exit code 0 (Run-Check / the launcher report it)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, AudioListener.volume 0
+ShiftStorm check 'round1', 2026-11-13 20:36, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STRIP PASS: finished True in 25.5 s, gates 11/11, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+LANE drive-lane: form Drive -> Drive (no change expected), top speed 74.2 m/s (build 2: 34.5), drift/carve used, resets 4
+LANE boat-lane: form Boat -> Boat (no change expected), top speed 58.6 m/s (build 2: 26.0), drift/carve used, resets 1
+LANE fly-lane: form Fly -> Fly (no change expected), top speed 92.2 m/s (build 2: 57.7), climb/dive weave, resets 0
+LANE dive-lane: form Dive -> Dive (no change expected), top speed 53.8 m/s (build 2: 28.0), climb/dive weave, resets 0
+E1 low-speed ramp entry PASS: ramp at 10 m/s, flight entered at 54.1 m/s, reached the lagoon in Boat, resets 0
+E2 boosted water entry PASS: boat speed 58.0 m/s, level after 0.47 s, resets 0
+E3 steep nose-down water entry PASS: -50 deg, level after 0.24 s, resets 0
+E4 reset during a change PASS: reset 0.25 s into Drive->Fly; back in Fly; wing zone fired again: True
+E5 same trigger twice PASS: changes 1 (Boat->Dive), form Dive, resets 0
+E6 surfacing pool -> road PASS: changes Dive->Boat, Boat->Drive; Boat->Drive done 0.63 s before the wheels touched, resets 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.14 ms, 95th pct 1.82 ms, 99th pct 3.08 ms, worst 300.62 ms over 126978 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  strip        Drive->Fly  z   240.7  0.601 s  frames worst 11.25 / mean 1.23 ms
+  strip        Fly->Boat   z   500.2  0.601 s  frames worst 8.89 / mean 1.13 ms
+  strip        Boat->Dive  z   862.2  0.601 s  frames worst 7.24 / mean 1.12 ms
+  strip        Dive->Boat  z  1086.6  0.601 s  frames worst 5.14 / mean 1.12 ms
+  strip        Boat->Drive z  1201.6  0.601 s  frames worst 5.21 / mean 1.15 ms
+  e1-slow-ramp Drive->Fly  z   240.2  0.600 s  frames worst 6.05 / mean 1.11 ms
+  e1-slow-ramp Fly->Boat   z   500.3  0.600 s  frames worst 5.40 / mean 1.26 ms
+  e2-boost-water Fly->Boat   z   500.6  0.600 s  frames worst 6.00 / mean 1.27 ms
+  e3-nose-down Fly->Boat   z   501.8  0.600 s  frames worst 6.17 / mean 1.25 ms
+  e4-reset-mid Drive->Fly  z   240.7  cancelled by the reset  frames worst 62.31 / mean 1.18 ms
+  e4-reset-mid Drive->Fly  z   240.4  0.600 s  frames worst 8.82 / mean 1.41 ms
+  e5-twice     Boat->Dive  z   862.0  0.601 s  frames worst 5.07 / mean 1.09 ms
+  e6-surface-road Dive->Boat  z  1086.0  0.601 s  frames worst 8.18 / mean 1.28 ms
+  e6-surface-road Boat->Drive z  1201.0  0.601 s  frames worst 4.59 / mean 1.24 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 0, Abi lines: waterfall: laugh_1; finish: quipgood_1; reset: disaster_1; reset: skipped (cooldown); reset: skipped (cooldown); reset: skipped (cooldown); reset: disaster_1; finish: win_1; reset: disaster_2; waterfall: laugh_1
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Clap, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'round2', 2026-11-13 20:33, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 122.77 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            16.4 s    20 s  -3.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.6 s    20 s  -0.4
+  6 Sunken Gateway      Diving              9.4 s    10 s  -0.6
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 74.5 m/s (167 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 122.77] finish in 122.77 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.30 ms, 95th pct 7.14 ms, 99th pct 8.89 ms, worst 82.43 ms over 21083 frames (26 over 16.7 ms); peak draw calls 0, batches 0, triangles 4438k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      4.14 /   6.34 /  82.43 ms       0 draws    1880k tris
+  Cliffside Climb      4.09 /   6.85 /  65.94 ms       0 draws    4438k tris
+  Sky Arch             4.57 /   7.21 /  62.52 ms       0 draws    4244k tris
+  Lagoon Landing       3.32 /   5.59 /  30.83 ms       0 draws    1332k tris
+  Mangrove Run         5.68 /   8.25 /  43.31 ms       0 draws    4289k tris
+  Sunken Gateway       4.04 /   6.43 /  14.99 ms       0 draws    2024k tris
+  Coral Vault          3.57 /   5.78 /  60.25 ms       0 draws    2104k tris
+  Waterfall Return     5.58 /   8.39 /  19.46 ms       0 draws    4059k tris
+  frames over 50 ms during the lap: 10; worst: 118 ms at 72.9 s (Mangrove Run, after "split Lagoon Landing: 11.85 s (target 15 s), total 64.98 s"); 89 ms at 3.4 s (Beach Promenade, after "gate G0 start passed (1/11)"); 72 ms at 91.0 s (Sunken Gateway, after "gate G6 dive portal passed (7/11)"); 67 ms at 19.7 s (Cliffside Climb, after "split Beach Promenade: 16.42 s (target 20 s), total 16.42 s"); 66 ms at 111.1 s (Coral Vault, after "shortcut Coral Vault tunnel: left without finishing it (38 m off its line)"); 65 ms at 42.5 s (Sky Arch, after "gate G3 arch exit passed (4/11)")
+RESULTS PASS: shown True, lap 122.77 s, 8 splits, new best False, best on file 122.76 s (local/round6/reg/save2\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 122.76 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "TURN BACK: G6 dive portal", then reset (missed gate G6 dive portal) to the anchor at 5423 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+ABI PASS: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69; head top 0.80 m under a closed canopy top of 0.87 m; Drive: 0 below the hull; Boat: 0 below the hull; Fly: 0 below the hull; Dive: 0 of 0 vertices outside the closed canopy above the body, 0 below the hull
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 1.99  wind 0.44  FOV 89.7  particles 80  speed 99 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.00  wind 0.45  FOV 90.0  particles 141  speed 100 % of top
+  Dive  pitch 1.50  wind 0.31  FOV 90.0  particles 113  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.88 ms, 95th pct 7.61 ms, 99th pct 9.81 ms, worst 118.07 ms over 54064 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   945.2  0.604 s  frames worst 13.38 / mean 7.42 ms
+  lap          Fly->Boat   z  -606.2  0.601 s  frames worst 9.34 / mean 4.60 ms
+  lap          Boat->Dive  z  -201.9  0.601 s  frames worst 12.24 / mean 5.58 ms
+  lap          Dive->Boat  z  -466.7  0.608 s  frames worst 13.95 / mean 7.34 ms
+  lap          Boat->Drive z  -304.3  0.605 s  frames worst 10.95 / mean 6.87 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; finish: win_1; reset: disaster_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'round2b', 2026-11-13 20:30, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SCREEN: start-up (started directly, screen arguments: none): Unity started it Windowed 2844 x 1355; desktop 3840 x 2160; test run: left as it is, would set FullScreenWindow (borderless full screen) 3840 x 2160
+SCREEN: player settings: default mode Windowed (batch mode: no real window), saved choice file C:/Users/danmo/AppData/LocalLow/ShiftStorm/ShiftStorm\display.json
+NAV: the guided pilot steers only by the HUD (the arrow's angle and CLIMB / DIVE when it shows, else the next gate's marker on the screen, else straight on)
+NAV nav-air-sideways PASS: placed 70 m off the line, facing sideways (away from it) as a plane at 60 m/s; passed G3 arch exit after 7.6 s, resets 0; arrow shown True, THIS WAY True, next-gate marker first in view at 0.0 s, WRONG WAY never shown (must not show)
+NAV nav-air-backwards PASS: placed on the line facing backwards as a plane at 60 m/s; passed G3 arch exit after 14.3 s, resets 0; arrow shown True, THIS WAY True, next-gate marker first in view at 0.0 s, WRONG WAY shown at 0.6 s (expected: it starts facing backwards)
+NAV pictures Drive: marker on the next gate shown True; turned 125 deg away: arrow shown True at -118 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Boat: marker on the next gate shown True; turned 125 deg away: arrow shown True at -136 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Fly: marker on the next gate shown True; turned 125 deg away: arrow shown True at -143 deg, cue "WRONG WAY - TURN AROUND"
+NAV pictures Dive: marker on the next gate shown True; turned 125 deg away: arrow shown True at -128 deg, cue "WRONG WAY - TURN AROUND"
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 122.76 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            16.4 s    20 s  -3.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.6 s    20 s  -0.4
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 74.5 m/s (167 mph), Boat 58.3 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 122.76] finish in 122.76 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.17 ms, 95th pct 6.96 ms, 99th pct 8.66 ms, worst 142.85 ms over 21761 frames (21 over 16.7 ms); peak draw calls 0, batches 0, triangles 4356k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      3.72 /   5.04 /  15.67 ms       0 draws    1880k tris
+  Cliffside Climb      3.55 /   5.54 /  22.97 ms       0 draws    4356k tris
+  Sky Arch             4.40 /   6.30 /  77.83 ms       0 draws    4244k tris
+  Lagoon Landing       3.31 /   5.56 /  32.09 ms       0 draws    1352k tris
+  Mangrove Run         5.84 /   8.35 /  35.88 ms       0 draws    4289k tris
+  Sunken Gateway       4.18 /   6.65 / 142.85 ms       0 draws    1930k tris
+  Coral Vault          3.54 /   5.96 /  65.70 ms       0 draws    2104k tris
+  Waterfall Return     5.93 /   8.74 /  72.88 ms       0 draws    4059k tris
+  frames over 50 ms during the lap: 6; worst: 149 ms at 87.9 s (Sunken Gateway, after "Boat->Dive at z -202.3 (x 354.5, y 0.6) (Canopy seals (dive portal)); speed 49.3 -> 49.3 m/s"); 79 ms at 43.5 s (Sky Arch, after "gate G3 arch exit passed (4/11)"); 79 ms at 92.6 s (Sunken Gateway, after "gate G6 dive portal passed (7/11)"); 74 ms at 118.5 s (Waterfall Return, after "gate G8 surfacing pool passed (9/11)"); 70 ms at 97.4 s (Coral Vault, after "split Sunken Gateway: 9.47 s (target 10 s), total 93.98 s"); 65 ms at 85.2 s (Sunken Gateway, after "split Mangrove Run: 19.55 s (target 20 s), total 84.51 s")
+RESULTS PASS: shown True, lap 122.76 s, 8 splits, new best True, best on file 122.76 s (local/round6/reg/save2\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 122.76 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "TURN BACK: G6 dive portal", then reset (missed gate G6 dive portal) to the anchor at 5423 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+  slowfps sleep 0 ms: worst frame 10 ms, sum of unscaled frame times 6.00 s, of game frame times 6.00 s, timeScale 1, captureDeltaTime 0
+  slowfps sleep 40 ms: worst frame 48 ms, sum of unscaled frame times 5.97 s, of game frame times 5.97 s, timeScale 1, captureDeltaTime 0
+  slowfps sleep 90 ms: worst frame 157 ms, sum of unscaled frame times 5.96 s, of game frame times 5.96 s, timeScale 1, captureDeltaTime 0
+SLOW FPS PASS: full throttle from standstill on the drive lane for 6 s of game time; 904 fps: 293.6 m in 6.00 s game time (6.00 s real, 1.00 x), 100.0 %; 23 fps: 294.7 m in 6.01 s game time (6.06 s real, 0.99 x), 100.4 %; 11 fps: 297.0 m in 6.06 s game time (6.15 s real, 0.99 x), 101.2 %. Fixed step 16.67 ms, maximum catch-up 0.25 s per frame
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 1.99  wind 0.44  FOV 89.7  particles 80  speed 99 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.45  FOV 90.0  particles 147  speed 100 % of top
+  Dive  pitch 1.50  wind 0.10  FOV 90.0  particles 115  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.42 ms, 95th pct 6.90 ms, 99th pct 9.14 ms, worst 157.46 ms over 82928 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   945.2  0.602 s  frames worst 13.85 / mean 6.61 ms
+  lap          Fly->Boat   z  -606.2  0.603 s  frames worst 9.22 / mean 5.15 ms
+  lap          Boat->Dive  z  -202.3  0.601 s  frames worst 148.96 / mean 6.15 ms
+  lap          Dive->Boat  z  -466.6  0.604 s  frames worst 40.68 / mean 7.96 ms
+  lap          Boat->Drive z  -305.1  0.602 s  frames worst 74.39 / mean 7.66 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: lucky_1; finish: quipgood_2; reset: disaster_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'round3', 2026-11-13 20:17, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SETTINGS: file local/round6/reg/save3\settings.json, invert at start off, chosen before False
+FIRST FLIGHT NOTE PASS: "Invert controls: Menu > Settings" shown on the first flight; nothing asked at start-up
+INVERT FROM THE MENU PASS: Menu opened True, Settings page True, item now "Invert flight / dive controls: On   (View / F2)", menu closed True; stick pulled back for 0.45 s: invert off: Fly pitch +18.9 deg, Dive +16.2 deg (nose up); invert on: Fly -18.9 deg, Dive -16.2 deg (nose down)
+  saved: local/round6/reg/save3\settings.json: {   "version": 1,   "invertVertical": true,   "showStats": false,   "invertChosen": true,   "difficulty": 0,   "design": "",   "invertVertical2": false,   "view": 0,   "view2": 0,   "splitLeftRight": false }
+RACE 1: 1. Abi 2:05.57, 2. Rocket Rae 2:24.96, 3. Chip "Showtime" Sterling 2:26.91, 4. Vivi 2:30.04
+  player (check pilot, no boost) place every 10 s: 4 3 3 2 1 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 144.96 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Chip "Showtime" Sterling: 146.91 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Vivi: 150.04 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 1 PASS: AI never stuck True, no pass-through True
+RACE 2: 1. Abi 2:05.91, 2. Rocket Rae 2:25.86, 3. Chip "Showtime" Sterling 2:27.83, 4. Vivi 2:29.71
+  player (check pilot, no boost) place every 10 s: 4 3 2 2 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 145.86 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Chip "Showtime" Sterling: 147.83 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 2, shortcut plan Coral Vault tunnel, taken Coral Vault tunnel
+  Vivi: 149.71 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 2, worst Abi / Rocket Rae 0.42 m at 29.0 s z 1184; Abi / Rocket Rae 0.41 m at 29.0 s z 1184
+RACE 2 CHECK: AI never stuck True, no pass-through False
+SHORTCUT Sky Arch slit: its line 1073 m from main progress 2279 to 3409 m (the main line there: 1130 m); entry / exit sub-gates; stands in for G3 arch exit; rejoins before G4 lagoon landing
+  from the anchor at 2245 m to G4 lagoon landing, the same start speed, no boost: safe line 20.44 s, resets 0, scrapes 0, shortcut not taken; shortcut 19.43 s, resets 0, scrapes 0, shortcut Sky Arch slit; deliberate miss (aimed 9 m beside its entry) 34.55 s, resets 0, scrapes 6, shortcut not taken
+  SHORTCUT Sky Arch slit PASS: saves 1.00 s (target 1-2 s); the miss costs +14.11 s against the safe line, +15.12 s against the shortcut, not trapped
+SHORTCUT Coral Vault tunnel: its line 460 m from main progress 6103 to 6592 m (the main line there: 489 m); entry / exit sub-gates; stands in for no main gate; rejoins before G7 chamber exit
+  from the anchor at 5667 m to G7 chamber exit, the same start speed, no boost: safe line 21.60 s, resets 0, scrapes 0, shortcut not taken; shortcut 20.76 s, resets 0, scrapes 3, shortcut Coral Vault tunnel; deliberate miss (aimed 6 m beside its entry) 23.33 s, resets 0, scrapes 22, shortcut not taken
+  SHORTCUT Coral Vault tunnel PASS: saves 0.83 s (target 2-3 s); the miss costs +1.73 s against the safe line, +2.57 s against the shortcut, not trapped
+SHORTCUT FULL LAP: the AI driver without boost, safe line 122.75 s, resets 0, scrapes 0, shortcuts none, gates 0 1 2 3 4 5 6 7 8 9 10; both shortcuts 120.98 s, resets 0, scrapes 3, shortcuts Sky Arch slit, Coral Vault tunnel, gates 0 1 2 3 4 5 6 7 8 9 10; difference +1.77 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.40 ms, 95th pct 2.40 ms, 99th pct 3.77 ms, worst 664.43 ms over 504778 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  race1        Drive->Fly  z   944.5  0.600 s  frames worst 4.41 / mean 1.45 ms
+  race1        Fly->Boat   z  -607.5  0.601 s  frames worst 12.84 / mean 1.66 ms
+  race1        Boat->Dive  z  -202.3  0.601 s  frames worst 4.68 / mean 1.52 ms
+  race1        Dive->Boat  z  -466.8  0.601 s  frames worst 11.72 / mean 1.65 ms
+  race1        Boat->Drive z  -304.5  0.602 s  frames worst 6.53 / mean 1.50 ms
+  race2        Drive->Fly  z   944.6  0.601 s  frames worst 8.18 / mean 1.63 ms
+  race2        Fly->Boat   z  -606.3  0.601 s  frames worst 10.29 / mean 1.77 ms
+  race2        Boat->Dive  z  -202.0  0.601 s  frames worst 31.53 / mean 2.06 ms
+  race2        Dive->Boat  z  -466.7  0.601 s  frames worst 13.13 / mean 1.92 ms
+  race2        Boat->Drive z  -304.3  0.601 s  frames worst 7.14 / mean 1.71 ms
+  sc-safe      Fly->Boat   z  -606.3  0.601 s  frames worst 9.42 / mean 1.28 ms
+  sc-take      Fly->Boat   z  -607.2  0.600 s  frames worst 14.65 / mean 1.26 ms
+  sc-miss      Fly->Boat   z  -606.1  0.600 s  frames worst 4.99 / mean 1.25 ms
+  sc-lap-safe  Drive->Fly  z   944.5  0.600 s  frames worst 6.73 / mean 1.26 ms
+  sc-lap-safe  Fly->Boat   z  -606.2  0.600 s  frames worst 6.53 / mean 1.27 ms
+  sc-lap-safe  Boat->Dive  z  -202.2  0.602 s  frames worst 50.42 / mean 1.30 ms
+  sc-lap-safe  Dive->Boat  z  -466.7  0.600 s  frames worst 4.50 / mean 1.25 ms
+  sc-lap-safe  Boat->Drive z  -304.4  0.600 s  frames worst 4.33 / mean 1.20 ms
+  sc-lap-shortcuts Drive->Fly  z   944.5  0.600 s  frames worst 5.13 / mean 1.27 ms
+  sc-lap-shortcuts Fly->Boat   z  -607.0  0.601 s  frames worst 3.88 / mean 1.28 ms
+  sc-lap-shortcuts Boat->Dive  z  -202.0  0.600 s  frames worst 6.27 / mean 1.27 ms
+  sc-lap-shortcuts Dive->Boat  z  -466.8  0.601 s  frames worst 4.77 / mean 1.27 ms
+  sc-lap-shortcuts Boat->Drive z  -304.6  0.601 s  frames worst 5.21 / mean 1.26 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 11, Abi lines: waterfall: lucky_1; finish: quipgood_1; waterfall: laugh_1; finish: win_1; waterfall: laugh_1; finish: quipgood_2; waterfall: laugh_1; finish: quipgood_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'round4', 2026-11-13 20:06, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SCAN: every collider inside the route's clear width, every 2 m along the line: road = between the edge lines (half width - 1 m), 0.3-3.8 m over the surface; air = 22 m wide (the flight rings' size), from 1.5 m under the line to 11 m over it; water = the buoy lane (+-13 m), 1.6 m under to 2.4 m over the surface; cave = +-14 m, +-2.5 m around the line's depth; pool / ramp = +-10 m, 0.2-3.2 m over the line
+SCAN FOUND: 5 colliders inside the route's clear width:
+  Road (under Course Paradise Plunge, layer 0): air from 2156 to 2156 m, its centre -2.6 m from the line, bounds centre (700.4, 20.6, 987.3) size (22.5, 43.1, 85.6)
+  Barrier L (under Course Paradise Plunge, layer 10): air from 2156 to 2156 m, its centre -14.1 m from the line, bounds centre (711.8, 37.0, 987.9) size (1.0, 12.4, 83.9)
+  Barrier R (under Course Paradise Plunge, layer 10): air from 2156 to 2156 m, its centre +8.7 m from the line, bounds centre (689.0, 37.1, 987.3) size (1.2, 12.6, 85.7)
+  Cave roof (under Course Paradise Plunge, layer 0): cave from 6720 to 6732 m, its centre +0.3 m from the line, bounds centre (-4.2, -0.3, -530.1) size (51.8, 2.5, 47.7)
+  Water ramp (under Course Paradise Plunge, layer 0): air from 6934 to 6934 m, its centre +0.0 m from the line, bounds centre (0.0, 1.7, -343.4) size (24.0, 6.6, 68.5)
+  sign Sign Fly at 2058 m (road): +14.6 m from the line, the route's edge at 11.7 m: outside
+  sign Sign Fly at 2058 m (road): +14.6 m from the line, the route's edge at 11.7 m: outside
+  sign Sign Boat at 3848 m (air): -30.0 m from the line, the route's edge at 20.0 m: outside
+  sign Sign Boat at 3848 m (air): -30.0 m from the line, the route's edge at 20.0 m: outside
+  sign Sign Dive at 5444 m (water): -23.0 m from the line, the route's edge at 15.0 m: outside
+  sign Sign Dive at 5444 m (water): -23.0 m from the line, the route's edge at 15.0 m: outside
+  sign Sign Drive at 6851 m (pool/ramp): -15.0 m from the line, the route's edge at 12.0 m: outside
+  sign Sign Drive at 6851 m (pool/ramp): -15.0 m from the line, the route's edge at 12.0 m: outside
+  gate frame G1 promenade exit (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+  gate frame G2 launch (road): posts at +-13.4 m, the route's edge at 11.0 m: outside
+  gate frame G3 arch exit (air): posts at +-43.2 m, the route's edge at 11.0 m: outside
+  gate frame G4 lagoon landing (water): posts at +-49.2 m, the route's edge at 15.0 m: outside
+  gate frame G5 mangrove exit (water): posts at +-17.5 m, the route's edge at 15.0 m: outside
+  gate frame G6 dive portal (cave): posts at +-14.4 m, the route's edge at 17.0 m: INSIDE or at the edge
+  gate frame G7 chamber exit (cave): posts at +-14.4 m, the route's edge at 17.0 m: INSIDE or at the edge
+  gate frame G8 surfacing pool (pool/ramp): posts at +-22.7 m, the route's edge at 12.0 m: outside
+  gate frame G9 road landing (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+  gate frame G10 finish (road): posts at +-15.5 m, the route's edge at 13.0 m: outside
+WALLS: each form driven straight into a course wall at 10, 25 and 45 deg (the angle measured from the real contact normal), the throttle holding the speed; kept = speed 0.25 s after the hit / speed just before it; the slowest speed and the heading's largest turn in the 1.5 s after (a spin would turn it far past the wall's direction); then 3 s steering into the wall
+  drive 10 deg into the finishing road barrier: hit Barrier R at 7 deg (rule keeps 95 %), 44.7 -> 45.1 m/s 0.25 s later = 101 % kept, slowest 35.3 m/s in 1.5 s, heading turned at most 42 deg (no spin: under 35), wall hits 2, resets 0  CHECK
+  drive 25 deg into the finishing road barrier: hit Barrier R at 19 deg (rule keeps 93 %), 45.2 -> 43.9 m/s 0.25 s later = 97 % kept, slowest 41.5 m/s in 1.5 s, heading turned at most 26 deg (no spin: under 50), wall hits 1, resets 0  OK
+  drive 45 deg into the finishing road barrier: hit Barrier R at 45 deg (rule keeps 83 %), 44.7 -> 40.0 m/s 0.25 s later = 90 % kept, slowest 37.3 m/s in 1.5 s, heading turned at most 49 deg (no spin: under 70), wall hits 3, resets 0  OK
+  drive held against the finishing road barrier for 3 s (steering into it, full throttle): moved 85 m forward along it, average 37.9 m/s, slowest 32.2 m/s, wall hits 1, resets 0  OK
+  boat  10 deg into the Mangrove river bank: hit River bank R at 10 deg (rule keeps 95 %), 35.1 -> 35.2 m/s 0.25 s later = 100 % kept, slowest 33.3 m/s in 1.5 s, heading turned at most 14 deg (no spin: under 35), wall hits 1, resets 0  OK
+  boat  25 deg into the Mangrove river bank: hit River bank R at 25 deg (rule keeps 91 %), 35.3 -> 34.7 m/s 0.25 s later = 98 % kept, slowest 32.1 m/s in 1.5 s, heading turned at most 29 deg (no spin: under 50), wall hits 1, resets 0  OK
+  boat  45 deg into the Mangrove river bank: hit River bank R at 45 deg (rule keeps 83 %), 35.0 -> 31.9 m/s 0.25 s later = 91 % kept, slowest 29.2 m/s in 1.5 s, heading turned at most 50 deg (no spin: under 70), wall hits 1, resets 0  OK
+  boat  held against the Mangrove river bank for 3 s (steering into it, full throttle): moved 118 m forward along it, average 40.1 m/s, slowest 32.6 m/s, wall hits 4, resets 0  OK
+  fly   10 deg into the Sky Arch pillar: hit Arch pillar at 5 deg (rule keeps 96 %), 70.8 -> 70.3 m/s 0.25 s later = 99 % kept, slowest 67.7 m/s in 1.5 s, heading turned at most 12 deg (no spin: under 35), wall hits 1, resets 0  OK
+  fly   25 deg into the Sky Arch pillar: hit Arch pillar at 11 deg (rule keeps 94 %), 70.5 -> 70.2 m/s 0.25 s later = 100 % kept, slowest 66.5 m/s in 1.5 s, heading turned at most 27 deg (no spin: under 50), wall hits 1, resets 0  OK
+  fly   45 deg into the Sky Arch pillar: hit Arch pillar at 26 deg (rule keeps 91 %), 70.4 -> 67.8 m/s 0.25 s later = 96 % kept, slowest 63.7 m/s in 1.5 s, heading turned at most 47 deg (no spin: under 70), wall hits 1, resets 0  OK
+  fly   held against a wall: n/a (the walls in the air are the arch's short pillars; a plane passes them in under a second)
+  dive  10 deg into the Coral Vault cave wall: hit Cave wall R at 9 deg (rule keeps 95 %), 29.9 -> 30.0 m/s 0.25 s later = 100 % kept, slowest 27.8 m/s in 1.5 s, heading turned at most 15 deg (no spin: under 35), wall hits 1, resets 0  OK
+  dive  25 deg into the Coral Vault cave wall: hit Cave wall R at 19 deg (rule keeps 93 %), 29.8 -> 30.2 m/s 0.25 s later = 101 % kept, slowest 27.8 m/s in 1.5 s, heading turned at most 30 deg (no spin: under 50), wall hits 1, resets 0  OK
+  dive  45 deg into the Coral Vault cave wall: hit Cave wall R at 40 deg (rule keeps 85 %), 30.1 -> 28.9 m/s 0.25 s later = 96 % kept, slowest 25.0 m/s in 1.5 s, heading turned at most 51 deg (no spin: under 70), wall hits 1, resets 0  OK
+  dive  held against the Coral Vault cave wall for 3 s (steering into it, full throttle): moved 103 m forward along it, average 34.7 m/s, slowest 28.3 m/s, wall hits 7, resets 0  OK
+WALLS CHECK
+NEAR MISS: a gate passed outside its frame but within 1.0 gate width (8-30 m) of it, in a permitted form, heading along the route, counts with +3 s; the band per gate:
+  G0 start: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  G1 promenade exit: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  G2 launch: frame +-13 x +-10 m, near-miss band to +-39 x +-30 m
+  G3 arch exit: frame +-42 x +-28 m, near-miss band to +-72 x +-58 m
+  G4 lagoon landing: frame +-48 x +-12 m, near-miss band to +-78 x +-36 m
+  G5 mangrove exit: frame +-22 x +-8 m, near-miss band to +-52 x +-24 m
+  G6 dive portal: frame +-17 x +-6 m, near-miss band to +-47 x +-18 m
+  G7 chamber exit: frame +-21 x +-10 m, near-miss band to +-51 x +-30 m
+  G8 surfacing pool: frame +-22 x +-10 m, near-miss band to +-52 x +-30 m
+  G9 road landing: frame +-15 x +-9 m, near-miss band to +-45 x +-27 m
+  G10 finish: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  road: G1 passed 3 m outside its post, on the grass beyond the barrier: counted, penalty +3 s, cue "MISSED G1 +3 s", resets 0; log: [   1.87] gate G1 promenade exit passed (near miss, 4.0 m outside, +3 s) (2/11)  PASS
+  flight: G3 passed 8 m under its frame (beside it the arch's pillars stand in the way): counted, penalty +3 s, cue "MISSED G3 +3 s", resets 0; log: [   2.48] gate G3 arch exit passed (near miss, 8.0 m outside, +3 s) (4/11)  PASS
+  water: G4 passed 8 m outside its frame on the lagoon: counted, penalty +3 s, cue "MISSED G4 +3 s", resets 0; log: [   1.98] gate G4 lagoon landing passed (near miss, 6.6 m outside, +3 s) (5/11)  PASS
+  pool: G8 passed 5 m outside its frame (the cave gates G6 / G7 fill the cave's cross-section: they cannot be passed beside): counted, penalty +3 s, cue "MISSED G8 +3 s", resets 0; log: [   0.75] gate G8 surfacing pool passed (near miss, 5.0 m outside, +3 s) (9/11)  PASS
+  far miss: G3 passed 15 m beyond the band: not counted, cue "", TURN BACK shown, resets 1 (missed gate G3 arch exit); log: [   3.73] missed gate G3 arch exit (40 m past it, Fly): turn back | [   5.53] reset (missed gate G3 arch exit, at 239.6 (x 255.8, y 51.4), 72 m/s, 90 m off the line) to the anchor at 2245 m in Fly  PASS (rejected)
+  wrong form: G4 (boat only) flown over as a plane 8 m above its frame: not counted, cue "", TURN BACK shown, resets 1 (missed gate G4 lagoon landing); log: [   3.03] missed gate G4 lagoon landing (41 m past it, Fly): turn back | [   4.55] reset (missed gate G4 lagoon landing, at -842.9 (x 762.7, y 19.9), 72 m/s, 20 m off the line) to the anchor at 2859 m in Fly  PASS (rejected)
+NEAR MISS PENALTY PASS: the most a near miss could save anywhere on the lap: 1.14 s at G7 chamber exit (320 m either side, 50.0 m shorter at 44 m/s); penalty 3 s (clearly above it: a lap with a near miss is never faster than the clean lap)
+NEAR MISS PASS
+STARTS: 25 race starts (the check pilot in Abi's car at the back, the 3 AI at Easy), the first 10 s after GO at time scale 3.0 (physics steps unchanged)
+STARTS PASS: 25 starts: resets in the first 10 s 0, AI back-outs 0, wall hits 0, racer-to-racer touches 9, closest two racers came 1.9 m (centres), field spread after 10 s 66-77 m
+DIFFICULTY: 3 races per level against the check pilot (Abi's car, no boost, the safe line), time scale 3.0 (physics steps unchanged)
+  Easy race 1: 1. Abi 125.7, 2. Rocket Rae 145.2, 3. Chip "Showtime" Sterling 147.8, 4. Vivi 149.2; AI mistakes 7/7/7
+  Easy race 2: 1. Abi 125.0, 2. Rocket Rae 145.2, 3. Chip "Showtime" Sterling 148.2, 4. Vivi 148.5; AI mistakes 15/16/14
+  Easy race 3: 1. Abi 124.0, 2. Rocket Rae 145.0 [Sky Arch slit], 3. Chip "Showtime" Sterling 148.1, 4. Vivi 148.2; AI mistakes 22/25/21
+DIFFICULTY Easy: AI pack mean 147.3 s (+18 % against the check pilot's 124.9 s); per rival Rocket 145.2/145.2/145.0, Chip 147.8/148.2/148.1, Vivi 149.2/148.5/148.2; check pilot 1st in 3 of 3
+  Normal race 1: 1. Abi 124.7, 2. Rocket Rae 131.1, 3. Chip "Showtime" Sterling 132.6 [Coral Vault tunnel], 4. Vivi 134.2; AI mistakes 25/28/25
+  Normal race 2: 1. Abi 124.5, 2. Rocket Rae 131.9, 3. Chip "Showtime" Sterling 132.5, 4. Vivi 133.4; AI mistakes 29/32/28
+  Normal race 3: 1. Abi 124.2, 2. Rocket Rae 130.9, 3. Chip "Showtime" Sterling 132.2, 4. Vivi 133.1; AI mistakes 32/35/31
+DIFFICULTY Normal: AI pack mean 132.4 s (+6 % against the check pilot's 124.4 s); per rival Rocket 131.1/131.9/130.9, Chip 132.6/132.5/132.2, Vivi 134.2/133.4/133.1; check pilot 1st in 3 of 3
+  Hard race 1: 1. Rocket Rae 117.5 [Sky Arch slit], 2. Chip "Showtime" Sterling 119.4, 3. Vivi 120.0, 4. Abi 123.2; AI mistakes 32/35/31
+  Hard race 2: 1. Rocket Rae 118.3, 2. Chip "Showtime" Sterling 118.6 [Coral Vault tunnel], 3. Vivi 120.1, 4. Abi 123.2; AI mistakes 32/35/31
+  Hard race 3: 1. Rocket Rae 118.3, 2. Chip "Showtime" Sterling 118.7 [Coral Vault tunnel], 3. Vivi 120.0, 4. Abi 123.2; AI mistakes 32/35/31
+DIFFICULTY Hard: AI pack mean 119.0 s (-3 % against the check pilot's 123.2 s); per rival Rocket 117.5/118.3/118.3, Chip 119.4/118.6/118.7, Vivi 120.0/120.1/120.0; check pilot 1st in 0 of 3
+  Easy: AI pack mean 147.3 s (+18 % against the check pilot's 124.9 s); per rival Rocket 145.2/145.2/145.0, Chip 147.8/148.2/148.1, Vivi 149.2/148.5/148.2; check pilot 1st in 3 of 3
+  Normal: AI pack mean 132.4 s (+6 % against the check pilot's 124.4 s); per rival Rocket 131.1/131.9/130.9, Chip 132.6/132.5/132.2, Vivi 134.2/133.4/133.1; check pilot 1st in 3 of 3
+  Hard: AI pack mean 119.0 s (-3 % against the check pilot's 123.2 s); per rival Rocket 117.5/118.3/118.3, Chip 119.4/118.6/118.7, Vivi 120.0/120.1/120.0; check pilot 1st in 0 of 3
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.47 ms, 95th pct 2.42 ms, 99th pct 3.52 ms, worst 294.75 ms over 442643 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  diff-Easy-1  Drive->Fly  z   945.0  0.600 s  frames worst 8.10 / mean 1.66 ms
+  diff-Easy-1  Fly->Boat   z  -606.2  0.602 s  frames worst 3.69 / mean 1.46 ms
+  diff-Easy-1  Boat->Dive  z  -201.9  0.605 s  frames worst 3.56 / mean 1.74 ms
+  diff-Easy-1  Dive->Boat  z  -466.6  0.603 s  frames worst 3.87 / mean 1.59 ms
+  diff-Easy-1  Boat->Drive z  -305.1  0.603 s  frames worst 4.40 / mean 1.53 ms
+  diff-Easy-2  Drive->Fly  z   945.2  0.602 s  frames worst 3.93 / mean 1.52 ms
+  diff-Easy-2  Fly->Boat   z  -606.2  0.604 s  frames worst 9.76 / mean 1.51 ms
+  diff-Easy-2  Boat->Dive  z  -201.9  0.608 s  frames worst 6.63 / mean 1.91 ms
+  diff-Easy-2  Dive->Boat  z  -466.5  0.603 s  frames worst 4.53 / mean 1.68 ms
+  diff-Easy-2  Boat->Drive z  -305.1  0.601 s  frames worst 3.67 / mean 1.53 ms
+  diff-Easy-3  Drive->Fly  z   944.5  0.602 s  frames worst 9.67 / mean 1.88 ms
+  diff-Easy-3  Fly->Boat   z  -606.2  0.603 s  frames worst 3.24 / mean 1.42 ms
+  diff-Easy-3  Boat->Dive  z  -202.5  0.601 s  frames worst 8.98 / mean 1.69 ms
+  diff-Easy-3  Dive->Boat  z  -466.3  0.600 s  frames worst 8.48 / mean 1.81 ms
+  diff-Easy-3  Boat->Drive z  -304.9  0.600 s  frames worst 4.00 / mean 1.51 ms
+  diff-Normal-1 Drive->Fly  z   944.8  0.603 s  frames worst 5.51 / mean 1.77 ms
+  diff-Normal-1 Fly->Boat   z  -606.2  0.601 s  frames worst 2.89 / mean 1.45 ms
+  diff-Normal-1 Boat->Dive  z  -202.5  0.601 s  frames worst 3.66 / mean 1.50 ms
+  diff-Normal-1 Dive->Boat  z  -466.9  0.601 s  frames worst 3.69 / mean 1.45 ms
+  diff-Normal-1 Boat->Drive z  -304.6  0.600 s  frames worst 5.13 / mean 1.54 ms
+  diff-Normal-2 Drive->Fly  z   944.7  0.602 s  frames worst 4.86 / mean 1.58 ms
+  diff-Normal-2 Fly->Boat   z  -606.9  0.603 s  frames worst 3.12 / mean 1.70 ms
+  diff-Normal-2 Boat->Dive  z  -202.0  0.603 s  frames worst 3.70 / mean 1.62 ms
+  diff-Normal-2 Dive->Boat  z  -466.3  0.600 s  frames worst 4.05 / mean 1.61 ms
+  diff-Normal-2 Boat->Drive z  -304.9  0.608 s  frames worst 5.85 / mean 1.63 ms
+  diff-Normal-3 Drive->Fly  z   945.2  0.603 s  frames worst 4.05 / mean 1.63 ms
+  diff-Normal-3 Fly->Boat   z  -606.0  0.602 s  frames worst 16.56 / mean 1.95 ms
+  diff-Normal-3 Boat->Dive  z  -202.0  0.601 s  frames worst 3.71 / mean 1.61 ms
+  diff-Normal-3 Dive->Boat  z  -466.6  0.601 s  frames worst 4.41 / mean 1.66 ms
+  diff-Normal-3 Boat->Drive z  -304.3  0.603 s  frames worst 5.01 / mean 1.59 ms
+  diff-Hard-1  Drive->Fly  z   945.2  0.603 s  frames worst 6.92 / mean 1.83 ms
+  diff-Hard-1  Fly->Boat   z  -606.2  0.603 s  frames worst 4.58 / mean 1.67 ms
+  diff-Hard-1  Boat->Dive  z  -202.3  0.602 s  frames worst 5.64 / mean 1.71 ms
+  diff-Hard-1  Dive->Boat  z  -466.9  0.604 s  frames worst 10.79 / mean 1.69 ms
+  diff-Hard-1  Boat->Drive z  -304.5  0.604 s  frames worst 5.39 / mean 1.71 ms
+  diff-Hard-2  Drive->Fly  z   945.2  0.601 s  frames worst 5.90 / mean 1.74 ms
+  diff-Hard-2  Fly->Boat   z  -606.2  0.603 s  frames worst 3.51 / mean 1.53 ms
+  diff-Hard-2  Boat->Dive  z  -202.0  0.601 s  frames worst 3.97 / mean 1.47 ms
+  diff-Hard-2  Dive->Boat  z  -466.4  0.602 s  frames worst 3.59 / mean 1.64 ms
+  diff-Hard-2  Boat->Drive z  -305.0  0.603 s  frames worst 3.98 / mean 1.66 ms
+  diff-Hard-3  Drive->Fly  z   945.2  0.605 s  frames worst 4.27 / mean 1.57 ms
+  diff-Hard-3  Fly->Boat   z  -606.2  0.605 s  frames worst 5.37 / mean 1.65 ms
+  diff-Hard-3  Boat->Dive  z  -201.8  0.602 s  frames worst 5.55 / mean 1.48 ms
+  diff-Hard-3  Dive->Boat  z  -466.7  0.601 s  frames worst 4.56 / mean 1.48 ms
+  diff-Hard-3  Boat->Drive z  -304.4  0.601 s  frames worst 3.99 / mean 1.46 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 18, Abi lines: reset: grunt_1; reset: skipped (cooldown); waterfall: lucky_1; finish: quipgood_1; waterfall: lucky_1; finish: win_1; waterfall: laugh_1; finish: quipgood_2; waterfall: laugh_1; finish: quipgood_1; waterfall: laugh_1; finish: quipgood_1; waterfall: laugh_1; finish: quipgood_2; waterfall: laugh_1; finish: win_1; waterfall: lucky_1; finish: quipgood_2; waterfall: laugh_1; finish: quipgood_1
+Abi's clips: 6 loaded, one-shots played: Sitting Disapproval, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'round5', 2026-11-13 20:03, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+GARAGE: menu page Garage, designs Gray box, Jetstream; items: Design: Jetstream   (2 of 2, A: next) | Form: Car - Tripo model   (A: next, with the change) | Racing with this design | Back
+  Gray box: Car gray box 4.0 x 2.6 x 4.2 m; Boat gray box 4.1 x 2.6 x 3.9 m; Plane gray box 6.9 x 2.0 x 5.8 m; Sub gray box 4.3 x 1.9 x 4.3 m
+  Gray box: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Jetstream: Car Tripo model 3.7 x 1.4 x 4.1 m; Boat Tripo model 3.8 x 1.3 x 4.1 m; Plane Tripo model 5.5 x 1.1 x 5.5 m; Sub Tripo model 3.8 x 1.6 x 4.2 m
+  Jetstream: change Car->Plane in the Garage: done True, swapped True, bursts 1
+GARAGE race with 'Jetstream': player's design Jetstream (forms imported: Car/Boat/Plane/Sub), rivals in it 3/3, saved setting Jetstream
+GARAGE race in 'Jetstream': shown form Car, Abi seat offset (0.00, -0.37, -0.35), Abi shown True
+LAP: Paradise Plunge, line 7276 m, 11 gates, 8 segments, 16 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 122.75 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            16.4 s    20 s  -3.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.9 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.5 s    20 s  -0.5
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 74.5 m/s (167 mph), Boat 58.3 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 122.75] finish in 122.75 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.25 ms, 95th pct 6.92 ms, 99th pct 8.55 ms, worst 161.81 ms over 21341 frames (24 over 16.7 ms); peak draw calls 0, batches 0, triangles 4356k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      3.85 /   5.41 /  43.78 ms       0 draws    1880k tris
+  Cliffside Climb      4.13 /   6.72 / 161.81 ms       0 draws    4356k tris
+  Sky Arch             4.56 /   6.97 /  67.27 ms       0 draws    4246k tris
+  Lagoon Landing       3.29 /   5.14 /  62.80 ms       0 draws    1352k tris
+  Mangrove Run         5.76 /   8.08 /  66.26 ms       0 draws    4289k tris
+  Sunken Gateway       4.00 /   6.04 /  39.08 ms       0 draws    1930k tris
+  Coral Vault          3.48 /   5.50 /  20.02 ms       0 draws    2104k tris
+  Waterfall Return     5.67 /   7.87 /  61.06 ms       0 draws    4058k tris
+  frames over 50 ms during the lap: 7; worst: 173 ms at 22.1 s (Cliffside Climb, after "split Beach Promenade: 16.42 s (target 20 s), total 16.42 s"); 69 ms at 78.5 s (Mangrove Run, after "split Lagoon Landing: 11.85 s (target 15 s), total 64.97 s"); 69 ms at 43.1 s (Sky Arch, after "gate G3 arch exit passed (4/11)"); 64 ms at 62.0 s (Lagoon Landing, after "gate G4 lagoon landing passed (5/11)"); 62 ms at 24.5 s (Cliffside Climb, after "split Beach Promenade: 16.42 s (target 20 s), total 16.42 s"); 62 ms at 112.6 s (Waterfall Return, after "split Coral Vault: 17.62 s (target 25 s), total 111.58 s")
+RESULTS PASS: shown True, lap 122.75 s, 8 splits, new best True, best on file 122.75 s (C:\Users\danmo\ShiftStorm\local\round6\reg\round5\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 122.75 s
+STRIP PASS: finished True in 25.5 s, gates 11/11, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 1.99  wind 0.44  FOV 89.7  particles 80  speed 99 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.45  FOV 90.0  particles 141  speed 100 % of top
+  Dive  pitch 1.50  wind 0.31  FOV 90.0  particles 113  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.92 ms, 95th pct 7.46 ms, 99th pct 9.28 ms, worst 172.90 ms over 55485 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.5  0.604 s  frames worst 19.72 / mean 7.31 ms
+  lap          Fly->Boat   z  -606.2  0.604 s  frames worst 9.43 / mean 5.13 ms
+  lap          Boat->Dive  z  -202.5  0.605 s  frames worst 41.04 / mean 5.51 ms
+  lap          Dive->Boat  z  -466.7  0.606 s  frames worst 11.36 / mean 7.37 ms
+  lap          Boat->Drive z  -304.3  0.601 s  frames worst 10.84 / mean 6.96 ms
+  strip        Drive->Fly  z   240.7  0.601 s  frames worst 3.63 / mean 1.13 ms
+  strip        Fly->Boat   z   500.2  0.600 s  frames worst 3.81 / mean 1.13 ms
+  strip        Boat->Dive  z   862.1  0.601 s  frames worst 5.00 / mean 1.17 ms
+  strip        Dive->Boat  z  1086.5  0.604 s  frames worst 4.38 / mean 1.29 ms
+  strip        Boat->Drive z  1201.5  0.601 s  frames worst 4.76 / mean 1.19 ms
+sound: music  not playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: lucky_1; finish: quipgood_1; waterfall: lucky_1; finish: win_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'settings2', 2026-11-13 20:29, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+INVERT SURVIVES A RESTART PASS: a new game process read local/round6/reg/save3\settings.json: invert on; stick pulled back in Fly: pitch -18.9 deg (nose down = inverted)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.19 ms, 95th pct 2.12 ms, 99th pct 3.52 ms, worst 5.72 ms over 297 frames; GPU time not available in batch mode
+sound: music  not playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+ShiftStorm check 'soak', 2026-11-13 20:39, build 0.6.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SOAK: 50 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+  race 1: Rocket Rae 130.0 [Sky Arch slit], Chip "Showtime" Sterling 131.8, Vivi 133.6, Abi 134.7 [Coral Vault tunnel]
+  race 2: Rocket Rae 131.4, Chip "Showtime" Sterling 132.2, Abi 133.0 [Sky Arch slit], Vivi 133.4
+  race 3: Rocket Rae 129.2 [Sky Arch slit], Chip "Showtime" Sterling 133.1 [Coral Vault tunnel], Vivi 133.1, Abi 133.2 [Coral Vault tunnel]
+  race 4: Rocket Rae 130.9, Abi 133.1, Chip "Showtime" Sterling 133.8, Vivi 134.0
+  race 5: Rocket Rae 130.6, Chip "Showtime" Sterling 132.1, Abi 133.4 [Coral Vault tunnel], Vivi 133.6
+  race 6: Rocket Rae 131.0, Abi 132.2, Chip "Showtime" Sterling 132.3, Vivi 133.2
+  race 7: Rocket Rae 131.7, Chip "Showtime" Sterling 132.2, Abi 133.3, Vivi 133.5
+  race 8: Rocket Rae 129.7 [Sky Arch slit], Vivi 132.2, Abi 133.2 [Coral Vault tunnel], Chip "Showtime" Sterling 133.8 [Coral Vault tunnel]
+  race 9: Rocket Rae 131.1, Chip "Showtime" Sterling 132.2, Abi 133.2, Vivi 133.4
+  race 10: Rocket Rae 129.4 [Sky Arch slit], Abi 132.9, Vivi 133.8, Chip "Showtime" Sterling 161.5 [Coral Vault tunnel]
+  race 11: Rocket Rae 130.9, Abi 131.7 [Sky Arch slit], Chip "Showtime" Sterling 132.2, Vivi 132.9
+  race 12: Rocket Rae 129.7 [Sky Arch slit], Abi 133.4, Chip "Showtime" Sterling 133.5 [Coral Vault tunnel], Vivi 134.3
+  race 13: Rocket Rae 131.1, Chip "Showtime" Sterling 132.1, Abi 132.3 [Sky Arch slit], Vivi 132.9
+SOAK PASS: 50 of 50 laps finished within 300 s (need 48); 0 counted finishes with a bad gate sequence; lap times min 129.2 / median 132.9 / max 161.5 s; shortcuts taken: Coral Vault tunnel 8, Sky Arch slit 8
+  resets: 0 in 50 laps; by reason: 
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.66 ms, 95th pct 2.72 ms, 99th pct 4.04 ms, worst 234.20 ms over 360722 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  soak1        Drive->Fly  z   945.2  0.950 s  frames worst 25.38 / mean 1.96 ms  OUT OF 0.5-0.8 s
+  soak1        Fly->Boat   z  -607.4  0.601 s  frames worst 7.90 / mean 1.91 ms
+  soak1        Boat->Dive  z  -203.0  0.601 s  frames worst 3.82 / mean 1.55 ms
+  soak1        Dive->Boat  z  -466.8  0.603 s  frames worst 5.89 / mean 1.68 ms
+  soak1        Boat->Drive z  -304.9  0.603 s  frames worst 4.01 / mean 1.64 ms
+  soak2        Drive->Fly  z   944.8  0.603 s  frames worst 4.40 / mean 1.56 ms
+  soak2        Fly->Boat   z  -607.2  0.602 s  frames worst 9.26 / mean 1.88 ms
+  soak2        Boat->Dive  z  -203.5  0.602 s  frames worst 2.85 / mean 1.48 ms
+  soak2        Dive->Boat  z  -466.8  0.604 s  frames worst 4.38 / mean 1.60 ms
+  soak2        Boat->Drive z  -305.0  0.601 s  frames worst 3.23 / mean 1.43 ms
+  soak3        Drive->Fly  z   944.8  0.605 s  frames worst 9.58 / mean 2.10 ms
+  soak3        Fly->Boat   z  -606.0  0.602 s  frames worst 4.61 / mean 1.65 ms
+  soak3        Boat->Dive  z  -201.7  0.601 s  frames worst 3.73 / mean 1.53 ms
+  soak3        Dive->Boat  z  -466.4  0.601 s  frames worst 4.44 / mean 1.62 ms
+  soak3        Boat->Drive z  -304.6  0.601 s  frames worst 6.21 / mean 1.53 ms
+  soak4        Drive->Fly  z   945.3  0.632 s  frames worst 94.44 / mean 5.00 ms
+  soak4        Fly->Boat   z  -607.3  0.601 s  frames worst 6.79 / mean 1.95 ms
+  soak4        Boat->Dive  z  -201.6  0.601 s  frames worst 5.17 / mean 1.75 ms
+  soak4        Dive->Boat  z  -466.4  0.602 s  frames worst 4.03 / mean 1.58 ms
+  soak4        Boat->Drive z  -304.5  0.602 s  frames worst 6.97 / mean 1.93 ms
+  soak5        Drive->Fly  z   944.9  0.601 s  frames worst 6.10 / mean 1.58 ms
+  soak5        Fly->Boat   z  -606.7  0.600 s  frames worst 6.35 / mean 1.65 ms
+  soak5        Boat->Dive  z  -202.3  0.603 s  frames worst 8.19 / mean 1.51 ms
+  soak5        Dive->Boat  z  -466.8  0.603 s  frames worst 4.48 / mean 1.73 ms
+  soak5        Boat->Drive z  -304.9  0.608 s  frames worst 5.65 / mean 1.78 ms
+  soak6        Drive->Fly  z   944.9  0.601 s  frames worst 7.98 / mean 1.56 ms
+  soak6        Fly->Boat   z  -607.8  0.602 s  frames worst 6.09 / mean 1.63 ms
+  soak6        Boat->Dive  z  -202.4  0.603 s  frames worst 4.95 / mean 1.53 ms
+  soak6        Dive->Boat  z  -466.7  0.602 s  frames worst 5.14 / mean 1.75 ms
+  soak6        Boat->Drive z  -304.9  0.607 s  frames worst 4.43 / mean 1.70 ms
+  soak7        Drive->Fly  z   944.8  0.600 s  frames worst 7.09 / mean 1.48 ms
+  soak7        Fly->Boat   z  -606.7  0.605 s  frames worst 7.16 / mean 1.47 ms
+  soak7        Boat->Dive  z  -203.3  0.601 s  frames worst 3.67 / mean 1.55 ms
+  soak7        Dive->Boat  z  -466.4  0.604 s  frames worst 3.65 / mean 1.76 ms
+  soak7        Boat->Drive z  -304.5  0.600 s  frames worst 4.86 / mean 1.53 ms
+  soak8        Drive->Fly  z   944.8  0.601 s  frames worst 3.75 / mean 1.57 ms
+  soak8        Fly->Boat   z  -606.7  0.604 s  frames worst 5.45 / mean 1.77 ms
+  soak8        Boat->Dive  z  -202.1  0.601 s  frames worst 9.07 / mean 1.73 ms
+  soak8        Dive->Boat  z  -466.8  0.603 s  frames worst 15.93 / mean 1.98 ms
+  soak8        Boat->Drive z  -304.9  0.603 s  frames worst 6.79 / mean 2.12 ms
+  soak9        Drive->Fly  z   945.0  0.610 s  frames worst 5.97 / mean 1.69 ms
+  soak9        Fly->Boat   z  -607.0  0.602 s  frames worst 4.55 / mean 1.62 ms
+  soak9        Boat->Dive  z  -202.5  0.604 s  frames worst 8.37 / mean 1.53 ms
+  soak9        Dive->Boat  z  -466.6  0.603 s  frames worst 4.68 / mean 1.66 ms
+  soak9        Boat->Drive z  -304.7  0.603 s  frames worst 5.03 / mean 1.53 ms
+  soak10       Drive->Fly  z   944.5  0.602 s  frames worst 4.67 / mean 1.53 ms
+  soak10       Fly->Boat   z  -606.8  0.602 s  frames worst 5.42 / mean 1.68 ms
+  soak10       Boat->Dive  z  -202.8  0.605 s  frames worst 7.86 / mean 1.83 ms
+  soak10       Dive->Boat  z  -466.5  0.606 s  frames worst 4.72 / mean 1.81 ms
+  soak10       Boat->Drive z  -304.5  0.602 s  frames worst 5.41 / mean 1.59 ms
+  soak11       Drive->Fly  z   944.5  0.601 s  frames worst 4.05 / mean 1.55 ms
+  soak11       Fly->Boat   z  -607.2  0.603 s  frames worst 4.58 / mean 1.57 ms
+  soak11       Boat->Dive  z  -202.4  0.603 s  frames worst 4.16 / mean 1.51 ms
+  soak11       Dive->Boat  z  -467.0  0.602 s  frames worst 3.68 / mean 1.72 ms
+  soak11       Boat->Drive z  -305.0  0.605 s  frames worst 5.53 / mean 2.57 ms
+  soak12       Drive->Fly  z   945.3  0.606 s  frames worst 8.37 / mean 1.90 ms
+  soak12       Fly->Boat   z  -606.9  0.601 s  frames worst 6.24 / mean 1.79 ms
+  soak12       Boat->Dive  z  -201.2  0.603 s  frames worst 4.02 / mean 1.65 ms
+  soak12       Dive->Boat  z  -466.7  0.603 s  frames worst 3.33 / mean 1.59 ms
+  soak12       Boat->Drive z  -304.8  0.606 s  frames worst 10.93 / mean 1.73 ms
+  soak13       Drive->Fly  z   944.7  0.604 s  frames worst 8.30 / mean 1.58 ms
+  soak13       Fly->Boat   z  -606.5  0.604 s  frames worst 5.23 / mean 1.67 ms
+  soak13       Boat->Dive  z  -200.8  0.604 s  frames worst 6.92 / mean 1.61 ms
+  soak13       Dive->Boat  z  -466.5  0.602 s  frames worst 5.13 / mean 1.63 ms
+  soak13       Boat->Drive z  -304.6  0.600 s  frames worst 4.04 / mean 1.66 ms
+sound: music course_jurassic playing (its own signal peak 0.000), splashes played 26, Abi lines: waterfall: lucky_1; finish: quipgood_1; waterfall: lucky_1; finish: quipgood_2; waterfall: lucky_1; finish: win_1; waterfall: laugh_1; finish: win_1; waterfall: lucky_1; finish: win_1; waterfall: laugh_1; finish: quipgood_1; waterfall: laugh_1; finish: quipgood_2; waterfall: lucky_1; finish: win_1; waterfall: lucky_1; finish: quipgood_2; waterfall: lucky_1; finish: quipgood_1; waterfall: laugh_1; finish: quipgood_2; waterfall: lucky_1; finish: win_1; waterfall: lucky_1; finish: quipgood_2
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

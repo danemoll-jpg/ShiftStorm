@@ -6,9 +6,9 @@ namespace ShiftStorm
     // The same inputs in every form (Input System only). Bindings start from chastain_rush's VehicleInput (triggers, dead zones, Y / R reset);
     // ShiftStorm adds boost, the secondary button, the vertical axis and the invert setting.
     //   Pad:      RT accelerate, LT brake / reverse, left stick X steer, left stick Y climb / dive (pull back = up; Invert flips it), A boost,
-    //             RB (or X) secondary: drift on land / tighter carve on water, Y reset, View (Back) invert on / off, D-pad left / right: next start.
+    //             RB secondary: drift on land / tighter carve on water, X camera view (Round 6), right stick look around, Y reset, View (Back) invert on / off, D-pad left / right: next start.
     //   Keyboard: W / Up accelerate, S / Down brake / reverse, A / D or Left / Right steer, I / K climb / dive (I = up), Space boost,
-    //             Left Shift secondary, R reset, F2 invert on / off, F3 / F4 previous / next start.
+    //             Left Shift secondary, V camera view, R reset, F2 invert on / off, F3 / F4 previous / next start.
     // Invert is saved in settings.json (Settings; Round 3, was PlayerPrefs "invertVertical"); also on the menu's Settings page.
     // Round 2, the course menu: Menu (Start) / Esc opens and closes it; D-pad up / down or Up / Down (W / S) move, A / Enter / Space choose,
     // B / Backspace go back. While it is open the race is paused, so these never reach the vehicle.
@@ -22,8 +22,12 @@ namespace ShiftStorm
         public bool Boost { get; private set; }
         public bool Secondary { get; private set; }
         public static bool Invert { get => Settings.InvertVertical; set => Settings.InvertVertical = value; }
+        // Round 6: per player (player 2 has their own invert setting, settings.json "invertVertical2")
+        public bool MyInvert { get => player == 2 ? Settings.InvertVertical2 : Invert; set { if (player == 2) Settings.InvertVertical2 = value; else Invert = value; } }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter;
+        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
+        bool viewRequested;
+        public Vector2 Look { get; private set; }   // Round 6: the right stick looks around (CameraViews)
         bool resetRequested; int startStep;
         public bool MenuPressed { get; private set; }
         public int MenuMove { get; private set; }
@@ -36,39 +40,61 @@ namespace ShiftStorm
         // position (pushed forward = +, as the pad gives it) and goes through the invert setting like a real stick (the invert check).
         // The one-shot menu presses (sMenu, sMove, sConfirm, sBack) let a check work the menu as a player would.
         [System.NonSerialized] public bool Scripted, sRawStick, sMenu, sConfirm, sBack;
-        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary; [System.NonSerialized] public int sMove;
+        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView; [System.NonSerialized] public int sMove; [System.NonSerialized] public Vector2 sLook;
 
-        void Awake()
+        void Awake() => Create(null);
+
+        // Round 6 (split screen, from chastain_rush's VehicleInput.Bind): each player's vehicle answers only its own device (null = every
+        // device, as before). A gamepad's bindings are rewritten to that pad's own path; the keyboard bindings exist only for the keyboard.
+        public InputDevice Device { get; private set; }
+        public int player;   // 0: the one player (as before); 1 or 2 in split screen (whose invert setting and camera view)
+        public void Bind(InputDevice device)
         {
-            throttle = new InputAction("Accelerate", InputActionType.Value);
-            throttle.AddBinding("<Gamepad>/rightTrigger").WithProcessor("axisDeadzone(min=0.1,max=1)"); throttle.AddBinding("<Keyboard>/w"); throttle.AddBinding("<Keyboard>/upArrow");
-            brake = new InputAction("Brake", InputActionType.Value);
-            brake.AddBinding("<Gamepad>/leftTrigger").WithProcessor("axisDeadzone(min=0.1,max=1)"); brake.AddBinding("<Keyboard>/s"); brake.AddBinding("<Keyboard>/downArrow");
-            steer = new InputAction("Steer", InputActionType.Value);
-            steer.AddBinding("<Gamepad>/leftStick/x").WithProcessor("axisDeadzone(min=0.12,max=0.95)");
-            steer.AddCompositeBinding("1DAxis").With("Negative", "<Keyboard>/a").With("Positive", "<Keyboard>/d");
-            steer.AddCompositeBinding("1DAxis").With("Negative", "<Keyboard>/leftArrow").With("Positive", "<Keyboard>/rightArrow");
-            vertical = new InputAction("Climb / dive", InputActionType.Value);
-            vertical.AddBinding("<Gamepad>/leftStick/y").WithProcessor("axisDeadzone(min=0.15,max=0.95)");
-            vertical.AddCompositeBinding("1DAxis").With("Negative", "<Keyboard>/i").With("Positive", "<Keyboard>/k");
-            boost = new InputAction("Boost", InputActionType.Button); boost.AddBinding("<Gamepad>/buttonSouth"); boost.AddBinding("<Keyboard>/space");
-            secondary = new InputAction("Drift / carve", InputActionType.Button);
-            secondary.AddBinding("<Gamepad>/rightShoulder"); secondary.AddBinding("<Gamepad>/buttonWest"); secondary.AddBinding("<Keyboard>/leftShift");
-            reset = new InputAction("Reset", InputActionType.Button); reset.AddBinding("<Gamepad>/buttonNorth"); reset.AddBinding("<Keyboard>/r");
-            invert = new InputAction("Invert", InputActionType.Button); invert.AddBinding("<Gamepad>/select"); invert.AddBinding("<Keyboard>/f2");
-            nextStart = new InputAction("Next start", InputActionType.Button); nextStart.AddBinding("<Gamepad>/dpad/right"); nextStart.AddBinding("<Keyboard>/f4");
-            prevStart = new InputAction("Previous start", InputActionType.Button); prevStart.AddBinding("<Gamepad>/dpad/left"); prevStart.AddBinding("<Keyboard>/f3");
-            menu = new InputAction("Menu", InputActionType.Button); menu.AddBinding("<Gamepad>/start"); menu.AddBinding("<Keyboard>/escape");
-            menuUp = new InputAction("Menu up", InputActionType.Button); menuUp.AddBinding("<Gamepad>/dpad/up"); menuUp.AddBinding("<Keyboard>/upArrow"); menuUp.AddBinding("<Keyboard>/w");
-            menuDown = new InputAction("Menu down", InputActionType.Button); menuDown.AddBinding("<Gamepad>/dpad/down"); menuDown.AddBinding("<Keyboard>/downArrow"); menuDown.AddBinding("<Keyboard>/s");
-            confirm = new InputAction("Confirm", InputActionType.Button); confirm.AddBinding("<Gamepad>/buttonSouth"); confirm.AddBinding("<Keyboard>/enter"); confirm.AddBinding("<Keyboard>/space");
-            back = new InputAction("Back", InputActionType.Button); back.AddBinding("<Gamepad>/buttonEast"); back.AddBinding("<Keyboard>/backspace");
-            stats = new InputAction("FPS readout", InputActionType.Button); stats.AddBinding("<Gamepad>/rightStickPress"); stats.AddBinding("<Keyboard>/f1");
-            enter = new InputAction("Enter", InputActionType.Button); enter.AddBinding("<Keyboard>/enter"); enter.AddBinding("<Keyboard>/numpadEnter");
+            if (device == Device && throttle != null) return;
+            bool on = isActiveAndEnabled; if (throttle != null) { foreach (var x in All) { x.Disable(); x.Dispose(); } }
+            Create(device); if (on) OnEnable();
+            Debug.Log($"[Input] player {player} bound to {(device == null ? "every device" : device.displayName + " (" + device.path + ")")}");
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter };
+        // The device that last pressed a menu button here (the 2 Players page: player 1 is whoever opened it)
+        public InputDevice LastDevice { get; private set; }
+
+        void Create(InputDevice device)
+        {
+            Device = device; bool pad = device == null || device is Gamepad, keys = device == null || device is Keyboard;
+            string P(string path) => device is Gamepad ? path.Replace("<Gamepad>", device.path) : path;
+            InputAction A(string name, InputActionType type = InputActionType.Button) => new InputAction(name, type);
+            void Add(InputAction a, string path, string processor = null) { if (path.Contains("<Gamepad>") ? !pad : !keys) return; var bb = a.AddBinding(P(path)); if (processor != null) bb.WithProcessor(processor); }
+            void Axis(InputAction a, string neg, string pos) { if (keys) a.AddCompositeBinding("1DAxis").With("Negative", neg).With("Positive", pos); }
+            throttle = A("Accelerate", InputActionType.Value);
+            Add(throttle, "<Gamepad>/rightTrigger", "axisDeadzone(min=0.1,max=1)"); Add(throttle, "<Keyboard>/w"); Add(throttle, "<Keyboard>/upArrow");
+            brake = A("Brake", InputActionType.Value);
+            Add(brake, "<Gamepad>/leftTrigger", "axisDeadzone(min=0.1,max=1)"); Add(brake, "<Keyboard>/s"); Add(brake, "<Keyboard>/downArrow");
+            steer = A("Steer", InputActionType.Value);
+            Add(steer, "<Gamepad>/leftStick/x", "axisDeadzone(min=0.12,max=0.95)");
+            Axis(steer, "<Keyboard>/a", "<Keyboard>/d"); Axis(steer, "<Keyboard>/leftArrow", "<Keyboard>/rightArrow");
+            vertical = A("Climb / dive", InputActionType.Value);
+            Add(vertical, "<Gamepad>/leftStick/y", "axisDeadzone(min=0.15,max=0.95)"); Axis(vertical, "<Keyboard>/i", "<Keyboard>/k");
+            boost = A("Boost"); Add(boost, "<Gamepad>/buttonSouth"); Add(boost, "<Keyboard>/space");
+            // Round 6: X is the camera-view button now (as in Chastain Rush / Woodstock Rush); drift / carve stays on RB and Left Shift
+            secondary = A("Drift / carve"); Add(secondary, "<Gamepad>/rightShoulder"); Add(secondary, "<Keyboard>/leftShift");
+            view = A("Change view"); Add(view, "<Gamepad>/buttonWest"); Add(view, "<Keyboard>/v");
+            look = new InputAction("Look around", InputActionType.Value, expectedControlType: "Vector2"); Add(look, "<Gamepad>/rightStick", "stickDeadzone(min=0.2,max=0.95)");
+            reset = A("Reset"); Add(reset, "<Gamepad>/buttonNorth"); Add(reset, "<Keyboard>/r");
+            invert = A("Invert"); Add(invert, "<Gamepad>/select"); Add(invert, "<Keyboard>/f2");
+            nextStart = A("Next start"); Add(nextStart, "<Gamepad>/dpad/right"); Add(nextStart, "<Keyboard>/f4");
+            prevStart = A("Previous start"); Add(prevStart, "<Gamepad>/dpad/left"); Add(prevStart, "<Keyboard>/f3");
+            menu = A("Menu"); Add(menu, "<Gamepad>/start"); Add(menu, "<Keyboard>/escape");
+            menuUp = A("Menu up"); Add(menuUp, "<Gamepad>/dpad/up"); Add(menuUp, "<Keyboard>/upArrow"); Add(menuUp, "<Keyboard>/w");
+            menuDown = A("Menu down"); Add(menuDown, "<Gamepad>/dpad/down"); Add(menuDown, "<Keyboard>/downArrow"); Add(menuDown, "<Keyboard>/s");
+            confirm = A("Confirm"); Add(confirm, "<Gamepad>/buttonSouth"); Add(confirm, "<Keyboard>/enter"); Add(confirm, "<Keyboard>/space");
+            back = A("Back"); Add(back, "<Gamepad>/buttonEast"); Add(back, "<Keyboard>/backspace");
+            stats = A("FPS readout"); Add(stats, "<Gamepad>/rightStickPress"); Add(stats, "<Keyboard>/f1");
+            enter = A("Enter"); Add(enter, "<Keyboard>/enter"); Add(enter, "<Keyboard>/numpadEnter");
+            foreach (var x in new[] { confirm, menu, back, menuUp, menuDown }) x.performed += c => LastDevice = c.control.device;
+        }
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
         void OnEnable() { foreach (var a in All) a.Enable(); }
-        void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; }
+        void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; viewRequested = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
 
         void Update()
@@ -84,21 +110,24 @@ namespace ShiftStorm
                 if (sMenu) MenuPressed = true; if (sConfirm) ConfirmPressed = true; if (sBack) BackPressed = true; if (sMove != 0) MenuMove = sMove;
                 sMenu = sConfirm = sBack = false; sMove = 0;
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Boost = sBoost; Secondary = sSecondary;
-                Vertical = sRawStick ? (Invert ? sVertical : -sVertical) : sVertical;
+                Vertical = sRawStick ? (MyInvert ? sVertical : -sVertical) : sVertical;
+                Look = sLook; viewRequested |= sView; sView = false;
                 return;
             }
             Throttle = throttle.ReadValue<float>(); Brake = brake.ReadValue<float>(); Steer = Mathf.Clamp(steer.ReadValue<float>(), -1, 1);
             // The pad's stick and the keys give "stick pushed up" as +; pulled back (up for the vehicle) is the default, so the sign flips here.
             float v = -Mathf.Clamp(vertical.ReadValue<float>(), -1, 1);
-            Vertical = Invert ? -v : v;
+            Vertical = MyInvert ? -v : v;
             Boost = boost.IsPressed(); Secondary = secondary.IsPressed();
             resetRequested |= reset.WasPressedThisFrame();
-            if (invert.WasPressedThisFrame()) Invert = !Invert;
+            if (invert.WasPressedThisFrame()) MyInvert = !MyInvert;
+            Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame();
             if (nextStart.WasPressedThisFrame()) startStep++;
             if (prevStart.WasPressedThisFrame()) startStep--;
         }
         public bool ConsumeReset() { bool r = resetRequested; resetRequested = false; return r; }
         public void RequestReset() => resetRequested = true;
+        public bool ConsumeView() { bool r = viewRequested; viewRequested = false; return r; }
         public int ConsumeStartStep() { int s = startStep; startStep = 0; return s; }
     }
 }

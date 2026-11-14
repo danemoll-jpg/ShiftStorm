@@ -21,6 +21,24 @@ namespace ShiftStorm
         public static void ResetSkyFog() { skyFog = RenderSettings.fogColor; skyDensity = RenderSettings.fogDensity; skyFogOn = RenderSettings.fog; skyMode = RenderSettings.fogMode; skyStart = RenderSettings.fogStartDistance; skyEnd = RenderSettings.fogEndDistance; skyRead = true; }
 
         void Start() { if (!skyRead) ResetSkyFog(); cam = GetComponent<Camera>(); }
+        // Round 6 (split screen): two cameras share one RenderSettings, so each camera sets the underwater fog for itself just before it
+        // renders, from where it really is (after CameraViews has placed it). primary: the camera with the listener (CourseAudio's ambience).
+        public bool primary = true;
+        // Round 6: Far chase (CameraViews): the offset behind / above is scaled (Chastain Rush: 1.5 back, 1.55 up)
+        public float distanceScale = 1, heightScale = 1;
+        void OnEnable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += BeforeRender;
+        void OnDisable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= BeforeRender;
+        void BeforeRender(UnityEngine.Rendering.ScriptableRenderContext ctx, Camera c) { if (c == cam && target && !Garage.Active) Fog(); }
+        public bool UnderwaterHere { get; private set; }
+        void Fog()
+        {
+            bool under = WaterVolume.SurfaceAt(transform.position, out float s, 0f) && transform.position.y < s;
+            RenderSettings.fog = under || skyFogOn;
+            RenderSettings.fogMode = under ? FogMode.Exponential : skyMode; if (!under) { RenderSettings.fogStartDistance = skyStart; RenderSettings.fogEndDistance = skyEnd; }
+            RenderSettings.fogColor = under ? UnderwaterColor : skyFog;
+            RenderSettings.fogDensity = under ? UnderwaterDensity : skyDensity;
+            UnderwaterHere = under; if (primary) Underwater = under;
+        }
         // Round 3 item 3: the sense of speed (field of view, distance) is measured against a top speed that eases from one form's to the next
         // (20 m/s per second) instead of jumping at the change: at the waterfall's Boat->Drive the old jump (50 -> 65 m/s) narrowed the view
         // about 4 deg and pulled the camera in at the moment the car left the ramp, which read as a stop. Legacy: the build 3 camera (checks).
@@ -50,7 +68,7 @@ namespace ShiftStorm
             if (boostOn && !wasBoosting) kickAt = Time.time; wasBoosting = boostOn;
             float kick = kickAt > 0 ? Mathf.Clamp01(1 - (Time.time - kickAt) / .6f) : 0; kick *= kick; Kick = kick;
             var wantOffset = Legacy ? -fwd * (distance + speedFrac * 1.6f) + Vector3.up * height
-                : -fwd * (distance - speedFrac * speedFrac * 1.4f + kick * 1.2f) + Vector3.up * (height - speedFrac * .55f);
+                : -fwd * ((distance - speedFrac * speedFrac * 1.4f + kick * 1.2f) * distanceScale) + Vector3.up * ((height - speedFrac * .55f) * heightScale);
             bool reset = target.Resets != lastResets || (t.position - lastTarget).sqrMagnitude > 30 * 30; lastResets = target.Resets; lastTarget = t.position;   // a reset or a restart (a jump) snaps
             if (!snapped || reset) { offset = wantOffset; velocity = Vector3.zero; snapped = true; }
             else offset = Vector3.SmoothDamp(offset, wantOffset, ref velocity, .12f);
@@ -71,13 +89,8 @@ namespace ShiftStorm
                 float a = (.06f + (1 - target.LastWallKeep) * .8f) * (1 - since / .3f), tt = Time.time * 41f;
                 transform.position += transform.right * ((Mathf.PerlinNoise(tt, 3) - .5f) * 2 * a) + transform.up * ((Mathf.PerlinNoise(3, tt) - .5f) * 2 * a);
             }
-            // underwater look
-            bool under = WaterVolume.SurfaceAt(transform.position, out float s, 0f) && transform.position.y < s;
-            RenderSettings.fog = under || skyFogOn;
-            RenderSettings.fogMode = under ? FogMode.Exponential : skyMode; if (!under) { RenderSettings.fogStartDistance = skyStart; RenderSettings.fogEndDistance = skyEnd; }
-            RenderSettings.fogColor = under ? UnderwaterColor : skyFog;
-            RenderSettings.fogDensity = under ? UnderwaterDensity : skyDensity;
-            Underwater = under;
+            // underwater look (set again just before this camera renders: BeforeRender)
+            Fog();
         }
     }
 }

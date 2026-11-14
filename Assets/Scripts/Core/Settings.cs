@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 1; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; }   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
+        [Serializable] sealed class Data { public int version = 1; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; }   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -43,6 +43,12 @@ namespace ShiftStorm
         }
         public static bool InvertVertical { get => D.invertVertical; set { D.invertVertical = value; D.invertChosen = true; Save(); Debug.Log($"[Settings] invert flight / dive controls {(value ? "on" : "off")} (saved)"); } }
         public static bool ShowStats { get => D.showStats; set { D.showStats = value; Save(); } }
+        // Round 6: player 2's own invert setting, each player's camera view (0 Chase, 1 Far chase, 2 First person, 3 Front) and the
+        // split-screen layout (false: top / bottom, player 1 on top, as Chastain Rush). A check run reads the defaults and saves nothing.
+        public static bool InvertVertical2 { get => D.invertVertical2; set { D.invertVertical2 = value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] player 2 invert flight / dive controls {(value ? "on" : "off")}"); } }
+        public static int View(int player) => QuietRun.Check ? 0 : player == 2 ? D.view2 : D.view;
+        public static void SetView(int player, int view) { if (QuietRun.Check) return; if (player == 2) D.view2 = view; else D.view = view; Save(); }
+        public static bool SplitLeftRight { get => D.splitLeftRight; set { D.splitLeftRight = value; if (!QuietRun.Check) Save(); } }
         public static bool InvertChosen => D.invertChosen;
         // Round 4: the AI's difficulty (how the rivals drive, never their vehicle). A check may set it for its run only ("-difficulty
         // Easy|Normal|Hard"), without saving.

@@ -54,6 +54,8 @@ namespace ShiftStorm
             if (!on || kind != "change") return;
             if ((v.ChangeFrom == Mode.Fly && v.Mode == Mode.Boat) || (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive)) Splash();
         }
+        // Round 6: player 2's splashes too (split screen), in the one shared mix
+        public void Follow(ShiftVehicle x) { x.Event += (kind, text) => { if (on && kind == "change" && ((x.ChangeFrom == Mode.Fly && x.Mode == Mode.Boat) || (x.ChangeFrom == Mode.Boat && x.Mode == Mode.Drive))) Splash(); }; }
         public void Splash() { var c = Random.value < .5f ? splashA : splashB; if (c) { oneShot.PlayOneShot(c, .9f); Splashes++; } }
 
         void Update()

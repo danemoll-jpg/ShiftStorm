@@ -73,14 +73,14 @@ namespace ShiftStorm
             if (measure)
             {
                 if (!px) { px = new Texture2D(1, 1, TextureFormat.RGB24, false); draws = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count"); tris = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Triangles Count"); batches = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Batches Count"); }
-                sw.Restart(); cam.Render(); var prev = RenderTexture.active; RenderTexture.active = rt; px.ReadPixels(new Rect(0, 0, 1, 1), 0, 0); px.Apply(); RenderTexture.active = prev; sw.Stop();
+                sw.Restart(); cam.Render(); if (SplitScreen.Session && SplitScreen.Session.Cam2) { SplitScreen.Session.Cam2.targetTexture = rt; SplitScreen.Session.Cam2.Render(); } var prev = RenderTexture.active; RenderTexture.active = rt; px.ReadPixels(new Rect(0, 0, 1, 1), 0, 0); px.Apply(); RenderTexture.active = prev; sw.Stop();
                 render.Add((segNow, (float)sw.Elapsed.TotalMilliseconds, draws.Valid ? draws.LastValue : -1, tris.Valid ? tris.LastValue : -1, batches.Valid ? batches.LastValue : -1));
             }
             for (int i = shots.Count - 1; i >= 0; i--) if (Time.time >= shots[i].at) { Capture(shots[i].name); shots.RemoveAt(i); }
         }
         void Capture(string name, Camera with = null)
         {
-            if (with) { with.targetTexture = rt; with.Render(); with.targetTexture = null; } else cam.Render();
+            if (with) { with.targetTexture = rt; with.Render(); with.targetTexture = null; } else { cam.Render(); if (SplitScreen.Session && SplitScreen.Session.Cam2) { SplitScreen.Session.Cam2.targetTexture = rt; SplitScreen.Session.Cam2.Render(); } }
             var prev = RenderTexture.active; RenderTexture.active = rt;
             grab.ReadPixels(new Rect(0, 0, W, H), 0, 0); grab.Apply(); RenderTexture.active = prev;
             shotLastFrame = true; var file = Path.Combine(dir, $"{++shotIndex:00}-{scenario}-{name}.jpg"); File.WriteAllBytes(file, grab.EncodeToJPG(88));
@@ -192,6 +192,10 @@ namespace ShiftStorm
             bool r5 = which == "round5";
             if (r5 || which == "garage") yield return GarageCheck();
             if (r5) { yield return Lap(); yield return Strip(); }
+            bool r6 = which == "round6";
+            if (r6 || which == "bind") yield return BindCheck();
+            if (r6 || which == "split") yield return SplitCheck();
+            if (r6 || which == "views") yield return ViewsCheck();
             FeelReport();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();

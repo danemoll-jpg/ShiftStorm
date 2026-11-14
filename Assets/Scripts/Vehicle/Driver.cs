@@ -19,6 +19,7 @@ namespace ShiftStorm
         public float Scale { get; private set; }
         public float CanopyTop { get; private set; }
         public float HeadTop { get; private set; }
+        public Transform Head => head;   // Round 6: the first-person view (CameraViews) sits at her eyes
         ShiftVehicle v; FormSet forms; Animator anim; Transform model;
         Transform hips, spine, chest, head, uaL, uaR, laL, laR, handL, handR, ulL, ulR, llL, llR, footL, footR;
         readonly Dictionary<Transform, Quaternion> seated = new Dictionary<Transform, Quaternion>();
