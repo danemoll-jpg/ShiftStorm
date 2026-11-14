@@ -1,0 +1,189 @@
+{
+ "speaker": "TeedOff Barker",
+ "lines": [
+  {
+   "id": "final_1",
+   "text": "Here comes the final stretch! Who wants it most?"
+  },
+  {
+   "id": "final_2",
+   "text": "Back on the road and heading for home, folks!"
+  },
+  {
+   "id": "go_1",
+   "text": "And they're off!"
+  },
+  {
+   "id": "go_2",
+   "text": "Go, go, go! Off they go, folks!"
+  },
+  {
+   "id": "jump_1",
+   "text": "Up, up and over! What airtime, folks!"
+  },
+  {
+   "id": "jump_2",
+   "text": "Look at it fly! And that's with wheels!"
+  },
+  {
+   "id": "jump_3",
+   "text": "Sticks the landing! Give that driver a hand!"
+  },
+  {
+   "id": "jump_4",
+   "text": "Stuck it! Did you see that, ladies and gentlemen?"
+  },
+  {
+   "id": "lead_1",
+   "text": "A new leader, folks! Hold on to your hats!"
+  },
+  {
+   "id": "lead_2",
+   "text": "Out in front! Did you see that pass?"
+  },
+  {
+   "id": "lead_3",
+   "text": "And the lead changes hands! What a race!"
+  },
+  {
+   "id": "loop_1",
+   "text": "Round and round and right side up again! Spectacular!"
+  },
+  {
+   "id": "loop_2",
+   "text": "The loop-the-loop! Don't look down... or up!"
+  },
+  {
+   "id": "loop_3",
+   "text": "Upside down at full throttle! Marvelous!"
+  },
+  {
+   "id": "loopfail_1",
+   "text": "Ohhh, not enough speed for the loop! Back you go!"
+  },
+  {
+   "id": "miss_1",
+   "text": "Close, but no cigar! That's a three second penalty!"
+  },
+  {
+   "id": "miss_2",
+   "text": "Ohhh, just wide of the gate! Penalty time, folks!"
+  },
+  {
+   "id": "miss_3",
+   "text": "Ohhh! So close, folks! Try again, try again!"
+  },
+  {
+   "id": "photo_1",
+   "text": "It's a photo finish! Somebody get me a camera!"
+  },
+  {
+   "id": "photo_2",
+   "text": "Neck and neck to the line! Too close to call!"
+  },
+  {
+   "id": "results_1",
+   "text": "Thank you, thank you! Come back for the next race, folks!"
+  },
+  {
+   "id": "results_2",
+   "text": "Step right up and see the results!"
+  },
+  {
+   "id": "results_lost_1",
+   "text": "Oops! Not a winner this time, but don't go away!"
+  },
+  {
+   "id": "shortcut_1",
+   "text": "Ooh, a sneaky shortcut! I didn't see a thing, folks."
+  },
+  {
+   "id": "shortcut_2",
+   "text": "Through the secret passage! Clever, clever!"
+  },
+  {
+   "id": "splash_1",
+   "text": "Into the creek! A little swim never hurt anyone!"
+  },
+  {
+   "id": "start_1",
+   "text": "Ladies and gentlemen, start your engines! And your wings! And your propellers!"
+  },
+  {
+   "id": "start_2",
+   "text": "Step right up, folks! Four racers, one lap, and every shape a machine can take!"
+  },
+  {
+   "id": "start_3",
+   "text": "Welcome to Paradise Plunge! Road, sky, lagoon and the deep blue below!"
+  },
+  {
+   "id": "stay_1",
+   "text": "No wings for this one! Keeping it on four wheels!"
+  },
+  {
+   "id": "stay_2",
+   "text": "Who needs wings? Not this daredevil!"
+  },
+  {
+   "id": "trial_1",
+   "text": "One racer, one clock, no excuses! Let's see that time, folks!"
+  },
+  {
+   "id": "wall_1",
+   "text": "Ooh! That's gonna leave a mark!"
+  },
+  {
+   "id": "wall_2",
+   "text": "Bonk! The wall wins that round, folks!"
+  },
+  {
+   "id": "wall_3",
+   "text": "Mind the scenery, it was here first!"
+  },
+  {
+   "id": "win_abi",
+   "text": "Abi takes it! The crowd goes wild!"
+  },
+  {
+   "id": "win_any_1",
+   "text": "Winner, winner! We have a winner!"
+  },
+  {
+   "id": "win_any_2",
+   "text": "Step right up and see the champion! Winner, winner!"
+  },
+  {
+   "id": "win_any_3",
+   "text": "Winner, winner! Somebody light the fireworks!"
+  },
+  {
+   "id": "win_any_4",
+   "text": "And the crowd goes WILD! Step right up and see a champion, folks!"
+  },
+  {
+   "id": "win_chip",
+   "text": "Chip Showtime Sterling wins it! Showtime indeed!"
+  },
+  {
+   "id": "win_p2",
+   "text": "Player two takes the crown! Winner, winner!"
+  },
+  {
+   "id": "win_rae",
+   "text": "Rocket Rae takes the chequered flag!"
+  },
+  {
+   "id": "win_vivi",
+   "text": "Vivi wins! What a performance, folks!"
+  },
+  {
+   "id": "wings_1",
+   "text": "Wings out! The scenic route over the lake!"
+  },
+  {
+   "id": "wings_2",
+   "text": "It's a car! It's a plane! It's both, folks!"
+  }
+ ]
+}

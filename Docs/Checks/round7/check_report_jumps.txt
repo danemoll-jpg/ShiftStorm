@@ -1,0 +1,16 @@
+ShiftStorm check 'jumps', 2026-11-14 06:06, build 0.7.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+JUMP Creek Jump: lip at 317 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 40 m over a creek, no wings
+  JUMP Creek Jump PASS: 57 m/s up the kicker, 1.95 s in the air, 59 m/s at the touch -> 61 m/s after it, resets 0
+  JUMP Creek Jump (boost) PASS: 73 m/s up the kicker, 2.38 s in the air, 75 m/s at the touch -> 75 m/s after it, resets 0
+  JUMP Creek Jump short / slow (28 m/s, coasting) PASS: reset after 0.2 s (missed gate G0 start), back at 80 m in Drive at 15 m/s
+JUMP Lake Jump: lip at 903 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 40 m over a creek, the choice jump (LB / E: wings)
+JUMP Cliff Gap: lip at 1638 m, kicker 45 m rising 3.2 m (about 8 deg at the lip), gap 36 m over a ravine, no wings
+  JUMP Cliff Gap PASS: 58 m/s up the kicker, 1.95 s in the air, 59 m/s at the touch -> 60 m/s after it, resets 0
+  JUMP Cliff Gap (boost) PASS: 74 m/s up the kicker, 2.38 s in the air, 74 m/s at the touch -> 74 m/s after it, resets 0
+  JUMP Cliff Gap short / slow (28 m/s, coasting) PASS: reset after 0.1 s (missed gate G0 start), back at 80 m in Drive at 17 m/s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 12.95 ms, 95th pct 31.75 ms, 99th pct 152.76 ms, worst 2740.63 ms over 5617 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: reset: grunt_1; reset: trouble_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

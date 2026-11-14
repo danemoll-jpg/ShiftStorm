@@ -1,0 +1,61 @@
+# ShiftStorm sounds (Round 7 item 5)
+
+Code chose every sound (Dan, 2026-11-14). All copied from the three read-only projects into
+`Assets/Resources/Audio/`; nothing was changed in them. Prefixes: `to_` Tee'd Off (its ElevenLabs effects),
+`hh_` Hostile Horizon (its spaceship sounds). Played through `Core/GameSounds.cs` at the **Effects** volume
+(Menu > Settings) unless noted.
+
+## Engines (`Vehicle/VehicleSound.cs`)
+| Form | Sound | From |
+|---|---|---|
+| Car | synthesised "six" engine loop (load), pitch over the car's 0-75 m/s, past it on boost | Chastain Rush `VehicleSoundSynthesis.cs` (copied as `Vehicle/EngineSynth.cs`) |
+| Boat | synthesised "flat6" loop (a raspy outboard) | Chastain Rush synthesis |
+| Plane | synthesised "v12" loop + `hh_engine_cruise` under it | Chastain Rush + Hostile Horizon `engine_cruise.mp3` |
+| Sub | synthesised low rumble (kind 3) + `hh_engine_idle` | Chastain Rush + Hostile Horizon `engine_idle.mp3` |
+| all | wind layer (generated noise, rises with speed; muffled underwater) | ShiftStorm (Round 5) |
+| rivals | the same engines, 3D (heard from where they are) | as above |
+
+The forms cross-fade over 0.35 s at a change; louder with the throttle.
+
+## Effects (`Core/GameSounds.cs`)
+| Sound | When | File (source) |
+|---|---|---|
+| change whoosh | every form change | `to_swing_whoosh_1/2` (TO) |
+| wings out | into the plane | `hh_sting_launch` (HH) |
+| canopy seals | into the sub | `hh_canopy_slam` (HH) |
+| wheels down | into the car | `hh_gear_down` (HH) |
+| hull down | into the boat | `to_sea_splash_1/2` (TO) + the splash below |
+| splash | landing in water, the boat through the waterfall | `splash_1/2` (TO, since Round 2) |
+| boost | boost pressed | `to_power_whoosh` (TO) + `hh_jump_drive` quietly (HH) |
+| gate chime | every main gate (higher at the finish) | `to_fun_ding_1/2` (TO) |
+| ring chime | a shortcut's / the Lake flight's sub-gates | `to_amb_chimes_1/2` (TO) |
+| near miss | a gate counted with +3 s | `to_crowd_aww` (TO) |
+| boost pad | the loop's boost pad | `to_rail_zip_1/2` (TO) |
+| loop | into the loop / out of it | `to_slide_whoosh_1/2` / `to_crowd_ooh` (TO) |
+| jump | airborne 0.35 s / the landing | `to_cloud_whoosh_1/2` / `to_soccer_thump_1/2` (TO) |
+| wall hit | a wall hit (louder when harder) | `wall_hit_1/2` (TO, Round 4) |
+| wall scrape | a shallow touch along a wall | `hh_canopy_scrape` (HH) |
+| water reset | a car in a creek | `hh_water_splash`, `to_pool_splash_1` |
+| reset | any reset | `to_void_bloop_1/2` (TO) |
+| countdown | 3, 2, 1 | `to_rocket_beep` (TO) |
+| GO | the start | `to_fun_horn_1` (TO) |
+| finish | the line | `to_cheer_big` + `to_applause` (TO) |
+| win / not first | after the finish in a race | `to_match_win` jingle / `to_crowd_clap_small` (TO) |
+| menu | open / move / close | `to_ui_select` / `to_ui_click` / `to_ui_back` (TO) |
+| ambience | jungle above water, bubbles below, far dinosaur calls in flight | `amb_jungle`, `amb_bubbles`, `amb_dino_call_*`, `amb_roar_far_1` (TO, Round 2) |
+
+## Music (`Core/CourseAudio.cs`, **Music** volume)
+- Race: Dan's `race_paradise` when it is in; until then Tee'd Off's Jurassic Par (`course_jurassic`).
+- Menu main page: Dan's `theme` (else the menu song, else Tee'd Off's `title` as `ph_menu`); Garage / Settings: `menu`.
+- Results: Dan's `results` (else Tee'd Off's `round_end` as `ph_results`), once.
+- Mix by form (filters, not separate songs): flight a little louder; underwater softer and low-passed to 650 Hz;
+  a 2.5 s lift at the waterfall exit.
+- Dan's Suno files: drop them in `Art/Incoming/Music/` and run `python Tools/Music/make_loops.py` (copied from
+  Tee'd Off) to make the intro + seamless loop in `Assets/Resources/Audio/Music/`.
+
+## The race caller: TeedOff Barker (`Race/Caller.cs`, **Voices** volume)
+- 39 new lines made with ElevenLabs in his own Tee'd Off voice ("TeedOff Barker", voice id from Tee'd Off's
+  `Tools/Audio/voices.json`, model eleven_v3): `Tools/Audio/caller_lines.py`, 949 credits.
+- 7 of his Tee'd Off clips reused: `winner_1`, `winner_3`, `winner_5`, `finale_1` (the winner), `great_2` (a big jump),
+  `ohno_1` (a near miss), `ohno_3` (the results when you didn't win).
+- Words: `Assets/Resources/Audio/Voice/barker/lines.json` (subtitles on the HUD: "TeedOff Barker: ...").

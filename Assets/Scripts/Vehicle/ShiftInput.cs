@@ -6,9 +6,9 @@ namespace ShiftStorm
     // The same inputs in every form (Input System only). Bindings start from chastain_rush's VehicleInput (triggers, dead zones, Y / R reset);
     // ShiftStorm adds boost, the secondary button, the vertical axis and the invert setting.
     //   Pad:      RT accelerate, LT brake / reverse, left stick X steer, left stick Y climb / dive (pull back = up; Invert flips it), A boost,
-    //             RB secondary: drift on land / tighter carve on water, X camera view (Round 6), right stick look around, Y reset, View (Back) invert on / off, D-pad left / right: next start.
+    //             RB secondary: drift on land / tighter carve on water, LB wings (Round 7: the choice jump only), X camera view (Round 6), right stick look around, Y reset, View (Back) invert on / off, D-pad left / right: next start.
     //   Keyboard: W / Up accelerate, S / Down brake / reverse, A / D or Left / Right steer, I / K climb / dive (I = up), Space boost,
-    //             Left Shift secondary, V camera view, R reset, F2 invert on / off, F3 / F4 previous / next start.
+    //             Left Shift secondary, E wings (choice jump), V camera view, R reset, F2 invert on / off, F3 / F4 previous / next start.
     // Invert is saved in settings.json (Settings; Round 3, was PlayerPrefs "invertVertical"); also on the menu's Settings page.
     // Round 2, the course menu: Menu (Start) / Esc opens and closes it; D-pad up / down or Up / Down (W / S) move, A / Enter / Space choose,
     // B / Backspace go back. While it is open the race is paused, so these never reach the vehicle.
@@ -25,8 +25,8 @@ namespace ShiftStorm
         // Round 6: per player (player 2 has their own invert setting, settings.json "invertVertical2")
         public bool MyInvert { get => player == 2 ? Settings.InvertVertical2 : Invert; set { if (player == 2) Settings.InvertVertical2 = value; else Invert = value; } }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
-        bool viewRequested;
+        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
+        bool viewRequested, wingsRequested;
         public Vector2 Look { get; private set; }   // Round 6: the right stick looks around (CameraViews)
         bool resetRequested; int startStep;
         public bool MenuPressed { get; private set; }
@@ -40,7 +40,7 @@ namespace ShiftStorm
         // position (pushed forward = +, as the pad gives it) and goes through the invert setting like a real stick (the invert check).
         // The one-shot menu presses (sMenu, sMove, sConfirm, sBack) let a check work the menu as a player would.
         [System.NonSerialized] public bool Scripted, sRawStick, sMenu, sConfirm, sBack;
-        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView; [System.NonSerialized] public int sMove; [System.NonSerialized] public Vector2 sLook;
+        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView, sWings; [System.NonSerialized] public int sMove; [System.NonSerialized] public Vector2 sLook;
 
         void Awake() => Create(null);
 
@@ -77,6 +77,8 @@ namespace ShiftStorm
             boost = A("Boost"); Add(boost, "<Gamepad>/buttonSouth"); Add(boost, "<Keyboard>/space");
             // Round 6: X is the camera-view button now (as in Chastain Rush / Woodstock Rush); drift / carve stays on RB and Left Shift
             secondary = A("Drift / carve"); Add(secondary, "<Gamepad>/rightShoulder"); Add(secondary, "<Keyboard>/leftShift");
+            // Round 7: LB / E opens the wings, only on the choice jump (ShiftVehicle.Stunts ignores it anywhere else)
+            wings = A("Wings"); Add(wings, "<Gamepad>/leftShoulder"); Add(wings, "<Keyboard>/e");
             view = A("Change view"); Add(view, "<Gamepad>/buttonWest"); Add(view, "<Keyboard>/v");
             look = new InputAction("Look around", InputActionType.Value, expectedControlType: "Vector2"); Add(look, "<Gamepad>/rightStick", "stickDeadzone(min=0.2,max=0.95)");
             reset = A("Reset"); Add(reset, "<Gamepad>/buttonNorth"); Add(reset, "<Keyboard>/r");
@@ -92,7 +94,7 @@ namespace ShiftStorm
             enter = A("Enter"); Add(enter, "<Keyboard>/enter"); Add(enter, "<Keyboard>/numpadEnter");
             foreach (var x in new[] { confirm, menu, back, menuUp, menuDown }) x.performed += c => LastDevice = c.control.device;
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
         void OnEnable() { foreach (var a in All) a.Enable(); }
         void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; viewRequested = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
@@ -111,7 +113,7 @@ namespace ShiftStorm
                 sMenu = sConfirm = sBack = false; sMove = 0;
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Boost = sBoost; Secondary = sSecondary;
                 Vertical = sRawStick ? (MyInvert ? sVertical : -sVertical) : sVertical;
-                Look = sLook; viewRequested |= sView; sView = false;
+                Look = sLook; viewRequested |= sView; sView = false; wingsRequested |= sWings; sWings = false;
                 return;
             }
             Throttle = throttle.ReadValue<float>(); Brake = brake.ReadValue<float>(); Steer = Mathf.Clamp(steer.ReadValue<float>(), -1, 1);
@@ -121,12 +123,14 @@ namespace ShiftStorm
             Boost = boost.IsPressed(); Secondary = secondary.IsPressed();
             resetRequested |= reset.WasPressedThisFrame();
             if (invert.WasPressedThisFrame()) MyInvert = !MyInvert;
-            Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame();
+            Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame(); wingsRequested |= wings.WasPressedThisFrame();
             if (nextStart.WasPressedThisFrame()) startStep++;
             if (prevStart.WasPressedThisFrame()) startStep--;
         }
         public bool ConsumeReset() { bool r = resetRequested; resetRequested = false; return r; }
         public void RequestReset() => resetRequested = true;
+        public bool ConsumeWings() { bool r = wingsRequested; wingsRequested = false; return r; }
+        public void RequestWings() => wingsRequested = true;
         public bool ConsumeView() { bool r = viewRequested; viewRequested = false; return r; }
         public int ConsumeStartStep() { int s = startStep; startStep = 0; return s; }
     }

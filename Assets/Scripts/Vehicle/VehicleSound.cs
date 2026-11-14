@@ -16,15 +16,23 @@ namespace ShiftStorm
         // Round 6 (split screen): both players' engines and wind are heard (one shared mix, both non-spatial), each at this share so two
         // are not twice as loud: 0.7 each (two equal sounds add up to about 1.4x in level, ~ +3 dB, not +6)
         public static float Mix = 1; float baseVol;
+        // Round 7 item 5: an engine per form, from Chastain Rush's synthesis (EngineSynth): the car "six", the boat's outboard "flat6", the
+        // plane "v12" with Hostile Horizon's engine_cruise under it, the sub's low rumble (kind 3) with Hostile Horizon's engine_idle;
+        // cross-faded over the change; each one's pitch runs over its own form's top speed (and past it on boost).
+        readonly AudioSource[] forms = new AudioSource[4], layers = new AudioSource[4]; readonly float[] formVol = { .42f, .38f, .34f, .4f }, layerVol = { 0, 0, .22f, .3f };
         void Start()
         {
             v = GetComponent<ShiftVehicle>();
-            const int rate = 44100; int n = rate / 2; var data = new float[n];
-            for (int i = 0; i < n; i++) { float t = i / (float)rate; data[i] = .25f * Mathf.Sin(2 * Mathf.PI * 90 * t) + .12f * Mathf.Sin(2 * Mathf.PI * 180 * t) + .06f * Mathf.Sin(2 * Mathf.PI * 270 * t); }
-            var clip = AudioClip.Create("Engine hum", n, 1, rate, false); clip.SetData(data, 0);
-            source = gameObject.AddComponent<AudioSource>(); source.clip = clip; source.loop = true; source.spatialBlend = spatial ? 1 : 0; source.volume = spatial ? .5f : .35f;
-            if (spatial) { source.rolloffMode = AudioRolloffMode.Linear; source.minDistance = 6; source.maxDistance = 90; source.dopplerLevel = .3f; }
-            source.Play(); baseVol = source.volume;
+            AudioSource Src(AudioClip c, float vol)
+            {
+                var a = gameObject.AddComponent<AudioSource>(); a.clip = c; a.loop = true; a.spatialBlend = spatial ? 1 : 0; a.volume = 0; a.playOnAwake = false;
+                if (spatial) { a.rolloffMode = AudioRolloffMode.Linear; a.minDistance = 6; a.maxDistance = 90; a.dopplerLevel = .3f; }
+                if (c) { a.timeSamples = Random.Range(0, Mathf.Max(1, c.samples - 1)); a.Play(); } return a;
+            }
+            forms[0] = Src(EngineSynth.Voiced("Car engine", 1, "six"), 0); forms[1] = Src(EngineSynth.Voiced("Boat motor", 1, "flat6"), 0);
+            forms[2] = Src(EngineSynth.Voiced("Plane engine", 1, "v12"), 0); forms[3] = Src(EngineSynth.Shared("Sub rumble", 3), 0);
+            if (!spatial) { layers[2] = Src(Resources.Load<AudioClip>("Audio/Sfx/hh_engine_cruise"), 0); layers[3] = Src(Resources.Load<AudioClip>("Audio/Sfx/hh_engine_idle"), 0); }
+            source = forms[0]; baseVol = spatial ? .5f : .35f; const int rate = 44100;
             if (!spatial)
             {
                 // wind: 2 s of low-passed noise with a slow swell, looped (the loop point is cross-faded)
@@ -36,26 +44,35 @@ namespace ShiftStorm
             }
             // Round 4: a wall hit (ElevenLabs-made Tee'd Off impact, copied): louder for a harder hit
             hits = new[] { Resources.Load<AudioClip>("Audio/Sfx/wall_hit_1"), Resources.Load<AudioClip>("Audio/Sfx/wall_hit_2") };
-            hitSource = gameObject.AddComponent<AudioSource>(); hitSource.playOnAwake = false; hitSource.spatialBlend = source.spatialBlend;
+            hitSource = gameObject.AddComponent<AudioSource>(); hitSource.playOnAwake = false; hitSource.spatialBlend = spatial ? 1 : 0;
             if (spatial) { hitSource.rolloffMode = AudioRolloffMode.Linear; hitSource.minDistance = 6; hitSource.maxDistance = 90; }
-            v.WallHit += (angle, keep, what) => { var c = hits[Random.Range(0, hits.Length)]; if (c) hitSource.PlayOneShot(c, Mathf.Lerp(.25f, .9f, Mathf.Clamp01((1 - keep) * 3f))); };
+            v.WallHit += (angle, keep, what) => { var c = hits[Random.Range(0, hits.Length)]; if (c) hitSource.PlayOneShot(c, Mathf.Lerp(.25f, .9f, Mathf.Clamp01((1 - keep) * 3f)) * Settings.Effects); };
         }
         AudioSource hitSource; AudioClip[] hits;
         public float Pitch => source ? source.pitch : 0;
+        public float EngineVolume => source ? source.volume : 0;
         public float WindVolume => wind ? wind.volume : 0;
         void Update()
         {
             if (!source || !v) return;
-            source.volume = baseVol * (spatial ? 1 : Mix);
-            float k = v.Mode == Mode.Fly ? 1.15f : v.Mode == Mode.Dive ? .75f : 1f;
-            if (Legacy) { source.pitch = Mathf.Lerp(.7f, 1.8f, Mathf.Clamp01(v.Speed / 45f)) * k * (v.Boosting ? 1.15f : 1f); return; }
-            // 0 .. 1 over the form's top speed, on to ~1.25 at the boost top speed: the pitch keeps climbing all the way
+            int m = (int)v.Mode; source = forms[m];
+            float k = v.Mode == Mode.Fly ? 1.15f : v.Mode == Mode.Dive ? .75f : 1f, pitch;
             float frac = v.Speed / Mathf.Max(1f, v.TopSpeedNow);
-            source.pitch = Mathf.Lerp(.7f, 2.0f, Mathf.Clamp01(frac)) * k + Mathf.Max(0, frac - 1) * 1.2f + (v.Boosting ? .12f : 0);
+            if (Legacy) pitch = Mathf.Lerp(.7f, 1.8f, Mathf.Clamp01(v.Speed / 45f)) * k * (v.Boosting ? 1.15f : 1f);
+            // 0 .. 1 over the form's top speed, on to ~1.25 at the boost top speed: the pitch keeps climbing all the way
+            else pitch = Mathf.Lerp(.7f, 2.0f, Mathf.Clamp01(frac)) * k + Mathf.Max(0, frac - 1) * 1.2f + (v.Boosting ? .12f : 0);
+            float load = Mathf.Clamp01(.55f + .45f * v.Input.Throttle + (v.Boosting ? .2f : 0));
+            float fx = (spatial ? 1 : Mix) * Settings.Effects * (spatial ? 1.3f : 1f), step = Time.deltaTime / .35f;
+            for (int i = 0; i < 4; i++)
+            {
+                float want = (i == m ? formVol[i] * load : 0) * fx;
+                forms[i].volume = Mathf.MoveTowards(forms[i].volume, want, step * formVol[i]); forms[i].pitch = i == m ? pitch : forms[i].pitch;
+                if (layers[i]) { layers[i].volume = Mathf.MoveTowards(layers[i].volume, (i == m ? layerVol[i] * (.5f + .5f * Mathf.Clamp01(frac)) : 0) * fx, step * .3f); layers[i].pitch = .8f + .45f * Mathf.Clamp01(frac); }
+            }
             if (wind)
             {
                 float f = Mathf.Clamp01(frac * .9f), want = (v.Mode == Mode.Dive ? .12f : .55f) * f * f + (v.Boosting ? .08f : 0);
-                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix, Time.deltaTime * 1.5f);
+                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix * Settings.Effects, Time.deltaTime * 1.5f);
                 wind.pitch = (v.Mode == Mode.Dive ? .55f : .8f) + .5f * f;
             }
         }

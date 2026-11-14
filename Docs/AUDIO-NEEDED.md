@@ -23,8 +23,11 @@ Sound effects are **not** on this list: Code picks them from Tee'd Off, Chastain
 
 ## Suno songs
 
-**No whistling** (Dan, 2026-11-14: not in every song, not in Paradise Plunge). Each song uses a different mouth
-instrument instead, for variety: theme harmonica + jaw harp, race pan flute + jaw harp, menu ocarina + melodica.
+**Mouth instruments only when they fit** (Dan, 2026-11-14): whistling isn't in every song (not in Paradise Plunge),
+and a mouth instrument (whistling, harmonica, jaw harp, didgeridoo, pan flute, ocarina, melodica, kazoo, ...) is
+**not required** in a song — use one only when it feels right for that song, and don't lean on the same one
+everywhere. Current picks: theme harmonica + jaw harp, Paradise Plunge didgeridoo + pan flute (prehistoric
+jungle), menu ocarina + melodica, victory none.
 If a Suno take still adds whistling, add `no whistling` at the end of the Style and try again.
 
 Suno: Custom mode, paste the **Style**, **Instrumental: on**, use the **Title**. Download the MP3 and save it
@@ -46,7 +49,7 @@ that loops while someone sits in the menu. A big, catchy, hummable main melody d
 ### 1. Race theme — `race_paradise.mp3` (most important)
 - **Title:** `Paradise Plunge`
 - **Style:**
-  `upbeat cartoon racing game theme, instrumental, prehistoric jungle adventure, driving tribal hand drums and tight snappy kit drums, bouncy marimba and plucky pizzicato strings riff, bold warm brass hook, breathy pan flute runs and twangy jaw harp, slap bass groove, playful and energetic, fast and fun, steady drive all the way, major key, 132 bpm, seamless loop, no vocals`
+  `upbeat cartoon racing game theme, instrumental, prehistoric jungle adventure, driving tribal hand drums and tight snappy kit drums, bouncy marimba and plucky pizzicato strings riff, bold warm brass hook, deep rhythmic didgeridoo grooves driving the beat, breathy pan flute runs answering the brass, slap bass groove, playful and energetic, fast and fun, steady drive all the way, major key, 132 bpm, seamless loop, no whistling, no jaw harp, no vocals`
 - **Length:** 2-3 min (Suno's normal 2:30-3:00 take is fine). **Loop:** the whole song loops; choose a take with no
   fade-out, no slow middle section and no big ending. Code cuts a seamless loop on the bar grid.
 - In the game it gets more energy in flight, is muffled underwater and brightens at the waterfall exit — that's

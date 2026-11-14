@@ -59,7 +59,11 @@ namespace ShiftStorm
             var t = target.transform;
             var fwd = Quaternion.Euler(0, target.HeadingDeg, 0) * Vector3.forward;
             if (pitchFollow > .01f) fwd = Vector3.Slerp(fwd, t.forward, pitchFollow).normalized;
-            var focus = t.position + Vector3.up * 1.2f;
+            // Round 7: through the loop the camera follows the car's own forward and up (eased in and out over 0.35 s), so it rides round
+            // the loop behind the car instead of staying level
+            var up = Vector3.up; float lw = Mathf.SmoothStep(0, 1, target.LoopCam);
+            if (lw > 0) { fwd = Vector3.Slerp(fwd, t.forward, lw).normalized; up = Vector3.Slerp(Vector3.up, t.up, lw).normalized; }
+            var focus = t.position + up * 1.2f;
             if (topRef < 0 || Legacy || target.Holding) topRef = target.TopSpeedNow; else topRef = Mathf.MoveTowards(topRef, target.TopSpeedNow, 20f * Time.deltaTime);
             float speedFrac = Mathf.Clamp01(target.Speed / Mathf.Max(1f, topRef)); SpeedFrac = speedFrac;
             // Round 5 item 1: lower and closer at speed (build 5 pulled back 1.6 m, which made speed look smaller); on a boost press a short
@@ -68,12 +72,12 @@ namespace ShiftStorm
             if (boostOn && !wasBoosting) kickAt = Time.time; wasBoosting = boostOn;
             float kick = kickAt > 0 ? Mathf.Clamp01(1 - (Time.time - kickAt) / .6f) : 0; kick *= kick; Kick = kick;
             var wantOffset = Legacy ? -fwd * (distance + speedFrac * 1.6f) + Vector3.up * height
-                : -fwd * ((distance - speedFrac * speedFrac * 1.4f + kick * 1.2f) * distanceScale) + Vector3.up * ((height - speedFrac * .55f) * heightScale);
-            bool reset = target.Resets != lastResets || (t.position - lastTarget).sqrMagnitude > 30 * 30; lastResets = target.Resets; lastTarget = t.position;   // a reset or a restart (a jump) snaps
+                : -fwd * ((distance - speedFrac * speedFrac * 1.4f + kick * 1.2f) * distanceScale) + up * ((height - speedFrac * .55f) * heightScale);
+            bool reset = target.Resets != lastResets || (t.position - lastTarget).sqrMagnitude > 30 * 30;   // (the loop moves under 2 m per frame) lastResets = target.Resets; lastTarget = t.position;   // a reset or a restart (a jump) snaps
             if (!snapped || reset) { offset = wantOffset; velocity = Vector3.zero; snapped = true; }
-            else offset = Vector3.SmoothDamp(offset, wantOffset, ref velocity, .12f);
+            else offset = Vector3.SmoothDamp(offset, wantOffset, ref velocity, Mathf.Lerp(.12f, .03f, lw));   // Round 7: tight round the loop
             transform.position = focus + offset;
-            transform.rotation = Quaternion.LookRotation(focus + fwd * 6f - transform.position, Vector3.up);
+            transform.rotation = Quaternion.LookRotation(focus + fwd * 6f - transform.position, up);
             // sense of speed: field of view, and a light shake on boost
             float wantFov = Legacy ? BaseFov + 18f * speedFrac + (target.Boosting ? 6f : 0f) : BaseFov + 20f * speedFrac * speedFrac + 5f * speedFrac + (target.Boosting ? 8f : 0f);
             fov = Mathf.Lerp(fov, wantFov, 1 - Mathf.Exp(-3f * Time.deltaTime)); if (cam) cam.fieldOfView = fov + (Legacy ? 0 : kick * 6f);

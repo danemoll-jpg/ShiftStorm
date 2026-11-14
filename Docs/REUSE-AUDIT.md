@@ -268,3 +268,15 @@ the Garage (`UI/Garage.cs`), the one-command import (`Tools/import_vehicles.py`,
 Written new: per-camera underwater fog (`ChaseCam.BeforeRender`) and gate colours (`RouteGuide`), the HUD once per half (`Hud.Relayout`,
 player 2's PAUSED), player 2's vehicle (`VehicleFactory.MakePlayer2`), the split race / trial setup in `Game.StartCourse`, and the Round 6
 checks (`Checks/CheckPilot.Round6.cs`: bind with virtual gamepads, split race, views).
+
+## Round 7 copies (2026-11-14)
+| Copied | From | Changed |
+|---|---|---|
+| `Assets/Scripts/Vehicle/EngineSynth.cs` | CR `Assets/Scripts/Vehicle/VehicleSoundSynthesis.cs` | namespace and class name only |
+| `Tools/Music/make_loops.py` | TO `Tools/Music/make_loops.py` | paths (Art/Incoming/Music, Assets/Resources/Audio/Music, local/audio_check) and the track list (race_paradise, menu, theme, results) |
+| `Tools/Audio/caller_lines.py` | TO `Tools/Audio/elevenlabs_voice.py` (its request and the "TeedOff Barker" voice id from `voices.json`) | rewritten small: one speaker, ffmpeg trim to Ogg, its own line list |
+| `Assets/Resources/Audio/Sfx/to_*.wav` (30) | TO `Assets/_Project/Resources/Audio/Sfx` and `Jingles/match_win.wav` | renamed with the `to_` prefix |
+| `Assets/Resources/Audio/Sfx/hh_*.mp3` (8) | Hostile Horizon `Assets/Resources/Sounds` | renamed with the `hh_` prefix |
+| `Assets/Resources/Audio/Voice/barker/` (7 of 46 clips) | TO `Resources/Audio/Voice/barker` (winner_1/3/5, finale_1, great_2, ohno_1, ohno_3) | renamed to the caller's pools |
+| `Assets/Resources/Drivers/Barnaby/` | TO `Assets/_Project/Art/Characters/Barnaby` (model, texture, "Standing Arguing") | none (metas copied with them) |
+Docs/SOUNDS.md lists every sound and where it is used.

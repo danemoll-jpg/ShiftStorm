@@ -109,6 +109,7 @@ namespace ShiftStorm.EditorTools
             if (assetPath.Contains("/Music/")) { st.loadType = AudioClipLoadType.Streaming; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .6f; }
             else if (assetPath.Contains("/amb_jungle") || assetPath.Contains("/amb_bubbles")) { st.loadType = AudioClipLoadType.CompressedInMemory; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .5f; }
             else { st.loadType = AudioClipLoadType.DecompressOnLoad; st.compressionFormat = AudioCompressionFormat.Vorbis; st.quality = .6f; }
+            st.preloadAudioData = !assetPath.Contains("/Music/");   // Round 7: new effects and voice preloaded too (off caused first-play hitches, Round 2b)
             ai.defaultSampleSettings = st; ai.forceToMono = false; ai.loadInBackground = assetPath.Contains("/Music/");
         }
         // Round 2: the shared driver animations (Mixamo, "Without Skin", Resources/Drivers/Animations): Humanoid clips any driver can play.

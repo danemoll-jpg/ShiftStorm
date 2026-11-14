@@ -105,6 +105,7 @@ namespace ShiftStorm
             float prog = v.Progress;
             float ahead = v.Mode == Mode.Dive ? Mathf.Max(14f, v.Speed * .9f) : Mathf.Max(18f, v.Speed * 1.1f);
             var look = c.PointAt(prog + ahead, out var lookDir);
+            if (v.Mode == Mode.Drive && c == game.Courses[0] && ParadisePlunge.LoopAim(prog, ahead, out var la)) look = la;   // Round 7: along the entry lane, not up the loop
             if (laneOffset != 0) look += Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(lookDir, Vector3.up).normalized) * laneOffset;   // Round 4: a line beside the course line
             var fwd = Vector3.ProjectOnPlane(v.transform.forward, Vector3.up).normalized;
             var want = Vector3.ProjectOnPlane(look - p, Vector3.up).normalized;
@@ -115,7 +116,7 @@ namespace ShiftStorm
             float vert = Mathf.Clamp((ty - p.y) * .15f - vy * .12f, -1, 1);
             float thr = throttleCap, brk = 0; bool sec = secondary;
             if (holdSpeed > 0) thr = v.Speed < holdSpeed ? 1 : 0;
-            if (smart && (v.Mode == Mode.Drive || v.Mode == Mode.Boat))
+            if (smart && (v.Mode == Mode.Drive || v.Mode == Mode.Boat) && !(c == game.Courses[0] && (v.OnLoop || ParadisePlunge.NoBrake(prog, prog + 6 + Mathf.Max(25f, v.Speed * 1.6f)))))
             {
                 // the line's bend ahead sets a safe speed (v = sqrt(a r)); over it: off the throttle, brake; drift / carve through bends
                 float d0 = 6, d1 = 6 + Mathf.Max(25f, v.Speed * 1.6f);
@@ -196,6 +197,12 @@ namespace ShiftStorm
             if (r6 || which == "bind") yield return BindCheck();
             if (r6 || which == "split") yield return SplitCheck();
             if (r6 || which == "views") yield return ViewsCheck();
+            bool r7 = which == "round7";
+            if (r7 || which == "loop") yield return LoopCheck();
+            if (r7 || which == "jumps") yield return JumpsCheck();
+            if (r7 || which == "choice") yield return ChoiceCheck();
+            if (which == "stuntlaps") yield return StuntLaps();
+            if (r7 || which == "caller") yield return CallerCheck();
             FeelReport();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();

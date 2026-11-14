@@ -82,6 +82,7 @@ namespace ShiftStorm
     {
         public Mode mode;
         [System.NonSerialized] public float progress;   // set when placed by progress (Paradise Plunge), else projected by Course.Finish
+        public float speed = -1;   // Round 7: the restart speed here (-1: ShiftTuning.resetSpeed); 45 m/s before a jump, so a reset car clears its gap
         void OnDrawGizmos() { Gizmos.color = Color.green; Gizmos.DrawSphere(transform.position, .6f); Gizmos.DrawRay(transform.position, transform.forward * 4); }
     }
 

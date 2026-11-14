@@ -62,6 +62,8 @@ namespace ShiftStorm
             var g = Game.Instance;
             P1 = g.Player; P1.Input.player = 1; P1.Input.Bind(SplitScreen.P1Device);
             P2 = VehicleFactory.MakePlayer2(SplitScreen.P2Rival, g.Shared, g.Drive, g.Boat, g.Fly, g.Dive);
+            Caller.Instance?.Watch(P2);   // Round 7: one caller for both players
+            GameSounds.Instance?.Watch(P2);
             P2.Input.Bind(SplitScreen.P2Device);
             Trial2 = gameObject.AddComponent<TimeTrial>(); Trial2.v = P2;
             CourseAudio.Instance?.Follow(P2);

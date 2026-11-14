@@ -125,19 +125,23 @@ namespace ShiftStorm
             }
             CheckZones();
             Carry(dt);
-            switch (Mode)
+            bool railed = StepStunts(dt);   // Round 7: the loop's rail, the boost pad, jumps, the wings
+            if (!railed)
             {
-                case Mode.Drive: StepDrive(dt); break;
-                case Mode.Boat: StepBoat(dt); break;
-                case Mode.Fly: StepFly(dt); break;
-                case Mode.Dive: StepDive(dt); break;
+                switch (Mode)
+                {
+                    case Mode.Drive: StepDrive(dt); break;
+                    case Mode.Boat: StepBoat(dt); break;
+                    case Mode.Fly: StepFly(dt); break;
+                    case Mode.Dive: StepDive(dt); break;
+                }
+                AlignAssist(dt);
             }
-            AlignAssist(dt);
             TrackProgress();
             Recovery(dt);
             if (GraceUntil > 0 && Time.time >= GraceUntil) { GraceUntil = -1; SetLayer(VehicleLayer); }
             var f = Vector3.ProjectOnPlane(Mode == Mode.Fly || Mode == Mode.Dive ? transform.forward : (Body.linearVelocity.sqrMagnitude > 4 && Vector3.Dot(Body.linearVelocity, transform.forward) > 0 ? Body.linearVelocity : transform.forward), Vector3.up);
-            if (f.sqrMagnitude > 1e-3f) HeadingDeg = Mathf.Atan2(f.x, f.z) * Mathf.Rad2Deg;
+            if (f.sqrMagnitude > 1e-3f && !OnLoop) HeadingDeg = Mathf.Atan2(f.x, f.z) * Mathf.Rad2Deg;
             stepVel = Body.linearVelocity;   // Round 4: the velocity going into the physics step (a wall hit is measured against it)
         }
         Vector3 stepVel;

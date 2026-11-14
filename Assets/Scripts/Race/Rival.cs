@@ -11,15 +11,16 @@ namespace ShiftStorm
     //   boostMeter added to the meter a rival waits for before it boosts (Easy boosts rarely), straight: multiplies how straight it must be
     //   mistakeEvery / mistakeSeconds  a lift off the throttle every so many seconds (random within +-40 %), this long
     //   shortcut   multiplies how often it goes for its shortcut
+    //   fly        Round 7: how often it opens its wings on the choice jump (decided before the lip, kept)
     public enum Difficulty { Easy, Normal, Hard }
     public struct AiSkill
     {
-        public float pace, brake, wobble, boostMeter, straight, mistakeEvery, mistakeSeconds, shortcut;
+        public float pace, brake, wobble, boostMeter, straight, mistakeEvery, mistakeSeconds, shortcut, fly;
         public static AiSkill For(Difficulty d) => d switch
         {
-            Difficulty.Easy => new AiSkill { pace = .76f, brake = .8f, wobble = 3f, boostMeter = .6f, straight = .4f, mistakeEvery = 18f, mistakeSeconds = 1.1f, shortcut = .2f },
-            Difficulty.Normal => new AiSkill { pace = .87f, brake = .9f, wobble = 1.6f, boostMeter = .3f, straight = .7f, mistakeEvery = 35f, mistakeSeconds = .7f, shortcut = .6f },
-            _ => new AiSkill { pace = 1f, brake = 1f, wobble = 0f, boostMeter = 0f, straight = 1f, mistakeEvery = 0f, mistakeSeconds = 0f, shortcut = 1f },   // Hard = Round 3's AI
+            Difficulty.Easy => new AiSkill { pace = .76f, brake = .8f, wobble = 3f, boostMeter = .6f, straight = .4f, mistakeEvery = 18f, mistakeSeconds = 1.1f, shortcut = .2f, fly = .35f },
+            Difficulty.Normal => new AiSkill { pace = .87f, brake = .9f, wobble = 1.6f, boostMeter = .3f, straight = .7f, mistakeEvery = 35f, mistakeSeconds = .7f, shortcut = .6f, fly = .5f },
+            _ => new AiSkill { pace = 1f, brake = 1f, wobble = 0f, boostMeter = 0f, straight = 1f, mistakeEvery = 0f, mistakeSeconds = 0f, shortcut = 1f, fly = .6f },   // Hard = Round 3's AI
         };
     }
 
@@ -56,6 +57,7 @@ namespace ShiftStorm
         public int ShortcutsTried { get; private set; }
         public float missOffset;       // checks only: aim this far to the side of a shortcut's entry (the deliberate miss)
         public float shortcutOffset;   // checks only: drive this far off the shortcut's line inside it (the scrape run)
+        public int forceChoice;    // checks only: 1 always flies on the choice jump, -1 always stays a car, 0 by AiSkill.fly
         public bool useDifficulty = true;   // checks that measure the course itself (shortcuts) drive at Round 3's (Hard) level
         public AiSkill Skill => useDifficulty ? AiSkill.For(Settings.Difficulty) : AiSkill.For(Difficulty.Hard);
         public int Mistakes { get; private set; }
@@ -80,6 +82,17 @@ namespace ShiftStorm
         Vector3 PathAt(float ahead, out Vector3 dir)
         {
             var c = v.Course;
+            // Round 7: the choice jump: car or plane, decided once 300 m before the lip and kept (every rival, AiSkill.fly)
+            if (!planned || scDone)
+                foreach (var sc in c.shortcuts)
+                {
+                    if (!sc.choice || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
+                    decided.Add(sc.label);
+                    if (forceChoice != 0 ? forceChoice > 0 : rnd.NextDouble() < Skill.fly) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} will fly at the {sc.label}"); }
+                    else v.Note("plan", $"{v.RacerName} stays a car at the {sc.label}");
+                    break;
+                }
+            if (planned && planned.choice && !scDone && v.WingsOpen && v.GroundedWheels == 0 && !v.Changing) input.RequestWings();
             if (planned && !scDone)
             {
                 if (v.OnShortcut == planned || v.Progress >= planned.mainFrom) return planned.PointAt(scS + ahead, out dir);
@@ -95,6 +108,7 @@ namespace ShiftStorm
             if (planned && !scDone && v.Progress >= planned.mainFrom - 30) return 0;
             var m = ParadisePlunge.Marks; float p = v.Progress;
             if (v.Course != Game.Instance?.Courses[0] || m.Count == 0) return 0;
+            if (ParadisePlunge.StuntNear(p)) return 0;   // Round 7: on its line into the loop (7 m half) and over the jumps
             foreach (var k in new[] { "lip", "splash", "diveZone", "portal", "surface", "rampFoot", "rampLip", "landing", "G1", "G5", "G7", "G8", "G9", "finish" })
                 if (Mathf.Abs(p - m[k]) < 45) return 0;
             if (p > m["rampStart"] - 20 && p < m["lip"]) return 0;
@@ -126,6 +140,17 @@ namespace ShiftStorm
                     else v.Note("plan", $"{v.RacerName} keeps to the safe line at the {sc.label}");
                     break;
                 }
+            // Round 7: the choice jump: car or plane, decided once 300 m before the lip and kept (every rival, AiSkill.fly)
+            if (!planned || scDone)
+                foreach (var sc in c.shortcuts)
+                {
+                    if (!sc.choice || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
+                    decided.Add(sc.label);
+                    if (forceChoice != 0 ? forceChoice > 0 : rnd.NextDouble() < Skill.fly) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} will fly at the {sc.label}"); }
+                    else v.Note("plan", $"{v.RacerName} stays a car at the {sc.label}");
+                    break;
+                }
+            if (planned && planned.choice && !scDone && v.WingsOpen && v.GroundedWheels == 0 && !v.Changing) input.RequestWings();
             if (planned && !scDone)
             {
                 if (v.OnShortcut == planned || v.Progress >= planned.mainFrom) scS = planned.Project(p, v.OnShortcut == planned || scS > 0 ? scS : -1, out _, out _);
@@ -153,6 +178,7 @@ namespace ShiftStorm
             if (planned && !scDone && v.OnShortcut != planned && hitTimes.Count >= 3) { v.Note("plan", $"{v.RacerName} gives up the {planned.label} (hitting rock)"); scDone = true; Plan = ""; hitTimes.Clear(); }
             float ahead = Ahead(speed);
             var look = PathAt(ahead, out _);
+            if (v.Mode == Mode.Drive && !(planned && !scDone) && v.Course == Game.Instance?.Courses[0] && ParadisePlunge.LoopAim(v.Progress, ahead, out var la)) look = la;
             // blocked (pinned against another car or a wall) on land or water: back out with the wheel turned the other way, as a player
             // would, well before the vehicle's own stuck reset (4 s)
             bool ground = v.Mode == Mode.Drive || v.Mode == Mode.Boat;
@@ -199,7 +225,8 @@ namespace ShiftStorm
             float d0 = 6, d1 = 6 + Mathf.Max(25f, speed * 1.6f);
             PathAt(d0, out var a0); PathAt(d1, out var a1);
             float turnFlat = Vector3.Angle(Vector3.ProjectOnPlane(a0, Vector3.up), Vector3.ProjectOnPlane(a1, Vector3.up));
-            if (v.Mode == Mode.Drive || v.Mode == Mode.Boat)
+            bool stuntLine = v.Mode == Mode.Drive && v.Course == Game.Instance?.Courses[0] && (v.OnLoop || ParadisePlunge.NoBrake(v.Progress, v.Progress + d1));   // Round 7: the loop's line turns over itself: no braking for it
+            if ((v.Mode == Mode.Drive || v.Mode == Mode.Boat) && !stuntLine)
             {
                 float turn = turnFlat * Mathf.Deg2Rad, r = turn > 1e-3f ? (d1 - d0) / turn : 1e4f;
                 float aLat = (v.Mode == Mode.Drive ? 27f : 15f) * (rival != null ? rival.brakeMargin : 1f) * skill.brake, vmax = Mathf.Sqrt(aLat * r);

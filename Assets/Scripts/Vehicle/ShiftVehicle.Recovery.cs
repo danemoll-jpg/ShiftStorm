@@ -44,7 +44,7 @@ namespace ShiftStorm
             var anchor = Course.AnchorFor(BestProgress, GatesPassed);
             bool wasChanging = Changing; var at = Body.position; float sp = Speed;
             Resets++; LastResetReason = reason;
-            Place(anchor, anchor.mode, shared.resetSpeed);
+            Place(anchor, anchor.mode, anchor.speed >= 0 ? anchor.speed : shared.resetSpeed);
             GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer);
             Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}, at {p3(at)}, {sp:0} m/s, {OffLine:0} m off the line) to the anchor at {anchor.progress:0} m in {anchor.mode}");
         }
@@ -61,7 +61,7 @@ namespace ShiftStorm
         // Put the vehicle at an anchor in a form, at a speed along the anchor's facing; no change animation (the form snaps).
         void Place(RecoveryAnchor anchor, Mode mode, float speed, Vector3 offset = default)
         {
-            Changing = false; Authority = 1; assistLeft = 0; OnShortcut = null;
+            Changing = false; Authority = 1; assistLeft = 0; OnShortcut = null; ClearStunts();
             Body.isKinematic = true;
             var pos = anchor.transform.position + anchor.transform.rotation * offset;
             transform.SetPositionAndRotation(pos, anchor.transform.rotation);

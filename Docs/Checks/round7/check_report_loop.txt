@@ -1,0 +1,13 @@
+ShiftStorm check 'loop', 2026-11-14 06:30, build 0.7.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LOOP: radius 24 m (car centre), 16 m side shift, line through it 152 m (progress 642 -> 794), boost pad 70 m before it tops up to 72 m/s
+LOOP full speed (from the anchor, the pilot's line, no boost) PASS: in at 10 m/s, over the top 68 m/s, through, resets 0, wrong-way cues 0, gates 1
+LOOP slow entry (placed after the pad at 34 m/s, throttle on, no boost) PASS: in at 22 m/s, over the top 50 m/s, through, resets 0, wrong-way cues 0, gates 1
+LOOP very slow entry (placed at 15 m/s, coasting) PASS: in at 6 m/s, over the top - m/s, too slow: slid back, resets 1 (too slow for the loop), back at the anchor at 523 m in Drive, wrong-way cues 0, gates 1
+LOOP views: pictures at 90 / 180 / 270 / 345 deg in Chase, Far chase, First person, Front (Far chase through, First person through, Front through)
+LOOP AI (Easy) PASS: 25/25 runs through the loop, 0 stuck / reset; slowest entry 71 m/s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.32 ms, 95th pct 1.91 ms, 99th pct 3.51 ms, worst 792.16 ms over 203112 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: reset: trouble_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

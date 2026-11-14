@@ -87,6 +87,13 @@ namespace ShiftStorm
                 float a = from / L * StripW, b = Mathf.Min(s.endProgress, L) / L * StripW; from = s.endProgress;
                 Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + (a + b) * .5f, 0), new Vector2(Mathf.Max(2, b - a - 2), 8), FormColor(s.form));
             }
+            // Round 7: the stunts on the strip: amber ticks at the jumps' lips (violet for the choice jump), a cyan block over the loop
+            if (c == game?.Courses[0] && ParadisePlunge.Marks.ContainsKey("loopIn"))
+            {
+                foreach (var j in ParadisePlunge.Jumps) Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + j.lip / L * StripW, 7), new Vector2(4, 6), j.choice ? new Color(.75f, .45f, 1f) : new Color(1f, .62f, .12f));
+                float a0 = ParadisePlunge.Marks["loopIn"] / L * StripW, b0 = ParadisePlunge.Marks["loopOut"] / L * StripW;
+                Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + (a0 + b0) * .5f, 7), new Vector2(Mathf.Max(4, b0 - a0), 6), new Color(.3f, 1f, .95f));
+            }
             foreach (var g in c.gates) stripGates.Add(Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + g.progress / L * StripW, 0), new Vector2(3, 16), new Color(1, 1, 1, .8f)));
         }
 

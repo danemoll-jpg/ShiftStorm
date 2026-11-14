@@ -85,6 +85,8 @@ namespace ShiftStorm
             Cam.gameObject.AddComponent<ChaseCam>().target = Player;
             Cam.gameObject.AddComponent<CameraViews>();   // Round 6: X / V cycles Chase, Far chase, First person, Front
             CourseAudio.Make(Cam.gameObject, Player);
+            Caller.Make(this).Watch(Player);   // Round 7: TeedOff Barker calls the race
+            GameSounds.Make(Cam.gameObject, this).Watch(Player);   // Round 7: the sound pass
             Trial = gameObject.AddComponent<TimeTrial>(); Trial.v = Player;
             Race = gameObject.AddComponent<Race>();
             Hud.Make(Cam, Player, this);
@@ -272,10 +274,13 @@ namespace ShiftStorm
                     Item(InvertItem, () => { ShiftInput.Invert = !ShiftInput.Invert; ShowPage(Page.Settings, 1); });
                     Item(ScreenItem, () => { ScreenSetting.Toggle(); ShowPage(Page.Settings, 2); });
                     Item(StatsItem, () => { ToggleStats(); ShowPage(Page.Settings, 3); });
+                    Item($"Music volume: {Settings.Music * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("music"); ShowPage(Page.Settings, 4); });
+                    Item($"Effects volume: {Settings.Effects * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("sfx"); ShowPage(Page.Settings, 5); });
+                    Item($"Voices volume: {Settings.Voices * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("voice"); ShowPage(Page.Settings, 6); });
                     if (SplitScreen.Active)
                     {
-                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 4); });
-                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 5); });
+                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 7); });
+                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 8); });
                     }
                     Item("Back", () => ShowPage(Page.Main));
                     break;

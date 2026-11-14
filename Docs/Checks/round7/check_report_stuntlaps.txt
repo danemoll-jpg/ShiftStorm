@@ -1,0 +1,20 @@
+ShiftStorm check 'stuntlaps', 2026-11-14 07:05, build 0.7.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STUNT RUNS: 7 races x 4 AI racers (Abi's car by an AI too), the grid to G2 (Creek Jump, the loop, the Lake Jump, the Cliff Gap), Normal, time scale 3.0
+STUNT RUNS PASS: 28/28 clean (G2 reached, one loop, no reset); loops 28, loop fails 0, landings logged 71; Lake Jump: 14 flew, 14 stayed a car
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.92 ms, 95th pct 2.93 ms, 99th pct 4.43 ms, worst 231.62 ms over 47902 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  stunt1       Drive->Fly  z   945.1  not finished  frames worst 10.12 / mean 2.14 ms
+  stunt2       Drive->Fly  z   652.1  0.602 s  frames worst 9.64 / mean 1.94 ms
+  stunt2       Fly->Drive  z   902.7  0.600 s  frames worst 5.45 / mean 1.88 ms
+  stunt2       Drive->Fly  z   944.5  0.604 s  frames worst 7.28 / mean 1.96 ms
+  stunt3       Drive->Fly  z   652.1  0.605 s  frames worst 4.30 / mean 2.11 ms
+  stunt3       Fly->Drive  z   902.9  0.605 s  frames worst 4.85 / mean 1.85 ms
+  stunt3       Drive->Fly  z   944.8  0.602 s  frames worst 7.22 / mean 1.78 ms
+  stunt4       Drive->Fly  z   652.1  0.603 s  frames worst 6.31 / mean 1.84 ms
+  stunt4       Fly->Drive  z   902.7  0.600 s  frames worst 6.31 / mean 1.89 ms
+  stunt4       Drive->Fly  z   944.9  not finished  frames worst 7.58 / mean 1.84 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

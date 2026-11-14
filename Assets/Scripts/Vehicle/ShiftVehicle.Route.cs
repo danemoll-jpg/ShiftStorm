@@ -51,7 +51,7 @@ namespace ShiftStorm
             var vel = Body.linearVelocity; var travel = vel.sqrMagnitude > 9f ? vel.normalized : transform.forward;
             var route = air ? RouteDir : Vector3.ProjectOnPlane(RouteDir, Vector3.up).normalized; if (!air) travel = Vector3.ProjectOnPlane(travel, Vector3.up).normalized;
             RouteAlign = Vector3.Dot(travel, route);
-            bool backwards = RouteAlign < shared.wrongWayCos && !Holding && !Finished;
+            bool backwards = RouteAlign < shared.wrongWayCos && !Holding && !Finished && !OnLoop;   // Round 7: upside down in the loop is not "wrong way"
             backwardFor = backwards ? backwardFor + dt : 0;
             bool wasWrong = WrongWay; WrongWay = backwardFor > shared.wrongWaySeconds && !OffRoute;
             if (WrongWay && !wasWrong) Note("wrong way", $"wrong way: heading {Mathf.Acos(Mathf.Clamp(RouteAlign, -1, 1)) * Mathf.Rad2Deg:0} deg against the route at {Progress:0} m ({Mode})");

@@ -1,0 +1,45 @@
+ShiftStorm check 'lap', 2026-11-14 06:37, build 0.7.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LAP: Paradise Plunge, line 7403 m, 11 gates, 8 segments, 21 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 124.98 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            18.4 s    20 s  -1.6
+  2 Cliffside Climb     Driving            16.7 s    20 s  -3.3
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.6 s    20 s  -0.5
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.6 s    25 s  -7.4
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 76.2 m/s (170 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 44.0 m/s (98 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 124.98] finish in 124.98 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.25 ms, 95th pct 6.69 ms, 99th pct 8.08 ms, worst 214.71 ms over 21981 frames (39 over 16.7 ms); peak draw calls 0, batches 0, triangles 5190k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      4.37 /   5.67 / 187.48 ms       0 draws    2466k tris
+  Cliffside Climb      3.46 /   5.63 /   9.84 ms       0 draws    4819k tris
+  Sky Arch             4.51 /   6.59 /  17.63 ms       0 draws    4897k tris
+  Lagoon Landing       3.10 /   4.80 /  23.77 ms       0 draws    1866k tris
+  Mangrove Run         6.18 /   7.75 / 214.71 ms       0 draws    5190k tris
+  Sunken Gateway       4.57 /   6.21 / 186.43 ms       0 draws    2635k tris
+  Coral Vault          3.33 /   4.80 / 140.94 ms       0 draws    2584k tris
+  Waterfall Return     5.97 /   7.73 /  49.61 ms       0 draws    4988k tris
+  frames over 50 ms during the lap: 27; worst: 216 ms at 80.3 s (Mangrove Run, after "split Lagoon Landing: 11.83 s (target 15 s), total 67.18 s"); 196 ms at 14.6 s (Beach Promenade, after "choice jump: wings window open"); 189 ms at 10.2 s (Beach Promenade, after "boost pad: 70 -> 72 m/s"); 188 ms at 89.5 s (Sunken Gateway, after "split Mangrove Run: 19.55 s (target 20 s), total 86.73 s"); 184 ms at 5.9 s (Beach Promenade, after "gate G0 start passed (1/11)"); 165 ms at 83.4 s (Mangrove Run, after "split Lagoon Landing: 11.83 s (target 15 s), total 67.18 s")
+RESULTS PASS: shown True, lap 124.98 s, 8 splits, new best True, best on file 124.98 s (local/round7/save\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 124.98 s
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.46  FOV 90.0  particles 80  speed 102 % of top
+  Fly   pitch 2.31  wind 0.45  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.45  FOV 90.0  particles 142  speed 100 % of top
+  Dive  pitch 1.50  wind 0.32  FOV 90.0  particles 116  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 4.66 ms, 95th pct 8.12 ms, 99th pct 9.79 ms, worst 216.30 ms over 28026 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   945.3  0.607 s  frames worst 17.00 / mean 7.01 ms
+  lap          Fly->Boat   z  -606.3  0.601 s  frames worst 19.54 / mean 5.02 ms
+  lap          Boat->Dive  z  -202.4  0.600 s  frames worst 12.05 / mean 5.57 ms
+  lap          Dive->Boat  z  -466.4  0.601 s  frames worst 17.99 / mean 7.90 ms
+  lap          Boat->Drive z  -305.0  0.604 s  frames worst 12.64 / mean 6.89 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: lucky_1; finish: quipgood_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

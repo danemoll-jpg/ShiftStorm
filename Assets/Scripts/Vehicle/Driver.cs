@@ -260,7 +260,7 @@ namespace ShiftStorm
             if (!lines.TryGetValue(what, out var set) || set.Length == 0) return false;
             float now = Time.time;
             if (now < nextAny || (nextOf.TryGetValue(what, out var t) && now < t)) { Spoken.Add($"{what}: skipped (cooldown)"); return false; }
-            var clip = set[Random.Range(0, set.Length)]; voice.PlayOneShot(clip);
+            var clip = set[Random.Range(0, set.Length)]; voice.volume = .95f * Settings.Voices; voice.PlayOneShot(clip);
             nextAny = now + AnyCooldown; nextOf[what] = now + LineCooldown; Spoken.Add($"{what}: {clip.name}");
             v.Note("voice", $"Abi says {clip.name} ({what})");
             return true;

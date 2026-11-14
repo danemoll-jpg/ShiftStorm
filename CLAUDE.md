@@ -91,6 +91,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
 | Boost (one shared meter) | A | Space |
 | Secondary: drift (car) / tighter carve (boat) | RB | Left Shift |
+| Wings: only in the first 1 s off the Lake Jump's lip (HUD "LB: FLY"); nothing anywhere else | LB | E |
 | Camera view: Chase / Far chase / First person / Front (per player, saved) | X | V |
 | Look around (pulled back = look behind) | Right stick | - |
 | Reset to last safe anchor | Y | R |
@@ -102,7 +103,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout. Quit game asks "No / Yes" (No is preselected) and exits
+Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Effects / Voices volume (A steps 100 -> 80 ... 0 -> 100 %, saved). Quit game asks "No / Yes" (No is preselected) and exits
 with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
 starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
 back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
@@ -129,7 +130,10 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   particles) + `strip`. Round 6: `round6` = `bind` (two virtual gamepads: join, per-device input, X view, per-player invert, pause from player 2, a pad
   pulled out) + `split` (two scripted players + 2 AI, a full lap, both HUDs sampled, pictures of both halves, split frame times;
   `-leftRight` for the side-by-side layout) + `views` (one lap per camera view, pictures per form and mid-change, look-behind, frames
-  inside rock / on the water surface). Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
+  inside rock / on the water surface). Round 7: `round7` = `loop` (full / slow / very slow entries, pictures at 4 points in every view, 25 AI
+  runs, `-loopRuns N`) + `jumps` (each plain jump with and without boost, a slow one) + `choice` (car line vs fly line timed, LB late, LB
+  elsewhere) + `caller` (a race: caller lines, effects, engine and music mix per form); `stuntlaps` (`-races N` x 4 AI, grid to G2, Normal).
+  Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
 - Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
@@ -141,6 +145,10 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `Tools/Blender/make_test_vehicle.py`). Blender cleans each (4.0 m long, origin, facing: `import.json` "yaw", default 180; floor per
   form, Seat point, LOD1, texture) into `Assets/Resources/Vehicles/<Design>/` + `designs.json`, previews in `Docs/Checks/round5/import/`;
   then build. Never ship `_Test` (names starting `_` are hidden; delete its folder before the release build).
+- Music (Round 7): Dan's Suno MP3s in `Art/Incoming/Music/` named `race_paradise`, `menu`, `theme`, `results` (his downloads are
+  "ShiftStorm - Paradise Plunge / Garage / Theme / Victory.mp3", found under either name) -> `python Tools/Music/make_loops.py` (copied
+  from Tee'd Off) writes the intro + seamless loop to `Assets/Resources/Audio/Music/`. Caller lines: `python Tools/Audio/caller_lines.py`
+  (dry run; `--go` records missing ones with ElevenLabs in the TeedOff Barker voice). Every sound and its source: `Docs/SOUNDS.md`.
 - Launcher: `powershell -File Tools/Build-Launcher.ps1` (and `-CoreOnly` for `LauncherChecks.exe`) -> `Builds/Launcher/`.
 - Release (local draft, then the deliberate publish):
   `python Tools/Release-Round.py --version 0.1.0 --build 1 --notes "..."` then
@@ -151,7 +159,7 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
 
-Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0), Round 4 (build 5, 0.4.0) and Round 5 (build 6, 0.5.0) and Round 6 (build 7, 0.6.0) are delivered: four-mode vehicle, full gray-box Paradise
+Round 1 (build 1), Round 2 (build 2, 0.2.0), Round 2b (build 3, 0.2.1), Round 3 (build 4, 0.3.0), Round 4 (build 5, 0.4.0), Round 5 (build 6, 0.5.0), Round 6 (build 7, 0.6.0) and Round 7 (build 8, 0.7.0) are delivered: four-mode vehicle, full gray-box Paradise
 Plunge lap in the Jurassic Par look and sound, ordered gates, time trial, Abi in the cockpit; Round 2b: where to go (glowing gate frames,
 next gold / after cyan, HUD arrow + marker + route strip, route guides in every form, direction cues from the heading against the route),
 much faster, fullscreen by default.
@@ -214,8 +222,18 @@ much faster, fullscreen by default.
   - **Camera views** (`UI/CameraViews.cs`, from Chastain Rush's): X / V cycles Chase / Far chase / First person (Abi's eyes, her head folded
     away) / Front, per player, saved ("view", "view2"); right stick looks around. Chase now keeps out of the cave walls underwater.
 
+- **Round 7 (build 8, 0.7.0):**
+  - **Stunts** (`World/ParadisePlunge.Stunts.cs`, `Vehicle/ShiftVehicle.Stunts.cs`): the promenade is a straight stunt strip: Creek Jump,
+    the loop (radius 24 m, rail physics, boost pad; too slow = slide back + reset), Lake Jump (LB / E wings in the first 1 s off the lip ->
+    the "Lake flight" shortcut, wheels down before G1); Cliff Gap on the climb. Anchors before jumps restart at 40-45 m/s
+    (`RecoveryAnchor.speed`). The AI decides fly / car before the lip (`AiSkill.fly`: Easy .35, Normal .5, Hard .6). Safe-line lap 125.0 s.
+  - **Course art** (`ParadisePlunge.Polish2.cs`): the rest of the lap dressed; TeedOff Barker's booth at the start line.
+  - **Sound** (`Core/GameSounds.cs`, `Vehicle/VehicleSound.cs` + `EngineSynth.cs`, `Core/CourseAudio.cs`; list in `Docs/SOUNDS.md`), Dan's
+    four Suno songs, Music / Effects / Voices volumes. **TeedOff Barker** calls the race (`Race/Caller.cs`, clips in `Resources/Audio/Voice/barker`).
+  - New sound files must be imported with Preload Audio Data on (the importer rule now sets it).
+
 Dan reviewed build 7: "everything good so far."
 
-Current objective: **Round 7** — first the music prompts for Dan (`Docs/AUDIO-NEEDED.md`, Tee'd Off-style cartoony songs; Code chooses sound effects itself),
+Previous objective (delivered, waiting for Dan's review of build 8): **Round 7** — first the music prompts for Dan (`Docs/AUDIO-NEEDED.md`, Tee'd Off-style cartoony songs; Code chooses sound effects itself),
 then a loop-the-loop and three big car jumps (one with a fly choice on LB / E), then course art for the rest of the lap, a full
 sound pass (Tee'd Off + Chastain Rush + Hostile Horizon sounds) and Barnaby, "TeedOff Barker", as the race caller. Release build 8 (0.7.0). See `TODO.md`.

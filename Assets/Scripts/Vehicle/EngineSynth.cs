@@ -1,0 +1,115 @@
+using System;
+using UnityEngine;
+
+namespace ShiftStorm
+{
+    // Round 7: copied from Chastain Rush's VehicleSoundSynthesis (Assets/Scripts/Vehicle, read-only there; its own synthesis, CC0, no
+    // sampled recordings): the engine loops for the car ("six"), the boat's outboard ("flat6"), the plane ("v12") and the sub's rumble (kind 3).
+    // Unchanged apart from the namespace and the class name.
+    public static class EngineSynth
+    {
+        // 0.113 Part E: one shared copy per kind for the other vehicles' engines (the output is fixed per kind) (Chastain Rush, Round 27: with OtherEngines)
+        static readonly AudioClip[] shared = new AudioClip[7];
+        public static AudioClip Shared(string name, int kind) { if (!shared[kind]) { shared[kind] = Create(name, kind); shared[kind].hideFlags = HideFlags.DontUnloadUnusedAsset; } return shared[kind]; }
+        // Chastain Rush, Round 94 (A): the new cars' own engine notes for the idle and load loops (kinds 0 and 1): "v8" (a low, uneven burble),
+        // "six" (smooth), "flat6" (a hard, raspy beat), "v12" (high and many-voiced); one shared copy per voice and kind
+        static readonly System.Collections.Generic.Dictionary<string, AudioClip> voiced = new();
+        public static AudioClip Voiced(string name, int kind, string voice)
+        {
+            if (string.IsNullOrEmpty(voice) || kind > 1) return Shared(name, kind);
+            string key = voice + kind;
+            if (!voiced.TryGetValue(key, out var c) || !c) { c = Create(name + " " + voice, kind, voice); c.hideFlags = HideFlags.DontUnloadUnusedAsset; voiced[key] = c; }
+            return c;
+        }
+        public static AudioClip Create(string name, int kind) => Create(name, kind, null);
+        static float Voice(string voice, double t, float low, float noise, out float extra)
+        {
+            extra = 0;
+            switch (voice)
+            {
+                case "v8":
+                {
+                    double f = 38, ph = 2 * Math.PI * f * t + .14 * Math.Sin(2 * Math.PI * 5 * t);
+                    // the cross-plane lope: every other pair of firings stronger, a half-order thump under it
+                    float lope = (float)(.72 + .28 * Math.Sin(ph * .5) * Math.Sin(ph * .25 + .7));
+                    float s = (float)(.42 * Math.Sin(ph) + .26 * Math.Sin(ph * 2 + .3) + .12 * Math.Sin(ph * 3 + 1) + .22 * Math.Sin(ph * .5));
+                    extra = (float)(.10 * Math.Sin(ph * 4) + .05 * Math.Sin(ph * 6)); return s * lope + low * .45f;
+                }
+                case "six":
+                {
+                    double ph = 2 * Math.PI * 52 * t + .06 * Math.Sin(2 * Math.PI * 6 * t);
+                    extra = (float)(.10 * Math.Sin(ph * 4) + .07 * Math.Sin(ph * 6)); return (float)(.40 * Math.Sin(ph) + .30 * Math.Sin(ph * 2 + .2) + .18 * Math.Sin(ph * 3) + .08 * Math.Sin(ph * 6 + .5)) + low * .25f;
+                }
+                case "flat6":
+                {
+                    double ph = 2 * Math.PI * 56 * t + .08 * Math.Sin(2 * Math.PI * 9 * t);
+                    float pulse = (float)Math.Pow(Math.Abs(Math.Sin(ph * .5)), 3);
+                    extra = (noise - low) * .10f + (float)(.10 * Math.Sin(ph * 5 + .4)); return (float)(.36 * Math.Sin(ph) + .24 * Math.Sin(ph * 3 + .6) + .14 * Math.Sin(ph * 5)) * (.7f + .45f * pulse) + (noise - low) * .08f + low * .2f;
+                }
+                case "v12":
+                {
+                    double ph = 2 * Math.PI * 70 * t + .04 * Math.Sin(2 * Math.PI * 4 * t);
+                    extra = (float)(.12 * Math.Sin(ph * 6) + .08 * Math.Sin(ph * 12 + .3) + .05 * Math.Sin(ph * 9)); return (float)(.30 * Math.Sin(ph) + .26 * Math.Sin(ph * 2 + .3) + .20 * Math.Sin(ph * 3 + .9) + .14 * Math.Sin(ph * 6) + .08 * Math.Sin(ph * 12)) + low * .12f;
+                }
+            }
+            return 0;
+        }
+        public static AudioClip Create(string name, int kind, string voice)
+        {
+            const int rate = 44100;
+            bool impact = kind >= 5;
+            int count = impact ? rate / 2 : rate * 4;
+            var samples = new float[count];
+            var random = new System.Random(20260918 + kind);
+            float low = 0, slower = 0;
+            for (int i = 0; i < count; i++)
+            {
+                double t = (double)i / rate;
+                float noise = (float)(random.NextDouble() * 2 - 1);
+                low += (noise - low) * (kind == 2 ? .035f : .16f);
+                slower += (low - slower) * .025f;
+                double phase = 2 * Math.PI * 48 * t + .10 * Math.Sin(2 * Math.PI * 7 * t);
+                float combustion = (float)(.40 * Math.Sin(phase) + .22 * Math.Sin(phase * 2 + .4)
+                    + .13 * Math.Sin(phase * 3) + .07 * Math.Sin(phase * 5 + .8));
+                if (voice != null && kind <= 1)
+                {
+                    float v = Voice(voice, t, low, noise, out float extra);
+                    samples[i] = kind == 0 ? v + slower * .3f : v * .6f + extra + low * .25f;
+                    continue;
+                }
+                samples[i] = kind switch
+                {
+                    0 => combustion * (float)(.88 + .12 * Math.Sin(2 * Math.PI * 12 * t)) + slower * .35f,
+                    1 => combustion * .6f + (float)(.12 * Math.Sin(phase * 4) + .08 * Math.Sin(phase * 7)) + low * .3f,
+                    2 => slower * 2.2f,
+                    3 => low * (float)(.9 + .3 * Math.Sin(2 * Math.PI * 19 * t)),
+                    4 => (noise - low) * .12f + (float)(.10 * Math.Sin(2 * Math.PI * 730 * t + 2 * Math.Sin(2 * Math.PI * 23 * t))) + low * .25f,
+                    _ => (low * .7f + (float)Math.Sin(2 * Math.PI * (85 * t - 35 * t * t)) * .45f)
+                        * (float)(Math.Exp(-t * (kind == 6 ? 16 : 11)) * Math.Min(1, t / .005))
+                };
+            }
+            if (!impact)
+            {
+                // Equal-length overlap, then trim: continuous noise and harmonic loop junction.
+                const int overlap = 2205;
+                int length = count - overlap;
+                for (int i = 0; i < overlap; i++)
+                {
+                    float blend = i / (float)(overlap - 1);
+                    samples[i] = Mathf.Lerp(samples[length + i], samples[i], blend);
+                }
+                Array.Resize(ref samples, length);
+                // Join the final 0.7 ms to the first sample without a hard endpoint step.
+                for (int i = length - 32; i < length; i++)
+                    samples[i] = Mathf.Lerp(samples[i], samples[0], Mathf.SmoothStep(0, 1, (i - length + 32) / 31f));
+            }
+            else for (int i = count - 441; i < count; i++) samples[i] *= (count - 1 - i) / 440f;
+            float peak = .001f;
+            foreach (float sample in samples) peak = Mathf.Max(peak, Mathf.Abs(sample));
+            for (int i = 0; i < samples.Length; i++) samples[i] *= .65f / peak;
+            var clip = AudioClip.Create(name, samples.Length, 1, rate, false);
+            clip.SetData(samples, 0);
+            return clip;
+        }
+    }
+}

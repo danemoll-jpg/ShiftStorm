@@ -20,6 +20,49 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 7 — loops and big jumps, course art, sound, TeedOff Barker** (2026-11-14, release `build-8` / 0.7.0). Status below; spec stays under Current Objective until Dan's review.
+
+### Round 7 delivery (2026-11-14) — status per item
+Evidence: `Docs/Checks/round7/` (reports, player-view pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy
+job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run. Nothing needed a visible window.
+0. **Music prompts — done.** `Docs/AUDIO-NEEDED.md` (based on Tee'd Off's `docs/music-suno.md`: Jurassic Par's instruments, instrumental,
+   loop-friendly takes); whistling taken out at Dan's word (harmonica / pan flute / jaw harp / ocarina / melodica instead). **Dan's four
+   songs are in:** Theme, Paradise Plunge, Garage, Victory, looped by `Tools/Music/make_loops.py` (copied from TO): race 89 bpm, a 36-bar
+   loop after a 62 s intro; menu 58 bars; theme 77 bars; results plays once; every seam check OK.
+1. **Loop-the-loop — done.** On the Beach Promenade (now a straight stunt strip along the lake), radius 24 m, 52 m tall, exit lane 16 m to
+   the right; mossy stone / wooden planks, cyan edge lights, two towers, a boost pad 70 m before it (tops up to 72 m/s). The racer line runs
+   round it, so progress / gates / the strip just count along it; a car on it rides a rail (real gravity along the track, grip check);
+   too slow: it slides back and is reset at the loop's anchor; no "wrong way" upside down; the camera follows the car's own up (every view).
+   *Check:* full speed PASS (68 m/s over the top), slow entry 34 m/s PASS (through, 50 m/s over the top), very slow 15 m/s PASS (slid back,
+   reset "too slow for the loop"), 25/25 AI runs, 0 stuck; pictures at 90 / 180 / 270 / 345 deg in Chase, Far, First person, Front.
+2. **Big car jumps — done.** Creek Jump (promenade, plain), Lake Jump (promenade, the choice), Cliff Gap (Cliffside Climb, plain; a
+   ravine with a stream). Kickers 45 m, about 8 deg at the lip, 36-40 m gaps, long straight landings; a car landing after 0.35 s in the
+   air keeps its air speed for 0.25 s. LB / E opens the wings only in the first 1 s off the Lake Jump's lip (HUD "LB: FLY"); the plane takes
+   the Lake flight (a climb over the lake-side beach through three gold rings, entry / exit sub-gates) and turns back into a car in the
+   marked wheels-down zone before G1 (first try swung 95 m out over the lake: too tight for the plane, reshaped). *Check:* Creek 1.95 s air
+   (2.38 s on boost), 59 -> 61 m/s, 0 resets; Cliff Gap 1.95 s, 59 -> 60 m/s; short / slow jumps reset at once (creek water / the ravine's
+   reset zone); car line 5.52 s lip -> G1, fly line 4.44 s (from a 45 m/s restart, so the car was slow there; at full speed they are
+   close); LB late and LB elsewhere do nothing; the AI decides before the lip: 24 of 50 soak laps flew on Normal. *Stunt runs:* 7 races x 4 AI (Normal) from the grid to G2: 28/28 clean (one loop each, no reset), 0 loop fails, 14 flew / 14 stayed a car.
+3. **Lap honest — done.** Safe-line pilot lap 125.0 s (build 7: 122.8): promenade 18.4 s (16.4), the rest unchanged; the AI on Normal
+   131-140 s. The route strip shows the jumps (amber; the choice violet) and the loop (cyan).
+4. **Course art — done (procedural, Tee'd Off's shapes).** Promenade: beach, boulders, driftwood, a jungle wall, pennants, grandstands with a
+   crowd and chequered flags at the line, brontosaurs in the lake, pterodactyls round the loop, a smoking volcano, hot springs by the creeks.
+   Mangrove: lily pads, reeds, vines, logs, a triceratops. Sunken Gateway: two giant stone heads with glowing eyes, glyph pillars, bubbles.
+   Coral Vault: coral clusters, light shafts from the roof, bubble columns. Waterfall Return: ferns, boulders, mist, a rainbow, foam.
+   Still not like TO: everything is primitive lumps (no TO meshes for cliffs / statues), the crowd is spheres, no foam shader at the creeks.
+   No essential model missing (no Tripo prompts added). *Perf (PC):* lap mean 4.25 ms, 95th pct 6.7 ms, peak 5.19 M triangles (build 7:
+   4.44 M); 27 frames over 50 ms in the lap (worst 216 ms; build 7: 6-10): see For Dan.
+5. **Sound pass — done.** Engines per form from Chastain Rush's synthesis (+ Hostile Horizon jet / sub layers), change sounds by form,
+   boost, gates and rings, near miss, boost pad, loop, jump whoosh and landing, scrapes, countdown, GO, finish, win jingle, menu clicks;
+   music mix by form (flight louder, underwater 650 Hz low-pass, a lift at the waterfall exit); Music / Effects / Voices volumes in
+   Settings. Every sound and its source: `Docs/SOUNDS.md`. *Check (muted):* every effect fired in a race; engine pitch Car 0.79-2.02,
+   Boat 1.44-2.00, Plane 1.84-2.31, Sub 1.39-1.50; music low-pass about 730 Hz on average underwater.
+5b. **TeedOff Barker — done.** `Race/Caller.cs`: 39 new lines in his own voice (ElevenLabs, 949 credits) + 7 of his TO clips; pools with
+   cooldowns, a gap after each line, priorities; subtitles "TeedOff Barker: ..."; results "Race called by TeedOff Barker"; his booth with
+   his name board and Barnaby himself (TO model, "Standing Arguing" loop) beside the start line; one caller in split screen. *Check:* a race:
+   10 lines from 9 pools (trial, go, jump, wings, lead, shortcut, final, win, results), 0 repeats within 20 s.
+6. **Regression + soak + release — done.** Round 6 (bind / split / views: one lap per view, 0 resets, camera never inside rock) PASS;
+   lap / results / restart PASS; soak 50 AI laps Normal PASS (50/50 within 300 s, 1 reset); release build 8 (0.7.0).
 - **Round 6 — split screen and camera views** (2026-11-13, release `build-7` / 0.6.0). Status below; spec stays under Current Objective until Dan's review.
 
 ### Round 6 delivery (2026-11-13) — status per item
@@ -300,6 +343,10 @@ the same kind of cartoony songs from the golf game."
      Suno's tag style), instrumental or not (say which; match Tee'd Off),
      the length to aim for, how to make it loop, and the exact file name
      and folder to save to (e.g. `Art/Incoming/Music/`).
+   - **Game theme song (added by the planning chat, Dan 2026-11-14):** song 0
+     in `AUDIO-NEEDED.md`, `theme.mp3`, instrumental (Dan: no lyrics on a
+     looping menu song). When it arrives: title screen (loop from the first chorus) and credits; the
+     Tee'd Off `title` placeholder until then.
    - **Sound effects are NOT on Dan's list** (Dan, 2026-11-14: "code can
      choose sound effects I am more concerned about picking the music").
      Code picks and makes them itself in item 5. `AUDIO-NEEDED.md` is
@@ -420,7 +467,15 @@ the same kind of cartoony songs from the golf game."
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- …
+- **Listen:** your four songs (Theme on the menu's main page, the Garage song in Garage / Settings, the race song, Victory on the results);
+  the race song muffles under water and lifts out of the waterfall; TeedOff Barker's lines (start, GO, jumps, the wings call, lead
+  changes, final stretch, the winner): is any line heard too often? The engines per form (synthesised car, boat outboard, plane, sub).
+- **Loop:** does it feel right at full speed, and in First person (at the top the view drifts above Abi's head a little)?
+- **Lake Jump:** press LB right off the lip: is 1 s of window enough, and is the fly line fun / about as fast as the car line?
+- **Jumps:** about 2 s of airtime; do you land straight? A short jump drops you in the creek (instant reset): fair?
+- **Deck frame rate:** the lap now peaks at 5.2 M triangles (+17 %); 27 frames over 50 ms on the PC check (at segment / change moments,
+  likely first-use loading): watch for hitches at the start, the loop and the Lake Jump.
+- **Settings:** the three volume rows.
 
 ## Next Steps (Do Not Start Yet)
 - **More vehicle designs** (Dan, 2026-11-13: "we can add different designs

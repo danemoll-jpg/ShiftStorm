@@ -1,0 +1,84 @@
+{
+ "race_paradise": {
+  "seconds": 179.72,
+  "loops": true,
+  "bpm": 89.08,
+  "bar_seconds": 2.6941,
+  "loop_start_s": 62.0269,
+  "loop_end_s": 159.0137,
+  "loop_bars": 36,
+  "intro_samples": 2735387,
+  "body_samples": 4277116,
+  "usable_end_s": 176.72,
+  "match_before": 0.863,
+  "match_after": 0.86,
+  "loudness_match": 0.807,
+  "crossfade_ms": 100,
+  "seam": {
+   "seam_step": 0.028563475236296654,
+   "typical_step_p99_9": 0.11542346328496933,
+   "step_ok": true,
+   "seam_flux": 4.223219394683838,
+   "flux_p95": 4.826238632202148,
+   "flux_ok": true,
+   "encoded_exact": true,
+   "encoded_seam_ok": true
+  }
+ },
+ "menu": {
+  "seconds": 178.88,
+  "loops": true,
+  "bpm": 105.78,
+  "bar_seconds": 2.269,
+  "loop_start_s": 27.3067,
+  "loop_end_s": 158.9063,
+  "loop_bars": 58,
+  "intro_samples": 1204224,
+  "body_samples": 5803545,
+  "usable_end_s": 176.38,
+  "match_before": 0.777,
+  "match_after": 0.818,
+  "loudness_match": 0.938,
+  "crossfade_ms": 100,
+  "seam": {
+   "seam_step": 0.01295564416795969,
+   "typical_step_p99_9": 0.10326788574457169,
+   "step_ok": true,
+   "seam_flux": 2.591764211654663,
+   "flux_p95": 4.01876974105835,
+   "flux_ok": true,
+   "encoded_exact": true,
+   "encoded_seam_ok": true
+  }
+ },
+ "results": {
+  "seconds": 38.64,
+  "loops": false
+ },
+ "theme": {
+  "seconds": 178.8,
+  "loops": true,
+  "bpm": 132.19,
+  "bar_seconds": 1.8156,
+  "loop_start_s": 29.0922,
+  "loop_end_s": 168.8936,
+  "loop_bars": 77,
+  "intro_samples": 1282968,
+  "body_samples": 6165239,
+  "usable_end_s": 176.55,
+  "match_before": 0.812,
+  "match_after": 0.827,
+  "loudness_match": 0.711,
+  "crossfade_ms": 100,
+  "seam": {
+   "seam_step": 0.014979803934693336,
+   "typical_step_p99_9": 0.12729987502098083,
+   "step_ok": true,
+   "seam_flux": 4.402429580688477,
+   "flux_p95": 3.8604936599731445,
+   "flux_ok": true,
+   "encoded_exact": true,
+   "encoded_seam_ok": true
+  }
+ }
+}

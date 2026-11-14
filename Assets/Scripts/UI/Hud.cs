@@ -15,7 +15,7 @@ namespace ShiftStorm
     {
         public static Hud Instance { get; private set; }
         public ShiftVehicle v; public Game game;
-        Text mode, info, last, help, timer, segment, center, results, menu, place, note; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
+        Text mode, info, last, help, timer, segment, center, results, menu, place, note, sub; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
         float lastSplitShown = -1; string splitLine = "";
 
         // Round 6 (split screen): one HUD per half, each on its player's camera (a Screen Space - Camera canvas fills that camera's half).
@@ -69,6 +69,7 @@ namespace ShiftStorm
             // Round 3: race position (big, top left under the stats) and the one-time note on the first flight
             place = Label(p, new Vector2(0, 1), new Vector2(24, -70), 54, TextAnchor.UpperLeft, new Vector2(400, 120)); place.supportRichText = true;
             note = Label(p, new Vector2(.5f, .5f), new Vector2(0, -150), 30, TextAnchor.MiddleCenter, new Vector2(900, 40)); note.color = new Color(.75f, .95f, 1f);
+            sub = Label(p, new Vector2(.5f, 0), new Vector2(0, 118), 24, TextAnchor.LowerCenter, new Vector2(1100, 34)); sub.supportRichText = true;   // Round 7: the caller's subtitle
             var bg = new GameObject("boost bg"); bg.transform.SetParent(p, false); var bgi = bg.AddComponent<Image>(); bgi.color = new Color(0, 0, 0, .55f);
             var br = bgi.rectTransform; br.anchorMin = br.anchorMax = br.pivot = new Vector2(0, 0); br.anchoredPosition = new Vector2(24, 40); br.sizeDelta = new Vector2(320, 22);
             var fill = new GameObject("boost"); fill.transform.SetParent(bg.transform, false); boostImage = fill.AddComponent<Image>(); boostImage.color = new Color(1, .78f, .15f);
@@ -120,6 +121,8 @@ namespace ShiftStorm
             // center: countdown, then cues
             if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }
             else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
+            else if (v.WingsOpen && v.GroundedWheels == 0)   // Round 7: the choice jump's wings window
+            { center.fontSize = 64; center.color = new Color(.55f, .95f, 1f); center.text = v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }
             else if (Time.time < v.CueUntil && !v.Finished)
             {
                 center.fontSize = v.CueType == ShiftVehicle.CueKind.Guide ? 44 : 52;
@@ -128,6 +131,8 @@ namespace ShiftStorm
             }
             else center.text = "";
             last.text = v.Finished ? $"FINISHED {TimeTrial.Clock(v.FinishTime)}  -  Y / R to race again" : v.LastEvent;
+            // Round 7: the race caller's words
+            var cl = Caller.Instance; if (sub) sub.text = cl && Time.time < cl.SubtitleUntil && cl.Subtitle != "" && player != 2 ? $"<color=#ffd34d><b>{Caller.Name}:</b></color> {cl.Subtitle}" : "";
             // race position
             var race = game ? game.Race : null;
             if (race && race.Active && c) { int pl = race.Place(v); place.text = $"{Race.Ordinal(pl)}<size=28> / {race.Racers.Count}</size>"; place.color = pl == 1 ? new Color(1, .85f, .3f) : Color.white; }
@@ -186,7 +191,7 @@ namespace ShiftStorm
                 string col = t < 0 ? "#cccccc" : t <= s.target ? "#8cff8c" : "#ffb070";
                 sb.AppendLine($"{i + 1} {s.name,-17}  <color={col}>{(t >= 0 ? t.ToString("0.00") : "--")}</color>  target {s.target:0}{(float.IsNaN(vsBest) ? "" : $"  best {Delta(vsBest)}")}");
             }
-            sb.AppendLine();
+            sb.AppendLine($"<size=17><color=#c8c8b4>Race called by {Caller.Name}</color></size>");   // Round 7
             if (SplitScreen.Active && !game.AllHumansFinished) { sb.Append("<color=#ffd34d>Waiting for the other player to finish...</color>"); return sb.ToString(); }
             for (int i = 0; i < Game.ResultsItems.Length; i++) { var it = Game.ResultsItems[i]; sb.Append(i == game.ResultsIndex ? $"<color=#ffd34d><b>> {it} <</b></color>   " : $"{it}   "); }
             sb.AppendLine(); sb.Append("<size=17>D-pad / arrows: choose   A / Enter: go   Y / R: race again</size>");
