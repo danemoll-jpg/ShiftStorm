@@ -234,6 +234,9 @@ much faster, fullscreen by default.
 
 Dan reviewed build 7: "everything good so far."
 
-Previous objective (delivered, waiting for Dan's review of build 8): **Round 7** — first the music prompts for Dan (`Docs/AUDIO-NEEDED.md`, Tee'd Off-style cartoony songs; Code chooses sound effects itself),
-then a loop-the-loop and three big car jumps (one with a fly choice on LB / E), then course art for the rest of the lap, a full
-sound pass (Tee'd Off + Chastain Rush + Hostile Horizon sounds) and Barnaby, "TeedOff Barker", as the race caller. Release build 8 (0.7.0). See `TODO.md`.
+Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes became Round 8.
+
+Current objective: **Round 8** — more (animated) dinosaurs so it reads as Jurassic Par, TeedOff Barker louder and talking more,
+driver mess-up reactions, a visible steering mechanism per form, results reactions by place, Music / Voices / Engines / Effects
+volumes (engines quieter), choice jumps with different paths, hitch fix, the Coral Vault tunnel reshape (Dan's OK for a visible window for that item
+only), playtest logging. Release build 9 (0.8.0). See `TODO.md`.
