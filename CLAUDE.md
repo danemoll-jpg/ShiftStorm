@@ -197,4 +197,7 @@ much faster, fullscreen by default.
     lagoon beaches, foam, clouds; Detail layer (11) culled beyond 800 m; looks only (colliders unchanged). Jurassic fog is now linear
     190-1100 m (TO's 140-820 x 1.35).
 
-Current objective: Round 5 delivered; waiting on Dan's review of build 6 and his vehicle models (see `TODO.md`).
+Dan reviewed build 6: "Looks good. Plays fine."
+
+Current objective: **Round 6 — two-player split screen and camera views (POV, cycled with X / V)**, the way Woodstock Rush /
+Chastain Rush do them. X moves from drift / carve (stays on RB) to the view button. Release build 7 (0.6.0). See `TODO.md`.

@@ -225,132 +225,65 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
-## Current Objective — Round 5: speed, then the first art slice
+## Current Objective — Round 6: split screen and camera views
 
-Round 4's spec is in `TODO-ARCHIVE.md`. Dan (2026-11-13): fold Code's
-Round 5 speed draft into the next phase (the art slice), as one round. Run
-unattended — don't stop to ask; anything needing a visible window or Dan's
-OK gets skipped and noted.
+**Dan's review of build 6 (0.5.0), 2026-11-13:** "Looks good. Plays fine."
+(Jetstream, speed, the polished stretch: no changes asked.)
 
-### Dan's review of build 5 (0.4.0), 2026-11-13
-1. Walls: "the wall bounce seems good now". 2. Keeping up: "still difficult keeping up. Still feels like I am moving slow".
-3. Start-line beams: gone. 4. Near miss +3 s: fair ("yes"). 5. Coral Vault tunnel: "not sure maybe". 6. Deck: 60 fps.
+**Dan's asks, quoted:** "Is it possible to throw in split screen so I can try
+with a friend? Woodstock Rush and Chastain Rush has this. Also they have it
+so you change your pov, can you do that here as well."
 
-**First — vehicle image prompts for Dan (do this before anything else).**
-Dan (2026-11-13): "move the image prompts to the front. I can work on them
-and it can continue work and then I will let it know when I am done and it
-can incorporate them."
+Reference (read-only, copy and adapt, never edit): `chastain_rush`'s split
+screen (`SplitScreen` and the per-device binding in `VehicleInput.cs`) and
+`CameraViews.cs` (Chase / Far chase / First person / Front, cycled with X).
+Make it work the way Dan already knows from those games. Run unattended —
+don't stop to ask; anything needing a visible window or Dan's OK gets skipped
+and noted.
 
-**DECIDED (Dan, 2026-11-13): the Jetstream design** (all four forms). Tee Shot and
-   Mudlark are parked for later (other designs can be added, e.g. rivals' own machines); the Garage shows Jetstream (and its rival colours) only.
-0. **Write the vehicle prompts, tell Dan, keep going.** Write the 12 image
-   prompts (3 design directions × 4 forms) and everything else item 5
-   lists for them in `Docs/MODELS-NEEDED.md`, commit and push that file,
-   then **post the prompts to Dan in the chat right away** (copy-pasteable,
-   with the file names and folders to save to and the Tripo settings).
-   Then continue with items 1–7 without waiting. When Dan says he's done
-   (or his files appear in the named folders), import whatever he made at
-   the next sensible point — finish the current item first — and show it in
-   the Garage; anything not made yet stays a placeholder.
-
-**Part A — speed (Code's Round 5 draft, approved).** Dan still "feels like
-I am moving slow" and can't keep up, so this comes first.
-
-1. **Feel of speed.** The engine sound's pitch tops out at 45 m/s
-   (`VehicleSound`), so above that (Drive 65, Fly 80) speed has no sound cue:
-   fix it per form's top speed and add a wind layer. Camera: stronger
-   field-of-view rise, lower and closer at speed, a bigger boost kick.
-   Speed streaks / spray / bubbles per form. Regularly spaced roadside
-   things (posts, palms, buoys, stripes) so movement reads against the
-   scenery.
-   *Check:* before / after pictures at the same spots, frame time on the lap.
-2. **Real speed.** Faster acceleration out of corners and form changes
-   (Drive 22 m/s² now) and +10–15 % top speeds in every form, AI on the same
-   tuning; lap target ~120–125 s (now ~139 s). Re-tune changes, ramps and
-   landings for the new speeds.
-   *Check:* lap, walls, near-miss, start, waterfall return and soak still pass.
-3. **Easy really easy.** Easy AI ~20 % slower than the check pilot (now 9 %),
-   Normal ~8 %, Hard as now; still no rubber-banding.
-   *Check:* 3 races per level; the check pilot wins on Easy without boost.
-4. **Coral Vault tunnel:** leave as it is (Dan: "not sure maybe"). The
-   climb-out reshape still needs a window and his OK — later.
-
-**Part B — the first art slice** (concept: "one polished sequence
-establishes the visual quality target", match Tee'd Off's look). Gray box
-stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
-
-5. **Vehicle design, stage 1: better-looking vehicles (Dan, 2026-11-13).**
-   Dan: "I want to make sure the vehicles look good. Maybe we can 3d model a
-   couple of designs ... I don't think the vehicles I had in Woodstock Rush
-   and Chastain Rush were high quality enough." So the real vehicles are
-   **not** built by Blender script. They come from Tripo (made by Dan by
-   hand) through the art pipeline in `CLAUDE.md`, in stages:
-   - **Stage 1 (this round; prompts already written in item 0):** image
-     prompts for **3 design directions** for Abi's transforming machine.
-     Each direction gets one prompt per form (car, boat, plane, submarine),
-     all four clearly the **same machine**: same cockpit/canopy shape, same
-     colors (from Abi's Tee'd Off model), same signature details, the Tee'd
-     Off toon style. Per image: 3/4 front view, plain light background, whole
-     vehicle in frame, no driver, no text. Add a design note per direction,
-     the exact file names and folders to save to, and the Tripo settings
-     (textured; low-poly / game option; FBX). Ask Dan to make **only the
-     car form of each direction in Tripo first** (3 models), so he can
-     compare them in 3D before spending time on all four forms.
-   - **Transformation with whole models:** Tripo gives one solid mesh per
-     form, so the change becomes a **0.6 s swap with an effect** instead of
-     folding parts: squash-and-stretch, a spin of panels / a burst of
-     sparkles and spray (by form), with the model swapped at the effect's
-     midpoint. Build this system now with the current placeholder forms as
-     four separate models, so Tripo models drop straight in later. Keep one
-     hull collider, Abi seated in every form (a seat point per model).
-     Vehicle models come **without glass** (Dan: Tripo gets glass wrong):
-     add a separate clear canopy per form in the game, shaped to the
-     cockpit rim, closed for the sub, optional elsewhere; and
-     the shared timing point for the physics handover.
-   - **Textures (Dan, 2026-11-13: the game is played on his 4K PC too, not
-     just the Deck):** Dan exports Tripo models with **4K** textures. Keep
-     the 4K source; add a **Texture quality** setting (High / Medium) in
-     Menu > Settings: High = full 4K on PC, Medium = half resolution
-     (Unity's global mipmap limit). Default: Medium on the Steam Deck
-     (detect it), High elsewhere. Report memory used by vehicle textures
-     with 4 cars on each setting.
-   - **Viewer for Dan:** a "Garage" screen in the menu that shows each form
-     (and any imported design) turning slowly, with a button to cycle forms
-     and designs — so Dan can judge them on the Deck.
-   - Drop-in import: when a design's FBX is in the folder named in the doc,
-     Code's import step (scale, origin, facing, seat point, LODs, rival
-     color variants) is one command. Write it now, test it on the
-     placeholders.
-   *Check:* MODELS-NEEDED.md has 12 prompts (3 directions × 4 forms) with
-   names and folders; the swap change passes every transition check at
-   0.6 s; Garage pictures of all four placeholder forms; the import command
-   works on a placeholder FBX; any models Dan delivered during the round are
-   imported and shown in the Garage (report which).
-6. **Polished stretch: Cliffside Climb → Sky Arch → Lagoon Landing.**
-   Finished Jurassic Par look for these three segments only: ported
-   Tee'd Off scenery (cycads, tree ferns, mossy cliffs and boulders, the
-   arch, waterfalls off the cliffs, dinosaurs in the valley, pterodactyls),
-   toon water with foam at the lagoon landing, splash and spray effects,
-   lighting / sky / fog tuned to Tee'd Off's `ArtStyle_Jurassic`. Copy from
-   Tee-dOff, never edit it. No new Tripo models unless something essential
-   is missing — then list it in `Docs/MODELS-NEEDED.md` with the image
-   prompts (per `CLAUDE.md`) and **leave it for Dan**, don't wait.
-   Readability first: gates, rings, the slit, the landing corridor and the
-   next change stay clear (concept: "spectacle that remains readable").
-   *Check:* player-view pictures every few seconds through the stretch,
-   side by side with Tee'd Off's Jurassic Par pictures; Code looks at them
-   and says what still doesn't match. Deck budget: frame time on the
-   stretch with four cars (PC numbers; Dan checks the Deck).
-7. **Regression + 50-lap AI soak (Normal), wrap-up, release build 6
-   (0.5.0).** Per-item status for all 8 items (0–7) (done / not done / deferred,
-   and why), "For Dan to check", update `CLAUDE.md`, commit, push, publish,
-   clean the disk.
+1. **Two-player split screen.**
+   - Menu: "2 Players" (Race and Time Trial). Player 2 joins by pressing A
+     on a second controller (keyboard counts as a device on PC); each player
+     is bound to their own device, as in Chastain Rush. On the Deck: the
+     Deck's own controls + one external controller.
+   - Layout like Chastain Rush (say which: top/bottom or side by side);
+     each half has its own camera, HUD, arrow, route strip, place,
+     speedometer, cues ("THIS WAY", "MISSED G4 +3 s") and Abi-style driver
+     reactions.
+   - Player 1 = Abi in Jetstream green; Player 2 picks a driver (Rae, Chip
+     or Vivi) and gets that colour; the other two AI racers fill the field
+     (option: 0–2 AI). Results show both players clearly.
+   - Pause / menu from either controller pauses both. Settings like invert
+     are **per player**.
+   - Sound: one shared mix, both engines audible but not doubled-loud.
+   - Performance: two views is the heaviest case. Add split-screen quality
+     cuts (draw distance, shadows, detail layer, texture quality) like
+     Chastain Rush's Deck scaling; PC must hold 60 fps; report PC frame times
+     and give Dan a short Deck check list.
+   *Check:* two scripted players race a full lap with 2 AI: both finish with
+   valid gate sequences, each HUD shows its own player's data, pictures of
+   both halves in each form.
+2. **Camera views (POV), per player.** Cycle with **X** (keyboard **V**), as
+   in Woodstock Rush / Chastain Rush: Chase (current), Far chase, First
+   person / cockpit (from Abi's eyes, the canopy edge and Jetstream nose in
+   view), Front / bumper. Every view works in all four forms and through the
+   change; the choice is remembered (per player). Right stick looks around,
+   as in Chastain Rush.
+   - **Button change:** X is currently a second button for drift / carve
+     (RB is the main one). Free X for the view, keep drift / carve on RB
+     (and Left Shift). Update the Controls table in `CLAUDE.md`.
+   *Check:* pictures of each view in each form; no view clips through
+   walls, water surface or the cave ceiling badly; the change effect still
+   reads in first person.
+3. **Regression + 50-lap AI soak (Normal), wrap-up, release build 7
+   (0.6.0).** Per-item status for all 3 items, "For Dan to check", update
+   `CLAUDE.md`, commit, push, publish, clean the disk.
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check
-- See "For Dan to check (Round 5)" under Completed Tasks.
+### For Dan to check (fill in at end of round)
+- …
 
 ## Next Steps (Do Not Start Yet)
 - **More vehicle designs** (Dan, 2026-11-13: "we can add different designs
@@ -362,7 +295,6 @@ stays everywhere else. Vehicles: Tripo by Dan, not Blender scripts.
   Waits on Dan's review of that stretch and the vehicle design. New character / organic models
   go through the manual Tripo pipeline in `CLAUDE.md`; the real vehicle comes
   from Tripo too (Dan's models, `Tools/import_vehicles.py`).
-- **Vehicle design stage 2:** Dan picks a direction in the Garage; then its other three forms, canopies shaped to its cockpit rim.
 - **Later experiment:** optional submerged bypass in Mangrove Run — only after
   the base lap works (concept doc).
 
