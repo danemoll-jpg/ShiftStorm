@@ -23,16 +23,20 @@ Sound effects are **not** on this list: Code picks them from Tee'd Off, Chastain
 
 ## Suno songs
 
-**Mouth instruments only when they fit** (Dan, 2026-11-14): whistling isn't in every song (not in Paradise Plunge),
-and a mouth instrument (whistling, harmonica, jaw harp, didgeridoo, pan flute, ocarina, melodica, kazoo, ...) is
-**not required** in a song — use one only when it feels right for that song, and don't lean on the same one
-everywhere. Current picks: theme harmonica + jaw harp, Paradise Plunge didgeridoo + pan flute (prehistoric
-jungle), menu ocarina + melodica, victory none.
+**Music rules for ShiftStorm (Dan, 2026-11-15):**
+- **No Tee'd Off music in ShiftStorm.** Every song is new, made by Dan in Suno. Remixes of Tee'd Off themes are possible
+  when Dan asks for one, but the default is a new song. (Tee'd Off sound effects and voices are still fine to reuse.)
+- **Vocals as an instrument** — wordless chants, "whoa-oh" hooks, choir "ooh / aah", vocal chops, scat — is what Dan meant
+  by "instruments played with the mouth": some Tee'd Off courses used voices this way. Use it **on some songs, when it fits**,
+  not on every one. Real mouth-played instruments (harmonica, kazoo, pan flute, didgeridoo, jaw harp, ocarina, melodica,
+  whistling) are fine too when they suit the song — none of them is required, and don't lean on the same one everywhere.
+- Current picks: theme harmonica + jaw harp, Paradise Plunge didgeridoo + pan flute, menu ocarina + melodica, victory none;
+  the new coaster track uses **wordless vocal chants** as its hook.
 If a Suno take still adds whistling, add `no whistling` at the end of the Style and try again.
 
 Suno: Custom mode, paste the **Style**, **Instrumental: on**, use the **Title**. Download the MP3 and save it
 under exactly the file name below in **`C:\Users\danmo\ShiftStorm\Art\Incoming\Music\`**. Tell Code (or just leave
-it there: Code checks the folder) and it goes in; until then the Tee'd Off placeholder keeps playing.
+it there: Code checks the folder) and it goes in; until then a ShiftStorm song (the theme) stands in — never a Tee'd Off song.
 
 ### 0. Game theme song — `theme.mp3` (Dan, 2026-11-14: "a theme song for the game")
 The signature ShiftStorm tune for the title screen (and the credits). **Instrumental** — Dan: no lyrics on a song
@@ -70,6 +74,38 @@ that loops while someone sits in the menu. A big, catchy, hummable main melody d
   `short triumphant cartoon racing victory fanfare, instrumental, bright brass and xylophone, tribal drum roll and cymbal swell, marimba flourish, happy jungle celebration, then a short bouncy outro, major key, 120 bpm, 25 seconds`
 - **Length:** 20-40 s (Suno may make a longer take: Code keeps the first fanfare and fades it). **Plays once**, no
   loop. Again a Cover of song 1 keeps the melody if Suno allows it.
+
+### 4. Second track race song — `race_coaster.mp3` (Dan, 2026-11-15; the coaster track, working name "Coaster Coast")
+A new song for the seaside amusement-park track (roller coaster, log flume, Ferris wheel, fireworks, an aquarium under the
+pier). Not a Tee'd Off song. It uses **wordless vocal chants as an instrument** (not words), so **Instrumental: off** and the
+"lyrics" are only chant syllables.
+- **Title:** `Coaster Coast`
+- **Style:**
+  `upbeat cartoon racing game theme, seaside carnival funfair, thrill ride energy, surf rock twang guitar and bright boardwalk calliope organ, punchy brass stabs, snappy kit drums with big tom fills, bouncy bass, glockenspiel and xylophone sparkles, wordless group vocal chants used as an instrument, whoa-oh hooks and hey shouts, no sung words, playful and exciting, steady drive all the way, major key, 140 bpm, seamless loop`
+- **Lyrics** (chant syllables only; paste as is):
+```
+[Intro]
+[Instrumental]
+
+[Hook]
+Whoa-oh! Whoa-oh-oh!
+Whoa-oh! Hey! Hey!
+
+[Instrumental Break]
+
+[Hook]
+Whoa-oh! Whoa-oh-oh!
+Whoa-oh! Hey! Hey!
+
+[Instrumental]
+
+[Hook]
+Whoa-oh! Whoa-oh-oh!
+Whoa-oh! Hey!
+```
+- **Length:** 2-3 min. **Loop:** pick a take with no fade-out and no slow breakdown. If Suno sings real words, try another
+  take (or add `no lyrics, vocal chants only` to the Style).
+- Save as `Art/Incoming/Music/race_coaster.mp3`.
 
 ## Race caller: TeedOff Barker (Barnaby) — lower priority
 

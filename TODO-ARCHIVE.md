@@ -1239,3 +1239,131 @@ Run unattended; don't stop to ask; no visible window. Tee-dOff read-only.
 - Barker's dino lines: do they now come when you can see the dinosaur?
 - Frame rate on the Deck (the dinos cost ~1.4 ms on the PC; the Mangrove and the finish are the heaviest).
 
+## Current Objective — Round 9 (delivered 2026-11-15, build-11 / 0.8.2; status under Completed Tasks; waiting for Dan's review)
+
+**Dan's review of build 10 (0.8.1), 2026-11-14, quoted:**
+1. "The steering wheel is far too big. It takes up too much of the screen
+   when you choose first person pov."
+2. "She says 'that's not where I aimed' which doesn't make sense in the
+   context of driving." (`Resources/Audio/Voice/abigail/lines.json`: a
+   Tee'd Off golf line.)
+3. "The finish plays both the finish from Tee'd Off and the new one we
+   created for this game."
+(The dinosaurs from Round 8b: no complaint this time.)
+Run unattended; don't stop to ask; no visible window. Tee-dOff,
+chastain_rush, Hostile-Horizon read-only.
+
+1. **Steering mechanisms at a sensible size.** Real proportions to Abi and
+   the cockpit: in first person the car's wheel sits low in the view and
+   takes no more than about **15–20 % of the screen height**, the road ahead
+   clear. Same check for the boat helm, the plane stick and the sub levers.
+   Hands still on it (IK). Also check the chase views (not oversized there).
+   *Check:* first-person pictures of all four forms, wheel centred and at
+   full lock; report the % of screen each mechanism covers.
+2. **Every line must fit racing.** Go through **all** driver lines (Abi,
+   Rae, Chip, Vivi) and Barker's reused Tee'd Off clips: anything that only
+   makes sense in golf (aiming, shots, putts, clubs, holes, the green,
+   "fore" used as a golf call, caddies, par…) is removed from the racing
+   pools. Replace them with new racing lines in the same voices (ElevenLabs,
+   as in Round 8), in each character's style. Keep the short mess-up yells
+   ("Noooo!", "Oh no!"). List every line removed and every line added.
+   *Check:* a written list of all lines now in use, per character, and
+   each one makes sense in a race.
+3. **One finish sound.** The finish plays both Tee'd Off's finish jingle and
+   our own (Dan's "Chequered Flag" / the new finish). Keep only ShiftStorm's
+   own; remove Tee'd Off's jingle from the finish. Then audit every race
+   event (GO, gates, form changes, loop, jumps, penalties, finish, results)
+   for any other doubled sound (two sounds for one event), and fix them.
+   *Check:* an event-by-event list of which sound(s) play; none plays two
+   music/jingle cues at once.
+3b. **The crowd from Gridiron Glory** (Dan, 2026-11-14: "I didn't even notice a
+   crowd. But can we take the crowd work from Gridiron Glory? There was
+   already extensive work to make the crowd look more real."). Find Dan's
+   Gridiron Glory project (`C:\Users\danmo\footballGame`, confirmed by Dan; read-only —
+   copy, never edit) and port its crowd system (models,
+   animation, instancing / LOD, colours, cheering) into the grandstands at the
+   start / finish and anywhere else a crowd fits (the loop, the waterfall
+   landing). Dress them for Jurassic Par where cheap. The crowd should be
+   **noticeable** as you pass (same idea as the dinos: big enough, close
+   enough, reacting — cheering, waving). Keep frame cost in check (report).
+   *Check:* player-view pictures at the grandstands; crowd counted and
+   animated; frame time before / after.
+3c. **Three new vehicle designs, ready for Dan's models.** Dan drew one form
+   each: **Hot Rod** (lavender; his image is the sub), **Scrambler** (a
+   motorcycle; his image is the land form) and **Grand Prix** (1930s
+   maroon / brass racer; his image is the car). Prompts for the other nine
+   forms are in `Docs/MODELS-NEEDED.md`; import whatever arrives
+   (`Tools/import_vehicles.py`), show them in the Garage, and give them to the
+   rivals (suggested: Hot Rod → Vivi, Grand Prix → Rae, Scrambler → Chip; Dan
+   to confirm). For the **Scrambler**: a motorcycle needs its own feel and
+   look on land — the rider sits astride (pose / IK on the handlebars),
+   the bike leans into turns (visual lean; same handling stats), the
+   kickstand is hidden while riding; its **sub form is enclosed in a clear
+   glass sphere** (Dan) mounted on the model's chrome ring, made in the
+   game like the other canopies. Steering mechanism per design (Round 8):
+   handlebars for the Scrambler.
+   *Check:* Garage pictures of every form that has arrived; the Scrambler's
+   lean and rider pose; the glass sphere on its sub.
+4. **Small fold-in: the Round 1 test strip's E6 check** has failed since
+   Round 5's speed-up (the strip's wheels-down zone fires 1 m past the ramp).
+   Fix the strip so its check passes again (the real course already passes).
+5. **Wrap-up, release build 11 (0.8.2).** Regression + 50-lap AI soak
+   (Normal); per-item status, "For Dan to check", update `CLAUDE.md`,
+   commit, push, publish, clean the disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (fill in at end of round)
+- See "For Dan to check (Round 9)" under Completed Tasks.
+
+### Draft, not chosen (2026-11-15): Lantern Reef as the second track
+4. **A second track: Lantern Reef, in Tee'd Off's Lost City Links** (Dan,
+   2026-11-15: "I want to go ahead and put in a new track this round. I am
+   going to bed so I don't really care to have a short round."). Dan didn't
+   pick which of the concept's three; the planning chat chose **Lantern
+   Reef** because Tee'd Off's Lost City Links (`AtlantisBuilder.cs`,
+   `ArtStyle_Atlantis`: sea floor, branching and fan coral, kelp forests,
+   white marble temples and columns, city gates, crystals, a galleon wreck,
+   the glass bubble, Ollie the Octopus host, `course_atlantis` music) is the
+   richest ready-made setting for it. Concept: *"Lantern Reef — boating and
+   diving: surface navigation gives way to luminous tunnels with vertical
+   splits."* Do it after items 1–3.
+   - **Route:** about 2 min on the safe line. Mostly **boat and sub** (the
+     concept's idea): a lantern-lit harbour start on the water at dusk, a
+     surface run between reef islands and marble ruins, dives into glowing
+     tunnels and the sunken city, **vertical splits** (an upper and a lower
+     tunnel — real route choices like the Lake Jump), surfacing through a
+     temple courtyard, a final surface sprint to the finish. Keep a **short
+     car section** (the harbour quay / a causeway with one plain jump) only
+     if it makes the start and finish work better — say what you chose.
+   - **Everything Paradise Plunge has, on this track too:** ordered gates and
+     near-miss rule, route guides / arrow / route strip, AI rivals (all
+     difficulties, they handle both splits), split screen, camera views,
+     recovery anchors, no stranding spots (item 1's rule), the crowd (on
+     the harbour quay / boats), TeedOff Barker with **lines for this track**
+     (ElevenLabs, his voice), driver reactions, steering mechanisms,
+     playtest logs, time trial and best times per track.
+   - **Life instead of dinos:** the reef's equivalent of the dino
+     set-pieces, big and close like Round 8b (8 % of screen height for 1 s
+     rule): whales or a giant turtle gliding past, manta rays, schools of
+     glowing fish, jellyfish lanterns, Ollie the Octopus waving from a
+     temple, a sea serpent arching over a tunnel mouth. Tee'd Off models
+     first (read-only), stand-ins otherwise; anything essential that's
+     missing → Tripo prompts in `Docs/MODELS-NEEDED.md` for Dan (keep it to
+     2–3; Dan is careful with credits), don't wait.
+   - **Look:** Lost City Links' toon look ported to URP: lantern glow at
+     dusk on the surface, luminous coral and crystals in the tunnels, light
+     shafts, bubbles; readable first (the next gate and the split choices
+     always clear).
+   - **Music:** `course_atlantis` as the placeholder; add a **Suno prompt for
+     a Lantern Reef race song** to `Docs/AUDIO-NEEDED.md` for Dan, in the
+     same style as Paradise Plunge's (instrumental, loops, mouth instruments
+     only if they fit — not whistling, not the didgeridoo again).
+   - **Menu:** pick the course (Paradise Plunge / Lantern Reef) for Race,
+     Time Trial and 2 Players; Barker's results line names the course.
+   *Check:* the check pilot's lap (segment times), both splits timed, AI
+   25 laps per split with 0 stuck, 50-lap AI soak on the new track,
+   set-piece visibility per segment, split-screen lap, frame time (PC) and
+   a Deck check list; player-view pictures of every segment — look at them
+   before calling it done.

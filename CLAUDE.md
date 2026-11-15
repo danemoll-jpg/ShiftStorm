@@ -23,7 +23,9 @@ submarine during a race. Current target: Paradise Plunge proof of concept.
   the Tripo web app** — there are no Tripo API credits, so never call a Tripo
   API. Meshy is not used any more.
 - **Animation:** Mixamo (Dan rigs and downloads; FBX, Humanoid in Unity).
-- **Music:** Suno (long), ElevenLabs (short stings). **SFX:** ElevenLabs.
+- **Music:** Suno (long), ElevenLabs (short stings). **SFX:** ElevenLabs. **No Tee'd Off music in ShiftStorm**
+  (Dan, 2026-11-15): every song is Dan's own new Suno song (remixes only if he asks). New environments too: same
+  universe and reused models / systems, but not Tee'd Off's places.
 - All paid licenses; generated assets can be used freely. Don't ask about the
   toolchain.
 
@@ -295,4 +297,7 @@ Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes b
     to `Tools/Characters/rig_dino.py`) -> `Resources/Dinos/<style>_rig.bytes`; stand-ins only if a rig is missing.
   - Checks: `round9` = `steering` + `sounds` + `crowd` + `bike` (`-testDesign Scrambler`) + `designs` (Garage + who races what).
 
-Round 9 delivered as build 11 (0.8.2), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").
+Round 9 delivered as build 11 (0.8.2), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").Current objective: **Round 10** — remove the wall before the loop where racers get stranded (and any other stranding spot on
+the lap), remove the test strip and lanes from the game (checks move onto Paradise Plunge), Abi's hands on the Scrambler's bars, and a
+second track: **Coaster Coast** (working name; a seaside boardwalk amusement park with a roller coaster, all four forms;
+a new environment, not Tee'd Off's). Release build 12 (0.9.0). See `TODO.md`.

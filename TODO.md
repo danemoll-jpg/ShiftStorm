@@ -288,88 +288,118 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 9 (delivered 2026-11-15, build-11 / 0.8.2; status under Completed Tasks; waiting for Dan's review)
+## Current Objective — Round 10: no stranding walls, test tracks out, a roller-coaster track
 
-**Dan's review of build 10 (0.8.1), 2026-11-14, quoted:**
-1. "The steering wheel is far too big. It takes up too much of the screen
-   when you choose first person pov."
-2. "She says 'that's not where I aimed' which doesn't make sense in the
-   context of driving." (`Resources/Audio/Voice/abigail/lines.json`: a
-   Tee'd Off golf line.)
-3. "The finish plays both the finish from Tee'd Off and the new one we
-   created for this game."
-(The dinosaurs from Round 8b: no complaint this time.)
-Run unattended; don't stop to ask; no visible window. Tee-dOff,
-chastain_rush, Hostile-Horizon read-only.
+**Dan's notes on build 11 (0.8.2), 2026-11-15, quoted:**
+1. "When you first start this level, before the loop it is very easy to land
+   on the other side of the wall and impossible to get back over without
+   resetting. Can we remove that wall?"
+2. "Let's also clean up all the test tracks. We know the concepts are
+   working, no need to have those there cluttering up the space."
+Run unattended; don't stop to ask; no visible window. Read-only references
+as before.
 
-1. **Steering mechanisms at a sensible size.** Real proportions to Abi and
-   the cockpit: in first person the car's wheel sits low in the view and
-   takes no more than about **15–20 % of the screen height**, the road ahead
-   clear. Same check for the boat helm, the plane stick and the sub levers.
-   Hands still on it (IK). Also check the chase views (not oversized there).
-   *Check:* first-person pictures of all four forms, wheel centred and at
-   full lock; report the % of screen each mechanism covers.
-2. **Every line must fit racing.** Go through **all** driver lines (Abi,
-   Rae, Chip, Vivi) and Barker's reused Tee'd Off clips: anything that only
-   makes sense in golf (aiming, shots, putts, clubs, holes, the green,
-   "fore" used as a golf call, caddies, par…) is removed from the racing
-   pools. Replace them with new racing lines in the same voices (ElevenLabs,
-   as in Round 8), in each character's style. Keep the short mess-up yells
-   ("Noooo!", "Oh no!"). List every line removed and every line added.
-   *Check:* a written list of all lines now in use, per character, and
-   each one makes sense in a race.
-3. **One finish sound.** The finish plays both Tee'd Off's finish jingle and
-   our own (Dan's "Chequered Flag" / the new finish). Keep only ShiftStorm's
-   own; remove Tee'd Off's jingle from the finish. Then audit every race
-   event (GO, gates, form changes, loop, jumps, penalties, finish, results)
-   for any other doubled sound (two sounds for one event), and fix them.
-   *Check:* an event-by-event list of which sound(s) play; none plays two
-   music/jingle cues at once.
-3b. **The crowd from Gridiron Glory** (Dan, 2026-11-14: "I didn't even notice a
-   crowd. But can we take the crowd work from Gridiron Glory? There was
-   already extensive work to make the crowd look more real."). Find Dan's
-   Gridiron Glory project (`C:\Users\danmo\footballGame`, confirmed by Dan; read-only —
-   copy, never edit) and port its crowd system (models,
-   animation, instancing / LOD, colours, cheering) into the grandstands at the
-   start / finish and anywhere else a crowd fits (the loop, the waterfall
-   landing). Dress them for Jurassic Par where cheap. The crowd should be
-   **noticeable** as you pass (same idea as the dinos: big enough, close
-   enough, reacting — cheering, waving). Keep frame cost in check (report).
-   *Check:* player-view pictures at the grandstands; crowd counted and
-   animated; frame time before / after.
-3c. **Three new vehicle designs, ready for Dan's models.** Dan drew one form
-   each: **Hot Rod** (lavender; his image is the sub), **Scrambler** (a
-   motorcycle; his image is the land form) and **Grand Prix** (1930s
-   maroon / brass racer; his image is the car). Prompts for the other nine
-   forms are in `Docs/MODELS-NEEDED.md`; import whatever arrives
-   (`Tools/import_vehicles.py`), show them in the Garage, and give them to the
-   rivals (suggested: Hot Rod → Vivi, Grand Prix → Rae, Scrambler → Chip; Dan
-   to confirm). For the **Scrambler**: a motorcycle needs its own feel and
-   look on land — the rider sits astride (pose / IK on the handlebars),
-   the bike leans into turns (visual lean; same handling stats), the
-   kickstand is hidden while riding; its **sub form is enclosed in a clear
-   glass sphere** (Dan) mounted on the model's chrome ring, made in the
-   game like the other canopies. Steering mechanism per design (Round 8):
-   handlebars for the Scrambler.
-   *Check:* Garage pictures of every form that has arrived; the Scrambler's
-   lean and rider pose; the glass sphere on its sub.
-4. **Small fold-in: the Round 1 test strip's E6 check** has failed since
-   Round 5's speed-up (the strip's wheels-down zone fires 1 m past the ramp).
-   Fix the strip so its check passes again (the real course already passes).
-5. **Wrap-up, release build 11 (0.8.2).** Regression + 50-lap AI soak
-   (Normal); per-item status, "For Dan to check", update `CLAUDE.md`,
+1. **Remove the stranding wall before the loop.** On the Beach Promenade
+   between the start and the loop (around the Creek Jump / Lake Jump
+   landings and the bronto neck bridge), racers land on the far side of a
+   wall / barrier and can't get back. Remove that wall. Where the road still
+   needs an edge, use something you can't land behind: a low kerb / rumble
+   strip, open sand that drives back onto the road, or a slope. Then **check
+   the whole lap** for any other place where a jump, the loop exit, a
+   landing or a wall bounce can leave you on the wrong side of a barrier
+   with no way back — fix each (remove, lower, or make the ground there
+   lead back to the road). Automatic recovery stays as the last resort,
+   not the answer.
+   *Check:* a sweep of scripted bad landings off every jump and the loop
+   (left / right / long / short, car and fly lines): 0 strandings — every
+   case either drives back onto the road or is clearly on it; list each
+   barrier changed with before / after pictures.
+2. **Remove the test tracks from the game.** The Round 1 strip and the four
+   mode lanes (`-course 0..4`, D-pad left / right / F3 / F4, the menu's test
+   courses) go: out of the menu, out of the build, the D-pad course switch
+   unbound. Paradise Plunge is the only course. **Keep the automated
+   checks:** move every check that used the strip or lanes (Round 1 lanes,
+   E1–E6 edge cases, slow fps, etc.) onto the real course (or a hidden,
+   check-only start point on it), so the regression suite still covers the
+   same things. Delete the dead code and assets; update the Controls table
+   and Commands in `CLAUDE.md`.
+   *Check:* the menu lists no test courses; the full regression suite
+   passes on Paradise Plunge alone; build size before / after.
+3. **Small fold-in from Round 9's own notes:** on the Scrambler, Abi's hands
+   are 10–20 cm short of the handlebars in some forms — put them on the
+   grips in every form (IK target / seat position).
+   *Check:* pictures of each Scrambler form, hands on the grips.
+4. **A second track: "Coaster Coast" (working name) — a seaside amusement
+   park with a roller coaster, all four forms** (Dan, 2026-11-15: "I have
+   been wanting to do a roller coaster so let's go with this one."). Do it
+   after items 1–3.
+   - **Not Tee'd Off again (Dan):** "this is not Tee'd Off. Yes, it is the
+     same universe ... and we certainly use assets we have already built for
+     the game (and others) ... I want to have some different environments."
+     So: **reuse models and systems** from Tee'd Off, Chastain Rush,
+     Hostile Horizon, Gridiron Glory where they help (read-only copies), but
+     the **place is new** — not Tee'd Off's Funland layout or look. Setting:
+     a seaside **boardwalk amusement park on a pier**, sunset turning to night
+     during the lap (neon, string lights, fireworks) — a clear contrast to the
+     jungle of Paradise Plunge. Same Tee'd Off toon style and humour.
+   - **Route (~2 min safe line, all four forms):**
+     - **Car on the roller coaster:** the road *is* a giant coaster track —
+       launch, big drops, banked turns, a loop and a corkscrew, airtime hills
+       (car rides the rails like the Round 7 loop; never stranded — item 1's
+       rule). One plain big jump between two coaster sections.
+     - **Boat down the log flume:** a splash-down drop into a winding flume
+       through the park, then out onto the sea beside the pier.
+     - **Plane over the park:** launch off the coaster's top into flight over
+       the midway — through the Ferris wheel, around the helter-skelter,
+       through the fireworks (rings / gates), with a **choice jump** (stay on
+       the coaster or fly) whose paths really split.
+     - **Sub under the pier:** dive between the pier's legs into a giant
+       aquarium / sunken carnival (old carousel, rides on the sea floor),
+       surface at a water-ride splash pool and land back on the boardwalk
+       for the finish.
+     - At least one split path in the water / under the pier too.
+   - **Life and set-pieces** (Round 8b's rule: big, close, in front, 8 % of
+     screen height for 1 s): the Ferris wheel turning right beside you,
+     fireworks bursting overhead, the crowd on the boardwalk and in coaster
+     cars (Gridiron Glory crowd), a giant mascot balloon, dolphins / whales /
+     a giant octopus in the aquarium, gulls. Models: reuse first; anything
+     essential missing → **at most 2–3** Tripo prompts in
+     `Docs/MODELS-NEEDED.md` for Dan (he's careful with credits), stand-ins
+     meanwhile, don't wait.
+   - **Everything Paradise Plunge has:** ordered gates, near-miss rule, route
+     guides / arrow / route strip, AI on all difficulties (they ride the
+     coaster and pick splits), split screen, camera views, recovery, the
+     crowd, TeedOff Barker with **lines for this track** (ElevenLabs, his
+     voice), driver reactions, steering mechanisms, playtest logs, time
+     trial and best times per track.
+   - **Music:** **no Tee'd Off music** (Dan). Dan's new song `race_coaster.mp3`
+     (prompt in `Docs/AUDIO-NEEDED.md`, song 4); until it arrives, a ShiftStorm
+     song stands in. Also: make sure no Tee'd Off song plays anywhere in the
+     game any more (e.g. `CourseAudio.cs` falls back to `course_jurassic`):
+     fall back to ShiftStorm's own songs instead.
+   - **Menu:** pick the course (Paradise Plunge / Coaster Coast) for Race,
+     Time Trial and 2 Players; Barker's results line names the course.
+   - The name "Coaster Coast" is a working name; Dan may rename it.
+   *Check:* check-pilot lap with segment times, every split timed, the
+   coaster sections at full / slow / very slow speed (no stranding, no
+   fall-through), AI 25 laps per split with 0 stuck, a 50-lap AI soak on
+   the new track, set-piece visibility per segment, a split-screen lap,
+   frame time (PC) + a Deck check list; player-view pictures of every
+   segment — look at them before calling it done.
+5. **Regression (both tracks) + 50-lap AI soak (Normal) on each track,
+   wrap-up, release build 12 (0.9.0).** Per-item status, "For Dan to check", update `CLAUDE.md`,
    commit, push, publish, clean the disk.
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- See "For Dan to check (Round 9)" under Completed Tasks.
+- …
 
 ## Next Steps (Do Not Start Yet)
-- **More tracks** from the concept: Clockwork Cascade (driving + boating),
-  Cloud Orchard (driving + flying), Lantern Reef (boating + diving), each in
-  a Tee'd Off setting — after Paradise Plunge is finished.
+- **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),
+  Clockwork Cascade (car + boat), Cloud Orchard (car + plane). Dan picks;
+  new environments, not Tee'd Off's (Dan, 2026-11-15).
 - **Playtest itself** (concept's evaluation plan): a few players of mixed
   skill, first attempt + three practice runs, per-mode questions, using the
   Round 8 logs. Dan runs it when he's ready.
