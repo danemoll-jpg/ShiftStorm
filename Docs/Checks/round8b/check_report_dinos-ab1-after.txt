@@ -1,0 +1,94 @@
+ShiftStorm check 'dinos', 2026-11-14 20:20, build 0.8.1, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+DINOS (Round 8b): 56 dinosaurs and skeletons (bronto 26, trike 6, trex 2, ptero 12, raptor 3, plesio 2, skeleton 5), 16 set-pieces; stand-ins (no model yet): raptor, plesio
+  sizes: bronto 16-28 m tall, trike 4.8-7 m tall, trex 15-15 m tall, ptero 2.6-9.7 m tall (30 m wingspan), raptor 4.2-5 m tall, plesio 24-24 m tall; rigs: bronto 20.7k tris, trex 20.7k tris, trike 20.9k tris, ptero 20.5k tris
+  placement notes: none
+  ROUTE CLEARANCE: the nearest any standing / walking dinosaur's feet come to the road's edge (pterodactyl circles: to the line in 3D): 5.0 m (cliff T. rex)  PASS; pacers: raptor 1 17 m from the line, raptor 2 21 m from the line, raptor 3 24 m from the line, flight ptero (alongside) 20 m from the line, 5 m over it, flight ptero (across) 48 m from the line, 14 m over it, lagoon long-neck 25 m from the line, charging trike 27 m from the line
+LAP: Paradise Plunge, line 7358 m, 11 gates, 8 segments, 21 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 124.53 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            18.4 s    20 s  -1.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.2 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.5 s    20 s  -0.5
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.4 s    25 s  -7.6
+  8 Waterfall Return    Dive-boat-drive    11.2 s    15 s  -3.8
+  top speed per form on the lap: Drive 76.2 m/s (170 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 49.4 m/s (110 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 124.53] finish in 124.53 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 7.93 ms, 95th pct 12.51 ms, 99th pct 29.83 ms, worst 509.83 ms over 9151 frames (206 over 16.7 ms); peak draw calls 0, batches 0, triangles 5899k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      7.52 /  12.24 /  23.62 ms       0 draws    4964k tris
+  Cliffside Climb      5.63 /   9.25 / 115.92 ms       0 draws    4619k tris
+  Sky Arch             6.83 /  10.68 /  72.91 ms       0 draws    5899k tris
+  Lagoon Landing       5.79 /   8.74 / 509.83 ms       0 draws    2229k tris
+  Mangrove Run         8.65 /  11.95 /  42.76 ms       0 draws    5657k tris
+  Sunken Gateway      11.44 /  13.82 / 350.10 ms       0 draws    4402k tris
+  Coral Vault         10.49 /  18.63 / 484.07 ms       0 draws    2446k tris
+  Waterfall Return    18.14 /  53.53 / 201.61 ms       0 draws    5033k tris
+  HITCHES (item 8): engine markers read (development build); blamed (largest marker of the frame before): Update.ScriptRunBehaviourUpdate x108, FixedUpdate.PhysicsFixedUpdate x43, GC.Collect x1, FixedUpdate.ScriptRunBehaviourFixedUpdate x1
+    60 ms at 22.4 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 21; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    58 ms at 22.4 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 24; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    102 ms at 22.7 s (Cliffside Climb): FixedUpdate.PhysicsFixedUpdate 29, Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    79 ms at 22.8 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 10, FixedUpdate.PhysicsFixedUpdate 3; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    134 ms at 24.9 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 15; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    110 ms at 25.1 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 11, FixedUpdate.PhysicsFixedUpdate 9; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    118 ms at 26.5 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 30; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    88 ms at 35.4 s (Sky Arch): Update.ScriptRunBehaviourUpdate 10; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    88 ms at 35.7 s (Sky Arch): Update.ScriptRunBehaviourUpdate 36; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    57 ms at 38.0 s (Sky Arch): Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    134 ms at 46.6 s (Sky Arch): Update.ScriptRunBehaviourUpdate 21; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    55 ms at 62.3 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 10; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    64 ms at 62.4 s (Lagoon Landing): FixedUpdate.PhysicsFixedUpdate 37, Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    664 ms at 62.7 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    125 ms at 63.0 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 11, FixedUpdate.PhysicsFixedUpdate 9; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    194 ms at 63.2 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    485 ms at 63.5 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 8; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    94 ms at 63.6 s (Lagoon Landing): FixedUpdate.PhysicsFixedUpdate 10, Update.ScriptRunBehaviourUpdate 9, PostLateUpdate.PlayerUpdateCanvases 4; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    79 ms at 63.7 s (Lagoon Landing): FixedUpdate.PhysicsFixedUpdate 26, Update.ScriptRunBehaviourUpdate 17, FixedUpdate.ScriptRunBehaviourFixedUpdate 2; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    63 ms at 63.8 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 34, PreLateUpdate.ScriptRunBehaviourLateUpdate 9; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    84 ms at 64.2 s (Lagoon Landing): Update.ScriptRunBehaviourUpdate 23; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    111 ms at 69.3 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 20; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    82 ms at 69.4 s (Mangrove Run): FixedUpdate.PhysicsFixedUpdate 81, Update.ScriptRunBehaviourUpdate 20, FixedUpdate.ScriptRunBehaviourFixedUpdate 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    50 ms at 69.4 s (Mangrove Run): FixedUpdate.PhysicsFixedUpdate 27, Update.ScriptRunBehaviourUpdate 19; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    53 ms at 69.5 s (Mangrove Run): Update.ScriptRunBehaviourUpdate 29; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    149 ms at 91.2 s (Sunken Gateway): Update.ScriptRunBehaviourUpdate 9; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    359 ms at 91.5 s (Sunken Gateway): FixedUpdate.PhysicsFixedUpdate 22, Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    66 ms at 91.9 s (Sunken Gateway): FixedUpdate.PhysicsFixedUpdate 14, Update.ScriptRunBehaviourUpdate 11, FixedUpdate.ScriptRunBehaviourFixedUpdate 4; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    86 ms at 92.0 s (Sunken Gateway): FixedUpdate.PhysicsFixedUpdate 14, Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    69 ms at 92.2 s (Sunken Gateway): Update.ScriptRunBehaviourUpdate 7; GC collections 0, allocated last frame 0 KB, heap 5 MB
+  frames over 50 ms during the lap: 153; worst: 785 ms at 107.3 s (Coral Vault, after "shortcut Coral Vault tunnel: left without finishing it (38 m off its line)"); 664 ms at 62.7 s (Lagoon Landing, after "gate G4 lagoon landing passed (5/11)"); 485 ms at 63.5 s (Lagoon Landing, after "gate G4 lagoon landing passed (5/11)"); 468 ms at 107.9 s (Coral Vault, after "shortcut Coral Vault tunnel: left without finishing it (38 m off its line)"); 408 ms at 102.5 s (Coral Vault, after "split Sunken Gateway: 9.47 s (target 10 s), total 95.97 s"); 375 ms at 107.7 s (Coral Vault, after "shortcut Coral Vault tunnel: left without finishing it (38 m off its line)")
+RESULTS PASS: shown True, lap 124.53 s, 8 splits, new best True, best on file 124.53 s (local/round8b/save\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 124.53 s
+  DINOS SEEN per segment (item 2: >= 8 % of the screen height for >= 1 s, chase view, the lap pilot at racing speed):
+    segment            seen  longest   time big   moments of 1 s+ (seconds, peak share of the screen height)
+    Beach Promenade       9    3.5 s    24.9 s   lake bronto 1 3.5 s 100%, neck bridge west 3.1 s 100%, neck bridge east 3.1 s 100%, raptor 1 2.5 s 61%, lake bronto 2 2.4 s 58%, canyon long-necks 1 2.1 s 50%, raptor 2 1.8 s 34%, canyon long-necks 2 1.8 s 82%
+    Cliffside Climb       3    3.5 s     8.6 s   climb cliff bronto 3.5 s 35%, corner1 bronto 3.2 s 33%, cliff T. rex 1.9 s 33%
+    Sky Arch              8    9.6 s    28.2 s   flight ptero (across) 9.6 s 32%, flight ptero (alongside) 5.5 s 43%, valley herd 2 1.9 s 35%, valley herd 1 1.7 s 38%, standing bronto 1.6 s 18%, gateway pool bronto 1.5 s 46%, valley herd 3 1.5 s 30%, standing bronto 1.4 s 26%
+    Lagoon Landing        5   11.9 s    27.4 s   lagoon long-neck 11.9 s 100%, lagoon bronto 3 6.7 s 100%, lagoon bronto 1 3.7 s 100%, lagoon bronto 2 3.4 s 100%, mangrove bronto bend2 1.7 s 9%
+    Mangrove Run          7    6.2 s    34.0 s   mangrove bronto bend2 6.2 s 100%, charging trike 5.6 s 71%, mangrove bronto bend1 5.1 s 100%, mangrove bronto bend3 5.0 s 100%, mangrove bronto bend4 3.8 s 100%, pool long-neck (rising) 2.5 s 20%, gateway pool bronto 2.0 s 20%, gateway pool bronto 1.1 s 31%
+    Sunken Gateway        2    2.8 s     5.2 s   gateway pool bronto 2.8 s 100%, pool long-neck (rising) 2.0 s 100%
+    Coral Vault           5    2.2 s    10.1 s   skeleton 5 2.2 s 59%, skeleton 4 2.1 s 100%, skeleton 6 2.0 s 100%, skeleton 7 1.9 s 100%, skeleton 8 1.9 s 100%
+    Waterfall Return      3    3.4 s     8.0 s   landing bronto west 3.4 s 100%, landing bronto east 3.0 s 100%, pool bronto 1.1 s 95%
+  DINOS PASS: segments with a moment of 2 s+ big on screen: 8 of 8
+  SET-PIECES (16): neck bridge west (Beach Promenade): 3.1 s, peak 100%; neck bridge east (Beach Promenade): 3.1 s, peak 100%; raptor 1 (Beach Promenade): 2.5 s, peak 61%; raptor 2 (Beach Promenade): 1.8 s, peak 34%; raptor 3 (Beach Promenade): 0.9 s, peak 22%; corner1 bronto (Cliffside Climb): 3.2 s, peak 33%; climb cliff bronto (Cliffside Climb): 3.5 s, peak 35%; cliff T. rex (Cliffside Climb): 1.9 s, peak 33%; flight ptero (alongside) (Sky Arch): 5.5 s, peak 43%; flight ptero (across) (Sky Arch): 9.6 s, peak 32%; lagoon bronto 1 (Lagoon Landing): 3.7 s, peak 100%; lagoon long-neck (Lagoon Landing): 11.9 s, peak 100%; mangrove bronto bend2 (Mangrove Run): 6.2 s, peak 100%; charging trike (Mangrove Run): 5.6 s, peak 71%; pool long-neck (rising) (Sunken Gateway): 2.5 s, peak 100%; landing bronto west (Waterfall Return): 3.4 s, peak 100%
+  BARKER's dinosaur lines (said only while one of that kind is big on screen): 5 in the lap, 5 with it >= 8 % at that moment  PASS: raptor 20%, ptero 8%, trex 18%, plesio 32%, skeleton 13%
+  T. rex roars 1, last camera shake yes
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.27  FOV 90.0  particles 80  speed 102 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.24  FOV 90.0  particles 139  speed 100 % of top
+  Dive  pitch 1.65  wind 0.17  FOV 90.0  particles 112  speed 112 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 11.08 ms, 95th pct 19.98 ms, 99th pct 63.12 ms, worst 785.01 ms over 11603 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.6  0.617 s  frames worst 87.98 / mean 15.14 ms
+  lap          Fly->Boat   z  -606.3  0.606 s  frames worst 17.29 / mean 8.08 ms
+  lap          Boat->Dive  z  -202.4  0.610 s  frames worst 18.20 / mean 10.71 ms
+  lap          Dive->Boat  z  -466.7  0.613 s  frames worst 220.07 / mean 52.09 ms
+  lap          Boat->Drive z  -304.4  0.609 s  frames worst 74.33 / mean 21.05 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: skipped (Barker talking); win: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -57,12 +57,18 @@ namespace ShiftStorm
             ["fill"] = (7, 0),
         };
         // landmarks along the lap: (pool, mark, metres after it) for the first person's racer, once a lap, low priority (Round 8 item 1: the dinosaurs)
+        // Round 8b: the dinosaur lines are no longer said at a place on the lap but only while that kind of dinosaur is big on the player's
+        // screen (DinoActor.BigShare of its height for DinoHeld s; DinoLines), once a race each
         static readonly (string pool, string mark, float at)[] Landmarks =
         {
-            ("bronto", "promMid", -60), ("ptero", "loopApp", -30), ("trex", "climbMid", -120), ("raptor", "climbMid", 140), ("arch", "arch", -200),
-            ("nest", "arch", 60), ("lagoon", "splash", -60), ("plesio", "splash", 120), ("mangrove", "bend1", -40), ("trike", "mangMid", -30),
-            ("gateway", "portal", -70), ("vault", "vaultStart", 10), ("skeleton", "hi2", -40), ("waterfall", "rampLip", -45),
+            ("arch", "arch", -200), ("nest", "arch", 60), ("lagoon", "splash", -60), ("mangrove", "bend1", -40),
+            ("gateway", "portal", -70), ("vault", "vaultStart", 10), ("waterfall", "rampLip", -45),
         };
+        static readonly string[] DinoPools = { "bronto", "trex", "raptor", "trike", "ptero", "plesio", "skeleton" };
+        const float DinoHeld = .5f;
+        public static bool IsDinoPool(string pool) => System.Array.IndexOf(DinoPools, pool) >= 0;
+        // every dinosaur line said: when, which, how big that kind was on screen at that moment (the check reads it)
+        public static readonly List<(float t, string pool, float share)> DinoLines = new List<(float, string, float)>();
         const float AnyGap = 1.2f;
 
         public static Caller Make(Game g)
@@ -241,6 +247,15 @@ namespace ShiftStorm
         void LandmarkPass(ShiftVehicle h)
         {
             if (h.Course != game.Courses[0] || h.Holding) return;
+            if (h == game.Player && game.Cam)
+            {
+                DinoActor.Track(game.Cam);
+                foreach (var pool in DinoPools)
+                {
+                    string key = "1" + pool; if (marksDone.Contains(key) || !pools.ContainsKey(pool)) continue;
+                    if (DinoActor.BigOnScreen(pool, DinoHeld)) { marksDone.Add(key); pendingMark = pool; pendingUntil = Time.time + 4f; break; }
+                }
+            }
             foreach (var lm in Landmarks)
             {
                 if (!ParadisePlunge.Marks.TryGetValue(lm.mark, out var m)) continue;
@@ -250,7 +265,12 @@ namespace ShiftStorm
         }
         string pendingMark = ""; float pendingUntil;
         // a landmark seen in the last 5 s: said now if he is free
-        bool Landmark(ShiftVehicle h) { if (pendingMark == "" || Time.time > pendingUntil) return false; var p = pendingMark; pendingMark = ""; return Call(p, h); }
+        bool Landmark(ShiftVehicle h)
+        {
+            if (pendingMark == "" || Time.time > pendingUntil) return false; var p = pendingMark;
+            if (IsDinoPool(p) && game.Cam) { DinoActor.Track(game.Cam); var d = DinoActor.BigOnScreen(p, 0f); if (!d) return false; pendingMark = ""; if (!Call(p, h)) return false; DinoLines.Add((Time.time, p, d.ShareNow)); return true; }   // still big, or wait
+            pendingMark = ""; return Call(p, h);
+        }
         void LateUpdate() { if (pendingMark != "" && !Talking && Time.time > nextAny && Time.time > Driver.AnySpeakingUntil && Time.time <= pendingUntil) Landmark(game ? game.Player : null); }
 
         readonly Dictionary<ShiftVehicle, float> finishedAt = new Dictionary<ShiftVehicle, float>();

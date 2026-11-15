@@ -133,7 +133,7 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   inside rock / on the water surface). Round 7: `round7` = `loop` (full / slow / very slow entries, pictures at 4 points in every view, 25 AI
   runs, `-loopRuns N`) + `jumps` (each plain jump with and without boost, a slow one) + `choice` (car line vs fly line timed, LB late, LB
   elsewhere) + `caller` (a race: caller lines, effects, engine and music mix per form); `stuntlaps` (`-races N` x 4 AI, grid to G2, Normal).
-  Round 8: `round8` = `dinos` (the lap counting dinosaurs seen per segment, route clearance, roars; + Lap) + `barker` (a race: lines / min, longest
+  Round 8: `round8` = `dinos` (Round 8b: the lap counting dinosaurs >= 8 % of the screen height for >= 1 s per segment, set-pieces, Barker's dino lines, route clearance, roars; + Lap) + `barker` (a race: lines / min, longest
   silence, overlaps, repeats, would-be levels, mess-ups) + `places` (1st / middle / last: reaction clip + results line) + `steering` (every form,
   first person + chase, full left / centre / right, hands-to-grips) + `volumes` (the four volumes, a migrated old settings.json via `-saveDir`, the
   duck) + `choice8` (Lake Jump car vs fly + canyon / lake pictures); `hitch` = the lap alone (HitchProbe: engine markers per long frame,
@@ -261,6 +261,15 @@ Dan reviewed build 7: "everything good so far."
 
 Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes became Round 8.
 
-Round 8 delivered as build 9 (0.8.0), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").Current objective: **Round 8b — dinosaurs you can actually see** (Dan: "not really seeing dinosaurs"): cartoon-huge, close, in
-the forward view, one set-piece per segment, a stricter visibility check (8 % of screen height for 1 s). Release build 10 (0.8.1).
-See `TODO.md`.
+- **Round 8b (build 10, 0.8.1):** Dan on build 9: "not really seeing dinosaurs". Dinos cartoon-huge (brontos 26-28 m, T. rex 15 m, trikes
+  5.5-6 m, pterodactyls 20-30 m wingspan) and placed by distance along the route (`ParadisePlunge.Spot`: end of a straight / outside of a
+  bend, 15-60 m from the road's edge, facing the racers); 16 set-pieces (`DinoActor.setPiece`): the promenade's neck bridge (`Kind.Arch`),
+  raptors / a pterodactyl / the lagoon long-neck / a triceratops pacing the nearest person's racer (`Kind.Pace`), the T. rex dead ahead at
+  corner2, a long-neck rising out of the Sunken Gateway pool (`Kind.Rise`), 60 m skeletons along the Coral Vault walls (`DinoActor.Still`).
+  Visibility = `DinoActor.ScreenShare(cam)` (box share of the screen height; above-water part only; underwater fog 46 m); "seen" = 8 % for
+  1 s (`dinos` check: per segment, pictures at 25 %). Barker's dino pools are said only while that kind is big on screen
+  (`Caller.DinoPools`, `DinoActor.Track` / `BigOnScreen`). Dino shadows within 100 m, non-set-pieces drawn within 500 m. ~+1.4 ms 95th pct
+  on the PC.
+
+Round 8 delivered as build 9 (0.8.0); Round 8b delivered as build 10 (0.8.1), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item
+status and "For Dan to check").

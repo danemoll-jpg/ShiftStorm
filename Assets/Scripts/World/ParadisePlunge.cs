@@ -467,13 +467,13 @@ namespace ShiftStorm
             for (int i = 0; i < 30; i++) { float a = R(0, Mathf.PI * 2); var p = W(400 + Mathf.Cos(a) * 118, 1.4f, -460 + Mathf.Sin(a) * 175); Plant(p, (int)R(0, 2), R(1.2f, 1.8f)); }
             foreach (var kv in batches) kv.Value.Object(scen, $"Plants {kv.Key}", JurassicLook.VertexColored(true));
             // dinosaurs in the valley under the flight (scenery only), pterodactyls circling high
-            Dino("bronto", W(170, .4f, 330), 140, 18f);
-            Dino("bronto", W(300, .4f, 120), -40, 15f);
+            Dino("bronto", W(170, .4f, 330), 140, 28f);   // Round 8b: cartoon-huge
+            Dino("bronto", W(300, .4f, 120), -40, 26f);
             Dino("trike", W(285, .4f, 430), 200, 7f);
-            Dino("trex", W(130, .4f, -20), 60, 11f);
+            Dino("trex", W(130, .4f, -20), 60, 15f);
             for (int i = 0; i < 3; i++)
             {
-                var pg = Dino("ptero", W(260, 95 + i * 9, 300), 0, 3.5f);
+                var pg = Dino("ptero", W(260, 95 + i * 9, 300), 0, 8f);
                 if (pg) { var cir = pg.AddComponent<Circle>(); cir.center = W(240 + i * 30, 95 + i * 9, 260 + i * 40); cir.radius = (70 + i * 25) * S; cir.speed = .18f + i * .04f; cir.phase = i * 2.1f; }
             }
         }

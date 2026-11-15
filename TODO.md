@@ -20,6 +20,38 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 8b — dinosaurs you can actually see** (2026-11-14, release `build-10` / 0.8.1). Status below.
+
+### Round 8b delivery (2026-11-14) — status per item
+Evidence: `Docs/Checks/round8b/` (reports, set-piece pictures from the player's chase view). Every run: built exe, `-batchmode -mute`, no
+window, Below Normal, one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound never unmuted.
+1. **Big, close, in front — done.** Brontos 26-28 m (head well over the palms), the T. rex 15 m, trikes 5.5-6 m, pterodactyls 20-30 m
+   wingspan, raptors 4.2-5 m. Placed by distance along the route (`Spot`): at the end of a straight or the outside of a bend, 15-60 m from
+   the road's edge, facing the racers coming. Set-pieces (16): two brontos' **necks arching over the promenade road** like a bridge (between
+   the Creek Jump and the loop); **raptors running alongside** just outside the barriers after the start; a long-neck on the climb's cliff
+   top and one dead ahead at corner1; **the T. rex dead ahead on the rock at corner2**, roaring + camera shake (now only at a racer on the
+   road, not the plane); **a pterodactyl flying with you** and **one swooping across in front** during the flight; **brontos wading right by
+   the boat line** + a long-neck swimming with you in the lagoon; a long-neck on the outside bank of every Mangrove bend + **a triceratops
+   charging along the bank**; **a long-neck rising out of the Sunken Gateway pool** beside you + a bronto wading there; 60 m skeletons laid
+   along the Coral Vault's outside walls; **brontos either side of the waterfall landing road**. Feet keep >= 5 m from the road's edge
+   (check: 5.0 m, the T. rex); the pacers keep 17-27 m to the side (the pterodactyls 20-48 m and 5-14 m up). No colliders.
+   **Barker's dinosaur lines** (bronto, T. rex, raptor, trike, pterodactyl, long-neck, skeleton) are no longer said at a place on the lap but
+   only while that kind is >= 8 % of the screen for 0.5 s, and only if still big when he speaks: 5-6 lines a lap, **all said while it was big
+   (5/5, 6/6)**. Check: `dinos`.
+2. **Real visibility check — done, PASS 8 of 8.** A dino counts only while its box covers >= 8 % of the screen height in the chase view (in
+   the frame, not behind rock, only the part above water when the camera is above it, not past the underwater fog's 46 m) for >= 1 s; time
+   split per segment. Longest moment per segment: Promenade 3.5 s (9 dinos seen), Climb 3.5 s (3), Sky Arch 8.2 s (9), Lagoon 11.8 s (5),
+   Mangrove 6.2 s (7), Gateway 2.8 s (2), Coral Vault 2.2 s (5 skeletons), Waterfall 3.4 s (3). Pictures of every set-piece taken when it
+   fills a quarter of the screen height; **looked at** (14 kept in `Docs/Checks/round8b/`). Build 9's own check (any pixel in the frame)
+   was what passed before; its pictures showed the problem.
+3. **Performance — done, costs ~1.4 ms at the 95th percentile (PC).** Same lap, build 9 then build 10 back to back (render + GPU, 1280x800,
+   GTX 1660 Ti): 95th pct 9.37 / 12.51, **8.36 / 9.80**, 8.68 / 12.02 ms. The PC was busy (other programs ~60 % CPU): pairs 1 and 3's
+   "after" runs had 0.5 s stalls and +3 ms in the Coral Vault where nothing changed, so pair 2 is the fair one (+1.4 ms; Mangrove +2.9,
+   Waterfall +2.3, the rest +0.3-1.6). Still well under 16.7 ms. Trims: dino shadows within 100 m (140 before), non-set-piece dinos drawn
+   within 500 m (650), 3 filler trikes and a lake bronto dropped (56 dinos + 5 skeletons; build 9: 46), the roar clips loaded at start-up
+   (the first roar caused a 130 ms frame). Steam Deck numbers need Dan's Deck.
+4. **Wrap-up — done.** This status, "For Dan to check", `CLAUDE.md`, commit, push, release `build-10` (0.8.1), disk cleaned.
+
 - **Round 8 — Jurassic Par for real, louder Barker, driver reactions, steering** (2026-11-14, release `build-9` / 0.8.0). Status below; spec stays under Current Objective until Dan's review.
 
 ### Round 8 delivery (2026-11-14) — status per item
@@ -271,7 +303,14 @@ Run unattended; don't stop to ask; no visible window. Tee-dOff read-only.
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- …
+- Drive the promenade: the two brontos' necks over the road after the Creek Jump; raptors running beside you off the start.
+- The T. rex dead ahead at the top of the climb (corner2): big enough, and does its roar / camera shake land right?
+- The flight: the pterodactyl flying with you on the right, the second one swooping across in front after the arch. Too distracting?
+- Lagoon / Mangrove: brontos right beside the boat line, the long-neck swimming with you, the charging triceratops on the bank.
+- Sunken Gateway: the long-neck rising out of the pool beside you before the dive.
+- Coral Vault: the long skeletons on the cave walls — readable as skeletons, or just "ribs"?
+- Barker's dino lines: do they now come when you can see the dinosaur?
+- Frame rate on the Deck (the dinos cost ~1.4 ms on the PC; the Mangrove and the finish are the heaviest).
 
 ## Next Steps (Do Not Start Yet)
 - **More vehicle designs** (Dan, 2026-11-13: "we can add different designs

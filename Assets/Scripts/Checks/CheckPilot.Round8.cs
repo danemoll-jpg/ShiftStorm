@@ -20,57 +20,80 @@ namespace ShiftStorm
     //   round8 = dinos + barker + places + steering + volumes + choice8 (then tunnel / shortcuts / stuntlaps / split / soak run on their own)
     public sealed partial class CheckPilot
     {
-        readonly Dictionary<string, HashSet<DinoActor>> dinoSeen = new Dictionary<string, HashSet<DinoActor>>();
-        readonly Dictionary<string, int> dinoMax = new Dictionary<string, int>(); bool dinoCount; int dinoFrame;
+        // Round 8b item 2: a dinosaur counts as seen only while its box covers DinoActor.BigShare (8 %) of the screen's height in the
+        // player's chase view (in the frame, not behind rock, not lost in the underwater fog), and only a stretch of 1 s or more counts.
+        // Build 9's check counted anything in the frame at all, a few pixels tall: it passed when it should not have.
+        readonly Dictionary<DinoActor, (float run, float peak, string seg)> dinoRun = new Dictionary<DinoActor, (float, float, string)>();
+        readonly List<(string seg, DinoActor d, float len, float peak)> dinoRuns = new List<(string, DinoActor, float, float)>();
+        readonly HashSet<DinoActor> dinoShot = new HashSet<DinoActor>(); bool dinoCount;
         readonly List<(string scen, float prog, string name)> progShots = new List<(string, float, string)>();
+        static string ShotName(string x) => new string(x.Select(ch => char.IsLetterOrDigit(ch) ? char.ToLowerInvariant(ch) : '-').ToArray()).Replace("--", "-").Trim('-');
 
         void DinoSample()
         {
-            if (!dinoCount || ++dinoFrame % 6 != 0 || segNow == "") return;
-            var planes = GeometryUtility.CalculateFrustumPlanes(cam); var cp = cam.transform.position; int now = 0;
-            if (!dinoSeen.TryGetValue(segNow, out var set)) dinoSeen[segNow] = set = new HashSet<DinoActor>();
+            if (!dinoCount) return;
+            float dt = Time.deltaTime;
             foreach (var d in DinoActor.All)
             {
-                var r = d.Rend; if (!r || !r.enabled) continue;
-                var b = r.bounds; float dist = Vector3.Distance(cp, b.center);
-                if (dist > d.range || !GeometryUtility.TestPlanesAABB(planes, b)) continue;
-                // not behind rock: a ray to its middle or its top reaches it
-                bool seen = false;
-                foreach (var tp in new[] { b.center, b.center + Vector3.up * b.extents.y * .8f })
-                    if (!Physics.Linecast(cp, tp, out var hit, ShiftVehicle.GroundMask, QueryTriggerInteraction.Ignore) || hit.distance > dist - b.extents.magnitude) { seen = true; break; }
-                if (!seen) continue;
-                now++; set.Add(d);
+                float sh = segNow == "" ? 0 : d.ScreenShare(cam);
+                dinoRun.TryGetValue(d, out var r);
+                // a stretch is split where the segment changes (each segment gets the time spent in it)
+                if (r.run > 0 && (sh < DinoActor.BigShare || r.seg != segNow)) { if (r.run >= .2f) dinoRuns.Add((r.seg, d, r.run, r.peak)); r = default; dinoRun[d] = r; }
+                if (sh >= DinoActor.BigShare)
+                {
+                    if (r.run == 0) r.seg = segNow; r.run += dt; r.peak = Mathf.Max(r.peak, sh); dinoRun[d] = r;
+                    // a picture once it fills a fair part of the screen (a quarter of its height), set-pieces first
+                    if (r.run >= .3f && sh >= .25f && (d.setPiece || dinoShot.Count < 30) && dinoShot.Add(d)) Shot(0, $"dino-{ShotName(r.seg.Split(' ')[0])}-{ShotName(d.label)}");
+                }
             }
-            dinoMax[segNow] = Mathf.Max(dinoMax.TryGetValue(segNow, out var m) ? m : 0, now);
         }
 
         IEnumerator DinosCheck()
         {
-            dinoSeen.Clear(); dinoMax.Clear(); dinoCount = true;
+            dinoRun.Clear(); dinoRuns.Clear(); dinoShot.Clear(); Caller.DinoLines.Clear(); dinoCount = true;
             var c = game.Courses[0];
-            Line($"DINOS (item 1): {DinoActor.All.Count} dinosaurs ({string.Join(", ", DinoActor.All.GroupBy(d => d.style).Select(g => $"{g.Key} {g.Count()}"))}), {ParadisePlunge.Fossils.Count} nests / footprints / fossils; stand-ins (no model yet): {string.Join(", ", DinoActor.All.Where(d => d.standIn).Select(d => d.style).Distinct())}");
-            Line($"  rigs: {string.Join(", ", DinoRig.Styles.Select(s => $"{s} {DinoRig.Triangles(s) / 1000.0:0.0}k tris"))}; left out at build time (too near the line): {(ParadisePlunge.DinoSkipped.Count == 0 ? "none" : string.Join("; ", ParadisePlunge.DinoSkipped))}");
-            // clearance: every dinosaur's path against the racer line
+            Line($"DINOS (Round 8b): {DinoActor.All.Count} dinosaurs and skeletons ({string.Join(", ", DinoActor.All.GroupBy(d => d.style).Select(g => $"{g.Key} {g.Count()}"))}), {DinoActor.All.Count(d => d.setPiece)} set-pieces; stand-ins (no model yet): {string.Join(", ", DinoActor.All.Where(d => d.standIn).Select(d => d.style).Distinct())}");
+            Line($"  sizes: {string.Join(", ", DinoActor.All.Where(d => d.style != "skeleton").GroupBy(d => d.style).Select(g => $"{g.Key} {g.Min(d => d.size.y):0.#}-{g.Max(d => d.size.y):0.#} m tall" + (g.Key == "ptero" ? $" ({g.Max(d => d.height):0} m wingspan)" : "")))}; rigs: {string.Join(", ", DinoRig.Styles.Select(s => $"{s} {DinoRig.Triangles(s) / 1000.0:0.0}k tris"))}");
+            Line($"  placement notes: {(ParadisePlunge.DinoSkipped.Count == 0 ? "none" : string.Join("; ", ParadisePlunge.DinoSkipped))}");
+            // clearance: every standing / walking dinosaur's feet against the road's edge (the neck bridge reaches over it on purpose; pacers keep their side offset)
             float worst = 1e9f; string worstWho = "";
             foreach (var d in DinoActor.All)
             {
+                if (d.kind == DinoActor.Kind.Pace || d.style == "skeleton") continue;
                 var pts = new List<Vector3>();
                 if (d.kind == DinoActor.Kind.Swoop) for (int i = 0; i < 24; i++) { float t = i * Mathf.PI * 2 / 24; pts.Add(d.a + new Vector3(Mathf.Cos(t) * d.b.x, Mathf.Sin(t * 2) * d.b.z, Mathf.Sin(t) * d.b.x)); }
                 else for (int i = 0; i <= 6; i++) pts.Add(Vector3.Lerp(d.a, d.b, i / 6f));
-                foreach (var p in pts) { float dist = ParadisePlunge.LineDistance(p, out float flat, out _); float clr = d.kind == DinoActor.Kind.Swoop || dist - flat > 20f ? dist : flat; if (clr < worst) { worst = clr; worstWho = d.label; } }
+                foreach (var p in pts)
+                {
+                    float dist = ParadisePlunge.LineDistance(p, out float flat, out float prog);
+                    if (ParadisePlunge.Underground(c.PointAt(prog, out _), p)) continue;   // over the cave
+                    float clr = d.kind == DinoActor.Kind.Swoop || d.style == "ptero" || dist - flat > 20f ? dist : flat - ParadisePlunge.RoadHalfAt(prog);
+                    if (clr < worst) { worst = clr; worstWho = d.label; }
+                }
             }
-            Line($"  ROUTE CLEARANCE: the nearest any dinosaur's path comes to the racer line: {worst:0.0} m ({worstWho}; walkers on the ground plan (in 3D where the line passes 20+ m over them), pterodactyls in 3D){(worst > 20 ? "  PASS" : "  CHECK")}");
+            Line($"  ROUTE CLEARANCE: the nearest any standing / walking dinosaur's feet come to the road's edge (pterodactyl circles: to the line in 3D): {worst:0.0} m ({worstWho}){(worst > 4 ? "  PASS" : "  CHECK")}; pacers: {string.Join(", ", DinoActor.All.Where(d => d.kind == DinoActor.Kind.Pace).Select(d => $"{d.label} {Mathf.Min(Mathf.Abs(d.sideStart), Mathf.Abs(d.sideEnd)):0} m from the line" + (d.paceFly ? $", {d.lift:0} m over it" : "")))}");
+            float bridge = ParadisePlunge.Marks["promMid"] + 75;
+            progShots.Clear(); progShots.Add(("lap", bridge - 70, "dino-neck-bridge-ahead")); progShots.Add(("lap", bridge - 25, "dino-neck-bridge-under"));
             yield return Lap();
-            dinoCount = false;
-            var segs = c.segments.Select(s => s.name).ToList(); int with = 0;
-            Line("  DINOS SEEN per segment on the lap (player view, in range, not behind rock): distinct / most at once / which");
+            dinoCount = false; progShots.Clear();
+            foreach (var kv in dinoRun) if (kv.Value.run >= .2f) dinoRuns.Add((kv.Value.seg, kv.Key, kv.Value.run, kv.Value.peak));
+            dinoRun.Clear();
+            var segs = c.segments.Select(s => s.name).ToList(); int good = 0;
+            Line($"  DINOS SEEN per segment (item 2: >= {DinoActor.BigShare * 100:0} % of the screen height for >= 1 s, chase view, the lap pilot at racing speed):");
+            Line("    segment            seen  longest   time big   moments of 1 s+ (seconds, peak share of the screen height)");
             foreach (var s in segs)
             {
-                dinoSeen.TryGetValue(s, out var set); int n = set?.Count ?? 0; if (n > 0) with++;
-                Line($"    {s,-18} {n,3} / {(dinoMax.TryGetValue(s, out var mx) ? mx : 0),2}   {(set == null ? "-" : string.Join(", ", set.GroupBy(d => d.style).Select(g => $"{g.Key} x{g.Count()}")))}");
+                var runs = dinoRuns.Where(r => r.seg == s && r.len >= 1f).OrderByDescending(r => r.len).ToList();
+                float longest = runs.Count > 0 ? runs[0].len : 0, total = dinoRuns.Where(r => r.seg == s).Sum(r => r.len);
+                if (longest >= 2f) good++;
+                Line($"    {s,-18} {runs.Select(r => r.d).Distinct().Count(),4}  {longest,5:0.0} s  {total,6:0.0} s   {(runs.Count == 0 ? "-" : string.Join(", ", runs.Take(8).Select(r => $"{r.d.label} {r.len:0.0} s {r.peak * 100:0}%")))}");
             }
-            var fossils = ParadisePlunge.Fossils.GroupBy(f => f.name.Split(' ').Last()).Select(g => $"{g.Key} {g.Count()}");
-            Line($"  DINOS {(with == segs.Count ? "PASS" : $"{with} of {segs.Count} segments")}: a group seen in {with} of {segs.Count} segments; fossils / nests / footprints per segment: {string.Join(", ", ParadisePlunge.Fossils.GroupBy(f => f.name.Substring(f.name.IndexOf(' ') + 1)).Select(g => $"{g.Key} {g.Count()}"))}; T. rex roars {DinoActor.All.Where(d => d.kind == DinoActor.Kind.Roar).Sum(d => d.Roars)}, last camera shake {(ChaseCam.LastShake > 0 ? "yes" : "no")}");
+            Line($"  DINOS {(good == segs.Count ? "PASS" : $"{good} of {segs.Count}")}: segments with a moment of 2 s+ big on screen: {good} of {segs.Count}");
+            var sp = DinoActor.All.Where(d => d.setPiece).ToList();
+            Line($"  SET-PIECES ({sp.Count}): {string.Join("; ", sp.Select(d => { var rr = dinoRuns.Where(r => r.d == d).ToList(); return $"{d.label} ({d.segment}): {(rr.Count == 0 ? "NOT SEEN" : $"{rr.Max(r => r.len):0.0} s, peak {rr.Max(r => r.peak) * 100:0}%")}"; }))}");
+            var dl = Caller.DinoLines;
+            Line($"  BARKER's dinosaur lines (said only while one of that kind is big on screen): {dl.Count} in the lap, {dl.Count(x => x.share >= DinoActor.BigShare)} with it >= {DinoActor.BigShare * 100:0} % at that moment{(dl.Count > 0 && dl.All(x => x.share >= DinoActor.BigShare) ? "  PASS" : "")}: {string.Join(", ", dl.Select(x => $"{x.pool} {x.share * 100:0}%"))}");
+            Line($"  T. rex roars {DinoActor.All.Where(d => d.kind == DinoActor.Kind.Roar).Sum(d => d.Roars)}, last camera shake {(ChaseCam.LastShake > 0 ? "yes" : "no")}");
         }
 
         // ---- item 2 / 3: a race with TeedOff Barker and the drivers ----
