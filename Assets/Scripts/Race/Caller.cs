@@ -55,7 +55,35 @@ namespace ShiftStorm
             ["up"] = (14, 1), ["down"] = (14, 1), ["close"] = (22, 1), ["behind"] = (35, 0), ["catch"] = (30, 1),
             ["creek"] = (30, 1), ["cliff"] = (30, 1), ["boost"] = (30, 0), ["canyon"] = (40, 0),
             ["fill"] = (7, 0),
+            // Round 10: Coaster Coast's own pools (and a results line naming each course)
+            ["ccstart"] = (30, 2), ["ccopen"] = (30, 2), ["ccfill"] = (7, 0), ["ccwings"] = (25, 2), ["ccsplash"] = (20, 1), ["ccres"] = (60, 2), ["ppres"] = (60, 2),
+            ["cccoaster"] = (40, 1), ["ccgap"] = (40, 1), ["cccork"] = (40, 1), ["cctophat"] = (40, 2), ["ccwheel"] = (60, 1), ["cchelter"] = (60, 1),
+            ["ccfireworks"] = (60, 1), ["ccballoon"] = (60, 1), ["ccflume"] = (60, 1), ["cclighthouse"] = (60, 1), ["ccpier"] = (60, 1), ["cccarousel"] = (60, 1),
+            ["ccoctopus"] = (60, 1), ["ccwhale"] = (60, 1), ["ccpool"] = (60, 1),
         };
+        // Round 10: Coaster Coast's landmarks (places on its lap) and its set-pieces (said only while big on screen, SetPiece)
+        static readonly (string pool, string mark, float at)[] CoasterLandmarks =
+        {
+            ("cchelter", "helter", -160), ("ccflume", "splash", -30), ("cclighthouse", "sea1", -20), ("ccpier", "portal", -50), ("ccpool", "G8", -25),
+        };
+        static readonly string[] SetPiecePools = { "ccwheel", "ccballoon", "ccfireworks", "ccwhale", "ccoctopus", "cccarousel" };
+        bool Coaster(ShiftVehicle who) { var c = who ? who.Course : game && game.Player ? game.Player.Course : null; return c && c.look == "coaster"; }
+        // the Paradise Plunge pools that name the jungle, the lake or the dinosaurs, swapped on Coaster Coast for its own
+        string ForCourse(string pool, ShiftVehicle who)
+        {
+            bool cc = Coaster(who);
+            if (pool == "results") return cc ? (pools.ContainsKey("ccres") ? "ccres" : pool) : (pools.ContainsKey("ppres") && Random.value < .6f ? "ppres" : pool);
+            if (!cc) return pool;
+            switch (pool)
+            {
+                case "start": return Random.value < .6f && pools.ContainsKey("ccopen") ? "ccopen" : "ccstart";   // Docs/STORY.md: the tour's public opening night
+                case "fill": return "ccfill";
+                case "wings": return "ccwings";
+                case "splash": return "ccsplash";
+                case "creek": case "cliff": case "canyon": return "";
+            }
+            return pool;
+        }
         // landmarks along the lap: (pool, mark, metres after it) for the first person's racer, once a lap, low priority (Round 8 item 1: the dinosaurs)
         // Round 8b: the dinosaur lines are no longer said at a place on the lap but only while that kind of dinosaur is big on the player's
         // screen (DinoActor.BigShare of its height for DinoHeld s; DinoLines), once a race each
@@ -121,7 +149,7 @@ namespace ShiftStorm
                     if (text.Contains("near miss")) Call("miss", v);
                     if (text.Contains("G9") && !finalCalled) { finalCalled = true; Call("final", v); }
                     break;
-                case "reset": if (text.Contains("water") && v.Mode == Mode.Drive && v.Progress < ParadisePlunge.Marks.GetValueOrDefault("G1", 0)) Call("splash", v); break;
+                case "reset": if (text.Contains("water") && v.Mode == Mode.Drive && v.Course.marks != null && v.Progress < v.Course.marks.GetValueOrDefault("G1", 0)) Call("splash", v); break;
                 case "wings":
                     if (text.Contains("window open")) { stayPending = true; stayWho = v; }
                     break;
@@ -142,12 +170,16 @@ namespace ShiftStorm
                     if (stayPending && stayWho == v) break;
                     // which jump: the nearest lip behind the car
                     string which = ""; float best = 1e9f;
-                    foreach (var j in ParadisePlunge.Jumps) { float d = v.Progress - j.lip; if (d > 0 && d < best) { best = d; which = j.name; } }
+                    if (v.Course && v.Course.stunts != null) foreach (var j in v.Course.stunts.Jumps) { float d = v.Progress - j.lip; if (d > 0 && d < best) { best = d; which = j.name; } }
+                    if (which == "Coaster Gap" && Call("ccgap", v)) break;
                     if (which == "Creek Jump" && Call("creek", v)) break;
                     if (which == "Cliff Gap" && Call("cliff", v)) break;
                     if (v.LastAirTime > 1.3f) Call("jump", v);
                     break;
                 case "wings": stayPending = false; Call("wings", v); break;
+                // Round 10: the coaster rails (Coaster Coast)
+                case "railin": if (v.Rail && v.Rail.label.Contains("rail A")) Call("cccoaster", v); else if (v.Rail) Call("cccork", v); break;
+                case "railout": if (v.Mode == Mode.Drive && v.Progress > (v.Course && v.Course.marks != null && v.Course.marks.TryGetValue("crest", out var cr) ? cr - 20 : 1e9f)) Call("cctophat", v); break;
             }
         }
 
@@ -246,7 +278,27 @@ namespace ShiftStorm
         }
         void LandmarkPass(ShiftVehicle h)
         {
-            if (h.Course != game.Courses[0] || h.Holding) return;
+            if (!h.Course || h.Holding) return;
+            if (Coaster(h))
+            {
+                if (h == game.Player && game.Cam)
+                {
+                    SetPiece.Track(game.Cam);
+                    foreach (var pool in SetPiecePools)
+                    {
+                        string key = "1" + pool; if (marksDone.Contains(key) || !pools.ContainsKey(pool)) continue;
+                        if (SetPiece.BigOnScreen(pool, DinoHeld)) { marksDone.Add(key); pendingMark = pool; pendingUntil = Time.time + 4f; break; }
+                    }
+                }
+                foreach (var lm in CoasterLandmarks)
+                {
+                    if (h.Course.marks == null || !h.Course.marks.TryGetValue(lm.mark, out var cm)) continue;
+                    float at = cm + lm.at; string key = (h == game.Player ? "1" : "2") + lm.pool;
+                    if (!marksDone.Contains(key) && h.Progress > at && h.Progress < at + 120f) { marksDone.Add(key); pendingMark = lm.pool; pendingUntil = Time.time + 5f; }
+                }
+                return;
+            }
+            if (h.Course != game.Courses[0]) return;
             if (h == game.Player && game.Cam)
             {
                 DinoActor.Track(game.Cam);
@@ -268,6 +320,7 @@ namespace ShiftStorm
         bool Landmark(ShiftVehicle h)
         {
             if (pendingMark == "" || Time.time > pendingUntil) return false; var p = pendingMark;
+            if (System.Array.IndexOf(SetPiecePools, p) >= 0 && game.Cam) { SetPiece.Track(game.Cam); var sp = SetPiece.BigOnScreen(p, 0f); if (!sp) return false; pendingMark = ""; return Call(p, h); }
             if (IsDinoPool(p) && game.Cam) { DinoActor.Track(game.Cam); var d = DinoActor.BigOnScreen(p, 0f); if (!d) return false; pendingMark = ""; if (!Call(p, h)) return false; DinoLines.Add((Time.time, p, d.ShareNow)); return true; }   // still big, or wait
             pendingMark = ""; return Call(p, h);
         }
@@ -287,6 +340,7 @@ namespace ShiftStorm
 
         public bool Call(string pool, ShiftVehicle who, bool force = false)
         {
+            pool = ForCourse(pool, who); if (pool == "") return false;
             if (!pools.TryGetValue(pool, out var list) || list.Count == 0) { Skipped.Add($"{Time.time:0.0} {pool}: no clips"); return false; }
             if (pool == "results") list = list.Where(c => !c.name.StartsWith("results_lost")).ToList();
             return Play(pool, list, Rules.TryGetValue(pool, out var r) ? r.pri : 1, who, force);

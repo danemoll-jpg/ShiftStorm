@@ -167,12 +167,13 @@ namespace ShiftStorm
                 var d = Driver.Instance; yield return Wait(.5f);
                 int place = game.Race.Place(v), field = game.Race.Racers.Count;
                 // the rivals still racing finish the lap (their places don't move the player's); wait for his results line
-                yield return Until(() => Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "podium" || l.pool == "last"), 12f);
-                var res = Caller.Instance.Lines.LastOrDefault(l => l.pool == "results" || l.pool == "podium" || l.pool == "last");
+                yield return Until(() => Caller.Instance.Lines.Any(l => (l.pool == "results" || l.pool == "ppres" || l.pool == "ccres") || l.pool == "podium" || l.pool == "last"), 12f);
+                var res = Caller.Instance.Lines.LastOrDefault(l => (l.pool == "results" || l.pool == "ppres" || l.pool == "ccres") || l.pool == "podium" || l.pool == "last");
                 string kind = place == 1 ? "1st" : place == field ? "last" : "middle";
                 string clip = d.Played.Count > 0 ? d.Played.Last() : "-";
                 bool ok = kind == "1st" ? clip == "Sitting Clap" : kind == "last" ? clip == "Sitting Disapproval" : clip == "Sitting Thumbs Up";
-                bool lineOk = kind == "1st" ? res.pool == "results" : kind == "last" ? res.pool == "last" : res.pool == "podium";
+                bool lineOk = kind == "1st" ? (res.pool == "results" || res.pool == "ppres" || res.pool == "ccres") :   // Round 10: the course's own results lines
+                              kind == "last" ? res.pool == "last" : res.pool == "podium";
                 Line($"  race {k + 1} (throttle {caps[k] * 100:0} %{(boost ? ", boost" : "")}, {Settings.Difficulty}): {Race.Ordinal(place)} of {field} in {v.FinishTime:0.0} s -> {d.FinishReaction}; clip {clip}; Barker: {res.pool} {res.clip}  {(ok && lineOk ? "PASS" : "FAIL")}");
                 Shot(0, $"result-{kind}"); yield return Wait(.3f);
                 if (!got.ContainsKey(kind)) got[kind] = ok && lineOk ? "PASS" : "FAIL";

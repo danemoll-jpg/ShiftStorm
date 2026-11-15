@@ -80,5 +80,31 @@
    "encoded_exact": true,
    "encoded_seam_ok": true
   }
+ },
+ "race_coaster": {
+  "seconds": 179.2,
+  "loops": true,
+  "bpm": 145.65,
+  "bar_seconds": 1.6478,
+  "loop_start_s": 18.4737,
+  "loop_end_s": 160.1854,
+  "loop_bars": 86,
+  "intro_samples": 814689,
+  "body_samples": 6249489,
+  "usable_end_s": 177.2,
+  "match_before": 0.803,
+  "match_after": 0.855,
+  "loudness_match": 0.538,
+  "crossfade_ms": 100,
+  "seam": {
+   "seam_step": 0.0575249083340168,
+   "typical_step_p99_9": 0.16631679236888885,
+   "step_ok": true,
+   "seam_flux": 3.6422336101531982,
+   "flux_p95": 3.7180073261260986,
+   "flux_ok": true,
+   "encoded_exact": true,
+   "encoded_seam_ok": true
+  }
  }
 }

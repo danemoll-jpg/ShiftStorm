@@ -104,7 +104,7 @@ namespace ShiftStorm
         // ---- item 1: a full split-screen race with two scripted players and 2 AI ----
         IEnumerator SplitCheck()
         {
-            scenario = "split"; Clear(); coast = true; BeginAt(0, 0); yield return Wait(.3f);
+            scenario = "split"; Clear(); coast = true; BeginAt(ArgInt("-course", 0), 0); yield return Wait(.3f);   // Round 10: -course 1 = Coaster Coast
             Pads();
             SplitScreen.P1Device = pad1; SplitScreen.P2Device = pad2; SplitScreen.P2Pick = 0; SplitScreen.AiCount = 2;
             var lr = Environment.GetCommandLineArgs().Contains("-leftRight"); if (lr) Settings.SplitLeftRight = true;

@@ -5,13 +5,13 @@ using UnityEngine.InputSystem;
 
 namespace ShiftStorm
 {
-    // Start-up: loads the tuning (Resources/Tuning), builds the world (Paradise Plunge and the Round 1 test courses), makes the player's
-    // vehicle with Abi in the seat, the three AI rivals (Round 3), the camera, HUD, time trial / race and course sound, and starts on Paradise
-    // Plunge ("-course <n>": 0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane; "-trial" alone,
-    // "-race" against the rivals: Paradise Plunge starts as a race unless a check asks otherwise).
-    // Round 3, the menu (Menu / Esc): Resume, Restart, Race, Time Trial, the test courses, Settings (invert flight / dive controls, screen,
-    // FPS readout) and Quit game (with a "Quit? No / Yes" page). The results screen has Race again / Menu / Quit game.
-    // D-pad left / right (F3 / F4) still steps through the courses. A check run ("-check <name>") hands over to CheckPilot.
+    // Start-up: loads the tuning (Resources/Tuning), builds the world (Round 10: Paradise Plunge and Coaster Coast; the Round 1 test courses
+    // are gone), makes the player's vehicle with Abi in the seat, the three AI rivals (Round 3), the camera, HUD, time trial / race and course
+    // sound, and starts on Paradise Plunge ("-course <n>": 0 Paradise Plunge, 1 Coaster Coast; "-trial" alone, "-race" against the rivals: a
+    // course starts as a race unless a check asks otherwise).
+    // Round 3, the menu (Menu / Esc): Resume, Restart, Race, Time Trial, 2 Players, Garage, Settings and Quit game (with a "Quit? No / Yes"
+    // page). Round 10: the course row picks the course for Race, Time Trial and 2 Players. The results screen has Race again / Menu / Quit
+    // game. A check run ("-check <name>") hands over to CheckPilot.
     // Round 6: Menu > 2 Players (split screen, SplitScreen): player 1 is the device that opened the page, player 2 joins with A on another
     // controller (Enter on the keyboard); Race (with 0-2 AI) or Time Trial (the two alone). While split, either player's Menu opens the one
     // menu (on player 1's half) and pauses both; either player works it. Settings has each player's invert and the split layout.
@@ -24,7 +24,8 @@ namespace ShiftStorm
         public TimeTrial Trial { get; private set; }
         public Race Race { get; private set; }
         public int CourseIndex { get; private set; }
-        public bool RaceMode { get; private set; }   // the current course is raced against the rivals (Paradise Plunge only)
+        public bool RaceMode { get; private set; }   // the current course is raced against the rivals
+        public int MenuCourse { get; private set; }  // Round 10: the course the menu's Race / Time Trial / 2 Players start (the one last started)
         public ShiftTuning Shared; public DriveTuning Drive; public BoatTuning Boat; public FlyTuning Fly; public DiveTuning Dive;
         public readonly List<ShiftVehicle> Rivals = new List<ShiftVehicle>();
 
@@ -72,14 +73,14 @@ namespace ShiftStorm
             Physics.IgnoreLayerCollision(ShiftVehicle.GhostLayer, ShiftVehicle.VehicleLayer, true);   // a racer just reset never lands on another
             Physics.IgnoreLayerCollision(ShiftVehicle.GhostLayer, ShiftVehicle.GhostLayer, true);
             Shared = Load<ShiftTuning>("Shift"); Drive = Load<DriveTuning>("Drive"); Boat = Load<BoatTuning>("Boat"); Fly = Load<FlyTuning>("Fly"); Dive = Load<DiveTuning>("Dive");
-            JurassicLook.Apply(false);   // remember the Round 1 look before anything changes it
             Courses = WorldBuilder.Build();
             Player = VehicleFactory.MakePlayer(Shared, Drive, Boat, Fly, Dive);
             Driver.Make(Player);
             foreach (var r in Rival.Roster) { var rv = VehicleFactory.MakeRival(r, Shared, Drive, Boat, Fly, Dive); Rivals.Add(rv); rv.gameObject.SetActive(false); }
             Cam = Camera.main; if (!Cam) { var cg = new GameObject("Main Camera"); cg.tag = "MainCamera"; Cam = cg.AddComponent<Camera>(); cg.AddComponent<AudioListener>(); }
             Cam.farClipPlane = 2600; Cam.nearClipPlane = .2f;
-            { var cull = new float[32]; cull[ParadisePlunge.DetailLayer] = ParadisePlunge.DetailCullDistance; Cam.layerCullDistances = cull; Cam.layerCullSpherical = true; }   // Round 5: the polished stretch's detail Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
+            { var cull = new float[32]; cull[ParadisePlunge.DetailLayer] = ParadisePlunge.DetailCullDistance; Cam.layerCullDistances = cull; Cam.layerCullSpherical = true; }   // Round 5: the polished stretch's detail
+            Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
             if (!FindAnyObjectByType<AudioListener>()) Cam.gameObject.AddComponent<AudioListener>();
             Cam.gameObject.AddComponent<AudioMeter>();
             Cam.gameObject.AddComponent<ChaseCam>().target = Player;
@@ -102,7 +103,8 @@ namespace ShiftStorm
             {
                 var was = new List<bool>(); foreach (var rv in Rivals) { was.Add(rv.gameObject.activeSelf); rv.gameObject.SetActive(true); }
                 var sets = new List<FormSet> { Player.Forms }; foreach (var rv in Rivals) sets.Add(rv.Forms);
-                JurassicLook.Apply(true); Warmup.Run(Courses[0], Cam, sets); JurassicLook.Apply(Courses[CourseIndex].look == "jurassic");
+                foreach (var wc in Courses) { CourseLook.Apply(wc); Warmup.Run(wc, Cam, sets); }   // Round 10: every course
+                CourseLook.Apply(Courses[CourseIndex]);
                 for (int k = 0; k < Rivals.Count; k++) Rivals[k].gameObject.SetActive(was[k]);
             }
             Debug.Log($"[Screen] at the first frame: {Screen.fullScreenMode} {Screen.width} x {Screen.height}, desktop {Display.main.systemWidth} x {Display.main.systemHeight}, current resolution {Screen.currentResolution.width} x {Screen.currentResolution.height}");
@@ -115,13 +117,12 @@ namespace ShiftStorm
         public void StartCourse(int index) => StartCourse(index, RaceMode);
         public void StartCourse(int index, bool race)
         {
-            CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count;
+            CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex;
             var c = Courses[CourseIndex];
             RaceMode = race && c.timeTrial;
-            JurassicLook.Apply(c.look == "jurassic");
+            CourseLook.Apply(c);   // Round 10: only this course is shown (its look and sky); the other one is hidden
             CourseAudio.Instance?.SetCourse(c);
             ResultsIndex = 0;
-            if (SplitScreen.Active && !c.timeTrial) { EndSplit(false); }   // the test courses are one player's
             var p2 = Player2;
             if (p2)
             {
@@ -153,13 +154,13 @@ namespace ShiftStorm
             if (Garage.Active) Garage.Instance.Close();
             if (!SplitScreen.Active) SplitScreen.Begin();
             else if (SplitScreen.Session.P2 && SplitScreen.Session.P2.RacerName != SplitScreen.P2Rival.name) { SplitScreen.Begin(); }   // another driver picked: a new player 2
-            MenuNote = ""; CloseMenu(); StartCourse(0, race);
+            MenuNote = ""; CloseMenu(); StartCourse(MenuCourse, race);
         }
         public void EndSplit(bool restart = true)
         {
             if (!SplitScreen.Active) return;
             SplitScreen.End(); SplitScreen.P2Device = null;
-            if (restart) StartCourse(0, RaceMode);
+            if (restart) StartCourse(MenuCourse, RaceMode);
         }
         // the inputs that work the menu: player 1's; in split screen both players'
         IEnumerable<ShiftInput> MenuInputs() { yield return Player.Input; if (Player2) yield return Player2.Input; }
@@ -178,7 +179,7 @@ namespace ShiftStorm
                 if (confirm) Choose(MenuIndex);
                 else if (backP) { if (MenuPage == Page.Main) CloseMenu(); else ShowPage(Page.Main); }
                 else if (menuP) CloseMenu();
-                foreach (var i in MenuInputs()) { i.ConsumeReset(); i.ConsumeStartStep(); i.ConsumeView(); }
+                foreach (var i in MenuInputs()) { i.ConsumeReset(); i.ConsumeView(); }
                 return;
             }
             if (menuP) { OpenMenu(); return; }
@@ -193,8 +194,6 @@ namespace ShiftStorm
                     else { OpenMenu(); ShowPage(Page.Quit); }
                 }
             }
-            int step = inp.ConsumeStartStep(); if (Player2) Player2.Input.ConsumeStartStep();
-            if (step != 0 && !inp.Scripted && !SplitScreen.Active) StartCourse(CourseIndex + step);
         }
 
         // ---- the 2 Players page: who is player 1, joining player 2 (Chastain Rush's UpdateSplitJoin) ----
@@ -242,7 +241,7 @@ namespace ShiftStorm
             if (page != Page.Split) MenuNote = "";
             MenuPage = page; MenuItems.Clear(); menuActions.Clear();
             void Item(string label, Action act) { MenuItems.Add(label); menuActions.Add(act); }
-            var pp = Courses[0];
+            var pp = Courses[Mathf.Clamp(MenuCourse, 0, Courses.Count - 1)];
             switch (page)
             {
                 case Page.Main when SplitScreen.Active:
@@ -262,6 +261,7 @@ namespace ShiftStorm
                         Item($"Player 2 driver:   {pick.name}   (A: next)", () => { SplitScreen.P2Pick = (SplitScreen.P2Pick + 1) % Rival.Roster.Length; ShowPage(Page.Split, 2); });
                         Item($"AI racers:   {SplitScreen.AiCount}   (A: 0 / 1 / 2)", () => { SplitScreen.AiCount = (SplitScreen.AiCount + 1) % 3; ShowPage(Page.Split, 3); });
                         Item("Screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Split, 4); });
+                        Item($"Course:   {pp.courseName}   (A: next)", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Split, 5); });
                         Item($"Race {pp.courseName}: 2 players + {SplitScreen.AiCount} AI" + (ready ? "" : "   (waiting for player 2)"), () => StartSplit(true));
                         Item($"Time Trial {pp.courseName}: 2 players" + (ready ? "" : "   (waiting for player 2)"), () => StartSplit(false));
                         Item("Back", () => ShowPage(Page.Main));
@@ -270,9 +270,9 @@ namespace ShiftStorm
                 case Page.Main:
                     Item("Resume", CloseMenu);
                     Item("Restart " + Courses[CourseIndex].courseName + (RaceMode ? " (race)" : ""), () => { CloseMenu(); Restart(); });
-                    Item($"Race: {pp.courseName}  (vs 3 rivals)", () => { CloseMenu(); StartCourse(0, true); });
-                    Item($"Time Trial: {pp.courseName}  (alone)", () => { CloseMenu(); StartCourse(0, false); });
-                    for (int k = 1; k < Courses.Count; k++) { int idx = k; Item(Courses[k].courseName + "  (test)", () => { CloseMenu(); StartCourse(idx, false); }); }
+                    Item($"Course: {pp.courseName}   (A: next, {MenuCourse + 1} of {Courses.Count})", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Main, 2); });
+                    Item($"Race: {pp.courseName}  (vs 3 rivals)", () => { CloseMenu(); StartCourse(MenuCourse, true); });
+                    Item($"Time Trial: {pp.courseName}  (alone)", () => { CloseMenu(); StartCourse(MenuCourse, false); });
                     Item("2 Players (split screen)", OpenSplitPage);
                     Item("Garage (vehicle designs)", () => ShowPage(Page.Garage));
                     Item("Settings", () => ShowPage(Page.Settings));

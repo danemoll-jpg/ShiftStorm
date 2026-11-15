@@ -82,6 +82,210 @@
    "text": "The gap is shrinking! Here they come!"
   },
   {
+   "id": "ccballoon_1",
+   "text": "Wave to the big balloon, folks! It's waving back!"
+  },
+  {
+   "id": "ccballoon_2",
+   "text": "Look at the size of that balloon! Don't pop it!"
+  },
+  {
+   "id": "cccarousel_1",
+   "text": "The sunken carousel! The horses are still going round down there!"
+  },
+  {
+   "id": "cccoaster_1",
+   "text": "Onto the roller coaster! Hold on to your hats, this ride has no brakes!"
+  },
+  {
+   "id": "cccoaster_2",
+   "text": "Up the hill and down the drop! Scream if you want to go faster!"
+  },
+  {
+   "id": "cccoaster_3",
+   "text": "Riding the rails like a real coaster car! Wheee!"
+  },
+  {
+   "id": "cccork_1",
+   "text": "Into the corkscrew! Upside down and round again!"
+  },
+  {
+   "id": "cccork_2",
+   "text": "A barrel roll on the coaster! My popcorn just went everywhere!"
+  },
+  {
+   "id": "ccfill_1",
+   "text": "Popcorn, candy floss, and four machines at full throttle! What a night at the pier!"
+  },
+  {
+   "id": "ccfill_10",
+   "text": "Roll up, roll up! The greatest race on the boardwalk!"
+  },
+  {
+   "id": "ccfill_11",
+   "text": "Grand opening night, folks! Tell your friends you were here for the first one!"
+  },
+  {
+   "id": "ccfill_2",
+   "text": "No height restriction on this ride, folks! Not even for me!"
+  },
+  {
+   "id": "ccfill_3",
+   "text": "Keep your arms and legs inside the ride! Unless you're a plane, then use your wings!"
+  },
+  {
+   "id": "ccfill_4",
+   "text": "Smell that sea air, folks! A little bit salt, a little bit candy floss!"
+  },
+  {
+   "id": "ccfill_5",
+   "text": "Every ride in the park, and they're riding them all at once!"
+  },
+  {
+   "id": "ccfill_6",
+   "text": "The whole pier is shaking! Is that the coaster or the crowd?"
+  },
+  {
+   "id": "ccfill_7",
+   "text": "I asked for one ticket to every ride. They gave me a race car!"
+  },
+  {
+   "id": "ccfill_8",
+   "text": "Ladies and gentlemen, the lights are on and the park is watching!"
+  },
+  {
+   "id": "ccfill_9",
+   "text": "Look at those lights! The whole coast is glowing tonight!"
+  },
+  {
+   "id": "ccfireworks_1",
+   "text": "Through the fireworks! Oooh! Aaah!"
+  },
+  {
+   "id": "ccfireworks_2",
+   "text": "Fireworks all around them! What a show, folks!"
+  },
+  {
+   "id": "ccflume_1",
+   "text": "Splashdown in the log flume! You might get a little wet, folks!"
+  },
+  {
+   "id": "ccflume_2",
+   "text": "Down the flume they go, right under the boardwalk!"
+  },
+  {
+   "id": "ccgap_1",
+   "text": "Off the end of the track and across the gap! Will it land?"
+  },
+  {
+   "id": "ccgap_2",
+   "text": "The Coaster Gap! No track, no problem!"
+  },
+  {
+   "id": "cchelter_1",
+   "text": "Round the helter-skelter! Mind the slide, folks!"
+  },
+  {
+   "id": "cclighthouse_1",
+   "text": "Round the lighthouse, or through the rocks? Choose wisely!"
+  },
+  {
+   "id": "cclighthouse_2",
+   "text": "The old lighthouse! Keep left of the light, folks!"
+  },
+  {
+   "id": "ccoctopus_1",
+   "text": "Is that an octopus? That is a VERY big octopus, folks!"
+  },
+  {
+   "id": "ccoctopus_2",
+   "text": "Eight arms, and not one of them can drive!"
+  },
+  {
+   "id": "ccopen_1",
+   "text": "Ladies and gentlemen, it's opening night! The tour's very first public race, right here on the pier!"
+  },
+  {
+   "id": "ccopen_2",
+   "text": "A real crowd, real fireworks, and the grand opening of the greatest racing tour on earth!"
+  },
+  {
+   "id": "ccopen_3",
+   "text": "They tried it out in private in the jungle. Tonight, folks, they race for you!"
+  },
+  {
+   "id": "ccpier_1",
+   "text": "Under the pier they go! Mind the legs!"
+  },
+  {
+   "id": "ccpier_2",
+   "text": "Down beneath the boardwalk, where the old rides sleep!"
+  },
+  {
+   "id": "ccpool_1",
+   "text": "Up through the splash pool and back onto the boardwalk!"
+  },
+  {
+   "id": "ccres_1",
+   "text": "And that's the race at Coaster Coast! What a night at the pier!"
+  },
+  {
+   "id": "ccres_2",
+   "text": "That was Coaster Coast, folks! Same time tomorrow, same rides!"
+  },
+  {
+   "id": "ccres_3",
+   "text": "And that's the first public race of the tour in the books! What an opening night!"
+  },
+  {
+   "id": "ccsplash_1",
+   "text": "Into the sea! The pier has edges, folks!"
+  },
+  {
+   "id": "ccstart_1",
+   "text": "Welcome to Coaster Coast! The pier, the park and the deep blue sea, all in one lap!"
+  },
+  {
+   "id": "ccstart_2",
+   "text": "Step right up, folks! Tonight we race the rides! Coaster, flume, and the sea below!"
+  },
+  {
+   "id": "ccstart_3",
+   "text": "The sun is setting on Coaster Coast, and the lights are coming on! Racers, are you ready?"
+  },
+  {
+   "id": "cctophat_1",
+   "text": "All the way to the top of the Top Hat! And now, wings out!"
+  },
+  {
+   "id": "cctophat_2",
+   "text": "Off the top of the coaster and into the sky! Magnificent!"
+  },
+  {
+   "id": "ccwhale_1",
+   "text": "A whale! Right beside them! The biggest fan in the park!"
+  },
+  {
+   "id": "ccwhale_2",
+   "text": "Dolphins racing alongside! Somebody give them a lap time!"
+  },
+  {
+   "id": "ccwheel_1",
+   "text": "Right under the big wheel! Wave to the people at the top, folks!"
+  },
+  {
+   "id": "ccwheel_2",
+   "text": "There goes the Ferris wheel, round and round, and there go our racers, faster still!"
+  },
+  {
+   "id": "ccwings_1",
+   "text": "Wings out! Straight through the middle of the Ferris wheel!"
+  },
+  {
+   "id": "ccwings_2",
+   "text": "Through the big wheel! I've never seen anyone ride it like that!"
+  },
+  {
    "id": "cliff_1",
    "text": "The Cliff Gap! Fly, little car, fly!"
   },
@@ -356,6 +560,14 @@
   {
    "id": "podium_3",
    "text": "A fine finish, folks! A prize from the middle shelf!"
+  },
+  {
+   "id": "ppres_1",
+   "text": "And that's the race at Paradise Plunge! The dinosaurs approve!"
+  },
+  {
+   "id": "ppres_2",
+   "text": "That was Paradise Plunge, folks! Jungle, lagoon and all!"
   },
   {
    "id": "ptero_1",

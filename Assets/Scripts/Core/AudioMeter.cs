@@ -11,6 +11,7 @@ namespace ShiftStorm
         public float Rms { get; private set; }
         public float MaxPeakSeen { get; private set; }
         public int Samples { get; private set; }
+        int logged;
         readonly float[] buffer = new float[1024];
 
         void Update()
@@ -23,6 +24,13 @@ namespace ShiftStorm
             }
             Peak = peak; Rms = n > 0 ? Mathf.Sqrt(sum / n) : 0; Samples++;
             if (peak > MaxPeakSeen) MaxPeakSeen = peak;
+            // Round 10: a muted run must read 0; any signal is logged with the sources playing then (the final Coaster Coast soak read 0.44 once)
+            if (peak > 1e-4f && logged < 5)
+            {
+                logged++; var playing = new System.Text.StringBuilder();
+                foreach (var a in FindObjectsByType<AudioSource>(FindObjectsSortMode.None)) if (a.isPlaying && a.volume > 0) playing.Append($"{a.name}:{(a.clip ? a.clip.name : "-")}@{a.volume:0.00} ");
+                Debug.Log($"[Audio] output peak {peak:0.000000} at {Time.time:0.00} s (frame {Time.frameCount}), AudioListener.volume {AudioListener.volume}, paused {AudioListener.pause}; playing: {playing}");
+            }
         }
     }
 }

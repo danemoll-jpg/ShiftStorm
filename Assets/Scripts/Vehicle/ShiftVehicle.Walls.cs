@@ -27,13 +27,26 @@ namespace ShiftStorm
         void OnCollisionEnter(Collision c) { Contact?.Invoke(c, true); Wall(c, true); }
         void OnCollisionStay(Collision c) { Contact?.Invoke(c, false); Wall(c, false); }
 
+        // Round 10: a bump between racers on the road or water shoves you aside (at most 6 m/s sideways, 4 m/s up) and costs at most 15 % of
+        // the speed; never more (the final Coaster Coast soak: a plane turned car dropped 7 m onto a car under it at the wheels-down zone and
+        // the solver threw both sideways at 75 m/s, 90 deg off their way: 14-20 resets in 50 laps)
+        void RacerBump()
+        {
+            if (Mode != Mode.Drive && Mode != Mode.Boat || OnLoop) return;
+            var pre = new Vector3(stepVel.x, 0, stepVel.z); float spPre = pre.magnitude; if (spPre < 10f) return;
+            var post = Body.linearVelocity; var flat = new Vector3(post.x, 0, post.z); var dir = pre / spPre;
+            float along = Mathf.Clamp(Vector3.Dot(flat, dir), spPre * .85f, spPre * 1.05f);
+            var side = flat - dir * Vector3.Dot(flat, dir); if (side.magnitude > 6f) side = side.normalized * 6f;
+            Body.linearVelocity = dir * along + side + Vector3.up * Mathf.Min(post.y, Mathf.Max(stepVel.y, 0) + 4f);
+        }
+
         // the share of the speed kept by a fresh hit at this angle into the wall (0 = along it, 90 = head-on)
         public float GlanceKeep(float angleDeg) => 1f - (shared.wallLossMin + (shared.wallLossHeadOn - shared.wallLossMin) * Mathf.Pow(Mathf.Clamp01(angleDeg / 90f), shared.wallLossExponent));
 
         void Wall(Collision c, bool first)
         {
             if (Holding || Body.isKinematic || !c.collider) return;
-            if (c.rigidbody && c.rigidbody.GetComponent<ShiftVehicle>()) return;   // a bump with another racer is physics only
+            if (c.rigidbody && c.rigidbody.GetComponent<ShiftVehicle>()) { RacerBump(); return; }   // a bump with another racer: physics, kept arcade-sized
             bool air = Mode == Mode.Fly || Mode == Mode.Dive;
             if (air && Changing && Time.time - ChangeStartedAt < .5f) return;
             int k = c.contactCount; if (k == 0) return;

@@ -33,12 +33,8 @@ namespace ShiftStorm.EditorTools
             tm.ApplyModifiedPropertiesWithoutUndo();
             // materials and tuning
             Directory.CreateDirectory("Assets/Resources/Materials"); Directory.CreateDirectory("Assets/Resources/Tuning");
-            Mat("Road", new Color(.32f, .33f, .36f)); Mat("Ground", new Color(.42f, .62f, .30f)); Mat("Ramp", new Color(.85f, .62f, .25f)); Mat("Rock", new Color(.52f, .47f, .42f));
-            Mat("Stone", new Color(.66f, .62f, .52f)); Mat("Sand", new Color(.86f, .78f, .55f)); Mat("Barrier", new Color(.9f, .9f, .9f)); Mat("Gate", new Color(.95f, .85f, .2f));
-            Mat("Buoy", new Color(1f, .35f, .15f)); Mat("Coral", new Color(.95f, .45f, .55f)); Mat("Foam", new Color(.95f, .98f, 1f)); Mat("WetRamp", new Color(.35f, .7f, .8f));
-            Mat("Finish", new Color(.1f, .1f, .1f)); Mat("SignCar", new Color(.95f, .5f, .1f)); Mat("SignWing", new Color(.35f, .7f, 1f)); Mat("SignBoat", new Color(.1f, .75f, .7f)); Mat("SignSub", new Color(.15f, .2f, .55f));
-            Mat("Light", new Color(1f, .95f, .6f), emission: true);
-            Mat("Water", new Color(.1f, .62f, .72f, .55f), transparent: true); Mat("Waterfall", new Color(.85f, .95f, 1f, .45f), transparent: true);
+            Mat("Gate", new Color(.95f, .85f, .2f));   // Round 10: the Round 1 test courses' materials are gone
+            Mat("SignCar", new Color(.95f, .5f, .1f)); Mat("SignWing", new Color(.35f, .7f, 1f)); Mat("SignBoat", new Color(.1f, .75f, .7f)); Mat("SignSub", new Color(.15f, .2f, .55f));   // Round 10: the Round 1 test courses' materials are gone
             Mat("VehicleBody", new Color(.95f, .45f, .1f)); Mat("VehicleTrim", new Color(.95f, .9f, .8f)); Mat("VehicleGlass", new Color(.35f, .65f, .9f, .7f), transparent: true);
             Mat("VehicleTire", new Color(.08f, .08f, .09f)); Mat("VehicleWing", new Color(.96f, .96f, .96f)); Mat("VehicleFin", new Color(.1f, .6f, .65f)); Mat("VehicleMetal", new Color(.55f, .57f, .6f));
             // Round 2: Paradise Plunge's toon look (ShiftStorm/* shaders, URP ports of Tee'd Off's): base materials the runtime copies and colours

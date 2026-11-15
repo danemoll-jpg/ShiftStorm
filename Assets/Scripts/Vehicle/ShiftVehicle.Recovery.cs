@@ -15,6 +15,7 @@ namespace ShiftStorm
             if (!Course) return;
             if (Input.ConsumeReset()) { if (Finished) { if (Human && Game.Instance) Game.Instance.ResetAfterFinish(this); else if (IsPlayer) Begin(Course); } else Recover("reset button"); return; }   // after the finish: start again (the race too)
             if (Finished) return;
+            if (rail != null) { OutOfBoundsFor = 0; stuckFor = 0; noProgressFor = 0; return; }   // Round 10: locked to a coaster rail (it never stalls; it runs to its end)
             var p = Body.position;
             // out of bounds: at once on land and water and below / above the course; in the air (a much wider corridor) after a few seconds of
             // THIS WAY, so a plane that strays is shown the way back before it is reset (Round 2b)

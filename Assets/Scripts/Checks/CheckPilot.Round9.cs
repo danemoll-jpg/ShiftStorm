@@ -90,7 +90,7 @@ namespace ShiftStorm
             Shot(.5f, "finish"); Shot(1.5f, "finish-2"); yield return Wait(2.5f);
             StopAi();
             foreach (var c in Crowd.All) Line($"  {c.StandName}: {c.Fans} fans, cheers {c.Cheers} (a racer passing within reach, the GO, the finish), last {(c.LastCheer > 0 ? $"{c.LastCheer - go:0.0} s into the race" : "never")}");
-            Line($"CROWD {(Crowd.Off || (Crowd.All.Count >= 4 && Crowd.All.All(c => c.Cheers > 0)) ? "PASS" : "CHECK")}: {Crowd.Total} fans in {Crowd.All.Count} stands, every stand cheered: {Crowd.All.All(c => c.Cheers > 0)}; the crowd's own CPU time {Crowd.CpuTotal / Mathf.Max(1, Crowd.CpuFrames):0.000} ms a frame (all stands; the GPU cost is in the frame time below, compared with a -noCrowd run)");
+            Line($"CROWD {(Crowd.Off || (Crowd.All.Count(c => c.gameObject.activeInHierarchy) >= 4 && Crowd.All.Where(c => c.gameObject.activeInHierarchy).All(c => c.Cheers > 0)) ? "PASS" : "CHECK")}: {Crowd.Total} fans in {Crowd.All.Count} stands, every stand of the course raced cheered: {Crowd.All.Where(c => c.gameObject.activeInHierarchy).All(c => c.Cheers > 0)}; the crowd's own CPU time {Crowd.CpuTotal / Mathf.Max(1, Crowd.CpuFrames):0.000} ms a frame (all stands; the GPU cost is in the frame time below, compared with a -noCrowd run)");
             Save();
         }
 
@@ -120,7 +120,7 @@ namespace ShiftStorm
             // every form, on the grid (held: no reset can interrupt): the rider astride, the bars, the sphere on the sub; chase, first person, sides
             foreach (var m in FormSet.All)
             {
-                game.StartCourse(0, false); yield return Wait(.6f); v.Forms.Snap(m); yield return Wait(.6f);
+                game.StartCourse(0, false); yield return Wait(.6f); v.Forms.Snap(m); yield return Wait(.6f); if (drv) yield return Until(() => drv.IkWeight >= .99f, 6f);   // Round 10: not during the GO horn
                 var model = v.Forms.ModelOf(m); bool sphere = model && model.GetComponentsInChildren<Transform>(true).Any(t => t.name.StartsWith("Glass sphere")), bubble = model && model.GetComponentsInChildren<Transform>(true).Any(t => t.name.StartsWith("Canopy (game)"));
                 var st = drv ? drv.Steering : null; var e = drv ? drv.GripError() : (0f, 0f);
                 var sm = st ? st.Shown : null; var pv = v.Forms.Pivot;

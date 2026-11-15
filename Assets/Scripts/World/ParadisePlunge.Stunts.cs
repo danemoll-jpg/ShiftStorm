@@ -89,6 +89,63 @@ namespace ShiftStorm
         static void Stunts()
         {
             BuildLoop(); foreach (var j in Jumps) BuildJump(j); Canyon();
+            if (!OldEdges) { LoopFunnel(); ClimbFalls(); ClimbGuard(); }
+        }
+
+        // Round 10 item 1: the loop's approach. Build 11 had 0.8 m barriers along the whole promenade: a car landing beside the road after
+        // the Creek Jump ended up behind them with no way back. Now the promenade is open (flush ground, a flat kerb), and the only walls are
+        // two long angled guide walls before the loop that span the whole width a racer may be in (from 75 / 85 m out, beyond the 75 m
+        // out-of-bounds line, to 9 m beside the loop's entry): anything on the ground in front of the loop is glanced into its entry, and
+        // nothing in bounds can be behind them. 23 deg to the route, so a hit slides along (ShiftVehicle.Walls).
+        public static readonly List<(Vector3 a, Vector3 b)> FunnelWalls = new List<(Vector3, Vector3)>();
+        static void LoopFunnel()
+        {
+            FunnelWalls.Clear();
+            var g = new GameObject("Loop guide walls"); g.transform.SetParent(root, false);
+            var stone = Mt(JurassicLook.Stone, true, default, .6f); var moss = Mt(JurassicLook.Moss);
+            foreach (float s in new[] { -1f, 1f })
+            {
+                Vector3 P(float back, float lat) { var q = LoopE - LoopF * back + LoopRt * s * lat; q.y = RoadY; return q; }
+                var pts = new[] { P(170, s > 0 ? 85 : 75), P(25, 9f), P(8, 9f) };
+                for (int i = 0; i < pts.Length - 1; i++)
+                {
+                    var a = pts[i]; var b = pts[i + 1]; var d = b - a; var f = Quaternion.LookRotation(d.normalized, Vector3.up);
+                    Box(g.transform, "guide wall", (a + b) * .5f + Vector3.up * .1f, new Vector3(.7f, 2.2f, d.magnitude + .7f), stone, f, true, ShiftVehicle.ObstacleLayer);   // from 1 m under the road to 1.2 m over it
+                    Box(g.transform, "guide wall moss", (a + b) * .5f + Vector3.up * 1.25f, new Vector3(.8f, .12f, d.magnitude + .8f), moss, f, false);
+                    FunnelWalls.Add((a, b));
+                }
+            }
+        }
+        // Round 10 item 1: the climb's valley side: a car thrown over the valley-side barrier (a bad Cliff Gap landing) falls to the valley floor
+        // far below the road, where it could drive about forever with no way back up (build 11). Now a fall zone under the road's valley side
+        // resets it at once, like the Cliff Gap's ravine.
+        // Round 10 item 1: between the canyon's east wall and the climb's barriers. A car down from the Lake flight (wheels down 23 m west of
+        // the line at 75 m/s, heading back east) crossed the road; build 11's 0.8 m promenade barrier glanced it along, but with the flush
+        // ground it ran on east of the road and off the ground's end at the climb (the final soak: 36 resets in 50 laps). A low stone wall
+        // continues the canyon wall into the barrier's start, 7 deg to the route, so a car glances back onto the road.
+        static void ClimbGuard()
+        {
+            var g = new GameObject("Climb guard wall"); g.transform.SetParent(root, false);
+            var stone = Mt(JurassicLook.Stone, true, default, .6f); var moss = Mt(JurassicLook.Moss);
+            float p0 = CanyonTo - 6, p1 = M("climb0") - 40; int n = Mathf.Max(2, Mathf.CeilToInt((p1 - p0) / 12f));
+            Vector3 P(float t) { float p = Mathf.Lerp(p0, p1, t), hw = HalfWidth(p); var q = At(p) + Right(p) * Mathf.Lerp(hw + 6.5f, hw + .35f, Mathf.SmoothStep(0, 1, t)); q.y = RoadY; return q; }
+            for (int i = 0; i < n; i++)
+            {
+                var a = P(i / (float)n); var b = P((i + 1) / (float)n); var d = b - a; var f = Quaternion.LookRotation(d.normalized, Vector3.up);
+                Box(g.transform, "guard wall", (a + b) * .5f + Vector3.up * .1f, new Vector3(.7f, 2.2f, d.magnitude + .7f), stone, f, true, ShiftVehicle.ObstacleLayer);
+                Box(g.transform, "guard wall moss", (a + b) * .5f + Vector3.up * 1.25f, new Vector3(.8f, .12f, d.magnitude + .8f), moss, f, false);
+            }
+        }
+        static void ClimbFalls()
+        {
+            float a = M("climb0") + 25, b = M("rampStart") - 15;
+            for (float p = a; p < b; p += 30)
+            {
+                if (InGap(p) || InGap(p - 18) || InGap(p + 18)) continue;
+                var q = At(p); float top = RoadTop(p) - 5f, bottom = -4f; if (top - bottom < 3) continue;
+                var at = q + Right(p) * (HalfWidth(p) + 1.5f + 35f); at.y = (top + bottom) * .5f;
+                Vol<ResetZone>("Climb valley fall", at, Facing(p), new Vector3(70, top - bottom, 34)).label = "fell off the climb";
+            }
         }
 
         static void BuildLoop()

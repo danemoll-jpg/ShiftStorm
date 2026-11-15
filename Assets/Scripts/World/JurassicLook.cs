@@ -7,7 +7,8 @@ namespace ShiftStorm
     // Paradise Plunge's look, first pass: Tee'd Off's Jurassic Par art style (TO Resources/Tuning/ArtStyle_Jurassic.asset and
     // ArtStyle.CreateJurassic, read-only: the values are copied here) on ShiftStorm's URP toon shaders (Assets/Shaders, ported from TO).
     // Warm, humid, hazy sky (gold low down, peach haze), a low warm sun, jungle greens, mossy greys, dark earthy water.
-    // Apply(true) when Paradise Plunge starts; Apply(false) puts the Round 1 gray-box look back for the test courses.
+    // Apply(true) when Paradise Plunge starts (CourseLook); Coaster Coast starts from it too (CoasterLook). Apply(false) (the Round 1 look) is
+    // unused since Round 10 removed the test courses.
     public static class JurassicLook
     {
         // ArtStyle_Jurassic (TO)

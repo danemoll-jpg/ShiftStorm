@@ -7,10 +7,10 @@ namespace ShiftStorm
     // being under water), splashes, a far dinosaur call now and then. Everything goes through the AudioListener, so a muted run (QuietRun)
     // stays at 0 output; MusicPeak measures the music source's own signal, so a check can see it plays without unmuting.
     // Round 7 item 5: the music has its own child object with a low-pass filter (a filter on the camera would muffle everything):
-    //   race:    Dan's Suno "race_paradise" (+ _intro) when it is in Resources/Audio/Music, else Tee'd Off's Jurassic Par
-    //   menu:    "theme" on the main menu page and "menu" in the Garage / Settings when Dan's songs are in; Tee'd Off's title until then
-    //            (ph_menu); the race music waits underneath and comes back where it was
-    //   results: "results" (else Tee'd Off's round_end, ph_results), once
+    //   race:    the course's own song (Course.music: Dan's Suno "race_paradise" / Round 10 "race_coaster", + _intro); Round 10: no Tee'd Off
+    //            music anywhere any more (build 11 fell back to Tee'd Off's Jurassic Par): a missing course song falls back to ShiftStorm's theme
+    //   menu:    "theme" on the main menu page and "menu" in the Garage / Settings; the race music waits underneath and comes back where it was
+    //   results: "results", once
     // and the concept's mix by form, with filters, not separate songs: in flight a little louder and fully open, on the road and the
     // water as it is, underwater softer and muffled (low-pass 650 Hz), bright again at the waterfall exit (a 2.5 s lift as the car
     // leaves the ramp). All at the Music volume; the ambience and splashes at the Effects volume.
@@ -40,26 +40,38 @@ namespace ShiftStorm
             a.lp = mh.AddComponent<AudioLowPassFilter>(); a.lp.cutoffFrequency = 22000; a.lp.lowpassResonanceQ = 1;   // after its sources (Unity needs one first)
             a.jungle = Src(host, true, 0); a.bubbles = Src(host, true, 0); a.oneShot = Src(host, false, .8f);
             AudioClip M(string n) => Resources.Load<AudioClip>("Audio/Music/" + n);
-            a.loop = M("race_paradise"); a.intro = a.loop ? M("race_paradise_intro") : null; bool dan = a.loop;
-            if (!a.loop) { a.intro = M("course_jurassic_intro"); a.loop = M("course_jurassic"); }
-            a.menuLoop = M("menu"); a.menuIntro = a.menuLoop ? M("menu_intro") : null; if (!a.menuLoop) { a.menuLoop = M("ph_menu"); a.menuIntro = M("ph_menu_intro"); }
+            a.menuLoop = M("menu"); a.menuIntro = a.menuLoop ? M("menu_intro") : null;
             a.themeLoop = M("theme"); a.themeIntro = a.themeLoop ? M("theme_intro") : null; if (!a.themeLoop) { a.themeLoop = a.menuLoop; a.themeIntro = a.menuIntro; }
-            a.resultsClip = M("results") ?? M("ph_results");
+            a.resultsClip = M("results");
+            a.loop = M("race_paradise"); a.intro = a.loop ? M("race_paradise_intro") : null; bool dan = a.loop;
+            if (!a.loop) { a.intro = a.themeIntro; a.loop = a.themeLoop; }
             a.jungle.clip = Resources.Load<AudioClip>("Audio/Sfx/amb_jungle"); a.bubbles.clip = Resources.Load<AudioClip>("Audio/Sfx/amb_bubbles");
             a.splashA = Resources.Load<AudioClip>("Audio/Sfx/splash_1"); a.splashB = Resources.Load<AudioClip>("Audio/Sfx/splash_2");
             foreach (var n in new[] { "amb_dino_call_1", "amb_dino_call_2", "amb_dino_call_3", "amb_roar_far_1" }) { var c = Resources.Load<AudioClip>("Audio/Sfx/" + n); if (c) a.calls.Add(c); }
             v.Event += a.OnEvent;
-            Debug.Log($"[Audio] race music {(a.loop ? a.loop.name : "MISSING")} ({(dan ? "Dan's" : "Tee'd Off placeholder")}, intro {(a.intro ? "yes" : "no")}), menu {(a.menuLoop ? a.menuLoop.name : "-")}, theme {(a.themeLoop ? a.themeLoop.name : "-")}, results {(a.resultsClip ? a.resultsClip.name : "-")}; ambience {(a.jungle.clip ? "jungle" : "MISSING")} / {(a.bubbles.clip ? "bubbles" : "MISSING")}, splashes {(a.splashA ? 2 : 0)}, calls {a.calls.Count}");
+            Debug.Log($"[Audio] race music {(a.loop ? a.loop.name : "MISSING")} ({(dan ? "Dan's" : "ShiftStorm theme stand-in")}, intro {(a.intro ? "yes" : "no")}), menu {(a.menuLoop ? a.menuLoop.name : "-")}, theme {(a.themeLoop ? a.themeLoop.name : "-")}, results {(a.resultsClip ? a.resultsClip.name : "-")}; ambience {(a.jungle.clip ? "jungle" : "MISSING")} / {(a.bubbles.clip ? "bubbles" : "MISSING")}, splashes {(a.splashA ? 2 : 0)}, calls {a.calls.Count}");
             return a;
         }
 
+        // Round 10: every course has its music (Course.music; a missing song: ShiftStorm's theme) and its ambience (the jungle and dinosaur
+        // calls on Paradise Plunge only; the bubbles under water everywhere)
+        public string CourseSong { get; private set; } = "";
+        Course course;
         public void SetCourse(Course c)
         {
-            bool want = c && c.look == "jurassic";
-            if (want == on) { if (on) RestartRace(); return; }
-            on = want;
-            if (on) { RestartRace(); if (jungle.clip) jungle.Play(); if (bubbles.clip) bubbles.Play(); nextCall = Time.time + 12f; }
-            else { music.Stop(); musicLoop.Stop(); alt.Stop(); altLoop.Stop(); altNow = ""; jungle.Stop(); bubbles.Stop(); }
+            if (!c) { on = false; music.Stop(); musicLoop.Stop(); alt.Stop(); altLoop.Stop(); altNow = ""; jungle.Stop(); bubbles.Stop(); return; }
+            if (c != course)
+            {
+                course = c; AudioClip M(string n) => Resources.Load<AudioClip>("Audio/Music/" + n);
+                var l = string.IsNullOrEmpty(c.music) ? null : M(c.music);
+                if (l) { loop = l; intro = M(c.music + "_intro"); CourseSong = c.music; } else { loop = themeLoop; intro = themeIntro; CourseSong = "theme (stand-in)"; }
+                Debug.Log($"[Audio] {c.courseName}: race music {(loop ? loop.name : "MISSING")}{(l ? "" : " (the course's own song is not in yet: ShiftStorm's theme)")}");
+            }
+            on = true; RestartRace();
+            bool jung = c.look == "jurassic";
+            if (jung && jungle.clip) { if (!jungle.isPlaying) jungle.Play(); } else jungle.Stop();
+            if (bubbles.clip && !bubbles.isPlaying) bubbles.Play();
+            nextCall = Time.time + 12f;
         }
         void RestartRace()
         {
@@ -99,7 +111,7 @@ namespace ShiftStorm
             string want = g && g.Trial && g.Trial.HasResults && g.Player.Finished ? "results" : g && g.MenuOpen ? (g.MenuPage == Game.Page.Main ? "theme" : "menu") : "";
             if (want != altNow && !(want == "results" && altNow == "results")) PlayAlt(want);
             bool under = ChaseCam.Underwater; float k = 1 - Mathf.Exp(-4f * Time.unscaledDeltaTime);
-            jungle.volume = Mathf.Lerp(jungle.volume, (under ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
+            jungle.volume = Mathf.Lerp(jungle.volume, (under || !jungle.isPlaying ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
             // the mix by form (the player's own racer): louder and open in flight, muffled underwater, a lift at the waterfall exit
             var m = v ? v.Mode : Mode.Drive; bool bright = Time.time < brightUntil;
             // Round 8 item 6: music louder than build 8 (x1.3, +2.3 dB: road .65, flight .78, underwater .39) and ducked 8 dB under TeedOff Barker
@@ -110,7 +122,7 @@ namespace ShiftStorm
             alt.volume = altLoop.volume = Mathf.Lerp(altLoop.volume, altVol, k);
             lp.cutoffFrequency = Mathf.Exp(Mathf.Lerp(Mathf.Log(lp.cutoffFrequency), Mathf.Log(altNow != "" ? 22000f : cut), k));
             // the race music holds its place under the menu (paused at zero volume would drift its scheduled loop: it keeps running)
-            if (calls.Count > 0 && Time.time > nextCall && v && v.Mode == Mode.Fly) { oneShot.PlayOneShot(calls[Random.Range(0, calls.Count)], .45f * Settings.Effects); nextCall = Time.time + Random.Range(14f, 24f); SoundLog.Add("ambience", "far dinosaur call"); }
+            if (calls.Count > 0 && Time.time > nextCall && v && v.Mode == Mode.Fly && course && course.look == "jurassic") { oneShot.PlayOneShot(calls[Random.Range(0, calls.Count)], .45f * Settings.Effects); nextCall = Time.time + Random.Range(14f, 24f); SoundLog.Add("ambience", "far dinosaur call"); }
             else if (Time.time > nextCall + 30f) nextCall = Time.time + 10f;
             var playing = altNow != "" ? (altLoop.isPlaying ? altLoop : alt.isPlaying ? alt : null) : musicLoop.isPlaying ? musicLoop : music.isPlaying ? music : null;
             if (playing) { playing.GetOutputData(buf, 0); float p = 0; foreach (var s in buf) p = Mathf.Max(p, Mathf.Abs(s)); MusicPeak = Mathf.Max(MusicPeak, p); }

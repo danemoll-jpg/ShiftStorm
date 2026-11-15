@@ -21,7 +21,11 @@ namespace ShiftStorm
         public float airHalfWidth;              // Round 2b: the allowed distance from the line in the air (0: halfWidth)
         public Mode startMode = Mode.Drive;
         public bool timeTrial;                  // countdown, lap timer, splits, results (Paradise Plunge); the test courses start at once
-        public string look = "";                // "jurassic": Paradise Plunge's look and sound (JurassicLook); "" = the Round 1 gray boxes
+        public string look = "";                // "jurassic": Paradise Plunge's look and sound (JurassicLook); "coaster": Coaster Coast (CoasterLook)
+        public string music = "";               // Round 10: the race song in Resources/Audio/Music (+ "_intro"); missing: ShiftStorm's theme
+        public string shortName = "";           // Round 10: TeedOff Barker's name for it, the HUD
+        public IReadOnlyDictionary<string, float> marks;   // Round 10: the course's named places along its line (progress, m)
+        public CourseStunts stunts;            // Round 10: what the AI and the pilot need to know of its jumps and rails (null: none)
         public float windowBack = 60, windowAhead = 140;
         float[] cumulative;
         public float Length { get { Prepare(); return cumulative[cumulative.Length - 1]; } }

@@ -1,0 +1,40 @@
+ShiftStorm check 'places', 2026-11-15 13:24, build 0.9.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+PLACES (item 5): races (time scale 3) until the player has finished 1st, a middle place and last; the driver's reaction clip and TeedOff Barker's results line
+  race 1 (throttle 100 %, boost, Easy): 1st of 4 in 122.5 s -> clap (1st); clip Sitting Clap; Barker: ppres ppres_2  PASS
+  race 2 (throttle 86 %, Normal): 1st of 4 in 132.2 s -> clap (1st); clip Sitting Clap; Barker: results results_2  PASS
+  race 3 (throttle 70 %, Normal): 4th of 4 in 141.5 s -> disappointed (4th, last); clip Sitting Disapproval; Barker: last last_2  PASS
+  race 4 (throttle 93 %, Normal): 1st of 4 in 127.7 s -> clap (1st); clip Sitting Clap; Barker: ppres ppres_1  PASS
+  race 5 (throttle 62 %, Normal): 4th of 4 in 148.4 s -> disappointed (4th, last); clip Sitting Disapproval; Barker: last last_1  PASS
+PLACES CHECK: 1st PASS, last PASS
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.49 ms, 95th pct 3.71 ms, 99th pct 4.37 ms, worst 26.72 ms over 102039 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  places1      Drive->Fly  z   945.2  0.601 s  frames worst 13.11 / mean 2.91 ms
+  places1      Fly->Boat   z  -607.0  0.605 s  frames worst 11.99 / mean 3.03 ms
+  places1      Boat->Dive  z  -201.8  0.604 s  frames worst 7.10 / mean 3.18 ms
+  places1      Dive->Boat  z  -466.9  0.605 s  frames worst 6.35 / mean 3.11 ms
+  places1      Boat->Drive z  -304.7  0.605 s  frames worst 6.99 / mean 3.10 ms
+  places2      Drive->Fly  z   944.8  0.606 s  frames worst 9.26 / mean 2.90 ms
+  places2      Fly->Boat   z  -606.7  0.603 s  frames worst 5.96 / mean 2.93 ms
+  places2      Boat->Dive  z  -202.4  0.603 s  frames worst 6.16 / mean 3.10 ms
+  places2      Dive->Boat  z  -466.6  0.601 s  frames worst 7.78 / mean 2.82 ms
+  places2      Boat->Drive z  -304.8  0.603 s  frames worst 6.24 / mean 2.94 ms
+  places3      Drive->Fly  z   944.6  0.601 s  frames worst 9.93 / mean 2.89 ms
+  places3      Fly->Boat   z  -606.2  0.608 s  frames worst 5.95 / mean 2.81 ms
+  places3      Boat->Dive  z  -203.1  0.605 s  frames worst 8.29 / mean 3.23 ms
+  places3      Dive->Boat  z  -466.9  0.604 s  frames worst 9.45 / mean 2.84 ms
+  places3      Boat->Drive z  -305.0  0.605 s  frames worst 5.04 / mean 2.79 ms
+  places4      Drive->Fly  z   945.2  0.605 s  frames worst 6.59 / mean 2.79 ms
+  places4      Fly->Boat   z  -606.8  0.605 s  frames worst 9.67 / mean 3.06 ms
+  places4      Boat->Dive  z  -202.1  0.601 s  frames worst 5.99 / mean 3.13 ms
+  places4      Dive->Boat  z  -466.4  0.601 s  frames worst 8.99 / mean 3.06 ms
+  places4      Boat->Drive z  -304.9  0.604 s  frames worst 6.57 / mean 3.31 ms
+  places5      Drive->Fly  z   944.8  0.602 s  frames worst 7.42 / mean 2.70 ms
+  places5      Fly->Boat   z  -606.3  0.608 s  frames worst 6.39 / mean 2.84 ms
+  places5      Boat->Dive  z  -203.1  0.605 s  frames worst 9.25 / mean 3.08 ms
+  places5      Dive->Boat  z  -466.6  0.604 s  frames worst 4.71 / mean 2.65 ms
+  places5      Boat->Drive z  -304.6  0.602 s  frames worst 8.25 / mean 2.86 ms
+sound: music results playing (its own signal peak 0.000), splashes played 5, Abi lines: waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: laugh_1; last: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: lucky_1; last: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

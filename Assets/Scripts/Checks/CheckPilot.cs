@@ -107,7 +107,7 @@ namespace ShiftStorm
             float prog = v.Progress;
             float ahead = v.Mode == Mode.Dive ? Mathf.Max(14f, v.Speed * .9f) : Mathf.Max(18f, v.Speed * 1.1f);
             var look = c.PointAt(prog + ahead, out var lookDir);
-            if (v.Mode == Mode.Drive && c == game.Courses[0] && ParadisePlunge.LoopAim(prog, ahead, out var la)) look = la;   // Round 7: along the entry lane, not up the loop
+            if (v.Mode == Mode.Drive && c.stunts != null && c.stunts.EntryAim(prog, ahead, out var la)) look = la;   // Round 7: along the entry lane, not up the loop
             if (laneOffset != 0) look += Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(lookDir, Vector3.up).normalized) * laneOffset;   // Round 4: a line beside the course line
             var fwd = Vector3.ProjectOnPlane(v.transform.forward, Vector3.up).normalized;
             var want = Vector3.ProjectOnPlane(look - p, Vector3.up).normalized;
@@ -118,7 +118,7 @@ namespace ShiftStorm
             float vert = Mathf.Clamp((ty - p.y) * .15f - vy * .12f, -1, 1);
             float thr = throttleCap, brk = 0; bool sec = secondary;
             if (holdSpeed > 0) thr = v.Speed < holdSpeed ? 1 : 0;
-            if (smart && (v.Mode == Mode.Drive || v.Mode == Mode.Boat) && !(c == game.Courses[0] && (v.OnLoop || ParadisePlunge.NoBrake(prog, prog + 6 + Mathf.Max(25f, v.Speed * 1.6f)))))
+            if (smart && (v.Mode == Mode.Drive || v.Mode == Mode.Boat) && !(v.OnLoop || (c.stunts != null && c.stunts.NoBrake(prog, prog + 6 + Mathf.Max(25f, v.Speed * 1.6f)))))
             {
                 // the line's bend ahead sets a safe speed (v = sqrt(a r)); over it: off the throttle, brake; drift / carve through bends
                 float d0 = 6, d1 = 6 + Mathf.Max(25f, v.Speed * 1.6f);
@@ -213,6 +213,15 @@ namespace ShiftStorm
             if (r8 || which == "steering") yield return SteeringCheck();
             if (r8 || which == "volumes") yield return VolumesCheck();
             if (r8 || which == "choice8") yield return Choice8();
+            bool r10 = which == "round10";   // Round 10: the stranding sweep, the edge pictures, and the Round 1 checks moved onto Paradise Plunge
+            if (r10 || which == "strand") yield return StrandCheck();
+            if (r10 || which == "edges") yield return EdgePictures();
+            if (r10) { yield return Strip(); yield return Lanes(); yield return Edges(); yield return SlowFps(); }
+            bool cc = which == "coaster";   // Round 10 item 4: Coaster Coast
+            if (cc || which == "cclap") yield return CoasterLap();
+            if (cc || which == "ccrails") yield return CoasterRails();
+            if (cc || which == "ccsplits") yield return CoasterSplits();
+            if (which == "ccprobe") yield return CoasterProbe();
             bool r9 = which == "round9";
             if (r9) yield return SteeringCheck();
             if (r9 || which == "sounds") yield return SoundsCheck();
@@ -400,86 +409,6 @@ namespace ShiftStorm
             yield return Wait(.5f);
         }
 
-        // ---- Round 1 regression: the transition strip (course 1) ----
-        IEnumerator Strip()
-        {
-            scenario = "strip"; Clear(); BeginAt(1, 0); Shot(.5f, "start");
-            yield return Until(() => v.Finished, 180f);
-            Shot(0, "finish"); yield return Wait(.3f);
-            var cs = Of("strip"); var names = string.Join(", ", cs.ConvertAll(x => x.what));
-            bool pass = v.Finished && v.Resets == 0 && cs.Count == 5;
-            Line($"STRIP {(pass ? "PASS" : "FAIL")}: finished {v.Finished} in {v.FinishTime:0.0} s, gates {v.GatesPassed}/{v.Course.gates.Count}, resets {v.Resets}{(v.Resets > 0 ? " (" + v.LastResetReason + ")" : "")}, changes {cs.Count}: {names}");
-        }
-
-        // ---- Round 1 regression: the four lanes (courses 2-5) ----
-        IEnumerator Lanes()
-        {
-            string[] names = { "", "", "drive-lane", "boat-lane", "fly-lane", "dive-lane" };
-            for (int lane = 2; lane <= 5; lane++)
-            {
-                scenario = names[lane]; Clear(); BeginAt(lane, 0); float t0 = Time.time; var mode = v.Mode; float top = 0; bool slid = false; int r0 = v.Resets;
-                steerWeave = () => { float t = Time.time - t0; return t > 3 && t < 11 ? Mathf.Sin(t * 1.4f) * .7f : 0; };
-                if (lane == 4 || lane == 5) { var c = v.Course; yOverride = () => { c.Project(v.Body.position, v.Progress, out var at, out _); return at.y + Mathf.Sin((Time.time - t0) * .6f) * 3f; }; }
-                Shot(7f, "b");
-                while (Time.time - t0 < 16f)
-                {
-                    float t = Time.time - t0; secondary = t > 6 && t < 9; boost = t > 12 && t < 14;
-                    top = Mathf.Max(top, v.Speed); slid |= v.Drifting || v.Carving; yield return null;
-                }
-                Line($"LANE {names[lane]}: form {mode} -> {v.Mode} (no change expected), top speed {top:0.0} m/s (build 2: {new[] { 0, 0, 34.5f, 26.0f, 57.7f, 28.0f }[lane]:0.0}), {(lane <= 3 ? (slid ? "drift/carve used" : "drift/carve NOT seen") : "climb/dive weave")}, resets {v.Resets - r0}");
-            }
-        }
-
-        // ---- Round 1 regression: edge cases on the strip (course 1) ----
-        IEnumerator Edges()
-        {
-            scenario = "e1-slow-ramp"; Clear(); BeginAt(1, 1); holdSpeed = 10; float speedAtLip;
-            yield return Until(() => v.Mode == Mode.Fly, 30f); speedAtLip = v.Speed; holdSpeed = -1;
-            yield return Until(() => v.Mode == Mode.Boat || v.Body.position.z > 620, 40f); yield return Wait(1f);
-            var c1 = Of(scenario);
-            Line($"E1 low-speed ramp entry {(c1.Exists(x => x.what == "Drive->Fly") && c1.Exists(x => x.what == "Fly->Boat") && v.Resets == 0 ? "PASS" : "FAIL")}: ramp at 10 m/s, flight entered at {speedAtLip:0.0} m/s, reached the lagoon in {v.Mode}, resets {v.Resets}");
-
-            scenario = "e2-boost-water"; Clear(); BeginAt(1, 2); boost = true; float boatSpeed, upright = -1, changeAt;
-            yield return Until(() => v.Mode == Mode.Boat || v.Resets > 0, 30f); changeAt = Time.time; boatSpeed = v.Speed;
-            while (Time.time - changeAt < 4f) { if (upright < 0 && v.transform.up.y > .9f && v.OnWater) upright = Time.time - changeAt; yield return null; }
-            boost = false;
-            Line($"E2 boosted water entry {(v.Mode == Mode.Boat && v.Resets == 0 && upright >= 0 && upright < 2f && boatSpeed <= game.Boat.entrySpeed.y + .5f ? "PASS" : "FAIL")}: boat speed {boatSpeed:0.0} m/s, level after {upright:0.00} s, resets {v.Resets}");
-
-            scenario = "e3-nose-down"; Clear(); BeginAt(1, 2); yOverride = () => 12f; upright = -1;
-            yield return Until(() => v.Body.position.z >= 497f || v.Resets > 0, 30f);
-            v.debugEntryPitch = -50f;
-            yield return Until(() => v.Mode == Mode.Boat || v.Resets > 0, 10f); v.debugEntryPitch = float.NaN; yOverride = null;
-            changeAt = Time.time;
-            while (Time.time - changeAt < 5f) { if (upright < 0 && v.transform.up.y > .9f) upright = Time.time - changeAt; yield return null; }
-            Line($"E3 steep nose-down water entry {(v.Mode == Mode.Boat && v.Resets == 0 && upright >= 0 && upright < 1.5f ? "PASS" : "FAIL")}: -50 deg, level after {upright:0.00} s, resets {v.Resets}");
-
-            scenario = "e4-reset-mid"; Clear(); BeginAt(1, 1);
-            yield return Until(() => v.Changing && v.Mode == Mode.Fly && Time.time - v.ChangeStartedAt >= .25f, 30f);
-            float tIn = Time.time - v.ChangeStartedAt; input.RequestReset();
-            yield return Wait(.25f);
-            var anchor = v.Course.anchors[1];
-            bool ok4 = v.Mode == Mode.Drive && !v.Changing && v.Forms.Done && v.Forms.Current == Mode.Drive && Vector3.Distance(v.Body.position, anchor.transform.position) < 6f && v.GraceUntil > Time.time;
-            int flies = Of(scenario).FindAll(x => x.what == "Drive->Fly").Count;
-            yield return Until(() => Of(scenario).FindAll(x => x.what == "Drive->Fly").Count > flies, 20f);
-            bool again = Of(scenario).FindAll(x => x.what == "Drive->Fly").Count > flies; yield return Wait(1f);
-            Line($"E4 reset during a change {(ok4 && again ? "PASS" : "FAIL")}: reset {tIn:0.00} s into Drive->Fly; back in {v.Mode}; wing zone fired again: {again}");
-
-            scenario = "e5-twice"; Clear(); BeginAt(1, 3);
-            yield return Until(() => v.Body.position.z >= 888f || v.Resets > 0, 40f);
-            reverse = true; yOverride = () => -6f;
-            yield return Until(() => v.Body.position.z <= 856f || v.Resets > 0, 20f);
-            reverse = false;
-            yield return Until(() => v.Body.position.z >= 935f || v.Resets > 0, 25f); yOverride = null;
-            var c5 = Of(scenario);
-            Line($"E5 same trigger twice {(c5.Count == 1 && c5[0].what == "Boat->Dive" && v.Mode == Mode.Dive && v.Resets == 0 ? "PASS" : "FAIL")}: changes {c5.Count} ({string.Join(", ", c5.ConvertAll(x => x.what))}), form {v.Mode}, resets {v.Resets}");
-
-            scenario = "e6-surface-road"; Clear(); BeginAt(1, 4);
-            yield return Until(() => (v.Mode == Mode.Drive && v.GroundedWheels > 0) || v.Resets > 0, 40f); yield return Wait(.5f);
-            var c6 = Of(scenario); var d = c6.Find(x => x.what == "Boat->Drive");
-            float doneAt = d != null && d.took > 0 ? d.at + d.took : -1, touch = v.FirstWheelContactAt;
-            Line($"E6 surfacing pool -> road {(c6.Exists(x => x.what == "Dive->Boat") && d != null && doneAt > 0 && touch > 0 && doneAt <= touch && v.Resets == 0 ? "PASS" : "FAIL")}: changes {string.Join(", ", c6.ConvertAll(x => x.what))}; Boat->Drive done {(doneAt > 0 && touch > 0 ? $"{touch - doneAt:0.00} s before the wheels touched" : "n/a")}, resets {v.Resets}");
-        }
-
         // ---- Round 2b item 3: the screen mode decided at start-up (logged by ScreenSetting; a test run never changes the window) ----
         void ScreenReport()
         {
@@ -532,23 +461,6 @@ namespace ShiftStorm
                 Line($"NAV pictures {form}: marker on the next gate shown {m1}; turned 125 deg away: arrow shown {a1} at {yaw:0} deg, cue \"{(Time.time < v.CueUntil ? v.Cue : "")}\"");
                 coast = false;
             }
-        }
-
-        // ---- Round 2b item 2: movement does not slow down at a low frame rate ----
-        IEnumerator SlowFps()
-        {
-            var res = new List<(float fps, float dist, float gameT, float wallT)>();
-            foreach (int sleep in new[] { 0, 40, 90 })
-            {
-                scenario = $"slowfps-{sleep}"; Clear(); BeginAt(2, 0); yield return Wait(.2f);
-                var start = v.Body.position; float g0 = Time.time, w0 = Time.realtimeSinceStartup; int f0 = Time.frameCount; sleepMs = sleep; float worst = 0, sumU = 0, sumD = 0;
-                while (Time.time - g0 < 6f) { worst = Mathf.Max(worst, Time.unscaledDeltaTime); sumU += Time.unscaledDeltaTime; sumD += Time.deltaTime; yield return null; }
-                sleepMs = 0;
-                float gt = Time.time - g0, wt = Time.realtimeSinceStartup - w0; res.Add(((Time.frameCount - f0) / wt, Vector3.Distance(start, v.Body.position), gt, wt)); Line($"  slowfps sleep {sleep} ms: worst frame {worst * 1000:0} ms, sum of unscaled frame times {sumU:0.00} s, of game frame times {sumD:0.00} s, timeScale {Time.timeScale}, captureDeltaTime {Time.captureDeltaTime}");
-            }
-            float d0 = res[0].dist; bool pass = true; var parts = new List<string>();
-            foreach (var x in res) { float ratio = x.dist / d0, pace = x.gameT / x.wallT; pass &= Mathf.Abs(ratio - 1) < .02f && pace > .97f; parts.Add($"{x.fps:0} fps: {x.dist:0.0} m in {x.gameT:0.00} s game time ({x.wallT:0.00} s real, {pace:0.00} x), {ratio * 100:0.0} %"); }
-            Line($"SLOW FPS {(pass ? "PASS" : "FAIL")}: full throttle from standstill on the drive lane for 6 s of game time; {string.Join("; ", parts)}. Fixed step {Time.fixedDeltaTime * 1000:0.00} ms, maximum catch-up {Time.maximumDeltaTime:0.00} s per frame");
         }
     }
 }

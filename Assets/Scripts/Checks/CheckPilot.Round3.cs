@@ -37,7 +37,8 @@ namespace ShiftStorm
         // ---------------- item 1: invert from the menu ----------------
         IEnumerator Pitch(int course, Mode m, string tag, Action<float> got)
         {
-            BeginAt(course, 0); yield return Wait(m == Mode.Dive ? 1.6f : .6f);
+            BeginForm(m);   // Round 10: a plane / sub anchor on Paradise Plunge (build 11: the fly / dive lanes)
+            yield return Wait(m == Mode.Dive ? 1.6f : .6f);
             input.sRawStick = false; input.sVertical = 0; input.sThrottle = 1; yield return Wait(.3f);
             float p0 = v.PitchDeg; input.sRawStick = true; input.sVertical = -1f;   // the stick pulled back (as on the pad: forward = +)
             yield return Wait(.45f);
@@ -48,7 +49,7 @@ namespace ShiftStorm
         {
             scenario = "settings"; Clear(); aiDrives = true;
             Line($"SETTINGS: file {Settings.FilePath}, invert at start {(ShiftInput.Invert ? "on" : "off")}, chosen before {Settings.InvertChosen}");
-            BeginAt(4, 0); yield return Wait(1.2f);
+            BeginForm(Mode.Fly); yield return Wait(1.2f);
             bool noteShown = Hud.Instance.NoteText.Contains("Menu > Settings"); Capture("first-flight-note");
             Line($"FIRST FLIGHT NOTE {(noteShown ? "PASS" : "FAIL")}: \"{Hud.Instance.NoteText}\" shown on the first flight; nothing asked at start-up");
             float fOff = 0, dOff = 0, fOn = 0, dOn = 0;
@@ -293,14 +294,14 @@ namespace ShiftStorm
         IEnumerator Soak()
         {
             int laps = ArgInt("-laps", 100); float scale = ArgFloat("-timeScale", 3f), limit = 2f * 150f;
-            Line($"SOAK: {laps} AI laps, four AI cars per race (Abi's car driven by an AI too), time scale {scale:0.0} (physics still at 60 Hz steps), a lap counts when finished within {limit:0} s (twice the 150 s target)");
-            var abi = new Rival { name = "Abi (AI)", lane = 0, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Sky Arch slit|Coral Vault tunnel", shortcutRate = .25f, seed = 51 };
+            Line($"SOAK ({game.Courses[ArgInt("-course", 0)].courseName}): {laps} AI laps, four AI cars per race (Abi's car driven by an AI too), time scale {scale:0.0} (physics still at 60 Hz steps), a lap counts when finished within {limit:0} s (twice the 150 s target)");
+            var abi = new Rival { name = "Abi (AI)", lane = 0, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Sky Arch slit|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .25f, seed = 51 };
             int done = 0, counted = 0, bad = 0, race = 0; var times = new List<float>(); var resetsAt = new List<(string who, string why, Vector3 at, float prog)>(); var dnfs = new List<string>();
             var takenBy = new Dictionary<string, int>();
             while (done < laps)
             {
                 race++; scenario = $"soak{race}"; Clear(); aiDrives = true;
-                game.StartCourse(0, true);
+                game.StartCourse(ArgInt("-course", 0), true);   // Round 10: -course 1 soaks Coaster Coast
                 var pilot = v.GetComponent<RivalPilot>() ?? v.gameObject.AddComponent<RivalPilot>(); pilot.rival = abi; pilot.AlwaysOn = true;
                 Time.timeScale = scale;
                 yield return Until(() => !v.Holding, 10f); float go = Time.time;

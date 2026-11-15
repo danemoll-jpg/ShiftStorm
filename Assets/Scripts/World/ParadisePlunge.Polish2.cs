@@ -40,8 +40,8 @@ namespace ShiftStorm
                 if (rnd.NextDouble() < .35) Boulder(rock, new Vector3(q.x, .8f, q.z) - r * (hw + R(9, 13)), R(.5f, 1f), R(0, 360));
                 if (rnd.NextDouble() < .2) rock.Add(MeshKit.LowCylinder, new Vector3(q.x, 1.3f, q.z) - r * (hw + R(6, 9)), Quaternion.Euler(R(80, 95), R(0, 180), 0), new Vector3(.5f, R(2.5f, 4f), .5f), new Color(.72f, .62f, .48f));
                 // the inland side (right): a jungle wall, tall tree ferns behind lower cycads
-                if (rnd.NextDouble() < .7) Fern(green, new Vector3(q.x, 1.5f, q.z) + r * (hw + R(22, 34)), R(1.3f, 1.9f), R(0, 360));
-                if (rnd.NextDouble() < .5) Cycad(green, new Vector3(q.x, 1.5f, q.z) + r * (hw + R(12, 18)), R(1f, 1.4f), R(0, 360));
+                if (rnd.NextDouble() < .7) Fern(green, new Vector3(q.x, GTop, q.z) + r * (hw + R(22, 34)), R(1.3f, 1.9f), R(0, 360));
+                if (rnd.NextDouble() < .5) Cycad(green, new Vector3(q.x, GTop, q.z) + r * (hw + R(12, 18)), R(1f, 1.4f), R(0, 360));
             }
             // pennant flags along the promenade's barrier posts every 40 m (orange / green / cream), high enough to read past the cars
             var flags = new MeshKit.Batch(); var fc = new[] { new Color(1f, .55f, .12f), new Color(.35f, .75f, .3f), new Color(.98f, .92f, .75f) }; int fi = 0;

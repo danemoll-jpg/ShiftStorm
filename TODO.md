@@ -20,8 +20,69 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 10 — no stranding walls, test tracks out, Coaster Coast** (2026-11-15, release `build-12` / 0.9.0).
 - **Round 9 — sensible steering, racing lines, one finish sound, the crowd, three new designs** (2026-11-15, release `build-11` / 0.8.2).
 - **Round 8b — dinosaurs you can actually see** (2026-11-14, release `build-10` / 0.8.1). Status below.
+
+### Round 10 delivery (2026-11-15) — status per item
+Evidence: `Docs/Checks/round10/` (reports, before / after edge pictures, Coaster Coast player-view pictures). Every run: built exe, `-batchmode -mute`,
+no window, Below Normal, one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run but one: the
+first 50-lap Coaster Coast soak read a single 0.44 peak with the volume at 0 the whole run (nothing can bypass it: no source ignores the
+listener volume, the volume was never set above 0, no "sound ON" in the log). The meter now logs the time and the playing sources of
+any non-zero peak; every run since (soaks included) read 0.000000. Sound was never unmuted.
+1. **No stranding edges — done.** The promenade's 0.8 m barriers are gone (a flush red / white kerb); the ground beside the promenade and
+   the finishing road is flush with the road (build 11: 0.5 m lower behind the barrier); the lakeside beach slopes into the lake (build 11:
+   a 1.3 m step). Before the loop: two long angled stone guide walls from 75 / 85 m out (past the out-of-bounds line) to the loop's entry,
+   so nothing in bounds is behind them and a car on the grass is glanced into the loop. The climb keeps its barriers (they rise out of the
+   road 60 m before it); fall zones under its valley side reset at once; a low guide wall joins the canyon's east wall to the climb's
+   barrier (cars down wide from the Lake flight ran off the end of the flush ground there: 36 AI resets in 50 laps, now 3). G1 is 22 m wide
+   (15): the ground beside it is drivable now. *Check (`strand`, 36 scripted bad landings: every jump and the loop left / right / wide /
+   angled / long / short, car and fly lines, the water ramp):* **0 strandings** (21 on the road, 6 drove back, 9 clearly reset); build
+   11's layout (`-oldEdges`) in the same sweep: 2 stranded (round the outside of the loop). Pictures before / after: creek landing,
+   promenade, loop approach (front and side), Lake Jump landing, canyon mouth, the climb's valley side, finishing road.
+2. **Test tracks removed — done.** The Round 1 strip and four lanes, their menu rows, `-course 2..5`, the D-pad / F3 / F4 course switch and
+   15 gray-box materials are gone; `-course 0..1` now picks Paradise Plunge / Coaster Coast. Every check that used them runs on Paradise
+   Plunge (`Checks/CheckPilot.Round10.cs`): strip (from the climb's last anchor: 5 changes, PASS), the four lanes (each form at top speed
+   on its part of the lap), E1-E6, slow fps: all PASS. Build data folder 141.69 MB (build 11) -> 143.35 MB (with Coaster Coast added).
+3. **Scrambler hands on the grips — done.** Abi bends forward from the spine and chest (up to 35 deg), then the shoulders stretch (up to
+   12 cm) to reach the bars (`Driver.ReachForward`). *Check (`bike`):* hands 0 / 0 cm off the grips in Car, Boat, Plane and Sub (build 11:
+   10-20 cm short); pictures of each form.
+4. **Coaster Coast — done (three stand-in models).** A seaside pier amusement park on its opening night (Docs/STORY.md): sunset turning to
+   night over the lap, "GRAND OPENING" bulb marquees, fireworks, string lights, a new place (not Tee'd Off's). Boardwalk -> **Midway Jump**
+   (choice: car under / plane through the hubless Ferris wheel) -> **coaster rail A** (launch pad to 72 m/s, airtime hill, banked turn, a
+   loop, the **Coaster Gap** jump) -> **rail B** (corkscrew, lift hill, top hat, launch into flight) -> **flight** (round the
+   helter-skelter, through fireworks rings, past the mascot balloon) -> **log flume** splash-down and flume under the boardwalk -> **the
+   sea** (split: **Lighthouse round / rocks**) -> **under the fishing pier** (sunken carousel, the octopus) -> splash pool ramp -> finish.
+   On a rail the car is locked to the track (booster tyres hold a minimum speed; it never stalls, rolls back or falls off). Ordered gates,
+   near misses, route strip / arrow, AI on all difficulties (they ride the rails and pick both splits), split screen, camera views, the
+   crowd (4 stands), Barker's own lines for it (53 new: the park, the rails, the splits, opening night, results per course; ElevenLabs, his voice, -16 LUFS), driver reactions, playtest
+   logs, best time per course. Menu: a Course row (Race / Time Trial / 2 Players). Music: Dan's "Coaster Coast" song (`race_coaster`).
+   *Checks:* pilot lap **107.8 s**, 11 / 11 gates, 0 resets, 5 changes; set-pieces **8 of 8 segments** >= 8 % of the screen for >= 1 s;
+   rails A and B at full / slow / very slow: **6 of 6 through**, never under the booster minimum; splits: Midway car 11.97 s / fly 10.40 s,
+   Lighthouse round 23.92 s / rocks 22.66 s (3 of 3 clean each); split-screen lap PASS (both valid, HUDs right in every sample); PC frame
+   mean 4.2 ms, 95th pct 6.7 ms (one view), 8.5 / 12.8 ms split. Pictures of every segment looked at. Stand-ins: mascot balloon, octopus,
+   whale (2-3 Tripo prompts in `Docs/MODELS-NEEDED.md`). **No Tee'd Off music anywhere** (`course_jurassic` deleted; the theme is the fallback).
+5. **Regression + soaks + release — done.** Paradise Plunge: lap 124.6 s, round2, round2b, round5, round6, round8 (dinos, places after a
+   check fix), round9, round10, choice (car 5.78 / fly 4.65 s), crowd (8 stands, only the raced course's cheer), barker (0 overlaps), quit
+   (exit 0), difficulty Easy +20 % / Normal +7 % / Hard -3 %: PASS. Not passing, all pre-existing (build 11 too): round7's Cliff Gap
+   short / slow case, round3's Lake flight shortcut timing (the check starts from the wrong anchor; the `choice` check times it).
+   Soaks (Normal, 50 AI laps each, time scale 3): **Paradise Plunge 50 of 50**, 0 bad gate sequences, laps 131.7 / 134.7 / 145.9 s,
+   5 resets; **Coaster Coast 50 of 50**, 0 bad gate sequences, laps 113.4 / 117.6 / 124.6 s, 18 resets (all after the Midway flight: see
+   For Dan); 25 race starts: 0 touches, 0 resets; invert (fly and dive both ways) PASS.
+   Fixed on the way: a coaster rail's race progress now follows the track (it could jump to the boardwalk 75 m away); a bump between
+   racers is capped (6 m/s sideways, 15 % of the speed); the invert check measured the sub with no settle time and too near the floor.
+
+#### For Dan to check (Round 10)
+- **The promenade:** land wide off the Creek Jump and the Lake Jump on purpose: can you always drive back onto the road? Do the guide walls
+  before the loop read as walls, and does the kerb look right?
+- **Coaster Coast, start to finish:** the rails (does riding the coaster feel good, the launch, the loop, the corkscrew, the top hat into
+  flight?), the Coaster Gap, the flume, the Lighthouse rocks, under the pier. Is ~108 s the right length?
+- **Opening night:** the sunset-to-night sky, fireworks, "GRAND OPENING" marquees, Barker's opening lines; your Coaster Coast song in game.
+- **The Midway Jump choice:** through the Ferris wheel vs under it (1.6 s apart): worth the risk?
+- **Deck FPS on Coaster Coast** (R3), especially the flight over the park and split screen (PC: 4.2 ms, split 8.5 ms).
+- **Scrambler:** Abi's forward lean to the bars: natural or too much?
+- **Known:** on Coaster Coast about one AI lap in four is reset after the Midway flight (it lands and is thrown sideways near the coaster
+  station); not seen with a single car in any probe; the AI loses ~5 s. Next round.
 
 ### Round 9 delivery (2026-11-15) — status per item
 Evidence: `Docs/Checks/round9/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy job at a
@@ -393,8 +454,8 @@ as before.
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check (fill in at end of round)
-- …
+### For Dan to check
+See "For Dan to check (Round 10)" under Completed Tasks.
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

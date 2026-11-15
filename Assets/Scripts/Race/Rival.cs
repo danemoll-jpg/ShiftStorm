@@ -1,3 +1,5 @@
+using System.Linq;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,8 +38,8 @@ namespace ShiftStorm
         public int seed;
         public static readonly Rival[] Roster =
         {
-            new Rival { name = "Rocket Rae", character = "Rae", color = new Color(.85f, .12f, .15f), lane = -2.5f, brakeMargin = .92f, boostMeter = .5f, boostStraight = 11f, shortcut = "Sky Arch slit", shortcutRate = .5f, seed = 11 },
-            new Rival { name = "Chip \"Showtime\" Sterling", character = "Chip", color = new Color(.15f, .4f, .95f), lane = 2.5f, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Coral Vault tunnel", shortcutRate = .5f, seed = 23 },
+            new Rival { name = "Rocket Rae", character = "Rae", color = new Color(.85f, .12f, .15f), lane = -2.5f, brakeMargin = .92f, boostMeter = .5f, boostStraight = 11f, shortcut = "Sky Arch slit|Lighthouse rocks", shortcutRate = .5f, seed = 11 },
+            new Rival { name = "Chip \"Showtime\" Sterling", character = "Chip", color = new Color(.15f, .4f, .95f), lane = 2.5f, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Coral Vault tunnel|Lighthouse rocks", shortcutRate = .5f, seed = 23 },
             new Rival { name = "Vivi", character = "Vivi", color = new Color(.62f, .25f, .9f), lane = 0f, brakeMargin = .88f, boostMeter = .65f, boostStraight = 8f, seed = 37 },
         };
     }
@@ -79,6 +81,7 @@ namespace ShiftStorm
         float Ahead(float speed) => v.Mode == Mode.Dive ? Mathf.Max(planned && !scDone && v.Progress >= planned.mainFrom ? 9f : 14f, speed * (planned && !scDone && v.Progress >= planned.mainFrom ? .45f : .9f)) : Mathf.Max(18f, speed * 1.1f);
 
         // the path the rival follows: the main line, or its shortcut's line from where the shortcut leaves the main line until it rejoins
+        float offNoteAt;   // Round 10: diagnostics (an AI far off the line logs where it is aiming)
         Vector3 PathAt(float ahead, out Vector3 dir)
         {
             var c = v.Course;
@@ -106,13 +109,8 @@ namespace ShiftStorm
         float MaxOffset()
         {
             if (planned && !scDone && v.Progress >= planned.mainFrom - 30) return 0;
-            var m = ParadisePlunge.Marks; float p = v.Progress;
-            if (v.Course != Game.Instance?.Courses[0] || m.Count == 0) return 0;
-            if (ParadisePlunge.StuntNear(p)) return 0;   // Round 7: on its line into the loop (7 m half) and over the jumps
-            foreach (var k in new[] { "lip", "splash", "diveZone", "portal", "surface", "rampFoot", "rampLip", "landing", "G1", "G5", "G7", "G8", "G9", "finish" })
-                if (Mathf.Abs(p - m[k]) < 45) return 0;
-            if (p > m["rampStart"] - 20 && p < m["lip"]) return 0;
-            if (p > m["poolEdge"] - 20 && p < m["G9"] + 10) return 0;
+            float p = v.Progress; var st = v.Course ? v.Course.stunts : null;   // Round 10: the course's own narrow places (CourseStunts)
+            if (st == null || st.Narrow(p, v.Mode)) return 0;
             switch (v.Mode)
             {
                 case Mode.Drive: return 6f;
@@ -178,7 +176,8 @@ namespace ShiftStorm
             if (planned && !scDone && v.OnShortcut != planned && hitTimes.Count >= 3) { v.Note("plan", $"{v.RacerName} gives up the {planned.label} (hitting rock)"); scDone = true; Plan = ""; hitTimes.Clear(); }
             float ahead = Ahead(speed);
             var look = PathAt(ahead, out _);
-            if (v.Mode == Mode.Drive && !(planned && !scDone) && v.Course == Game.Instance?.Courses[0] && ParadisePlunge.LoopAim(v.Progress, ahead, out var la)) look = la;
+            if (v.Mode == Mode.Drive && !(planned && !scDone) && v.Course.stunts != null && v.Course.stunts.EntryAim(v.Progress, ahead, out var la)) look = la;
+            if (v.OffLine > 40f && v.Mode == Mode.Drive && Time.time > offNoteAt) { offNoteAt = Time.time + 3f; var cp = v.Course.PointAt(v.Progress, out _); v.Note("ai", $"{v.RacerName} {v.OffLine:0} m off the line at {v.Progress:0} m: at {p.x - cp.x:0},{p.z - cp.z:0} from the line, looking at {look.x - cp.x:0},{look.z - cp.z:0}, plan '{Plan}' done {scDone}, on {(v.OnShortcut ? v.OnShortcut.label : "-")}, scS {scS:0}, pos {p.x - cp.x:0.0},{p.y:0.0},{p.z - cp.z:0.0} vel {v.Body.linearVelocity.x:0},{v.Body.linearVelocity.y:0},{v.Body.linearVelocity.z:0} wheels {v.GroundedWheels} changing {v.Changing}"); }
             // blocked (pinned against another car or a wall) on land or water: back out with the wheel turned the other way, as a player
             // would, well before the vehicle's own stuck reset (4 s)
             bool ground = v.Mode == Mode.Drive || v.Mode == Mode.Boat;
@@ -225,7 +224,7 @@ namespace ShiftStorm
             float d0 = 6, d1 = 6 + Mathf.Max(25f, speed * 1.6f);
             PathAt(d0, out var a0); PathAt(d1, out var a1);
             float turnFlat = Vector3.Angle(Vector3.ProjectOnPlane(a0, Vector3.up), Vector3.ProjectOnPlane(a1, Vector3.up));
-            bool stuntLine = v.Mode == Mode.Drive && v.Course == Game.Instance?.Courses[0] && (v.OnLoop || ParadisePlunge.NoBrake(v.Progress, v.Progress + d1));   // Round 7: the loop's line turns over itself: no braking for it
+            bool stuntLine = v.Mode == Mode.Drive && (v.OnLoop || (v.Course.stunts != null && v.Course.stunts.NoBrake(v.Progress, v.Progress + d1)));   // Round 7: the loop's line turns over itself: no braking for it
             if ((v.Mode == Mode.Drive || v.Mode == Mode.Boat) && !stuntLine)
             {
                 float turn = turnFlat * Mathf.Deg2Rad, r = turn > 1e-3f ? (d1 - d0) / turn : 1e4f;

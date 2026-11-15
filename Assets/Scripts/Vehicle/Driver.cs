@@ -310,7 +310,37 @@ namespace ShiftStorm
             bool want = m != null && oneShot < 0 && !v.Finished && forms.ShowDriver;
             ik = Mathf.MoveTowards(ik, want ? 1 : 0, Time.deltaTime / .25f);
             if (ik <= 0 || m == null) return;
+            ReachForward(m.gripL.position, m.gripR.position, ik);
             TwoBone(uaL, laL, handL, m.gripL.position, -1, ik); TwoBone(uaR, laR, handR, m.gripR.position, 1, ik);
+        }
+        // Round 10 item 3: grips further than her arms reach (the Scrambler's own bars, 10-20 cm short in build 11): she bends forward from the
+        // spine (and chest) until both shoulders are within 97 % of the arm's length of their grip, up to 35 deg; whatever is still missing
+        // after that, the shoulders move towards the grips (a stretch of at most 12 cm). A rider over a bike's bars leans like this anyway.
+        public float LastReachLean { get; private set; }
+        void ReachForward(Vector3 gl, Vector3 gr, float w)
+        {
+            LastReachLean = 0;
+            if (!spine || !uaL || !uaR || !laL || !laR || !handL || !handR) return;
+            float armL = (Vector3.Distance(uaL.position, laL.position) + Vector3.Distance(laL.position, handL.position)) * .97f;
+            float armR = (Vector3.Distance(uaR.position, laR.position) + Vector3.Distance(laR.position, handR.position)) * .97f;
+            float Short() => Mathf.Max(Vector3.Distance(uaL.position, gl) - armL, Vector3.Distance(uaR.position, gr) - armR);
+            if (Short() <= 0) return;
+            var axis = transform.right; float total = 0;
+            for (int i = 0; i < 6 && Short() > .005f && total < 35f; i++)
+            {
+                var mid = (uaL.position + uaR.position) * .5f; float torso = Mathf.Max(.15f, Vector3.Distance(spine.position, mid));
+                float deg = Mathf.Min(35f - total, Mathf.Rad2Deg * Mathf.Asin(Mathf.Clamp(Short() / torso, 0, .9f)) * 1.1f);
+                spine.rotation = Quaternion.AngleAxis(deg * w * (chest ? .55f : 1f), axis) * spine.rotation;
+                if (chest) chest.rotation = Quaternion.AngleAxis(deg * w * .45f, axis) * chest.rotation;
+                total += deg;
+            }
+            LastReachLean = total * w;
+            float rest = Short();
+            if (rest > .005f)
+            {
+                float k = Mathf.Min(rest, .12f) * w;
+                uaL.position += (gl - uaL.position).normalized * k; uaR.position += (gr - uaR.position).normalized * k;
+            }
         }
         void TwoBone(Transform upper, Transform lower, Transform hand, Vector3 target, float side, float w)
         {

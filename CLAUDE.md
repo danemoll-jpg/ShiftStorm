@@ -98,10 +98,9 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Look around (pulled back = look behind) | Right stick | - |
 | Reset to last safe anchor | Y | R |
 | Invert climb / dive (per player, saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
-| Previous / next course (strip, 4 lanes) | D-pad left / right | F3 / F4 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
-| Menu: Resume, Restart, Race, Time Trial, test courses, 2 Players, Garage, Settings, Quit game | Menu (Start), either player | Esc |
+| Menu: Resume, Restart, Course (Paradise Plunge / Coaster Coast), Race, Time Trial, 2 Players (its own Course row), Garage, Settings, Quit game | Menu (Start), either player | Esc |
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
@@ -120,7 +119,7 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `powershell -File Tools/Unity-Batch.ps1 -Log local/logs/build.log -Method ShiftStorm.EditorTools.BuildPlayer.Run -Extra '-buildVersion','0.1.0'`
 - Muted, windowless check in the built exe (`-batchmode -mute`, Below Normal; report + pictures in the folder):
   `powershell -File Tools/Run-Check.ps1 -Check round2 -Out local/round2/check -Extra '-saveDir','local/round2/save'`
-  (`round2` = `lap` + `skip` + `abi`; `round1` = `strip` + `lanes` + `edge`; `round2b` = `screen` + `nav` + `lap` + `skip` + `slowfps`;
+  (`round2` = `lap` + `skip` + `abi`; `round1` = `strip` + `lanes` + `edge` (Round 10: all on Paradise Plunge, the test courses are gone); `round2b` = `screen` + `nav` + `lap` + `skip` + `slowfps`;
   `all` = all three; `best` = a second process reading the best time saved by `lap`, same `-saveDir`). Round 3: `round3` = `settings` +
   `race` + `shortcuts`; `settings2` (a second process: invert survived), `quit` / `quitresults` (exit code 0), `waterfall` (item 3's
   recorder, CSV per run; `-before` = build 3's behaviour), `race` (`-races N`), `shortcuts`, `soak` (`-laps 100 -timeScale 3`, use
@@ -140,12 +139,17 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   first person + chase, full left / centre / right, hands-to-grips) + `volumes` (the four volumes, a migrated old settings.json via `-saveDir`, the
   duck) + `choice8` (Lake Jump car vs fly + canyon / lake pictures); `hitch` = the lap alone (HitchProbe: engine markers per long frame,
   best in the development build: BuildPlayer `-development` -> `Builds/ShiftStormDev`, Run-Check `-Exe`). `-noDinos`, `-noWarmup` for comparisons.
+  Round 10: `round10` = `strand` (bad landings off every jump / the loop / the water ramp: on the road, drove back, clearly reset or STRANDED)
+  + `edges` (pictures of the changed road edges) + `strip` + `lanes` + `edge` + `slowfps` (the Round 1 checks, now on Paradise Plunge);
+  `-oldEdges` builds build 11's promenade / finishing-road edges (before pictures, before sweep). `coaster` = `cclap` (Coaster Coast lap: segments,
+  set-piece visibility, rails, perf) + `ccrails` (each rail full / slow / very slow) + `ccsplits` (Midway Jump car / fly, Lighthouse round / rocks);
+  `soak` and `split` take `-course 1` for Coaster Coast. `ccprobe`: diagnostics (see Round 10).
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
-- Game start options: `-course 0..5` (0 Paradise Plunge, 1 transition strip, 2 drive lane, 3 boat lane, 4 fly lane, 5 dive lane);
+- Game start options: `-course 0..1` (0 Paradise Plunge, 1 Coaster Coast);
   `-race` / `-trial`; `-saveDir <dir>` puts the best-times and settings files elsewhere (checks never touch Dan's own files).
-- In game: Menu (Start) / Esc opens the menu (see Controls); D-pad left / right still steps courses.
+- In game: Menu (Start) / Esc opens the menu (see Controls). D-pad left / right no longer steps courses (Round 10).
 - Vehicle import (Round 5, one command, Tripo models Dan saved in `Art/Incoming/Vehicles/<Design>/<Design>_<Form>.fbx`):
   `python Tools/import_vehicles.py` (or `--design Jetstream`; takes Tripo's zips as downloaded, meshes capped at 20,000 faces;
   `import.json` "files" maps a form saved under another name; `--src local/round5/testfbx --design _Test` for the stand-in made by
@@ -297,7 +301,30 @@ Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes b
     to `Tools/Characters/rig_dino.py`) -> `Resources/Dinos/<style>_rig.bytes`; stand-ins only if a rig is missing.
   - Checks: `round9` = `steering` + `sounds` + `crowd` + `bike` (`-testDesign Scrambler`) + `designs` (Garage + who races what).
 
-Round 9 delivered as build 11 (0.8.2), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").Current objective: **Round 10** — remove the wall before the loop where racers get stranded (and any other stranding spot on
-the lap), remove the test strip and lanes from the game (checks move onto Paradise Plunge), Abi's hands on the Scrambler's bars, and a
-second track: **Coaster Coast** (working name; a seaside boardwalk amusement park with a roller coaster, all four forms;
-a new environment, not Tee'd Off's). Release build 12 (0.9.0). See `TODO.md`.
+Round 9 delivered as build 11 (0.8.2), 2026-11-15.
+
+- **Round 10 (build 12, 0.9.0):**
+  - **No stranding edges** (`ParadisePlunge.cs`, `ParadisePlunge.Stunts.cs`): the promenade's and the finishing road's barriers are gone (a flush
+    red / white kerb instead); the ground beside them is flush with the road (`GroundTop` 1.97 m), the lakeside beach slopes into the lake; two
+    long angled guide walls before the loop span the whole in-bounds width (nothing in bounds is behind them); fall zones under the climb's
+    valley side. `-oldEdges` builds build 11's layout.
+  - **Test courses removed:** the Round 1 strip and lanes, their menu rows, the D-pad / F3 / F4 course switch and 15 gray-box materials;
+    their checks run on Paradise Plunge (`Checks/CheckPilot.Round10.cs`). `WorldBuilder` builds the two courses.
+  - **Coaster Coast** (`World/CoasterCoast*.cs`, `CoasterLook.cs`, `CoasterRail.cs`, `Vehicle/ShiftVehicle.Rail.cs`): a pier amusement park 8 km
+    east of Paradise Plunge (only the raced course is active: `CourseLook`), sunset turning to night over the lap (`CoasterSky`), the tour's
+    public opening night (Docs/STORY.md: "GRAND OPENING" banners, fireworks, Barker's opening-night lines). Boardwalk (Midway Jump: car under /
+    fly through the hubless Ferris wheel) -> coaster rail A (launch, airtime hill, banked turn, loop, the Coaster Gap jump) -> rail B
+    (corkscrew, lift hill, top hat) -> flight (helter-skelter, fireworks rings, mascot balloon) -> log flume (under the boardwalk's jump) ->
+    the sea (Lighthouse round / rocks) -> under the fishing pier (sunken carousel, octopus) -> splash pool ramp -> finish. Rails: a car is
+    locked to the track (booster minimum speeds, never stalls or falls off). Per-course data: `Course.music / marks / stunts` (`CourseStunts`)
+    for the AI, the pilot, the route strip and Barker (`Caller.ForCourse`, cc* pools). Set-pieces: `SetPiece` (Round 8b's 8 % rule).
+    Stand-ins: mascot balloon, octopus, whale (Tripo prompts in `Docs/MODELS-NEEDED.md`). Music: Dan's `race_coaster`.
+  - **No Tee'd Off music:** `course_jurassic` deleted; a missing course song falls back to ShiftStorm's theme.
+  - Scrambler: Abi bends forward from the spine to reach the bars (`Driver.ReachForward`): hands on the grips in every form.
+  - Late fixes: a low guide wall joins the canyon's east wall to the climb's barriers (`ClimbGuard`); on a coaster rail race progress is the
+    share of the track ridden and no recovery runs; a bump between racers is capped (6 m/s sideways, 15 % of the speed: `RacerBump`); no rail
+    support stands on a road (`OverRoad`); `AudioMeter` logs any non-zero output peak with the sources playing. `ccprobe` = a car driven
+    through Coaster Coast's station straight on five lines, logging heading jumps and the colliders round it. Known: ~1 AI lap in 3 on
+    Coaster Coast is reset just after the Midway flight (thrown sideways near the station; not reproduced with one car).
+
+Round 10 delivered as build 12 (0.9.0), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").

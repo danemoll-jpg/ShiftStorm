@@ -13,7 +13,7 @@ namespace ShiftStorm
     //   it, still in the air, changes into the plane. Anywhere else LB does nothing (logged once per press).
     public sealed partial class ShiftVehicle
     {
-        public bool OnLoop => loop != null;
+        public bool OnLoop => loop != null || rail != null;   // Round 10: a coaster rail counts as the loop (camera, no braking, no wrong way)
         public LoopRail Loop => loop;
         public float LoopAngle => loopTh;
         public bool LoopSlipping => loopSlip;
@@ -37,7 +37,7 @@ namespace ShiftStorm
 
         void ClearStunts()
         {
-            if (loop) { loop = null; Body.useGravity = Mode == Mode.Drive || Mode == Mode.Boat; }
+            if (loop || rail) { loop = null; rail = null; Body.useGravity = Mode == Mode.Drive || Mode == Mode.Boat; }
             loopSlip = false; lastPad = null; stuntPrevSet = false; WingsUntil = -1; airFor = 0; landHoldUntil = -1;
         }
 
@@ -53,12 +53,14 @@ namespace ShiftStorm
                 if (WingsOpen && GroundedWheels == 0 && !Changing) { WingsUsed++; WingsUntil = -1; Change(Mode.Fly, "wings out (choice jump)"); Stunt?.Invoke("wings"); }
                 else { WingsIgnored++; Note("wings", $"wings pressed: nothing here ({(Mode != Mode.Drive ? Mode.ToString() : WingsUntil > 0 && Time.time >= WingsUntil ? "after the window" : GroundedWheels > 0 && WingsOpen ? "still on the lip" : "not a choice jump")})"); }
             }
-            if (OnLoop) { StepLoop(dt); return true; }
+            if (rail) { StepRail(dt); return true; }
+            if (loop) { StepLoop(dt); return true; }
             if (Mode != Mode.Drive) { airFor = 0; return false; }
             foreach (var l in ChoiceLip.All) if (l.Contains(p)) { if (WingsUntil < Time.time) Note("wings", "choice jump: wings window open"); WingsUntil = Time.time + l.window; }
             // the loop's entry plane
             foreach (var r in LoopRail.All)
                 if (r.Entered(prev, p, out float lat) && Vector3.Dot(Body.linearVelocity, r.F) > 0) { EnterLoop(r, lat); StepLoop(dt); return true; }
+            if (TryEnterRail(prev, p, dt)) return true;   // Round 10: a coaster rail's entry plane
             // the boost pad
             BoostPad onPad = null; foreach (var b in BoostPad.All) if (b.Contains(p)) onPad = b;
             if (onPad && onPad != lastPad)

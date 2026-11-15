@@ -50,6 +50,9 @@ namespace ShiftStorm
             ("", -12, -7, -330), ("poolEdge", 0, -3, -300), ("surface", 0, .6f, -268), ("G8", 0, .6f, -238), ("rampFoot", 0, .6f, -222), ("rampLip", 0, 5.6f, -182), ("landing", 0, 4.5f, -160),
             ("G9", 0, 2.9f, -140), ("", 0, 2.9f, -60), ("finish", 0, 2.9f, 0), ("lineEnd", 0, 2.9f, 20),
         };
+        // Round 10 item 1: the ground's top beside the roads (flush with the road surface at RoadY), and the build 11 layout for comparisons
+        public const float GroundTop = 1.97f;
+        public static bool OldEdges => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldEdges") >= 0;
         public const float RoadY = 2f, Water = 0f, CaveRoof = -1.5f, CaveFloor = -18f, CaveHalf = 17f;
         // Round 2b: the whole course is S times larger on the ground plan than build 2 (heights unchanged), so the lap stays about 150 s at
         // the new speeds (about 1.6 x). The control points, the land, the lagoon, the pool and the scenery are written in build 2's metres and
@@ -62,11 +65,12 @@ namespace ShiftStorm
             mark.Clear();
             var g = new GameObject("Course Paradise Plunge"); g.transform.SetParent(parent, false); root = g.transform;
             scen = new GameObject("Scenery").transform; scen.SetParent(root, false);
-            c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic";
+            c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic"; c.music = "race_paradise"; c.shortName = "Paradise Plunge";
             c.halfWidth = 75; c.airHalfWidth = 420; c.minY = -45; c.maxY = 130; c.endMargin = 40; c.startMode = Mode.Drive;
             MakeLine();
             Land(); Road(); Stunts(); Lagoon(); Mangrove(); Cave(); Return(); Arch(); Scenery(); Polish(); Polish2(); Dinosaurs();   // Round 8 item 1: the dinosaurs   // Round 7 item 4: the rest of the lap   // Round 5 item 6: the polished stretch
             Gates(); RouteMarks(); Zones(); Anchors(); Signs(); Segments(); Shortcuts();
+            c.marks = new Dictionary<string, float>(mark); c.stunts = new ParadiseStunts();   // Round 10: per course
             return c;
         }
 
@@ -146,12 +150,23 @@ namespace ShiftStorm
             Vol<WaterVolume>("Lake", W(-340, -4, 420), Quaternion.identity, W(600, 8, 960));
             // west arm (the promenade's island), its lakeshore beach, the island over the cave (with the pool's opening)
             // Round 7: the West arm and its beach are cut by the two creeks under the promenade's jumps
-            SplitZ("West arm", W(10, 1.25f, 290), W(100, .5f, 700), ground);
-            SplitZ("Beach", W(-48, -.5f, 330), W(16, 2.4f, 780), sand);
-            Box(root, "Island W", W(-106, 1.25f, -225), W(168, .5f, 330), ground);
-            Box(root, "Island E", W(46, 1.25f, -225), W(48, .5f, 330), ground);
-            Box(root, "Island S", W(0, 1.25f, -340), W(44, .5f, 100), ground);
-            Box(root, "Island N", W(0, 1.25f, -127), W(44, .5f, 134), ground);
+            // Round 10 item 1: the ground beside the promenade and the finishing road is flush with the road (top 1.97 m; build 11: 1.5 m,
+            // with 0.8 m barriers on the road's edges, so a car landing beside the road could never climb back), and the lakeside beach
+            // slopes gently from the ground's edge into the lake (build 11: a 1.3 m step down). "-oldEdges" builds the build 11 layout.
+            float gc = OldEdges ? 1.25f : GroundTop - .25f;
+            SplitZ("West arm", W(10, gc, 290), W(100, .5f, 700), ground);
+            if (OldEdges) SplitZ("Beach", W(-48, -.5f, 330), W(16, 2.4f, 780), sand);
+            else
+            {
+                // from the ground's edge (x -68 m, y 1.97) down to y -0.6 at x -100 m: about 4.6 deg, a car drives up it
+                float x0 = -40 * S, x1 = -100f, y0 = GroundTop, y1 = -.6f, ang = Mathf.Atan2(y0 - y1, x0 - x1); var rot = Quaternion.Euler(0, 0, ang * Mathf.Rad2Deg);
+                var top = new Vector3((x0 + x1) * .5f, (y0 + y1) * .5f, 0); var nrm = rot * Vector3.up; var ctr = top - nrm * 1.2f;
+                SplitZ("Beach", new Vector3(ctr.x, ctr.y, 330 * S), new Vector3(Mathf.Sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1)) + .6f, 2.4f, 780 * S), sand, rot);
+            }
+            Box(root, "Island W", W(-106, gc, -225), W(168, .5f, 330), ground);
+            Box(root, "Island E", W(46, gc, -225), W(48, .5f, 330), ground);
+            Box(root, "Island S", W(0, gc, -340), W(44, .5f, 100), ground);
+            Box(root, "Island N", W(0, gc, -127), W(44, .5f, 134), ground);
             Box(root, "Ridge", W(122, 1.25f, -120), W(100, .5f, 70), ground);
             Box(root, "Island beach S", W(-60, -.5f, -400), W(280, 2.4f, 20), sand);
             // the central valley (dinosaurs), the east arm's high cliffs, the far north hills
@@ -165,14 +180,14 @@ namespace ShiftStorm
             for (int i = 0; i < 6; i++) { float x = -20 + i * 80, h = 50 + (i * 23 % 19); Box(root, "North hill", W(x, h * .5f, 790 + (i % 2) * 20), W(90, h, 90), rock); Box(root, "North hill moss", W(x, h, 790 + (i % 2) * 20), W(92, 3, 92), Mt(JurassicLook.Moss)); }
         }
         // a box along z with the promenade's creek gaps (water jumps) left out
-        static void SplitZ(string name, Vector3 center, Vector3 size, Material mat)
+        static void SplitZ(string name, Vector3 center, Vector3 size, Material mat, Quaternion? rot = null)
         {
             float z0 = center.z - size.z * .5f, z1 = center.z + size.z * .5f;
             var cuts = new List<Vector2>(); foreach (var j in Jumps) if (j.water) cuts.Add(new Vector2(At(j.lip).z + 1f, At(j.lip + j.gap).z - 1f));
             cuts.Sort((a, b) => a.x.CompareTo(b.x));
             float from = z0;
-            foreach (var cz in cuts) { if (cz.x > from && cz.x < z1) Box(root, name, new Vector3(center.x, center.y, (from + cz.x) * .5f), new Vector3(size.x, size.y, cz.x - from), mat); from = Mathf.Max(from, cz.y); }
-            if (z1 > from) Box(root, name, new Vector3(center.x, center.y, (from + z1) * .5f), new Vector3(size.x, size.y, z1 - from), mat);
+            foreach (var cz in cuts) { if (cz.x > from && cz.x < z1) Box(root, name, new Vector3(center.x, center.y, (from + cz.x) * .5f), new Vector3(size.x, size.y, cz.x - from), mat, rot); from = Mathf.Max(from, cz.y); }
+            if (z1 > from) Box(root, name, new Vector3(center.x, center.y, (from + z1) * .5f), new Vector3(size.x, size.y, z1 - from), mat, rot);
         }
         static Mesh Grid(float size, int cells)
         {
@@ -194,7 +209,16 @@ namespace ShiftStorm
             return p < b - 30 ? Mathf.Lerp(13f, 12.5f, Mathf.InverseLerp(a - 15, a + 15, p)) : Mathf.Lerp(12.5f, 11f, Mathf.InverseLerp(b - 30, b + 5, p));
         }
         public static float RoadHalfAt(float p) => HalfWidth(p);
-        static float BarrierTop(float p, bool right) => Mathf.Lerp(.8f, right ? 1.3f : 1.1f, Mathf.InverseLerp(M("climb0") - 15, M("climb0") + 15, p));
+        // Round 10 item 1: no barriers on the promenade any more; the climb's rise out of the road at climb0 (flush) to 0.8 m 20 m later, then to
+        // 1.1 / 1.3 m (the valley side) as before
+        static float BarrierTop(float p, bool right)
+        {
+            if (OldEdges) return Mathf.Lerp(.8f, right ? 1.3f : 1.1f, Mathf.InverseLerp(M("climb0") - 15, M("climb0") + 15, p));
+            // the barriers rise out of the road 60 m before the climb (its first corner hangs over the ground's end: the regression run's AI,
+            // fast off the Lake flight, flew off it without them) and 62 m after the canyon's east wall ends (a car beside the canyon rejoins first)
+            float c0 = M("climb0"); if (p < c0 - 40) return Mathf.Lerp(0f, .8f, Mathf.InverseLerp(c0 - 60, c0 - 40, p));
+            return Mathf.Lerp(.8f, right ? 1.3f : 1.1f, Mathf.InverseLerp(c0 + 10, c0 + 40, p));
+        }
         // cross-sections whose edges vary along the line
         static List<MeshKit.Sample> SamplesW(float a, float b, Func<float, float> l, Func<float, float> r, Func<float, Vector3, float> top, Func<float, Vector3, float> bottom, float step = 4f)
         {
@@ -209,7 +233,7 @@ namespace ShiftStorm
         // Round 7: the road from a to b in pieces: cut where the width rule changes (climb0, the ramp), at every jump's gap and round the loop
         static List<(float, float)> RoadPieces(float a, float b)
         {
-            var cuts = new List<float> { a, M("climb0"), M("rampStart") - 10, b };
+            var cuts = new List<float> { a, M("climb0"), M("rampStart") - 10, b }; if (!OldEdges) cuts.Add(M("climb0") - 60);   // Round 10: where the barriers start
             var holes = new List<Vector2> { new Vector2(M("loopIn"), M("loopOut")) }; foreach (var j in Jumps) holes.Add(new Vector2(j.lip, j.lip + j.gap));
             foreach (var h in holes) { cuts.Add(h.x); cuts.Add(h.y); }
             cuts.Sort(); var list = new List<(float, float)>();
@@ -231,6 +255,8 @@ namespace ShiftStorm
                 float lo = k1 <= climb + 1 ? 1f : -1f;
                 MeshKit.Strip(root, "Road", SamplesW(k0, k1, p => -HalfWidth(p), p => HalfWidth(p), (p, pt) => pt.y - .9f + Lift(p), (p, pt) => lo, 3f), road, rock);
                 // low barriers at both edges (the valley side a little higher on the climb); Round 7: they ride up the kickers
+                // Round 10 item 1: only on the climb (from climb0); the promenade has a flush red / white kerb instead
+                if (!OldEdges && k1 <= climb - 60 + .5f) { Kerb(k0, k1, HalfWidth, RoadTop); continue; }
                 MeshKit.Strip(root, "Barrier L", SamplesW(k0, k1, p => -HalfWidth(p) - .7f, p => -HalfWidth(p), (p, pt) => pt.y - .9f + BarrierTop(p, false) + Lift(p), (p, pt) => pt.y - 1.6f + Lift(p), 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
                 MeshKit.Strip(root, "Barrier R", SamplesW(k0, k1, p => HalfWidth(p), p => HalfWidth(p) + .7f, (p, pt) => pt.y - .9f + BarrierTop(p, true) + Lift(p), (p, pt) => pt.y - 1.6f + Lift(p), 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
             }
@@ -249,8 +275,13 @@ namespace ShiftStorm
             // Round 4: the barriers end exactly where the promenade's begin (the line's first point), end to end with the same section; in
             // build 4 they ran 55 m past it beside the promenade's, whose end face then stood in the way of a car sliding along the wall
             float fbb = M("lineEnd") - Vector3.Distance(At(M("lineEnd")), c.line[0]);
-            MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fbb, -13.7f, -13f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
-            MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fbb, 13f, 13.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            if (OldEdges)
+            {
+                MeshKit.Strip(root, "Barrier L", Samples(fa + 8, fbb, -13.7f, -13f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+                MeshKit.Strip(root, "Barrier R", Samples(fa + 8, fbb, 13f, 13.7f, (p, pt) => RoadY + .8f, (p, pt) => RoadY - .7f, 3f), barrier, null, true, ShiftVehicle.ObstacleLayer);
+            }
+            else Kerb(fa + 8, fbb, p => 13f, p => RoadY);   // Round 10 item 1: the water ramp's landing has flush ground either side (build 11: barriers)
+            KerbFlush();
             // start / finish banner and grid lines
             var fin = new Vector3(0, RoadY, 0);
             Box(root, "Finish line", fin + Vector3.up * .03f, new Vector3(26, .06f, 2.2f), Mt(new Color(.1f, .1f, .1f)), null, false);
@@ -258,6 +289,19 @@ namespace ShiftStorm
             foreach (float x in new[] { -15.5f, 15.5f }) Box(root, "Banner post", fin + new Vector3(x, 4.5f, 0), new Vector3(.8f, 9, .8f), Mt(JurassicLook.FernTrunk, true));
             Box(root, "Banner", fin + new Vector3(0, 8.6f, 0), new Vector3(31.8f, 2.2f, .5f), Mt(JurassicLook.Amber, true));
         }
+
+        // Round 10 item 1: a flush red / white kerb along both edges (looks only, nothing to hit or land behind), 3 m blocks
+        static MeshKit.Batch kerbs;
+        static void Kerb(float a, float b, Func<float, float> half, Func<float, float> top)
+        {
+            kerbs ??= new MeshKit.Batch(); int n = 0;
+            for (float p = a; p < b - 1.5f; p += 3f, n++)
+            {
+                if (OffSurface(p) || OffSurface(p + 3)) continue; var q = At(p + 1.5f); var r = Right(p + 1.5f); var f = Facing(p + 1.5f, false);
+                foreach (float s in new[] { -1f, 1f }) kerbs.Add(MeshKit.Cube, new Vector3(q.x, top(p + 1.5f) + .03f, q.z) + r * s * (half(p + 1.5f) + .45f), f, new Vector3(.9f, .07f, 3.02f), n % 2 == 0 ? new Color(.85f, .12f, .1f) : new Color(.96f, .94f, .9f));
+            }
+        }
+        static void KerbFlush() { if (kerbs != null) kerbs.Object(scen, "Road kerbs (flush)", JurassicLook.VertexColored(false), false, false); kerbs = null; }
 
         // ---------------- lagoon ----------------
         static void Lagoon()
@@ -425,6 +469,7 @@ namespace ShiftStorm
         }
 
         // ---------------- scenery: cycads, tree ferns, mossy boulders, dinosaurs, pterodactyls ----------------
+        static float GTop => OldEdges ? 1.5f : GroundTop;
         static void Scenery()
         {
             var rnd = new System.Random(1717);
@@ -437,18 +482,18 @@ namespace ShiftStorm
             {
                 if (InGap(p) || InGap(p + 6) || InGap(p - 6) || (p > M("loopIn") - 60 && p < M("loopOut") + 70)) continue;   // Round 7: not in a creek or round the loop
                 var q = At(p); var r = Right(p);
-                Plant(new Vector3(q.x, 1.5f, q.z) + r * R(18, 34), (int)R(0, 3), R(1f, 1.5f));
-                if (rnd.NextDouble() < .6) Plant(new Vector3(q.x, 1.5f, q.z) - r * R(15, 19), (int)R(0, 2), R(.8f, 1.2f));
+                Plant(new Vector3(q.x, GTop, q.z) + r * R(18, 34), (int)R(0, 3), R(1f, 1.5f));
+                if (rnd.NextDouble() < .6) Plant(new Vector3(q.x, GTop, q.z) - r * R(15, 19), (int)R(0, 2), R(.8f, 1.2f));
             }
             // the finishing road
-            for (float p = M("landing"); p < M("finish") - 10; p += 16) { var q = At(p); var r = Right(p); foreach (float s in new[] { -1f, 1f }) Plant(new Vector3(q.x, 1.5f, q.z) + r * s * R(16, 26), (int)R(0, 3), R(.9f, 1.4f)); }
+            for (float p = M("landing"); p < M("finish") - 10; p += 16) { var q = At(p); var r = Right(p); foreach (float s in new[] { -1f, 1f }) Plant(new Vector3(q.x, GTop, q.z) + r * s * R(16, 26), (int)R(0, 3), R(.9f, 1.4f)); }
             // on the climb's hillside
             for (float p = M("climb0") + 20; p < M("rampStart") - 25; p += 16) { if (InGap(p) || InGap(p - 8) || InGap(p + 8)) continue; var q = At(p); Plant(new Vector3(q.x, q.y - .9f + 9f, q.z) - Right(p) * R(16, 36), (int)R(0, 2), R(1.1f, 1.6f)); }
             // the valley (well clear of the flight line's low end) and the island over the cave
             for (int i = 0; i < 150; i++) { var p = W(R(80, 500), .4f, R(-80, 640)); Plant(p, i % 9 == 0 ? 2 : (int)R(0, 2), R(1.2f, 2.2f)); }
             for (int i = 0; i < 70; i++)
             {
-                var p = W(R(-165, 65), 1.5f, R(-345, -65));
+                var p = W(R(-165, 65), GTop, R(-345, -65));
                 if (Mathf.Abs(p.x) < 30 * S && p.z > -300 * S && p.z < -60 * S) continue;   // the pool, the ramp and the finishing road
                 Plant(p, i % 6 == 0 ? 2 : (int)R(0, 2), R(1f, 1.8f));
             }
@@ -529,7 +574,7 @@ namespace ShiftStorm
                 if (i > 0) GateMarker.Make(pg, c, !Array.Exists(modes, m => m == Mode.Dive) || Array.Exists(modes, m => m == Mode.Boat), look);
             }
             G(0, "G0 start", M("G0"), new Vector2(15, 8), Mode.Drive);
-            G(1, "G1 promenade exit", M("G1"), new Vector2(15, 8), Mode.Drive);
+            G(1, "G1 promenade exit", M("G1"), new Vector2(OldEdges ? 15 : 22, 8), Mode.Drive);   // Round 10: wider (the ground either side is drivable now; a car down wide from the Lake flight passed just outside the 15 m frame)
             G(2, "G2 launch", M("lip") - 3, new Vector2(13, 10), Mode.Drive, Mode.Fly);
             G(3, "G3 arch exit", M("arch") + 55, new Vector2(42, 28), Mode.Fly);
             G(4, "G4 lagoon landing", M("splash") + 50, new Vector2(48, 12), Mode.Boat);

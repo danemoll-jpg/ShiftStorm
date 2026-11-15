@@ -25,10 +25,10 @@ namespace ShiftStorm
         // Round 6: per player (player 2 has their own invert setting, settings.json "invertVertical2")
         public bool MyInvert { get => player == 2 ? Settings.InvertVertical2 : Invert; set { if (player == 2) Settings.InvertVertical2 = value; else Invert = value; } }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
+        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
         bool viewRequested, wingsRequested;
         public Vector2 Look { get; private set; }   // Round 6: the right stick looks around (CameraViews)
-        bool resetRequested; int startStep;
+        bool resetRequested;
         public bool MenuPressed { get; private set; }
         public int MenuMove { get; private set; }
         public bool ConfirmPressed { get; private set; }
@@ -83,8 +83,6 @@ namespace ShiftStorm
             look = new InputAction("Look around", InputActionType.Value, expectedControlType: "Vector2"); Add(look, "<Gamepad>/rightStick", "stickDeadzone(min=0.2,max=0.95)");
             reset = A("Reset"); Add(reset, "<Gamepad>/buttonNorth"); Add(reset, "<Keyboard>/r");
             invert = A("Invert"); Add(invert, "<Gamepad>/select"); Add(invert, "<Keyboard>/f2");
-            nextStart = A("Next start"); Add(nextStart, "<Gamepad>/dpad/right"); Add(nextStart, "<Keyboard>/f4");
-            prevStart = A("Previous start"); Add(prevStart, "<Gamepad>/dpad/left"); Add(prevStart, "<Keyboard>/f3");
             menu = A("Menu"); Add(menu, "<Gamepad>/start"); Add(menu, "<Keyboard>/escape");
             menuUp = A("Menu up"); Add(menuUp, "<Gamepad>/dpad/up"); Add(menuUp, "<Keyboard>/upArrow"); Add(menuUp, "<Keyboard>/w");
             menuDown = A("Menu down"); Add(menuDown, "<Gamepad>/dpad/down"); Add(menuDown, "<Keyboard>/downArrow"); Add(menuDown, "<Keyboard>/s");
@@ -94,7 +92,7 @@ namespace ShiftStorm
             enter = A("Enter"); Add(enter, "<Keyboard>/enter"); Add(enter, "<Keyboard>/numpadEnter");
             foreach (var x in new[] { confirm, menu, back, menuUp, menuDown }) x.performed += c => LastDevice = c.control.device;
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, nextStart, prevStart, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
         void OnEnable() { foreach (var a in All) a.Enable(); }
         void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; viewRequested = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
@@ -124,14 +122,11 @@ namespace ShiftStorm
             resetRequested |= reset.WasPressedThisFrame();
             if (invert.WasPressedThisFrame()) MyInvert = !MyInvert;
             Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame(); wingsRequested |= wings.WasPressedThisFrame();
-            if (nextStart.WasPressedThisFrame()) startStep++;
-            if (prevStart.WasPressedThisFrame()) startStep--;
         }
         public bool ConsumeReset() { bool r = resetRequested; resetRequested = false; return r; }
         public void RequestReset() => resetRequested = true;
         public bool ConsumeWings() { bool r = wingsRequested; wingsRequested = false; return r; }
         public void RequestWings() => wingsRequested = true;
         public bool ConsumeView() { bool r = viewRequested; viewRequested = false; return r; }
-        public int ConsumeStartStep() { int s = startStep; startStep = 0; return s; }
     }
 }

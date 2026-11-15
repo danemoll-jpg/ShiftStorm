@@ -1,0 +1,9 @@
+ShiftStorm check 'starts', 2026-11-15 14:14, build 0.9.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STARTS: 25 race starts (the check pilot in Abi's car at the back, the 3 AI at Easy), the first 10 s after GO at time scale 3.0 (physics steps unchanged)
+STARTS PASS: 25 starts: resets in the first 10 s 0, AI back-outs 0, wall hits 0, racer-to-racer touches 0, closest two racers came 7.4 m (centres), field spread after 10 s 125-127 m
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.04 ms, 95th pct 3.55 ms, 99th pct 4.36 ms, worst 34.33 ms over 77290 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -1,0 +1,54 @@
+ShiftStorm check 'strand', 2026-11-15 12:32, build 0.9.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STRAND SWEEP (Round 10 edges): each case placed before a jump / the loop / the water ramp, placed on the kicker 12 m before the lip (the loop: 150 m before it; the ramp: in the pool) at an offset and angle, driven straight (steer held) off the lip, then the pilot drives on for 15 s
+  outcome: ON ROAD (landed on it), DROVE BACK (off the road, back on it and 120 m on; off-road = the metres of the lap driven off it), RESET (water / a fall / the loop rule: clearly recovered), STRANDED (not back on the road in 20 s or 600 m, round the outside of the loop, or reset as stuck / no progress)
+  Creek Jump centre          ON ROAD      off-road    0 m, landed 0.0 m off the line (road half 13.0)    resets 0, now Drive at 578 m, 0.0 m off
+  Creek Jump left            DROVE BACK   off-road  152 m, landed 29.8 m off the line (road half 13.0)   resets 0, now Drive at 605 m, 7.5 m off
+  Creek Jump right           DROVE BACK   off-road  134 m, landed 30.0 m off the line (road half 13.0)   resets 0, now Drive at 589 m, 8.7 m off
+  Creek Jump wide-left       DROVE BACK   off-road  164 m, landed 57.0 m off the line (road half 13.0)   resets 0, now Drive at 614 m, 7.2 m off
+  Creek Jump wide-right      DROVE BACK   off-road  164 m, landed 57.6 m off the line (road half 13.0)   resets 0, now Drive at 617 m, 7.4 m off
+  Creek Jump long            DROVE BACK   off-road  104 m, landed 14.5 m off the line (road half 13.0)   resets 0, now Drive at 628 m, 5.8 m off
+  Creek Jump short           ON ROAD      off-road    0 m, landed 0.0 m off the line (road half 13.0)    resets 0, now Drive at 481 m, 0.0 m off
+  Lake Jump centre           ON ROAD      off-road    0 m, landed 4.6 m off the line (road half 13.0)    resets 0, now Drive at 1161 m, 2.8 m off
+  Lake Jump left             DROVE BACK   off-road  146 m, landed 33.9 m off the line (road half 13.0)   resets 0, now Drive at 1182 m, 13.5 m off
+  Lake Jump right            ON ROAD      off-road   34 m, landed 12.6 m off the line (road half 13.0)   resets 0, now Drive at 1103 m, 1.2 m off
+  Lake Jump wide-left        RESET        off-road   33 m, landed 61.1 m off the line (road half 13.0)   resets 1 (out of bounds), now Drive at 983 m, 75.2 m off
+  Lake Jump wide-right       RESET        off-road  151 m, landed 53.0 m off the line (road half 13.0)   resets 1 (out of bounds), now Drive at 983 m, 75.5 m off
+  Lake Jump long             ON ROAD      off-road    0 m, landed 1.7 m off the line (road half 13.0)    resets 0, now Drive at 1214 m, 2.3 m off
+  Lake Jump short            ON ROAD      off-road    0 m, landed 0.4 m off the line (road half 13.0)    resets 0, now Drive at 1067 m, 1.3 m off
+  Lake Jump fly centre       ON ROAD      off-road    0 m, landed 3.4 m off the line (road half 13.0)    resets 0, now Drive at 1321 m, 0.9 m off
+  Lake Jump fly left         ON ROAD      off-road    0 m, landed 1.2 m off the line (road half 13.0)    resets 0, now Drive at 1327 m, 2.3 m off
+  Lake Jump fly right        ON ROAD      off-road    0 m, landed 5.2 m off the line (road half 13.0)    resets 0, now Drive at 1320 m, 0.4 m off
+  Cliff Gap centre           ON ROAD      off-road    0 m, landed 3.4 m off the line (road half 12.5)    resets 0, now Drive at 1856 m, 0.1 m off
+  Cliff Gap left             RESET        off-road    0 m, landed 8.7 m off the line (road half 12.5)    resets 1 (fell into the Cliff Gap), now Drive at 1433 m, 0.0 m off
+  Cliff Gap right            RESET        off-road    9 m, landed 29.5 m off the line (road half 12.5)   resets 1 (fell into the Cliff Gap), now Drive at 1433 m, 0.0 m off
+  Cliff Gap wide-left        RESET        off-road    0 m, landed -                                      resets 1 (fell into the Cliff Gap), now Drive at 1433 m, 0.0 m off
+  Cliff Gap wide-right       RESET        off-road    3 m, landed 70.2 m off the line (road half 12.5)   resets 1 (out of bounds), now Drive at 1433 m, 75.1 m off
+  Cliff Gap long             RESET        off-road    0 m, landed 8.5 m off the line (road half 12.5)    resets 1 (fell into the Cliff Gap), now Drive at 1433 m, 0.0 m off
+  Cliff Gap short            ON ROAD      off-road    0 m, landed 0.2 m off the line (road half 12.5)    resets 0, now Drive at 1758 m, 0.2 m off
+  Loop full                  ON ROAD      off-road    0 m, landed 0.0 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.1 m off
+  Loop slow                  ON ROAD      off-road    0 m, landed 0.0 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.1 m off
+  Loop very slow             ON ROAD      off-road    0 m, landed 0.0 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.1 m off
+  Loop off-centre left       ON ROAD      off-road    0 m, landed 5.0 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.7 m off
+  Loop off-centre right      ON ROAD      off-road    0 m, landed 5.0 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.5 m off
+  Loop wide left             ON ROAD      off-road    0 m, landed 5.5 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.5 m off
+  Loop wide right            ON ROAD      off-road    0 m, landed 5.5 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.7 m off
+  Loop angled out left       ON ROAD      off-road    0 m, landed 4.1 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.4 m off
+  Loop angled out right      ON ROAD      off-road    0 m, landed 5.5 m off the line (road half 7.0)     resets 0, now Drive at 924 m, 0.7 m off
+  Water ramp centre          ON ROAD      off-road    0 m, landed 0.1 m off the line (road half 13.0)    resets 0, now Drive at 7173 m, 0.0 m off
+  Water ramp left            RESET        off-road    0 m, landed -                                      resets 1 (out of bounds), now Boat at 6905 m, 40.7 m off
+  Water ramp right           RESET        off-road    0 m, landed -                                      resets 1 (out of bounds), now Boat at 6905 m, 41.1 m off
+STRAND SWEEP PASS: 36 cases, 0 strandings; ON ROAD 21, DROVE BACK 6, RESET 9
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.29 ms, 95th pct 3.20 ms, 99th pct 4.06 ms, worst 51.78 ms over 92473 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  strand-lake-jump-fly-centre Drive->Fly  z   652.6  0.602 s  frames worst 7.51 / mean 2.41 ms
+  strand-lake-jump-fly-centre Fly->Drive  z   904.3  0.601 s  frames worst 9.72 / mean 2.36 ms
+  strand-lake-jump-fly-left Drive->Fly  z   652.4  0.602 s  frames worst 7.40 / mean 2.52 ms
+  strand-lake-jump-fly-left Fly->Drive  z   904.8  0.602 s  frames worst 5.02 / mean 2.47 ms
+  strand-lake-jump-fly-right Drive->Fly  z   652.4  0.601 s  frames worst 4.15 / mean 2.61 ms
+  strand-lake-jump-fly-right Fly->Drive  z   904.7  0.602 s  frames worst 10.96 / mean 2.57 ms
+  strand-water-ramp-centre Boat->Drive z  -305.2  0.600 s  frames worst 4.91 / mean 2.16 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 1, Abi lines: messup: gasp_1; messup: mishit_1; messup: skipped (cooldown); messup: messup_3; messup: mishit_1; messup: gasp_1; waterfall: skipped (Barker talking); messup: gasp_1
+Abi's clips: 6 loaded, one-shots played: Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -1,0 +1,33 @@
+ShiftStorm check 'crowd', 2026-11-15 06:56, build 0.9.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CROWD (item 3b): 8 stands, 2214 fans (Gridiron Glory's instanced fan sprites): Start W 306, Start E 306, Loop 330, Waterfall landing 240, CC start W 306, CC start E 306, CC coaster station 215, CC splash landing 205
+  Start W: centre (-29, 6, -18), drawn by the camera at the grid: 306
+  Start E: centre (29, 6, -18), drawn by the camera at the grid: 306
+  Loop: centre (-29, 6, 540), drawn by the camera at the grid: 330
+  Waterfall landing: centre (28, 6, -227), drawn by the camera at the grid: 240
+  CC start W: centre (7969, 8, -20), drawn by the camera at the grid: 306
+  CC start E: centre (8031, 8, -20), drawn by the camera at the grid: 306
+  CC coaster station: centre (8036, 8, 810), drawn by the camera at the grid: 215
+  CC splash landing: centre (7968, 8, -300), drawn by the camera at the grid: 205
+  Start W: 306 fans, cheers 6 (a racer passing within reach, the GO, the finish), last 134.9 s into the race
+  Start E: 306 fans, cheers 6 (a racer passing within reach, the GO, the finish), last 134.9 s into the race
+  Loop: 330 fans, cheers 4 (a racer passing within reach, the GO, the finish), last 8.8 s into the race
+  Waterfall landing: 240 fans, cheers 7 (a racer passing within reach, the GO, the finish), last 131.0 s into the race
+  CC start W: 306 fans, cheers 0 (a racer passing within reach, the GO, the finish), last never
+  CC start E: 306 fans, cheers 0 (a racer passing within reach, the GO, the finish), last never
+  CC coaster station: 215 fans, cheers 0 (a racer passing within reach, the GO, the finish), last never
+  CC splash landing: 205 fans, cheers 0 (a racer passing within reach, the GO, the finish), last never
+CROWD PASS: 2214 fans in 8 stands, every stand of the course raced cheered: True; the crowd's own CPU time 0.013 ms a frame (all stands; the GPU cost is in the frame time below, compared with a -noCrowd run)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.51 ms, 95th pct 3.52 ms, 99th pct 4.28 ms, worst 37.07 ms over 55632 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  crowd        Drive->Fly  z   652.9  0.602 s  frames worst 11.86 / mean 2.95 ms
+  crowd        Fly->Drive  z   906.6  0.601 s  frames worst 4.54 / mean 2.82 ms
+  crowd        Drive->Fly  z   944.5  0.601 s  frames worst 4.15 / mean 2.32 ms
+  crowd        Fly->Boat   z  -607.1  0.600 s  frames worst 9.30 / mean 2.71 ms
+  crowd        Boat->Dive  z  -202.0  0.600 s  frames worst 9.50 / mean 2.85 ms
+  crowd        Dive->Boat  z  -466.9  0.602 s  frames worst 7.76 / mean 3.14 ms
+  crowd        Boat->Drive z  -304.7  0.600 s  frames worst 6.83 / mean 2.92 ms
+sound: music results playing (its own signal peak 0.000), splashes played 1, Abi lines: messup: messup_1; waterfall: skipped (Barker talking); last: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

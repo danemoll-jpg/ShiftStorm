@@ -2,6 +2,29 @@
 
 Keep each round's list short; each item is Dan's time.
 
+## Round 10 — Coaster Coast: three set-piece creatures (Tripo, by hand) — optional, stand-ins in the game now
+
+Coaster Coast runs with primitive stand-ins for these three (they already move: the balloon bobs, the whale and the octopus are
+placed and animated by code). A model only replaces the stand-in's look. Tee'd Off toon style (chunky shapes, flat bright colours,
+soft cartoon proportions, like Tee'd Off's characters), **one full-body image each, front 3/4 view, plain light background, no
+cropping, no props, no text**; Tripo: **Image to Model, textured, low-poly (~20k faces), GLB**. No rig needed (Code animates them
+by parts: the octopus's arms are separated in Blender by Code).
+
+1. **Mascot balloon** — `Art/Incoming/SetPieces/MascotBalloon/MascotBalloon.glb`. *"A giant parade balloon of a cheerful cartoon
+   seagull mascot wearing a navy-and-white sailor's cap and a red neckerchief, wings spread wide as if waving, big friendly eyes,
+   yellow beak and feet, inflatable vinyl look with visible seams and a soft shine, Tee'd Off cartoon style, full body, front 3/4
+   view, plain light grey background, no strings, no text."* Size in game: 30 m tall over the flight.
+2. **Giant octopus** — `Art/Incoming/SetPieces/Octopus/Octopus.glb`. *"A giant friendly cartoon octopus, coral red with pale pink
+   suckers, big round curious eyes, a playful smile, its eight arms spread out flat around it in a star shape (so each arm is
+   separate), Tee'd Off cartoon style, full body, seen from the front and slightly above, plain light grey background, no props."*
+   Size in game: 30 m across, on the sea floor by the dive line.
+3. **Whale** — `Art/Incoming/SetPieces/Whale/Whale.glb`. *"A big friendly cartoon humpback whale, slate blue back and a pale
+   striped belly, long white flippers, a gentle smile and small kind eyes, tail flukes level, Tee'd Off cartoon style, full body,
+   side 3/4 view, plain light grey background, no water, no props."* Size in game: 26 m long, surfacing beside the boat.
+
+After the download: say so and Code cleans them in Blender (scale, origin, facing, LOD), swaps them in and keeps the stand-ins as
+the fallback. Animations: none (Mixamo is for people).
+
 ## Round 9 — three new vehicle designs (Dan's concepts, Tripo by hand)
 
 **Status (2026-11-15): all 12 models in the game** (Grand Prix -> Rae, Hot Rod -> Vivi, Scrambler -> Chip; Garage pictures in

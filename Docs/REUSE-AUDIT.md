@@ -311,3 +311,9 @@ Docs/SOUNDS.md lists every sound and where it is used.
 - **Tee'd Off (read-only)** — the dinosaur rigger: `Tools/Characters/rig_dino.py`, `glb_load.py`, `rig_biscuit.py` -> `Tools/Characters/`.
   Changed in `rig_dino.py` only: the creature list (Dan's raptor and plesiosaur), the paths (local/dinos, Assets/Resources/Dinos via
   `Tools/Characters/import_dinos.py`), the raptor oriented by its body axis, no bipeds, eyes optional.
+
+## Round 10 copies (2026-11-15)
+- **Nothing new copied from the read-only projects.** Reused inside ShiftStorm: Gridiron Glory's crowd (Round 9 copy) in Coaster Coast's
+  four stands; Tee'd Off's toon shaders and the Round 7 loop's rail maths (`LoopRail.Pos`) for the coaster rails (`World/CoasterRail.cs`,
+  `Vehicle/ShiftVehicle.Rail.cs`); `Tools/Music/make_loops.py` (Round 7 copy) for Dan's `race_coaster` song.
+- **Removed:** Tee'd Off's Jurassic Par music (`course_jurassic*.ogg`, the Round 7 fallback): no Tee'd Off music is in the game any more.

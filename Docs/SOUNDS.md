@@ -80,3 +80,14 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
 - **Event-by-event list:** the `sounds` check (`Docs/Checks/round9/check_report_sounds.txt`): every race event with what it plays.
 - **Crowd (Gridiron Glory's, `gg_crowd_*`):** a murmur bed at each grandstand (3D, Effects volume), one roar from the start stands at GO,
   a cheer at the waterfall-landing stand when your racer passes. Every voice line in use: `Docs/Checks/round9/voice_lines.md`.
+
+## Round 10 (2026-11-15): Coaster Coast, no Tee'd Off music
+- **Music:** each course has its own song (`Course.music`): Paradise Plunge `race_paradise`, Coaster Coast `race_coaster` (Dan's Suno
+  "ShiftStorm - Coaster Coast", looped by `Tools/Music/make_loops.py`: 145.6 bpm, an 86-bar loop after an 18.5 s intro, seam OK). A course
+  whose song is missing plays ShiftStorm's `theme`. Tee'd Off's Jurassic Par (`course_jurassic`, the old fallback) is deleted.
+- **Ambience:** the jungle bed and the far dinosaur calls only on Paradise Plunge; the bubbles under water on both.
+- **TeedOff Barker:** 53 new lines (ElevenLabs, his voice, -16 LUFS; 1,676 credits): Coaster Coast's own start / opening-night (Docs/STORY.md:
+  the tour's first public race), fill-ins, wings (through the Ferris wheel), splash, the coaster, the Coaster Gap, the corkscrew, the top hat,
+  the helter-skelter, fireworks, the balloon, the flume, the lighthouse, the pier, the carousel, the octopus, the whale / dolphins, the splash
+  pool, and a results line naming each course (`ccres_*`, `ppres_*`). On Coaster Coast the Paradise Plunge pools that name the jungle swap
+  for these (`Caller.ForCourse`); set-piece lines only while it is big on screen (`SetPiece`).

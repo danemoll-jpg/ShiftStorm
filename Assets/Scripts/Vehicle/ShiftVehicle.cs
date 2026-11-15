@@ -248,6 +248,12 @@ namespace ShiftStorm
             if (!Course) return;
             var p = Body.position; var gates = Course.gates; Vector3 at, dir;
             if (OnShortcut) { ShortcutProgress(p, out at, out dir); if (!Course) return; }
+            else if (rail != null && rail.exitProgress > rail.entryProgress && rail.Length > 0)
+            {
+                // Round 10: on a coaster rail the progress is the share of the track ridden (the final soak: rail A's turn back south passes
+                // 75 m from the boardwalk, the projection sometimes took the boardwalk and the car was reset "out of bounds" off the track)
+                Progress = Mathf.Lerp(rail.entryProgress, rail.exitProgress, railS / rail.Length); at = Course.PointAt(Progress, out dir);
+            }
             else
             {
                 Progress = Course.Project(p, Progress, out at, out dir);
