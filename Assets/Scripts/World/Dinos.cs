@@ -10,8 +10,8 @@ namespace ShiftStorm
     // world in code), with their texture and the game's toon material. DinoPose is Tee'd Off's ModelCreature animation, copied: a walk cycle
     // on the legs by speed (diagonal pairs on four legs, alternating on two), tail sway, a slow look round, breathing, the T. rex's roar and
     // chomp, the brontosaurus lowering its neck, the pterodactyl's wing beats. DinoActor gives each one a behaviour along the lap.
-    // Stand-ins (no model anywhere yet; Tripo prompts in Docs/MODELS-NEEDED.md): the raptor is the T. rex at 2.6 m, the plesiosaur the
-    // brontosaurus swimming with its body under water.
+    // Round 9: the raptor and the plesiosaur are Dan's Tripo models, rigged by Tee'd Off's rigger (copied: Tools/Characters/import_dinos.py);
+    // their stand-ins (the T. rex small, the brontosaurus swimming) stay as the fallback when a rig file is missing.
     public static class DinoRig
     {
         sealed class Template { public int tris; public Mesh mesh; public string[] names; public int[] parents; public Vector3[] heads; public Material mat; public Bounds bounds; }
@@ -58,6 +58,7 @@ namespace ShiftStorm
         }
         static Vector3 V3(BinaryReader br) => new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
         public static int Triangles(string style) { var t = Load(style); return t != null ? t.tris : 0; }
+        public static bool Has(string style) { if (cache.TryGetValue(style, out var t)) return t != null; return Resources.Load<TextAsset>($"Dinos/{style}_rig") && Load(style) != null; }
 
         // a new skinned dinosaur under parent, scaled so its body is `height` tall (pterodactyl: `height` = wingspan); null without the rig
         public static GameObject Spawn(string style, Transform parent, float height, out SkinnedMeshRenderer smr, out Vector3 box)
@@ -122,7 +123,7 @@ namespace ShiftStorm
                 if (head) head.localRotation = Quaternion.Euler(Mathf.Sin(t * .7f) * 6f, Mathf.Sin(t * .4f) * 15f, 0f);
                 return;
             }
-            float stride = style == "trex" ? 3.2f : style == "bronto" ? 3.0f : 2.2f;
+            float stride = style == "trex" ? 3.2f : style == "bronto" ? 3.0f : style == "plesio" ? 2.6f : 2.2f;
             gait += dt * speed / stride * Mathf.PI * 2f;
             float walk = Mathf.Clamp01(speed / .6f);
             foreach (var (upper, lower, front, left) in legs)
@@ -235,12 +236,14 @@ namespace ShiftStorm
 
         public static DinoActor Make(Transform parent, string style, Kind kind, Vector3 a, Vector3 b, float height, string segment, string label, float yaw = 0)
         {
-            string model = style == "raptor" ? "trex" : style == "plesio" ? "bronto" : style;
+            // Round 9: Dan's Tripo raptor and plesiosaur (Tools/Characters/import_dinos.py: Tee'd Off's rigger, copied) when their rigs are in;
+            // otherwise the stand-ins (a small T. rex, a swimming brontosaurus)
+            string model = DinoRig.Has(style) ? style : style == "raptor" ? "trex" : style == "plesio" ? "bronto" : style;
             SkinnedMeshRenderer smr = null; GameObject g = null;
             var size = Vector3.one * height;
             if (!NoDinos) g = DinoRig.Spawn(model, parent, height, out smr, out size);
             else { g = new GameObject("Dino off"); g.transform.SetParent(parent, false); }
-            bool standIn = g == null || style == "raptor" || style == "plesio";
+            bool standIn = g == null || model != style;
             if (g == null && !NoDinos) { g = new GameObject("Dino " + style + " (shape)"); g.transform.SetParent(parent, false); var s = GameObject.CreatePrimitive(PrimitiveType.Sphere); Object.Destroy(s.GetComponent<Collider>()); s.transform.SetParent(g.transform, false); s.transform.localScale = new Vector3(height * .5f, height * .6f, height); s.transform.localPosition = Vector3.up * height * .4f; s.GetComponent<Renderer>().sharedMaterial = JurassicLook.Mat(JurassicLook.Moss, true); }
             g.name = $"Dino {style} ({label})";
             var d = g.AddComponent<DinoActor>(); d.style = style; d.kind = kind; d.a = a; d.b = b; d.height = height; d.segment = segment; d.label = label; d.smr = smr; d.standIn = standIn; d.size = size;
@@ -407,7 +410,7 @@ namespace ShiftStorm
         {
             if (!voice) return; var cs = Calls(style == "raptor" ? "trike" : style == "plesio" ? "bronto" : style); if (cs.Length == 0) return;
             voice.pitch = style == "raptor" ? 1.5f : style == "plesio" ? .8f : 1f;
-            voice.PlayOneShot(cs[Random.Range(0, cs.Length)], vol * Settings.Effects);
+            voice.PlayOneShot(cs[Random.Range(0, cs.Length)], vol * Settings.Effects); SoundLog.Add("ambience", "dinosaur " + name);
         }
     }
 }

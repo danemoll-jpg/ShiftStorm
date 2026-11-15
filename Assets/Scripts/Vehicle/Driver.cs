@@ -43,16 +43,18 @@ namespace ShiftStorm
         {
             ["abigail"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1", "quipgood_2" } }, { "last", new[] { "lose_1", "quipbad_1" } },
-                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "mishit_1", "gasp_1", "bogey_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_1" } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "mishit_1", "gasp_1", "bogey_1", "line_1" } }, { "water", new[] { "water_1", "messup_1" } },
                 { "waterfall", new[] { "laugh_1", "lucky_1" } } },
+            // Round 9 item 2: golf-only lines out (Abi "That's not where I aimed", Rae "Too much muscle!", "Who planted that?!", "The lake can
+            // have it!", Vivi "Second place suits no one" for last place), racing lines in the same voices in (Tools/Audio/driver_lines.py)
             ["rae"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
-                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "water_1", "messup_1" } } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "throttle_1", "gasp_1", "wall_1" } }, { "water", new[] { "swim_1", "messup_1" } } },
             ["chip"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
                 { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "messup_2", "disaster_1" } } },
             ["vivi"] = new Dictionary<string, string[]> {
-                { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
+                { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "last_1" } },
                 { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_2" } } },
         };
         public static string[] MessupNames(string folder) => LineNames.TryGetValue(folder, out var t) && t.TryGetValue("messup", out var m) ? m : new string[0];
@@ -108,19 +110,20 @@ namespace ShiftStorm
             Place(seat, 1f);
             float headTop = MaxY(), hipsY = Local(hips.position).y;
             float s = Mathf.Clamp((top - .07f - seat.y) / Mathf.Max(.1f, headTop - hipsY), .5f, 1.05f);
-            Place(seat, s); Scale = s; HeadTop = MaxY();
+            Place(seat, s); Scale = s; baseScale = s; HeadTop = MaxY();
             if (!Animated) foreach (var b in new[] { hips, spine, chest, head, uaL, uaR, laL, laR, ulL, ulR, llL, llR }) if (b) seated[b] = b.localRotation;
             Source = Animated ? $"{who}.fbx (Tee'd Off), Humanoid, {ClipCount} shared Mixamo clips (Driving loop), scale {s:0.00}" : $"{who}.fbx (Tee'd Off), Humanoid, fixed seated pose (no clips found), scale {s:0.00}";
-            // Round 8 item 4: the steering mechanism where her hands are in the Driving pose (the pivot's space, at the gray seat)
-            if (handL && handR)
+            // Round 8 item 4: the steering mechanism; Round 9 item 1: placed from her eyes in the Driving pose (where the first-person camera
+            // sits, CameraViews.FirstPerson) at real proportions to her, low in the view, where her hands reach (Steering.Place)
+            if (handL && handR && head)
             {
+                var eye = forms.Pivot.InverseTransformPoint(head.position + transform.up * (.1f * s) + transform.forward * (.05f * s)); eye.x = 0;
+                // where her hands reach comfortably: the Driving clip's hands, a little up and forward (Round 8's measured place)
                 Vector3 a = forms.Pivot.InverseTransformPoint(handL.position), b = forms.Pivot.InverseTransformPoint(handR.position);
-                var mid = (a + b) * .5f; float span = Vector3.Distance(a, b);
-                var hp = forms.Pivot.InverseTransformPoint(hips.position);
-                // Round 8: a little up and forward of the clip's hands (nearer the cockpit rim, so it shows in first person)
-                mid.y = Mathf.Clamp(mid.y + .12f, hp.y + .2f * s, hp.y + .6f * s); mid.z = Mathf.Clamp(mid.z + .13f, hp.z + .22f * s, hp.z + .6f * s); mid.x = 0;   // (arms reach ~0.2 m past the clip's hands)
-                steering = Steering.Make(v, mid, span);
-                Debug.Log($"[Driver] {who}: steering at {mid.ToString("F2")} (hands {span:0.00} m apart in the Driving pose)");
+                var mid = (a + b) * .5f; var hp = forms.Pivot.InverseTransformPoint(hips.position);
+                mid.y = Mathf.Clamp(mid.y + .12f, hp.y + .2f * s, hp.y + .6f * s); mid.z = Mathf.Clamp(mid.z + .13f, hp.z + .22f * s, hp.z + .6f * s); mid.x = 0;
+                steering = Steering.Make(v, eye, mid, s);
+                Debug.Log($"[Driver] {who}: eyes at {eye.ToString("F2")}, wheel at {steering.Anchor.ToString("F2")} (grips {steering.Span:0.00} m apart)");
             }
             forms.Snap(Mode.Drive);
             Debug.Log($"[Driver] {who} seated: scale {s:0.00}, head top {HeadTop:0.00} m, closed canopy top {top:0.00} m");
@@ -185,8 +188,22 @@ namespace ShiftStorm
         }
         void Legs()
         {
+            if (Astride) { LegsAstride(); return; }
             foreach (var (u, l, f, sd) in new[] { (ulL, llL, footL, -1f), (ulR, llR, footR, 1f) })
             { Aim(u, l, W(new Vector3(sd * .12f, .08f, 1))); Aim(l, f, W(new Vector3(0, -.75f, .65f))); }
+        }
+        // Round 9 item 3c: astride (the Scrambler: designs.json "astride"): thighs down and forward either side of the tank, knees bent, feet
+        // back on the pegs, the back leaning forward over the bars
+        bool Astride { get { var d = forms ? forms.Design : null; return d != null && d.Astride(forms.ShownMode); } }
+        public bool RidingAstride => Astride;
+        Vector3 WP(Vector3 localDir) => forms.Pivot.TransformDirection(localDir.normalized);   // the pivot's frame: she leans with the bike
+        void LegsAstride()
+        {
+            foreach (var (u, l, f, sd) in new[] { (ulL, llL, footL, -1f), (ulR, llR, footR, 1f) })
+            { Aim(u, l, WP(new Vector3(sd * .34f, -.55f, .78f))); Aim(l, f, WP(new Vector3(sd * .06f, -.95f, -.32f))); }
+            if (spine) Aim(spine, chest ? chest : head, WP(new Vector3(0, 1, .75f)));
+            if (chest) Aim(chest, head, WP(new Vector3(0, 1, .4f)));
+            if (head) head.rotation = Quaternion.AngleAxis(-25f, forms.Pivot.right) * head.rotation;   // eyes up the road again
         }
         void Place(Vector3 seat, float s)
         {
@@ -234,9 +251,20 @@ namespace ShiftStorm
             Destroy(mesh); return (outside, total, below);
         }
 
-        Vector3 seatApplied;
+        Vector3 seatApplied; float baseScale;
+        // Round 9 item 3c: her size on a design that asks for it (designs.json "riderScale": the Scrambler's bikes, 1.4x); the hips stay on the
+        // seat (re-anchored every frame), the eyes / first-person camera follow her head
+        void DesignScale()
+        {
+            if (!model || baseScale <= 0) return;
+            var d = forms ? forms.Design : null; float want = baseScale * (d != null && d.riderScale > 0 ? d.riderScale : 1f);
+            if (Mathf.Abs(model.localScale.x - want) < 1e-4f) return;
+            model.localScale = Vector3.one * want; Scale = want;
+            if (!Animated) { model.localPosition += seat + forms.SeatOffset - forms.Pivot.InverseTransformPoint(hips.position); seatApplied = forms.SeatOffset; }
+        }
         void Update()
         {
+            DesignScale();
             if (model && forms && model.gameObject.activeSelf != forms.ShowDriver) model.gameObject.SetActive(forms.ShowDriver);   // a closed design hides her
             if (Animated && model && v) UpdateGraph();
             TryPending();
@@ -261,6 +289,7 @@ namespace ShiftStorm
             model.localPosition += forms.SeatOffset - seatApplied; seatApplied = forms.SeatOffset;
             cheer = Mathf.MoveTowards(cheer, v.Finished ? 1 : 0, Time.deltaTime * 2.5f);
             foreach (var kv in seated) kv.Key.localRotation = kv.Value;
+            if (Astride) LegsAstride();   // Round 9
             if (spine) spine.rotation = Quaternion.AngleAxis(-lean * 9f, transform.forward) * spine.rotation;
             if (head) head.rotation = Quaternion.AngleAxis(lean * 14f, transform.up) * head.rotation;
             ArmsToGrips();
@@ -374,7 +403,7 @@ namespace ShiftStorm
             if (Caller.Instance && Caller.Instance.Talking && !force) { Spoken.Add($"{what}: skipped (Barker talking)"); return false; }
             AudioClip clip = set[Random.Range(0, set.Length)];
             for (int k = 0; k < 4 && set.Length > 1 && Spoken.Count > 0 && Spoken[Spoken.Count - 1].EndsWith(clip.name); k++) clip = set[Random.Range(0, set.Length)];
-            voice.Stop(); voice.clip = clip; voice.volume = .95f * Settings.Voices * (v.Human ? 1f : .85f); voice.Play();
+            voice.Stop(); voice.clip = clip; voice.volume = .95f * Settings.Voices * (v.Human ? 1f : .85f); voice.Play(); SoundLog.Add("voice", who + " " + clip.name);
             nextAny = now + AnyCooldown; nextOf[what] = now + cooldown; Spoken.Add($"{what}: {clip.name}");
             SpeakingUntil = now + clip.length; AnySpeakingUntil = Mathf.Max(AnySpeakingUntil, SpeakingUntil);
             AllSpoken.Add($"{now:0.00} {who} {what} {clip.name} {clip.length:0.00}");

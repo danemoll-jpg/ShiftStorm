@@ -307,7 +307,7 @@ namespace ShiftStorm
             var clip = fresh.OrderBy(c => clipLast.TryGetValue(c.name, out var l) ? l : -1000f).ThenBy(_ => Random.value).First();
             if (talking) voice.Stop();
             Driver.Hush();
-            voice.clip = clip; voice.Play();
+            voice.clip = clip; voice.Play(); SoundLog.Add("voice", "Barker " + clip.name);
             busyUntil = now + clip.length; busyPriority = pri; nextAny = busyUntil + AnyGap; poolNext[pool] = now + rule.Item1; clipLast[clip.name] = now; usedThisRace.Add(clip.name);
             if (nextFill > 0) nextFill = Mathf.Max(nextFill, busyUntil + Random.Range(5f, 8f));
             Subtitle = words.TryGetValue(clip.name, out var w) ? w : ""; SubtitleUntil = now + Mathf.Max(2f, clip.length + .6f);

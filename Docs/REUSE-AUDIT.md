@@ -296,3 +296,18 @@ Docs/SOUNDS.md lists every sound and where it is used.
   `mishit_1`, `gasp_1`, `trouble_1/2`, `bogey_1` (Abi), `water_1`, `lose_1`, `win_1`, `quipgood_1/2`, `quipbad_1` (Abi) — levelled to
   -16 LUFS (`Tools/Audio/normalize_voice.py`). New: 3 lines each in their own Tee'd Off ElevenLabs voices (`Tools/Audio/driver_lines.py`).
 - Nothing copied from chastain_rush or Hostile-Horizon this round.
+
+## Round 9 copies (2026-11-15)
+- **Gridiron Glory (`C:\Users\danmo\footballGame`, read-only)** — the crowd:
+  - `Scripts/Gameplay/Field/CrowdRenderer.cs` -> `Assets/Scripts/World/Crowd.cs`. Changed: one Crowd per grandstand with its own material;
+    a cheer that ripples along the stand from where a racer passes at its speed (instead of the match mood, boos, towels by side, the wave
+    round a bowl, ponchos, empty seats); tropical shirts and sun hats; size x1.35; drawn per camera from URP's `beginCameraRendering` (split
+    screen, checks); a murmur bed per stand and a few cheers, never on top of the finish's own crowd sound.
+  - `Resources/Shaders/CrowdInstanced.shader` -> `Assets/Resources/Shaders/CrowdInstanced.shader` (+ meta). Changed: URP pass
+    ("UniversalForward"), the light / ambient from globals set by Crowd.cs, the per-stand cheer sweep, no boo / towel / wave / poncho / empty-seat logic.
+  - `Resources/Materials/CrowdInstanced.mat`, `Resources/Crowd/FanAtlas.png`, `Resources/Crowd/fan_atlas.json` (+ metas): unchanged.
+  - Sounds: `crowd_bed_engaged`, `crowd_cheer_big_1/2`, `crowd_cheer_small_1/2/3`, `crowd_roar_1` -> `Assets/Resources/Audio/Sfx/gg_crowd_*.ogg`
+    (re-encoded to Vorbis, otherwise unchanged).
+- **Tee'd Off (read-only)** — the dinosaur rigger: `Tools/Characters/rig_dino.py`, `glb_load.py`, `rig_biscuit.py` -> `Tools/Characters/`.
+  Changed in `rig_dino.py` only: the creature list (Dan's raptor and plesiosaur), the paths (local/dinos, Assets/Resources/Dinos via
+  `Tools/Characters/import_dinos.py`), the raptor oriented by its body axis, no bipeds, eyes optional.

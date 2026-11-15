@@ -188,8 +188,33 @@ namespace ShiftStorm
             scenario = "steering"; Clear(); straight = true; holdSpeed = 4; game.StartCourse(0, false); yield return Until(() => !v.Holding, 6f); yield return Wait(2.5f);   // after the GO horn gesture, rolling at 4 m/s (a car standing still is reset as stuck)
             var d = Driver.Instance; var st = d ? d.Steering : null; var views = cam.GetComponent<CameraViews>();
             if (!st) { Line("STEERING: no mechanism (no driver?)"); yield break; }
-            Line($"STEERING (item 4): {string.Join(", ", FormSet.All.Select(m => $"{Game.FormName(m)} {st.KindOf(m)}"))}; at {st.Anchor.ToString("F2")} in the vehicle (the hands' centre in the Driving pose), grips {st.Span:0.00} m apart");
-            Steering.ForceInput = true; float worst = 0; var rows = new List<string>();
+            Line($"STEERING (Round 8 item 4, Round 9 item 1): {string.Join(", ", FormSet.All.Select(m => $"{Game.FormName(m)} {st.KindOf(m)}"))}; driver's eyes at {st.Eye.ToString("F2")} in the vehicle, wheel centre {st.Anchor.ToString("F2")}, grips {st.Span:0.00} m apart (driver scale {st.DriverScale:0.00})");
+            Steering.ForceInput = true; float worst = 0, worstShare = 0; var rows = new List<string>();
+            // Round 9: the share of the screen height each mechanism covers in first person: at rest (FOV 70), at top speed (85) and on boost (90)
+            float[] fovs = { CameraViews.FirstPersonFov(ChaseCam.BaseFov), CameraViews.FirstPersonFov(ChaseCam.BaseFov + 25f), CameraViews.FirstPersonFov(ChaseCam.BaseFov + 33f) };
+            // the visible share: the camera's picture rendered with and without the mechanism, the rows that differ (the mechanism's parts behind
+            // the cockpit rim or the hull do not count: they are not seen)
+            Color32[] Grab() { cam.Render(); var prev = RenderTexture.active; RenderTexture.active = rt; grab.ReadPixels(new Rect(0, 0, W, H), 0, 0); grab.Apply(); RenderTexture.active = prev; return grab.GetPixels32(); }
+            float Rendered()
+            {
+                var rs = st.Shown.root.GetComponentsInChildren<Renderer>(); var with = Grab();
+                foreach (var r in rs) r.enabled = false; var without = Grab(); foreach (var r in rs) r.enabled = true;
+                int lo = H, hi = -1;
+                for (int y = 0; y < H; y++)
+                {
+                    int diff = 0;
+                    for (int x = 0; x < W; x += 2) { var a = with[y * W + x]; var b = without[y * W + x]; if (Mathf.Abs(a.r - b.r) + Mathf.Abs(a.g - b.g) + Mathf.Abs(a.b - b.b) > 24 && ++diff > 3) break; }
+                    if (diff > 3) { lo = Mathf.Min(lo, y); hi = Mathf.Max(hi, y); }
+                }
+                if (Steering.ForcedSteer == 0 && cam.fieldOfView < 71f)   // the evidence: the mechanism's own pixels (the difference), per form
+                {
+                    var dimg = new Texture2D(W, H, TextureFormat.RGB24, false); var dp = new Color32[W * H];
+                    for (int i = 0; i < dp.Length; i++) { var a = with[i]; var b = without[i]; bool d = Mathf.Abs(a.r - b.r) + Mathf.Abs(a.g - b.g) + Mathf.Abs(a.b - b.b) > 24; dp[i] = d ? a : new Color32((byte)(b.r / 4), (byte)(b.g / 4), (byte)(b.b / 4), 255); }
+                    dimg.SetPixels32(dp); dimg.Apply(); File.WriteAllBytes(Path.Combine(dir, $"steering-{st.Shown.kind}-only.jpg"), dimg.EncodeToJPG(85)); Destroy(dimg);
+                }
+                shotLastFrame = true; return hi < 0 ? 0 : (hi - lo + 1) / (float)H;
+            }
+            string Shares() { var keep = cam.fieldOfView; var o = string.Join(" / ", fovs.Select(f => { cam.fieldOfView = f; float sh = Rendered(); worstShare = Mathf.Max(worstShare, sh); return $"{sh * 100:0} %"; })); cam.fieldOfView = keep; return o; }
             foreach (var m in FormSet.All)
             {
                 v.Forms.Snap(m); yield return Wait(.3f);
@@ -200,13 +225,15 @@ namespace ShiftStorm
                     {
                         Steering.ForcedSteer = s; Steering.ForcedPitch = m == Mode.Fly || m == Mode.Dive ? -s * .6f : 0; yield return Wait(.45f);
                         var e = d.GripError(); worst = Mathf.Max(worst, Mathf.Max(e.l, e.r));
-                        if (view == CameraViews.View.FirstPerson) rows.Add($"{Game.FormName(m)} {(s < 0 ? "left" : s > 0 ? "right" : "centre")}: {st.Shown.kind} at {st.Shown.turn:0} deg, hands {e.l * 100:0} / {e.r * 100:0} cm off the grips, IK {d.IkWeight:0.00}");
+                        if (view == CameraViews.View.FirstPerson) rows.Add($"{Game.FormName(m)} {(s < 0 ? "left" : s > 0 ? "right" : "centre")}: {st.Shown.kind} at {st.Shown.turn:0} deg, screen height covered {Shares()} (FOV {fovs[0]:0} / {fovs[1]:0} / {fovs[2]:0}: rest / top speed / boost), hands {e.l * 100:0} / {e.r * 100:0} cm off the grips, IK {d.IkWeight:0.00}");
+                        else if (s == 0) rows.Add($"{Game.FormName(m)} chase: {st.Shown.kind} covers {st.ScreenShare(cam) * 100:0.0} % of the screen height");
                         Capture($"{Game.FormName(m).ToLowerInvariant()}-{(view == CameraViews.View.FirstPerson ? "first-person" : "chase")}-{(s < 0 ? "left" : s > 0 ? "right" : "centre")}");
                     }
                 }
             }
             Steering.ForceInput = false; views.SetView(CameraViews.View.Chase); v.Forms.Snap(v.Mode);
             foreach (var r in rows) Line("  " + r);
+            Line($"STEERING SIZE {(worstShare <= .2f ? "PASS" : "CHECK")}: the largest first-person share of the screen height {worstShare * 100:0} % (Dan: no more than ~15-20 %; build 10: ~65 %)");
             Line($"STEERING {(worst < .08f ? "PASS" : "CHECK")}: worst hand-to-grip distance {worst * 100:0.0} cm over every form and angle; the mechanism swaps with the model at the change's midpoint (it follows the shown model)");
             Save();
         }

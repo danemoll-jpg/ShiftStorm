@@ -1,0 +1,95 @@
+{
+  "_note": "Written by Code (Round 9): Dan's Scrambler (motorcycle; his own image is the land form). 2.6 m long (a bike in real proportion to a 1.4x Abi, the hull stays 4 m); ridden astride, the bike leans into turns; her hands on the model's own handlebars (\"grips\") on every form; the centre stand under the bike cut away (\"cut\"); seat / grips measured on the previews; the sub's clear glass sphere is the game's, on the model's chrome ring. Raced by Chip (Dan to confirm).",
+  "title": "Scrambler",
+  "yaw": -90,
+  "length": 2.6,
+  "rival": "Chip",
+  "steering": [
+    "grips",
+    "grips",
+    "grips",
+    "grips"
+  ],
+  "canopy": [
+    "none",
+    "none",
+    "none",
+    "sphere"
+  ],
+  "astride": [
+    "Car",
+    "Boat",
+    "Plane",
+    "Sub"
+  ],
+  "lean": [
+    "Car"
+  ],
+  "riderScale": 1.4,
+  "seat": {
+    "Car": [
+      0,
+      -0.35,
+      0.2
+    ],
+    "Boat": [
+      0,
+      -0.35,
+      0.27
+    ],
+    "Plane": [
+      0,
+      -0.33,
+      0.07
+    ],
+    "Sub": [
+      0,
+      -0.25,
+      0.25
+    ]
+  },
+  "steer": {
+    "Car": [
+      0,
+      0.25,
+      0.53
+    ],
+    "Boat": [
+      0,
+      0.12,
+      0.75
+    ],
+    "Plane": [
+      0,
+      0.16,
+      0.43
+    ],
+    "Sub": [
+      0,
+      0.24,
+      0.6
+    ]
+  },
+  "cut": {
+    "Car": [
+      [
+        -0.35,
+        -0.5,
+        -0.87,
+        0.35,
+        -0.25,
+        -0.64
+      ],
+      [
+        -0.35,
+        0.38,
+        -0.87,
+        0.35,
+        0.6,
+        -0.64
+      ]
+    ]
+  },
+  "sphere": 0.9,
+  "sphereY": 0.93
+}

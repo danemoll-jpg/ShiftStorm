@@ -9,7 +9,10 @@ import bpy, sys, os, math, mathutils
 
 argv = sys.argv[sys.argv.index("--") + 1:]
 src, out_dir, form, yaw, seat_arg, preview = argv[0], argv[1], argv[2], float(argv[3]), argv[4], argv[5]
-LENGTH = 4.0
+import json
+extra = json.loads(argv[6]) if len(argv) > 6 else {}   # Round 9: {"cut": [[x0, y0, z0, x1, y1, z1], ...], "steer": [x, y, z] or None, "length": m}
+LENGTH = 4.0   # the hull collider's length; Round 9: a design may be shorter (import.json "length": the Scrambler's bikes, visual only)
+LENGTH = float(extra.get("length") or LENGTH)
 FLOOR = {"Car": -0.85, "Boat": -0.62, "Plane": -0.55, "Sub": -0.6}[form]   # the floor of each placeholder form, metres under the hull's centre
 os.makedirs(out_dir, exist_ok=True)
 
@@ -62,6 +65,16 @@ else:
     top = max(near) if near else lo.z + size.z * .8
     seat = mathutils.Vector((0, sy, top - .42))
 e = bpy.data.objects.new("Seat", None); bpy.context.scene.collection.objects.link(e); e.location = seat
+# Round 9: cut boxes (faces whose centre lies inside are deleted: a part of the model the game replaces or hides) and the steering point
+cut_faces = 0
+if extra.get("cut"):
+    import bmesh
+    bm = bmesh.new(); bm.from_mesh(obj.data)
+    gone = [f for f in bm.faces if any(b[0] <= f.calc_center_median().x <= b[3] and b[1] <= f.calc_center_median().y <= b[4] and b[2] <= f.calc_center_median().z <= b[5] for b in extra["cut"])]
+    cut_faces = len(gone)
+    bmesh.ops.delete(bm, geom=gone, context="FACES"); bm.to_mesh(obj.data); bm.free(); obj.data.update()
+if extra.get("steer"):
+    st = bpy.data.objects.new("Steering", None); bpy.context.scene.collection.objects.link(st); st.location = mathutils.Vector(extra["steer"])
 
 # base colour texture: the first image used by the materials
 tex_out = None
@@ -102,5 +115,6 @@ for name, loc, rot in (("side", (12, 0, 0), (math.radians(90), 0, math.radians(9
         d = mathutils.Vector((0, 0, 0)) - mathutils.Vector(loc); co.rotation_euler = d.to_track_quat("-Z", "Y").to_euler(); cam.ortho_scale = 6
     sc.render.filepath = f"{base}-{name}.png"; bpy.ops.render.render(write_still=True); shots.append(sc.render.filepath)
 print(f"[vehicle_import] {form}: {os.path.basename(src)} faces {faces_in} -> LOD0 {faces0}, LOD1 {faces1}; size {size.x:.2f} x {size.y:.2f} x {size.z:.2f} m "
-      f"(scale x{s:.3f}, yaw {yaw:.0f}); seat {tuple(round(c, 2) for c in seat)}; texture {'saved' if tex_out else 'none'}{'; WIDER THAN LONG: check the facing' if wide else ''}")
+      f"(scale x{s:.3f}, yaw {yaw:.0f}); seat {tuple(round(c, 2) for c in seat)}; texture {'saved' if tex_out else 'none'}{'; WIDER THAN LONG: check the facing' if wide else ''}"
+      f"{f'; cut {cut_faces} faces' if extra.get('cut') else ''}{'; steering point set' if extra.get('steer') else ''}")
 print("[vehicle_import] wrote", out_fbx, "previews", ", ".join(shots))

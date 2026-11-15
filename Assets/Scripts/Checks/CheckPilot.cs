@@ -213,6 +213,12 @@ namespace ShiftStorm
             if (r8 || which == "steering") yield return SteeringCheck();
             if (r8 || which == "volumes") yield return VolumesCheck();
             if (r8 || which == "choice8") yield return Choice8();
+            bool r9 = which == "round9";
+            if (r9) yield return SteeringCheck();
+            if (r9 || which == "sounds") yield return SoundsCheck();
+            if (r9 || which == "crowd") yield return CrowdCheck();
+            if (r9 || which == "bike") yield return BikeCheck();
+            if (r9 || which == "designs") { yield return GarageCheck(); RivalDesigns(); }
             FeelReport();
             if (which == "quit" || which == "quitresults" || which == "quitlauncher") { yield return QuitCheck(which); yield break; }
             Frames();

@@ -70,3 +70,13 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
 - **Dinosaurs (positional, Effects volume):** T. rex roar (`trex_roar_1/2`), brontosaurus moo (`bronto_moo_1/2`), grunts
   (`dino_grunt_1/2`, the triceratops; the raptors pitched up), pterodactyl calls (`amb_dino_call_2/3`).
 - **Finish by place:** 1st the cheer, applause and win jingle; a middle place a small clap; last an "aww" (`to_crowd_aww`), no applause.
+
+## Round 9 (2026-11-15): one sound per event
+- **Finish:** Tee'd Off's win jingle (`to_match_win`) is gone: it played on top of Dan's own finish song (Victory, `results`). Now one
+  crowd sound by place (1st / time trial the big cheer, a middle place a small clap, last an "aww") + Dan's song; no gate chime on the
+  finish gate. Build 10 played cheer + applause + jingle + chime + song.
+- **One of a kind at a time** (`Core/SoundLog.cs`): a second music, crowd, splash, whoosh, impact or chime sound within 0.5 s of one of its
+  kind is skipped (the change's whoosh on a jump's air whoosh, the landing's double splash, a wall hit under a scrape, both start stands at GO).
+- **Event-by-event list:** the `sounds` check (`Docs/Checks/round9/check_report_sounds.txt`): every race event with what it plays.
+- **Crowd (Gridiron Glory's, `gg_crowd_*`):** a murmur bed at each grandstand (3D, Effects volume), one roar from the start stands at GO,
+  a cheer at the waterfall-landing stand when your racer passes. Every voice line in use: `Docs/Checks/round9/voice_lines.md`.

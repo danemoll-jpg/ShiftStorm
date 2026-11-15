@@ -20,7 +20,7 @@ namespace ShiftStorm
             MakeVisual(root.transform, Mode.Drive, 1f, true, VehicleDesigns.PlayerTint, true);
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive;
-            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>();
+            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>(); root.AddComponent<BikeLean>();
             ShiftVehicle.MarkPlayer(v); v.Human = true; v.RacerName = "Abi"; v.Tint = new Color(.95f, .45f, .1f);
             return v;
         }
@@ -34,10 +34,12 @@ namespace ShiftStorm
             col.material = new PhysicsMaterial("Hull") { dynamicFriction = 0, staticFriction = 0, bounciness = 0, frictionCombine = PhysicsMaterialCombine.Minimum, bounceCombine = PhysicsMaterialCombine.Minimum };
             root.AddComponent<Rigidbody>();
             root.AddComponent<ShiftInput>().Scripted = true;
-            MakeVisual(root.transform, Mode.Drive, 1f, false, r.color, true);
+            var vis = MakeVisual(root.transform, Mode.Drive, 1f, false, r.color, true);
+            // Round 9 item 3c: a rival with a design of its own (designs.json "rival": Hot Rod -> Vivi, Grand Prix -> Rae, Scrambler -> Chip)
+            var own = VehicleDesigns.ForRival(r.character); if (own != null) vis.SetOwnDesign(own.name);
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive; v.RacerName = r.name; v.Tint = r.color;
-            root.AddComponent<VehicleSound>().spatial = true; root.AddComponent<SpeedFx>();
+            root.AddComponent<VehicleSound>().spatial = true; root.AddComponent<SpeedFx>(); root.AddComponent<BikeLean>();
             Driver.Make(v, r.character);
             var pilot = root.AddComponent<RivalPilot>(); pilot.rival = r;
             return v;
@@ -55,7 +57,7 @@ namespace ShiftStorm
             MakeVisual(root.transform, Mode.Drive, 1f, false, r.color, true);
             var v = root.AddComponent<ShiftVehicle>();
             v.shared = shared; v.drive = drive; v.boat = boat; v.fly = fly; v.dive = dive; v.Human = true; v.RacerName = r.name; v.Tint = r.color;
-            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>();
+            root.AddComponent<VehicleSound>(); root.AddComponent<SpeedFx>(); root.AddComponent<BikeLean>();
             Driver.Make(v, r.character);
             return v;
         }

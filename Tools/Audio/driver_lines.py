@@ -32,13 +32,25 @@ NEW = {
     "chip": {"messup_1": "[wailing] Noooooo!", "messup_2": "[panicked] Oh no, oh no!", "messup_3": "[groans] That is NOT going in the highlight reel!"},
     "vivi": {"messup_1": "[dramatic shriek] Noooooo!", "messup_2": "[gasps] Oh no!", "messup_3": "[dramatic] My hair! Darling, my HAIR!"},
 }
+# Round 9 item 2 (Dan: "She says 'that's not where I aimed' which doesn't make sense in the context of driving"): every Tee'd Off clip that
+# only makes sense in golf (or in another place than the one it is played for) is out; a racing line in the same voice replaces each.
+ROUND9 = {
+    "abigail": {"line_1": "[annoyed] That was NOT the racing line."},                       # for trouble_1 "That's not where I aimed."
+    "rae": {"throttle_1": "[frustrated, speaking clearly] Too much throttle!",                               # for mishit_1 "Too much muscle!" (a golf swing)
+            "wall_1": "[yells] Who put a WALL there?!",                                    # for trouble_2 "Who planted that?!" (a ball in a tree)
+            "swim_1": "[angry] I came here to race, not to swim!"},                        # for water_1 "The lake can have it!" (the ball)
+    "vivi": {"last_1": "[sighs] Last? Darling, that is simply not my colour."},            # for lose_1 "Second place suits no one." (said for last place)
+}
+REMOVED = {"abigail": ["trouble_1"], "rae": ["mishit_1", "trouble_2", "water_1"], "vivi": ["lose_1"]}
+for _who, _d in ROUND9.items():
+    NEW.setdefault(_who, {}).update(_d)
 WORDS_NEW = {who: {k: v.split("] ", 1)[-1] for k, v in d.items()} for who, d in NEW.items()}
-# their Tee'd Off clips that fit (copied as they are)
+# their Tee'd Off clips that fit a race (copied as they are)
 COPY = {
-    "abigail": ["disaster_1", "mishit_1", "gasp_1", "bogey_1", "trouble_1", "water_1", "lose_1", "quipbad_1", "win_1", "quipgood_1", "quipgood_2", "laugh_1", "lucky_1"],
-    "rae": ["disaster_1", "mishit_1", "gasp_1", "trouble_2", "water_1", "lose_1", "win_1", "quipgood_1"],
+    "abigail": ["disaster_1", "mishit_1", "gasp_1", "bogey_1", "water_1", "lose_1", "quipbad_1", "win_1", "quipgood_1", "quipgood_2", "laugh_1", "lucky_1"],
+    "rae": ["disaster_1", "gasp_1", "lose_1", "win_1", "quipgood_1"],
     "chip": ["disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_2", "lose_1", "win_1", "quipgood_1"],
-    "vivi": ["disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1", "water_1", "lose_1", "win_1", "quipgood_1"],
+    "vivi": ["disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1", "water_1", "win_1", "quipgood_1"],
 }
 
 
@@ -62,6 +74,11 @@ def main():
         print("dry run: add --go to record")
         return
     copied = 0
+    for who, names in REMOVED.items():   # Round 9: the golf-only clips leave the game
+        for n in names:
+            for ext in (".ogg", ".ogg.meta"):
+                p = os.path.join(OUT, who, n + ext)
+                if os.path.exists(p): os.remove(p); print(f"  removed {who}/{n}{ext}")
     for who, names in COPY.items():
         os.makedirs(os.path.join(OUT, who), exist_ok=True)
         for n in names:

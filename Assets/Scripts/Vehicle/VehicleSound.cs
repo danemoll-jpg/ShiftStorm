@@ -46,7 +46,8 @@ namespace ShiftStorm
             hits = new[] { Resources.Load<AudioClip>("Audio/Sfx/wall_hit_1"), Resources.Load<AudioClip>("Audio/Sfx/wall_hit_2") };
             hitSource = gameObject.AddComponent<AudioSource>(); hitSource.playOnAwake = false; hitSource.spatialBlend = spatial ? 1 : 0;
             if (spatial) { hitSource.rolloffMode = AudioRolloffMode.Linear; hitSource.minDistance = 6; hitSource.maxDistance = 90; }
-            v.WallHit += (angle, keep, what) => { var c = hits[Random.Range(0, hits.Length)]; if (c) hitSource.PlayOneShot(c, Mathf.Lerp(.25f, .9f, Mathf.Clamp01((1 - keep) * 3f)) * Settings.Effects); };
+            // Round 9 item 3: a shallow touch (speed kept > 85 %) is the scrape alone (GameSounds); build 10 played the hit under it as well
+            v.WallHit += (angle, keep, what) => { if (keep > .85f && !spatial) return; if (!spatial && SoundLog.Busy("impact", .3f)) { SoundLog.Merged++; return; } var c = hits[Random.Range(0, hits.Length)]; if (c) { hitSource.PlayOneShot(c, Mathf.Lerp(.25f, .9f, Mathf.Clamp01((1 - keep) * 3f)) * Settings.Effects); if (!spatial) SoundLog.Add("impact", c.name); } };
         }
         AudioSource hitSource; AudioClip[] hits;
         public float Pitch => source ? source.pitch : 0;

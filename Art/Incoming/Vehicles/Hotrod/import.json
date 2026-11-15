@@ -1,0 +1,48 @@
+{
+  "_note": "Written by Code (Round 9): Dan's Hot Rod (lavender; his own image is the sub). Raced by Vivi (Dan to confirm). Its chrome T-handle in the cockpit is cut out (\"cut\" boxes, from the previews): the game's own steering mechanism replaces it.",
+  "title": "Hot Rod",
+  "yaw": 180,
+  "rival": "Vivi",
+  "cut": {
+    "Car": [
+      [
+        -0.12,
+        -0.13,
+        0.1,
+        0.12,
+        0.11,
+        0.6
+      ]
+    ],
+    "Boat": [
+      [
+        -0.12,
+        -0.13,
+        0.1,
+        0.12,
+        0.11,
+        0.6
+      ]
+    ],
+    "Plane": [
+      [
+        -0.12,
+        -0.13,
+        0.1,
+        0.12,
+        0.11,
+        0.6
+      ]
+    ],
+    "Sub": [
+      [
+        -0.12,
+        -0.2,
+        0.3,
+        0.12,
+        0.15,
+        1.3
+      ]
+    ]
+  }
+}

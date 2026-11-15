@@ -271,8 +271,28 @@ Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes b
   (`Caller.DinoPools`, `DinoActor.Track` / `BigOnScreen`). Dino shadows within 100 m, non-set-pieces drawn within 500 m. ~+1.4 ms 95th pct
   on the PC.
 
-Round 8 delivered as build 9 (0.8.0); Round 8b delivered as build 10 (0.8.1), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item
-status and "For Dan to check").Current objective: **Round 9** — steering mechanisms at a sensible size (first person), every voice line must fit racing (no
-Tee'd Off golf lines), one finish sound (no Tee'd Off jingle doubling ours), the crowd ported from Gridiron Glory, three new vehicle designs (Hot Rod, Scrambler motorcycle,
-Grand Prix) imported as Dan's Tripo models arrive, fix the strip's E6 check. Release build 11 (0.8.2).
-See `TODO.md`.
+- **Round 9 (build 11, 0.8.2):**
+  - **Steering size** (`Vehicle/Steering.cs`): mechanisms at real proportions to the driver, placed low where her hands reach
+    (`Steering.Place`, from the Driving clip's hands); first-person camera 17 cm over her eyes, 5 deg down, FOV 70 -> 80
+    (`CameraViews.FirstPersonFov`). The `steering` check measures the share of the screen height by rendering with / without it.
+    Kind "grips" = only grips on a model's own bars (the Scrambler).
+  - **Voices:** golf-only driver clips out, racing lines in (`Tools/Audio/driver_lines.py` ROUND9 / REMOVED); `Tools/Audio/voice_audit.py`
+    writes every line in use + what speech-to-text hears (faster-whisper small.en, local; the ElevenLabs key has no STT permission) to
+    `Docs/Checks/round9/voice_lines.md`.
+  - **Sounds:** Tee'd Off's win jingle gone; one crowd sound per finish; `Core/SoundLog.cs` logs every sound and skips a second one of a kind
+    (music, crowd, splash, whoosh, impact, chime) within 0.5 s.
+  - **Crowd** (`World/Crowd.cs`, `World/ParadisePlunge.Crowd.cs`, from Gridiron Glory: `Resources/Shaders/CrowdInstanced.shader` (URP),
+    `Resources/Crowd/FanAtlas.png`): 4 grandstands (start both sides, loop, waterfall landing), 1,182 fans, a cheer rippling along a stand as a
+    racer passes; drawn per camera from `RenderPipelineManager.beginCameraRendering` (Graphics.DrawMesh* queued in LateUpdate misses a
+    camera rendered by hand). `-noCrowd` turns it off.
+  - **Designs** (designs.json keys from each `import.json`: `title`, `default` (Jetstream), `rival` (GrandPrix -> Rae, Hotrod -> Vivi,
+    Scrambler -> Chip, used when all 4 forms are in), `steering`, `canopy` per form (bubble / sphere / none), `astride`, `lean`, `sphere`,
+    `sphereY`, `riderScale`; import-only: `length` (Scrambler 2.6 m), `cut` boxes per form (faces deleted: Hot Rod T-handle, Scrambler centre
+    stand), `steer` (the steering point), `yaw` (GrandPrix -90, Hotrod 180, Scrambler -90), `skip`). `Vehicle/BikeLean.cs` (visual lean),
+    Driver astride pose + `riderScale`. `JurassicLook.Textured` is cached by texture object (by name, all designs shared one texture).
+    `Tools/Blender/make_placeholder_scrambler.py` = a test bike design `_Scrambler` (hidden; never ship it).
+  - **Dinos:** Dan's raptor + plesiosaur: `python Tools/Characters/import_dinos.py` (Blender `dino_to_glb.py` + Tee'd Off's rigger copied
+    to `Tools/Characters/rig_dino.py`) -> `Resources/Dinos/<style>_rig.bytes`; stand-ins only if a rig is missing.
+  - Checks: `round9` = `steering` + `sounds` + `crowd` + `bike` (`-testDesign Scrambler`) + `designs` (Garage + who races what).
+
+Round 9 delivered as build 11 (0.8.2), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").

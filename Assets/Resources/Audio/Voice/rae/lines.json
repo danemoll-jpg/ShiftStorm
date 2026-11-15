@@ -26,20 +26,20 @@
    "text": "Should've hit the gym harder!"
   },
   {
-   "id": "mishit_1",
-   "text": "Too much muscle!"
-  },
-  {
    "id": "quipgood_1",
    "text": "Did you SEE those gains?!"
   },
   {
-   "id": "trouble_2",
-   "text": "Who planted that?!"
+   "id": "swim_1",
+   "text": "I came here to race, not to swim!"
   },
   {
-   "id": "water_1",
-   "text": "The lake can have it!"
+   "id": "throttle_1",
+   "text": "Too much throttle!"
+  },
+  {
+   "id": "wall_1",
+   "text": "Who put a WALL there?!"
   },
   {
    "id": "win_1",

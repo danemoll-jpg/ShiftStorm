@@ -1,0 +1,24 @@
+ShiftStorm check 'designs', 2026-11-15 02:01, build 0.8.2, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+GARAGE: menu page Garage, designs Gray box, GrandPrix, Jetstream, Scrambler, Hotrod; items: Design: Jetstream   (3 of 5, A: next) | Form: Car - Tripo model   (A: next, with the change) | Racing with this design | Back
+  Gray box: Car gray box 4.0 x 2.6 x 4.2 m; Boat gray box 3.8 x 2.6 x 4.2 m; Plane gray box 6.9 x 2.0 x 5.8 m; Sub gray box 4.3 x 1.9 x 4.3 m
+  Gray box: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  GrandPrix: Car Tripo model 4.1 x 1.4 x 4.4 m; Boat Tripo model 3.5 x 1.6 x 3.9 m; Plane Tripo model 5.6 x 1.6 x 5.6 m; Sub Tripo model 4.6 x 2.1 x 4.8 m
+  GrandPrix: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Jetstream: Car Tripo model 3.7 x 1.4 x 4.1 m; Boat Tripo model 3.8 x 1.3 x 4.1 m; Plane Tripo model 5.5 x 1.1 x 5.5 m; Sub Tripo model 3.8 x 1.6 x 4.2 m
+  Jetstream: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Scrambler: Car Tripo model 2.6 x 1.5 x 2.8 m; Boat Tripo model 2.5 x 1.4 x 2.7 m; Plane Tripo model 3.6 x 1.1 x 3.6 m; Sub Tripo model 2.7 x 2.7 x 2.8 m
+  Scrambler: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Hotrod: Car Tripo model 4.3 x 2.0 x 4.6 m; Boat Tripo model 4.0 x 1.9 x 4.3 m; Plane Tripo model 5.6 x 1.6 x 5.6 m; Sub Tripo model 5.0 x 1.9 x 5.1 m
+  Hotrod: change Car->Plane in the Garage: done True, swapped True, bursts 1
+GARAGE race with 'Hotrod': player's design Hotrod (forms imported: Car/Boat/Plane/Sub), rivals in it 1/3, saved setting Hotrod
+GARAGE race in 'Hotrod': shown form Car, Abi seat offset (0.00, 0.27, -0.35), Abi shown True
+DESIGNS (item 3c): GrandPrix (Car/Boat/Plane/Sub, rival Rae), Jetstream (Car/Boat/Plane/Sub), Scrambler (Car/Boat/Plane/Sub, rival Chip), Hotrod (Car/Boat/Plane/Sub)
+  Rocket Rae: races GrandPrix (its own design)
+  Chip "Showtime" Sterling: races Scrambler (its own design)
+  Vivi: races Hotrod (its own design)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.77 ms, 95th pct 2.85 ms, 99th pct 3.53 ms, worst 25.06 ms over 3907 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

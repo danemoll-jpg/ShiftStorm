@@ -36,7 +36,7 @@ namespace ShiftStorm
         {
             scenario = "garage"; Clear(); coast = true; BeginAt(0, 0);
             var testName = ""; { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, "-testDesign"); if (i >= 0 && i + 1 < a.Length) testName = a[i + 1]; }
-            if (testName != "") VehicleDesigns.AddForCheck(new VehicleDesigns.Design { name = testName, forms = new[] { "Car", "Boat", "Plane", "Sub" }, driver = true });
+            if (testName != "" && !VehicleDesigns.AddHiddenForCheck(testName)) VehicleDesigns.AddForCheck(new VehicleDesigns.Design { name = testName, forms = new[] { "Car", "Boat", "Plane", "Sub" }, driver = true });   // Round 9: with its designs.json settings when it has an entry
             yield return Wait(.5f);
             game.ShowGarage(); yield return WaitReal(.3f);
             var gar = Garage.Instance;

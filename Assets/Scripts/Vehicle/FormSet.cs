@@ -32,6 +32,13 @@ namespace ShiftStorm
         readonly Dictionary<Mode, FormAnimator> grayParts = new Dictionary<Mode, FormAnimator>();
         readonly Dictionary<Mode, Vector3> seats = new Dictionary<Mode, Vector3>();
         Color body = new Color(.95f, .45f, .1f); bool showDriver = true; ParticleSystem burst;
+        // Round 9 item 3c: a rival racing its own design (designs.json "rival"): that design always, in its own colours (Dan's texture),
+        // recoloured to the rival's colour only while the player races the same design
+        public string OwnDesign { get; private set; }
+        public void SetOwnDesign(string design) { OwnDesign = design; Restyle(); }
+        public void Restyle() { if (string.IsNullOrEmpty(OwnDesign)) Build(Settings.Design); else Build(OwnDesign); }
+        Color TextureTint => !string.IsNullOrEmpty(OwnDesign) && OwnDesign != Settings.Design ? VehicleDesigns.PlayerTint : body;
+        public VehicleDesigns.Design Design { get; private set; }
         public bool ShowDriver => showDriver;
         public static readonly Vector3 GraySeat = new Vector3(0, .17f, -.05f);
         public static readonly Mode[] All = { Mode.Drive, Mode.Boat, Mode.Fly, Mode.Dive };
@@ -52,11 +59,11 @@ namespace ShiftStorm
         {
             foreach (var m in models.Values) if (m) Destroy(m);
             models.Clear(); grayParts.Clear(); seats.Clear();
-            var d = VehicleDesigns.Find(design); DesignName = d != null ? d.name : VehicleDesigns.GrayBox; showDriver = d == null || d.driver;
+            var d = VehicleDesigns.Find(design); DesignName = d != null ? d.name : VehicleDesigns.GrayBox; showDriver = d == null || d.driver; Design = d;
             foreach (var m in All)
             {
                 GameObject go = null; Vector3 seat = GraySeat;
-                if (d != null && d.Has(m)) go = VehicleDesigns.Instantiate(d, m, Pivot, body, out seat);
+                if (d != null && d.Has(m)) go = VehicleDesigns.Instantiate(d, m, Pivot, TextureTint, out seat);
                 if (!go) { var fa = VehicleFactory.MakeGrayForm(Pivot, m, body); go = fa.gameObject; grayParts[m] = fa; seat = GraySeat; }
                 go.name = $"Form {m}"; go.SetActive(false); models[m] = go; seats[m] = seat;
                 foreach (var r in go.GetComponentsInChildren<Renderer>(true)) r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
@@ -72,6 +79,7 @@ namespace ShiftStorm
         public GameObject ModelOf(Mode m) => models.TryGetValue(m, out var g) ? g : null;
         public bool IsImported(Mode m) => !grayParts.ContainsKey(m);
         public Vector3 SeatOf(Mode m) => seats.TryGetValue(m, out var s) ? s : GraySeat;   // Round 8: each form's seat (the steering mechanism)
+        public Mode ShownMode { get { foreach (var kv in models) if (kv.Value && kv.Value.activeSelf) return kv.Key; return Swapped ? Target : Current; } }   // Round 9
 
         void Show(Mode m)
         {

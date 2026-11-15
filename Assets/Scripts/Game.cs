@@ -230,7 +230,7 @@ namespace ShiftStorm
         public void UseDesign(string design)
         {
             Settings.Design = design;
-            foreach (var fs in FindObjectsByType<FormSet>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (!Garage.Instance || fs != Garage.Instance.Shown) fs.Build(design);
+            foreach (var fs in FindObjectsByType<FormSet>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (!Garage.Instance || fs != Garage.Instance.Shown) fs.Restyle();   // Round 9: a rival's own design stays
         }
         public void ShowGarage() { OpenMenu(); ShowPage(Page.Garage); }
         public void RefreshGarage(int select = 0) { if (MenuOpen && MenuPage == Page.Garage) ShowPage(Page.Garage, select); }
@@ -301,7 +301,7 @@ namespace ShiftStorm
                     {
                         var gar = Garage.Get(); if (!Garage.Active) { gar.SetDesign(Settings.Design); gar.Open(Cam); }
                         var names = VehicleDesigns.Names;
-                        Item($"Design: {gar.Design}   ({names.IndexOf(gar.Design) + 1} of {names.Count}, A: next)", () => { gar.NextDesign(); ShowPage(Page.Garage, 0); });
+                        Item($"Design: {VehicleDesigns.Title(gar.Design)}{(VehicleDesigns.Find(gar.Design)?.rival is string rv && rv != "" ? $" ({rv}'s)" : "")}   ({names.IndexOf(gar.Design) + 1} of {names.Count}, A: next)", () => { gar.NextDesign(); ShowPage(Page.Garage, 0); });
                         Item($"Form: {FormName(gar.Form)} - {gar.FormInfo(gar.Form)}   (A: next, with the change)", () => { gar.NextForm(); ShowPage(Page.Garage, 1); });
                         Item(gar.Design == Settings.Design ? "Racing with this design" : "Race with this design", () => { UseDesign(gar.Design); ShowPage(Page.Garage, 2); });
                         Item("Back", () => ShowPage(Page.Main));

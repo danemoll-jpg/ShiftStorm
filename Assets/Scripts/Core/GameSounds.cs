@@ -18,6 +18,7 @@ namespace ShiftStorm
         public readonly List<string> Missing = new List<string>();
         readonly HashSet<ShiftVehicle> watched = new HashSet<ShiftVehicle>();
         int lastCount = -1; Game game; bool wasMenu; int menuIndex = -1;
+        public static float LastFinishSound = -99;   // the grandstand crowd (Crowd) stays quiet over the finish's own crowd sound
 
         // name -> clips (Resources/Audio/Sfx); several: one at random
         static readonly (string name, string[] files)[] Table =
@@ -34,7 +35,8 @@ namespace ShiftStorm
             ("air", new[] { "to_cloud_whoosh_1", "to_cloud_whoosh_2" }), ("land", new[] { "to_soccer_thump_1", "to_soccer_thump_2" }),
             ("scrape", new[] { "hh_canopy_scrape" }), ("splash", new[] { "hh_water_splash", "to_pool_splash_1" }),
             ("beep", new[] { "to_rocket_beep" }), ("go", new[] { "to_fun_horn_1" }),
-            ("finish", new[] { "to_cheer_big" }), ("applause", new[] { "to_applause" }), ("win", new[] { "to_match_win" }), ("lost", new[] { "to_crowd_clap_small" }),
+            // Round 9 item 3: Tee'd Off's win jingle (to_match_win) is gone: it played on top of ShiftStorm's own finish (Dan's "Victory" song)
+            ("finish", new[] { "to_cheer_big" }), ("applause", new[] { "to_applause" }), ("lost", new[] { "to_crowd_clap_small" }),
             ("reset", new[] { "to_void_bloop_1", "to_void_bloop_2" }),
             ("ui_move", new[] { "to_ui_click" }), ("ui_select", new[] { "to_ui_select" }), ("ui_back", new[] { "to_ui_back" }),
         };
@@ -56,9 +58,24 @@ namespace ShiftStorm
         public void Play(string name, float vol = 1f, float pitch = 1f)
         {
             if (!set.TryGetValue(name, out var cs) || cs.Length == 0) return;
+            if (SoundLog.Busy(KindOf(name))) { SoundLog.Merged++; return; }   // Round 9 item 3: never two of a kind at once (a change's whoosh on a jump's)
             var c = cs[Random.Range(0, cs.Length)];
             src.pitch = pitch; src.PlayOneShot(c, vol * Settings.Effects);
             Played[name] = (Played.TryGetValue(name, out var k) ? k : 0) + 1;
+            SoundLog.Add(KindOf(name), c.name);
+        }
+        // Round 9: the kind of each effect (SoundLog)
+        public static string KindOf(string name)
+        {
+            switch (name)
+            {
+                case "whoosh": case "boost": case "loop": case "air": return "whoosh";
+                case "hull": case "splash": return "splash";
+                case "gate": case "ring": return "chime";
+                case "miss": case "loopcrowd": case "finish": case "applause": case "lost": return "crowd";
+                case "land": case "scrape": return "impact";
+                default: return name.StartsWith("ui_") ? "ui" : "mech";
+            }
         }
 
         public void Watch(ShiftVehicle v)
@@ -74,13 +91,15 @@ namespace ShiftStorm
                         Play("whoosh", .55f);
                         Play(v.Mode == Mode.Fly ? "wings" : v.Mode == Mode.Dive ? "seal" : v.Mode == Mode.Drive ? "wheels" : "hull", v.Mode == Mode.Boat ? .5f : .6f);
                         break;
-                    case "gate": Play(text.Contains("near miss") ? "miss" : "gate", text.Contains("near miss") ? .6f : .45f, text.Contains("G10") ? 1.25f : 1f); break;
+                    // Round 9: no chime on the finish gate (G10): the finish has its own crowd sound and Dan's finish music
+                    case "gate": if (!text.Contains("G10")) Play(text.Contains("near miss") ? "miss" : "gate", text.Contains("near miss") ? .6f : .45f); break;
                     case "shortcut": Play("ring", .5f); break;
-                    case "go": Play("go", .55f); break;
+                    case "go": Play("go", .55f); Crowd.OnRace("go", v, 0); break;
                     case "finish":
-                        // Round 8 item 5: by place: 1st the cheer, applause and the win jingle; a middle place a small clap; last an "aww" (no applause)
+                        // Round 8 item 5: by place; Round 9 item 3: one crowd sound per finish (build 10 played the cheer, the applause and Tee'd Off's
+                        // win jingle together, under Dan's finish song): 1st (or a time trial) the big cheer, a middle place a small clap, last an "aww"
                         { var race = game.Race; int place = race && race.Active ? race.Finishers.Count : 1, field = race && race.Active ? race.Racers.Count : 1; bool last = place == field && field > 1;
-                          if (!last) { Play("finish", .6f); Play("applause", .4f); } if (race && race.Active) Play(place <= 1 ? "win" : last ? "miss" : "lost", .7f); }
+                          Play(place <= 1 ? "finish" : last ? "miss" : "lost", place <= 1 ? .6f : .7f); LastFinishSound = Time.time; Crowd.OnRace("finish", v, place); }
                         break;
                     case "reset": if (text.Contains("water")) Play("splash", .6f); Play("reset", .35f); break;
                 }

@@ -57,23 +57,10 @@ namespace ShiftStorm
                 }
             }
             flags.Object(scen, "Promenade pennants", JurassicLook.VertexColored(true), false, false).layer = DetailLayer;
-            // grandstands with a crowd at the start / finish (both sides, behind the barriers), a sign board over each
-            foreach (float s in new[] { -1f, 1f })
-            {
-                var basePt = new Vector3(0, RoadY, 0) + Vector3.right * s * 24f; var face = Quaternion.LookRotation(Vector3.right * -s);
-                var stand = new MeshKit.Batch();
-                for (int row = 0; row < 4; row++) stand.Add(MeshKit.Cube, basePt + Vector3.right * s * (row * 2.2f) + Vector3.up * (row * 1.4f + .7f) + Vector3.back * 18f, face, new Vector3(60, 1.4f, 2.4f), row % 2 == 0 ? JurassicLook.Stone : new Color(.62f, .5f, .36f));
-                for (int row = 0; row < 4; row++)
-                    for (int k = 0; k < 26; k++)
-                    {
-                        var at = basePt + Vector3.right * s * (row * 2.2f) + Vector3.up * (row * 1.4f + 2.1f) + Vector3.forward * (-46 + k * 2.2f + R(-.4f, .4f));
-                        var col = Color.HSVToRGB((float)rnd.NextDouble(), R(.45f, .8f), R(.75f, 1f));
-                        stand.Add(MeshKit.LowSphere, at, Quaternion.identity, new Vector3(.9f, 1.2f, .9f), col);
-                        stand.Add(MeshKit.LowSphere, at + Vector3.up * .95f, Quaternion.identity, Vector3.one * .6f, new Color(.95f, .78f, .6f));
-                    }
-                stand.Add(MeshKit.Cube, basePt + Vector3.right * s * 9f + Vector3.up * 9f + Vector3.back * 18f, face, new Vector3(60, .6f, 6f), new Color(.85f, .3f, .2f));   // a striped awning
-                stand.Object(scen, s < 0 ? "Grandstand W" : "Grandstand E", JurassicLook.VertexColored(true), false, true);
-            }
+            // Round 9 item 3b: the grandstands with Gridiron Glory's crowd (ParadisePlunge.Crowd.cs) replace build 10's ball-and-head figures;
+            // the random numbers those used are still drawn, so the rest of the scenery stays where it was
+            for (int k = 0; k < 2 * 4 * 26 * 4; k++) rnd.NextDouble();
+            Grandstands();
             // chequered flags either side of the line, on tall poles
             for (int i = 0; i < 2; i++)
             {

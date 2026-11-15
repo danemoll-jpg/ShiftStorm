@@ -11,9 +11,31 @@ namespace ShiftStorm
     public static class VehicleDesigns
     {
         public const string GrayBox = "Gray box";
-        [System.Serializable] public sealed class Design { public string name; public string[] forms; public bool driver = true; public string[] steering; public bool Has(Mode m) => forms != null && System.Array.IndexOf(forms, FileName(m)) >= 0; }
+        // Round 9 item 3c: per design (designs.json, from the design's import.json): "rival" the rival who races it (Rae / Chip / Vivi, when all
+        // four forms are in); "canopy" per form (Car, Boat, Plane, Sub order): "bubble" (the default: the clear bubble over the cockpit rim),
+        // "sphere" (a clear glass sphere round the rider, the Scrambler's sub, mounted on the model's chrome ring), "none" (a motorcycle);
+        // "astride" the forms ridden astride (the rider's legs either side, leaning forward); "lean" the forms that lean into turns (BikeLean);
+        // "sphere" the sphere's radius (m) and "sphereY" its centre over the seat (m); "riderScale" the driver's size on it (the Scrambler's
+        // bikes are imported 2.6 m long, import.json "length", and ridden by a 1.4x Abi: real bike-and-rider proportions, her hands on the bars).
+        [System.Serializable] public sealed class Design
+        {
+            public string name; public string[] forms; public bool driver = true; public string[] steering;
+            public string title = ""; public bool @default; public string rival = ""; public string[] canopy; public string[] astride; public string[] lean; public float sphere = 1.05f, sphereY = .42f, riderScale = 1f;
+            public bool Has(Mode m) => forms != null && System.Array.IndexOf(forms, FileName(m)) >= 0;
+            public bool Complete => forms != null && forms.Length >= 4;
+            public string CanopyOf(Mode m) { int i = System.Array.IndexOf(FormSet.All, m); return canopy != null && i < canopy.Length && !string.IsNullOrEmpty(canopy[i]) ? canopy[i] : "bubble"; }
+            public bool Astride(Mode m) => astride != null && System.Array.IndexOf(astride, FileName(m)) >= 0;
+            public bool Leans(Mode m) => lean != null && System.Array.IndexOf(lean, FileName(m)) >= 0;
+        }
         [System.Serializable] sealed class Index { public Design[] designs; }
-        static List<Design> list;
+        static List<Design> list, hidden;
+        // the design a rival races (designs.json "rival", all four forms in), else null (the player's design, recoloured)
+        public static Design ForRival(string character)
+        {
+            if (string.IsNullOrEmpty(character)) return null;
+            foreach (var d in Imported) if (d.Complete && string.Equals(d.rival, character, System.StringComparison.OrdinalIgnoreCase)) return d;
+            return null;
+        }
 
         public static string FileName(Mode m) => m == Mode.Drive ? "Car" : m == Mode.Boat ? "Boat" : m == Mode.Fly ? "Plane" : "Sub";
         public static List<Design> Imported
@@ -23,7 +45,8 @@ namespace ShiftStorm
                 if (list != null) return list;
                 list = new List<Design>();
                 var ta = Resources.Load<TextAsset>("Vehicles/designs");
-                if (ta) { try { var ix = JsonUtility.FromJson<Index>(ta.text); if (ix?.designs != null) foreach (var d in ix.designs) if (d != null && !string.IsNullOrEmpty(d.name) && !d.name.StartsWith("_")) list.Add(d); } catch (System.Exception e) { Debug.LogWarning("[Designs] designs.json unreadable: " + e.Message); } }
+                hidden = new List<Design>();
+                if (ta) { try { var ix = JsonUtility.FromJson<Index>(ta.text); if (ix?.designs != null) foreach (var d in ix.designs) if (d != null && !string.IsNullOrEmpty(d.name)) (d.name.StartsWith("_") ? hidden : list).Add(d); } catch (System.Exception e) { Debug.LogWarning("[Designs] designs.json unreadable: " + e.Message); } }
                 Debug.Log($"[Designs] {list.Count} imported: {string.Join(", ", list.ConvertAll(d => $"{d.name} ({string.Join("/", d.forms ?? new string[0])})"))}");
                 return list;
             }
@@ -31,16 +54,21 @@ namespace ShiftStorm
         // every name the Garage cycles through: the gray box first
         public static List<string> Names { get { var n = new List<string> { GrayBox }; foreach (var d in Imported) n.Add(d.name); return n; } }
         // the design raced with when none was chosen: Dan's pick (the first imported design), else the gray box
-        public static string Default => Imported.Count > 0 ? Imported[0].name : GrayBox;
+        public static string Default { get { foreach (var d in Imported) if (d.@default) return d.name; return Imported.Count > 0 ? Imported[0].name : GrayBox; } }   // Round 9: designs.json "default" (Jetstream, Dan's pick)
+        public static string Title(string name) { var d = Find(name); return d != null && !string.IsNullOrEmpty(d.title) ? d.title : name; }   // Round 9: "Grand Prix", "Hot Rod"
         public static Design Find(string name) { if (string.IsNullOrEmpty(name) || name == GrayBox) return null; foreach (var d in Imported) if (d.name == name) return d; return null; }
         // checks can add a design that is not in the shipped list (the import test's "_Test")
         public static void AddForCheck(Design d) { Imported.RemoveAll(x => x.name == d.name); Imported.Add(d); }
+        // Round 9: a hidden design (a placeholder, "_Scrambler") with its designs.json entry as it is (canopy, astride, lean...)
+        public static bool AddHiddenForCheck(string name) { var _ = Imported; var d = hidden.Find(x => x.name == name); if (d == null) return false; AddForCheck(d); return true; }
 
         static Vector3 Inv(Vector3 v) => new Vector3(1 / Mathf.Max(1e-4f, v.x), 1 / Mathf.Max(1e-4f, v.y), 1 / Mathf.Max(1e-4f, v.z));
         static Mesh smooth; static Material glass;
         static Mesh SmoothSphere { get { if (!smooth) { var g = GameObject.CreatePrimitive(PrimitiveType.Sphere); smooth = g.GetComponent<MeshFilter>().sharedMesh; Object.Destroy(g); } return smooth; } }
         // clearer than the gray box's glass (alpha 0.7): Abi must show through it
         static Material Glass { get { if (!glass) { var b = Resources.Load<Material>("Materials/VehicleGlass"); glass = new Material(b) { name = "Canopy glass" }; var c = new Color(.6f, .82f, 1f, .32f); glass.SetColor("_BaseColor", c); glass.SetFloat("_Smoothness", .95f); } return glass; } }
+        static Material sphereGlass;   // the sphere: clearer still (the whole rider is seen through it), a faint blue edge
+        static Material SphereGlass { get { if (!sphereGlass) { var b = Resources.Load<Material>("Materials/VehicleGlass"); sphereGlass = new Material(b) { name = "Sphere glass" }; sphereGlass.SetColor("_BaseColor", new Color(.7f, .88f, 1f, .2f)); sphereGlass.SetFloat("_Smoothness", .97f); } return sphereGlass; } }
         static readonly Dictionary<string, Material> mats = new Dictionary<string, Material>();
         public static GameObject Instantiate(Design d, Mode m, Transform parent, Color tint, out Vector3 seat)
         {
@@ -61,6 +89,18 @@ namespace ShiftStorm
             // Dan's models have open cockpits and no glass (Tripo bakes glass in opaque): the game adds its own clear bubble over the cockpit
             // rim on every form (Dan, 2026-11-13: "add the separate clear canopies"), sized from the seat: the rim is 0.42 m over Abi's hips
             // (Tools/Blender/vehicle_import.py), the bubble 0.72 m wide, 1.1 m long, ~0.3 m high over the rim (Abi's head clears it by ~0.1 m); its lower half is inside the hull.
+            // Round 9: per form (designs.json "canopy"): "none" (the Scrambler's bike, jet ski and flying bike), "sphere" (its sub: a clear
+            // glass sphere round the rider and the bars, on the model's chrome ring: Dan's design)
+            string kind = d.CanopyOf(m);
+            if (kind == "sphere")
+            {
+                var ball = new GameObject("Glass sphere (game)"); ball.transform.SetParent(go.transform, false);
+                ball.transform.position = parent.TransformPoint(seat + new Vector3(0, d.sphereY, .08f));
+                ball.transform.rotation = parent.rotation; ball.transform.localScale = Vector3.Scale(Vector3.one * (2 * d.sphere), Inv(go.transform.localScale));
+                ball.AddComponent<MeshFilter>().sharedMesh = SmoothSphere; var br = ball.AddComponent<MeshRenderer>(); br.sharedMaterial = SphereGlass;
+                br.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            }
+            else if (kind != "none")
             {
                 var dome = new GameObject("Canopy (game)"); dome.transform.SetParent(go.transform, false);
                 dome.transform.position = parent.TransformPoint(seat + new Vector3(0, .36f, -.05f));

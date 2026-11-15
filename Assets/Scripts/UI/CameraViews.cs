@@ -83,6 +83,7 @@ namespace ShiftStorm
         // ---------- first person: Abi's eyes ----------
         Vector3 eyeLocal = new Vector3(0, 1.05f, -.05f);
         Quaternion fpRot; float fpY; bool fpFresh = true; Transform fpFor; View fpView;
+        public static float FirstPersonFov(float chaseFov) => 70f + (chaseFov - ChaseCam.BaseFov) * .3f;
         Pose FirstPerson(ShiftVehicle v, Pose fallback)
         {
             var d = v.GetComponent<Driver>();
@@ -94,14 +95,18 @@ namespace ShiftStorm
                 // the head bone is at the base of the skull: the eyes ~10 cm above it and a little ahead (her head itself is folded away
                 // in her own first-person view: HideHead)
                 eye = d.Head.position + t.up * (.1f * s) + t.forward * (.05f * s);
+                eye += t.up * (.25f * s);   // Round 9 item 1: 17 cm over her eyes (her head is folded away): the steering mechanism sits low in the view
             }
             else eye = t.TransformPoint(new Vector3(0, 1.05f, -.05f));
             // through the change the eye holds still in the vehicle's own frame, 12 cm higher, and the model squashes and twirls beneath it
             // (following her twirling head looked across her shoulder)
             if (!v.Changing) eyeLocal = t.InverseTransformPoint(eye);
             else eye = t.TransformPoint(eyeLocal + Vector3.up * .12f);
-            return Mounted(v, eye, Quaternion.Euler(v.Mode == Mode.Fly ? 8 : 12,   // Round 8: a little more down: the steering mechanism in view
-                 Mathf.Clamp(v.Body.angularVelocity.y * Mathf.Rad2Deg * .2f, -10, 10), 0), fallback.fov + 4f, View.FirstPerson);
+            // Round 9 item 1: looking ahead (5 deg down, 3 in flight; Round 8 tipped it 12 deg down to show its oversized wheel), and a narrower
+            // field-of-view swing than the chase camera's (70 at rest -> 77 at top speed, 80 on boost; chase +4 was 69 -> 102): the steering
+            // mechanism stays a steady ~15-20 % of the screen height
+            return Mounted(v, eye, Quaternion.Euler(v.Mode == Mode.Fly ? 3 : 5,
+                 Mathf.Clamp(v.Body.angularVelocity.y * Mathf.Rad2Deg * .2f, -10, 10), 0), FirstPersonFov(fallback.fov), View.FirstPerson);
         }
         // ---------- front: just ahead of the nose, bumper level (a little higher on the water) ----------
         Pose FrontView(ShiftVehicle v, Pose fallback)

@@ -63,7 +63,7 @@ namespace ShiftStorm
         }
         void RestartRace()
         {
-            music.Stop(); musicLoop.Stop(); alt.Stop(); altLoop.Stop(); altNow = ""; musicLoop.clip = loop;
+            music.Stop(); musicLoop.Stop(); alt.Stop(); altLoop.Stop(); altNow = ""; musicLoop.clip = loop; SoundLog.Add("music", "race " + (loop ? loop.name : "-"));
             double t0 = AudioSettings.dspTime + .1;
             if (intro && loop) { music.clip = intro; music.PlayScheduled(t0); musicLoop.PlayScheduled(t0 + (double)intro.samples / intro.frequency); }
             else if (loop) musicLoop.PlayScheduled(t0);
@@ -71,6 +71,7 @@ namespace ShiftStorm
         void PlayAlt(string which)
         {
             if (altNow == which) return; altNow = which; alt.Stop(); altLoop.Stop();
+            SoundLog.Add("music", which == "" ? "race (back)" : which);
             if (which == "") return;
             if (which == "results") { alt.clip = resultsClip; if (resultsClip) alt.Play(); return; }
             var (i, l) = which == "theme" ? (themeIntro, themeLoop) : (menuIntro, menuLoop);
@@ -81,12 +82,14 @@ namespace ShiftStorm
         void OnEvent(string kind, string text)
         {
             if (!on || kind != "change") return;
-            if ((v.ChangeFrom == Mode.Fly && v.Mode == Mode.Boat) || (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive)) Splash();
+            // Round 9 item 3: the splash only for the waterfall exit (Boat -> Drive); a landing in the water (Fly -> Boat) already has the
+            // change's own "hull" splash (GameSounds): build 10 played two splashes at once there
+            if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive) Splash();
             if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive) brightUntil = Time.time + 2.5f;   // the waterfall exit
         }
         // Round 6: player 2's splashes too (split screen), in the one shared mix
-        public void Follow(ShiftVehicle x) { x.Event += (kind, text) => { if (on && kind == "change" && ((x.ChangeFrom == Mode.Fly && x.Mode == Mode.Boat) || (x.ChangeFrom == Mode.Boat && x.Mode == Mode.Drive))) Splash(); }; }
-        public void Splash() { var c = Random.value < .5f ? splashA : splashB; if (c) { oneShot.PlayOneShot(c, .9f * Settings.Effects); Splashes++; } }
+        public void Follow(ShiftVehicle x) { x.Event += (kind, text) => { if (on && kind == "change" && x.ChangeFrom == Mode.Boat && x.Mode == Mode.Drive) Splash(); }; }
+        public void Splash() { if (SoundLog.Busy("splash")) { SoundLog.Merged++; return; } var c = Random.value < .5f ? splashA : splashB; if (c) { oneShot.PlayOneShot(c, .9f * Settings.Effects); Splashes++; SoundLog.Add("splash", c.name); } }
 
         void Update()
         {
@@ -107,7 +110,7 @@ namespace ShiftStorm
             alt.volume = altLoop.volume = Mathf.Lerp(altLoop.volume, altVol, k);
             lp.cutoffFrequency = Mathf.Exp(Mathf.Lerp(Mathf.Log(lp.cutoffFrequency), Mathf.Log(altNow != "" ? 22000f : cut), k));
             // the race music holds its place under the menu (paused at zero volume would drift its scheduled loop: it keeps running)
-            if (calls.Count > 0 && Time.time > nextCall && v && v.Mode == Mode.Fly) { oneShot.PlayOneShot(calls[Random.Range(0, calls.Count)], .45f * Settings.Effects); nextCall = Time.time + Random.Range(14f, 24f); }
+            if (calls.Count > 0 && Time.time > nextCall && v && v.Mode == Mode.Fly) { oneShot.PlayOneShot(calls[Random.Range(0, calls.Count)], .45f * Settings.Effects); nextCall = Time.time + Random.Range(14f, 24f); SoundLog.Add("ambience", "far dinosaur call"); }
             else if (Time.time > nextCall + 30f) nextCall = Time.time + 10f;
             var playing = altNow != "" ? (altLoop.isPlaying ? altLoop : alt.isPlaying ? alt : null) : musicLoop.isPlaying ? musicLoop : music.isPlaying ? music : null;
             if (playing) { playing.GetOutputData(buf, 0); float p = 0; foreach (var s in buf) p = Mathf.Max(p, Mathf.Abs(s)); MusicPeak = Mathf.Max(MusicPeak, p); }

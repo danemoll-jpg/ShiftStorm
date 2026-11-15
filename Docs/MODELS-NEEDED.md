@@ -4,7 +4,8 @@ Keep each round's list short; each item is Dan's time.
 
 ## Round 9 — three new vehicle designs (Dan's concepts, Tripo by hand)
 
-**Status (2026-11-14, 23:30): all 12 images done** (Dan's 3 originals + the 9 transformations), saved in
+**Status (2026-11-15): all 12 models in the game** (Grand Prix -> Rae, Hot Rod -> Vivi, Scrambler -> Chip; Garage pictures in
+`Docs/Checks/round9/`). Earlier: **all 12 images done** (Dan's 3 originals + the 9 transformations), saved in
 `Art/Concepts/Vehicles/{HotRod,Scrambler,GrandPrix}/<Design>_<Form>.png`. Next: Dan makes the Tripo models. Note for Code: the
 Hot Rod has a small chrome T-handle in its cockpit in every form — hide or replace it with the game's own steering mechanism.
 
@@ -34,7 +35,8 @@ it on and **Code adds the clear sphere in the game**.
 
 ## Round 8 — two dinosaurs Tee'd Off doesn't have (Tripo, by hand) — optional, stand-ins in the game now
 
-**Status (2026-11-14, 23:37): images done** — `Art/Concepts/Dinos/Raptor.png` and `Art/Concepts/Dinos/Plesiosaur.png`
+**Status (2026-11-15): both in the game** (Dan's Tripo models, rigged by `Tools/Characters/import_dinos.py`; the stand-ins stay
+only as a fallback). Earlier: **images done** — `Art/Concepts/Dinos/Raptor.png` and `Art/Concepts/Dinos/Plesiosaur.png`
 (Dan's). Dan is making the Tripo models now. Earlier status: written, not made. Jurassic Par's other dinosaurs (brontosaurus, T. rex, triceratops, pterodactyl) are Tee'd
 Off's rigged models, now animated in the race. Two the course wants have no model anywhere: the game uses stand-ins meanwhile (the
 raptor is the T. rex at 2.6 m tall; the plesiosaur is a brontosaurus swimming with its body under water). Make these only if the

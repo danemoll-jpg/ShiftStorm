@@ -93,20 +93,31 @@ def main():
     for design in designs:
         cfg_path = os.path.join(src, design, "import.json")
         cfg = json.load(open(cfg_path)) if os.path.exists(cfg_path) else {}
+        if cfg.get("skip"):   # Round 9: a folder whose models belong to another design (import.json "_note" says which)
+            print(f"{design}: skipped ({cfg.get('_note', 'import.json skip')[:90]}...)"); continue
         made = []
         for form in FORMS:
             f = find(src, design, form, cfg.get("files"))
             if not f: continue
             seat = cfg.get("seat", {}).get(form)
-            args = [f, os.path.join(out_root, design), form, str(cfg.get("yaw", 180)), ",".join(str(c) for c in seat) if seat else "auto",
-                    os.path.join(previews, f"{design}-{form}.png")]
+            # Round 9: per form, "cut": boxes [x0, y0, z0, x1, y1, z1] in the cleaned model's metres (x right, y forward, z up; the previews'
+            # frame) whose faces are deleted (the Hot Rod's chrome T-handle, the Scrambler's kickstand); "steer": where the steering
+            # mechanism's centre goes (an empty named "Steering"); "yaw" may be per form too ({"Car": 180, ...})
+            extra = {"cut": cfg.get("cut", {}).get(form, []), "steer": cfg.get("steer", {}).get(form), "length": cfg.get("length", 4.0)}
+            yaw = cfg.get("yaw", 180); yaw = yaw.get(form, 180) if isinstance(yaw, dict) else yaw
+            args = [f, os.path.join(out_root, design), form, str(yaw), ",".join(str(c) for c in seat) if seat else "auto",
+                    os.path.join(previews, f"{design}-{form}.png"), json.dumps(extra)]
             for l in run_blender(args): print(l)
             shrink_texture(os.path.join(out_root, design, f"{form}_basecolor.png"))
             made.append(form)
         if not made:
             print(f"{design}: no models yet"); continue
         prev = by_name.get(design, {}).get("forms", [])
-        by_name[design] = {"name": design, "forms": sorted(set(prev) | set(made), key=FORMS.index), "driver": cfg.get("driver", True)}
+        entry = {"name": design, "forms": sorted(set(prev) | set(made), key=FORMS.index), "driver": cfg.get("driver", True)}
+        # Round 9: the design's game settings pass straight through (VehicleDesigns.Design): rival, steering, canopy, astride, lean, sphere, sphereY
+        for k in ("title", "default", "rival", "steering", "canopy", "astride", "lean", "sphere", "sphereY", "riderScale"):
+            if k in cfg: entry[k] = cfg[k]
+        by_name[design] = entry
         print(f"{design}: imported {', '.join(made)}")
     index["designs"] = sorted(by_name.values(), key=lambda d: d["name"])
     json.dump(index, open(index_path, "w"), indent=2)

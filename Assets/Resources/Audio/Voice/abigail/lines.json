@@ -18,6 +18,10 @@
    "text": "Ha!"
   },
   {
+   "id": "line_1",
+   "text": "That was NOT the racing line."
+  },
+  {
    "id": "lose_1",
    "text": "Rematch. Now."
   },
@@ -52,10 +56,6 @@
   {
    "id": "quipgood_2",
    "text": "Precision. Look it up."
-  },
-  {
-   "id": "trouble_1",
-   "text": "That's not where I aimed."
   },
   {
    "id": "water_1",

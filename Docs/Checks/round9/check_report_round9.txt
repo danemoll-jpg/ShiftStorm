@@ -1,0 +1,109 @@
+ShiftStorm check 'round9', 2026-11-15 02:02, build 0.8.2, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+STEERING (Round 8 item 4, Round 9 item 1): Car wheel, Boat helm, Plane yoke, Sub levers; driver's eyes at (0.00, 0.58, -0.07) in the vehicle, wheel centre (0.00, 0.38, 0.20), grips 0.26 m apart (driver scale 0.69)
+  Car left: wheel at 119 deg, screen height covered 11 % / 16 % / 18 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 3 / 11 cm off the grips, IK 1.00
+  Car centre: wheel at 1 deg, screen height covered 11 % / 16 % / 18 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 4 / 4 cm off the grips, IK 1.00
+  Car right: wheel at -119 deg, screen height covered 10 % / 16 % / 17 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 12 / 1 cm off the grips, IK 1.00
+  Car chase: wheel covers 3.0 % of the screen height
+  Boat left: helm at 109 deg, screen height covered 3 % / 9 % / 11 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 12 / 12 cm off the grips, IK 1.00
+  Boat centre: helm at 0 deg, screen height covered 5 % / 11 % / 13 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 7 / 7 cm off the grips, IK 1.00
+  Boat right: helm at -110 deg, screen height covered 4 % / 10 % / 12 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 13 / 11 cm off the grips, IK 1.00
+  Boat chase: helm covers 5.5 % of the screen height
+  Plane left: yoke at 35 deg, screen height covered 19 % / 23 % / 24 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 15 / 12 cm off the grips, IK 1.00
+  Plane centre: yoke at 0 deg, screen height covered 12 % / 17 % / 18 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 11 / 11 cm off the grips, IK 1.00
+  Plane right: yoke at -35 deg, screen height covered 18 % / 22 % / 23 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 10 / 7 cm off the grips, IK 1.00
+  Plane chase: yoke covers 1.3 % of the screen height
+  Sub left: levers at -31 deg, screen height covered 9 % / 14 % / 16 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 8 / 16 cm off the grips, IK 1.00
+  Sub centre: levers at 0 deg, screen height covered 5 % / 11 % / 13 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 13 / 13 cm off the grips, IK 1.00
+  Sub right: levers at 31 deg, screen height covered 9 % / 15 % / 16 % (FOV 70 / 78 / 80: rest / top speed / boost), hands 19 / 10 cm off the grips, IK 1.00
+  Sub chase: levers covers 2.5 % of the screen height
+STEERING SIZE CHECK: the largest first-person share of the screen height 24 % (Dan: no more than ~15-20 %; build 10: ~65 %)
+STEERING CHECK: worst hand-to-grip distance 19.1 cm over every form and angle; the mechanism swaps with the model at the change's midpoint (it follows the shown model)
+SOUNDS (item 3): a race on Normal, 132.8 s, 65 events, 142 sounds started; each event with the sounds started from 0.05 s before to 0.6 s after it:
+  start (x1): ambience: dinosaur Dino bronto (landing bronto west) | mech: to_rocket_beep | music: race race_paradise | voice: Barker trial_2
+  race start (grid) (x1): ambience: dinosaur Dino bronto (landing bronto west) | mech: to_rocket_beep | music: race race_paradise | voice: Barker trial_2
+  go (x1): crowd: Start W gg_crowd_cheer_big_1 | mech: to_fun_horn_1 | voice: Barker go_3
+  gate (x10): ambience: dinosaur Dino ptero (flight ptero (across)) | ambience: dinosaur Dino raptor (raptor 1) | chime: to_fun_ding_1 | chime: to_fun_ding_2 | mech: hh_jump_drive | mech: hh_sting_launch | voice: Barker toplane_2 | whoosh: to_power_whoosh | whoosh: to_swing_whoosh_1
+  stunt air (x4): ambience: dinosaur Dino bronto (climb cliff bronto) | ambience: dinosaur Dino ptero (loop ptero 1) | crowd: Waterfall landing gg_crowd_cheer_small_3 | impact: hh_canopy_scrape | whoosh: to_cloud_whoosh_1
+  jump (x1): impact: to_soccer_thump_1 | voice: Barker bronto_2
+  stunt jump (x1): impact: to_soccer_thump_1 | voice: Barker bronto_2
+  pad (x1): mech: to_rail_zip_1
+  stunt pad (x1): mech: to_rail_zip_1
+  plan (x1): whoosh: to_slide_whoosh_2
+  loop (x2): crowd: to_crowd_ooh | whoosh: to_slide_whoosh_2
+  stunt loopin (x1): whoosh: to_slide_whoosh_2
+  stunt loop (x1): crowd: to_crowd_ooh
+  wings (x1): ambience: far dinosaur call | mech: hh_sting_launch | voice: Barker wings_2 | whoosh: to_swing_whoosh_2
+  change into Plane (x2): ambience: far dinosaur call | chime: to_fun_ding_1 | mech: hh_sting_launch | voice: Barker toplane_2 | voice: Barker wings_2 | whoosh: to_swing_whoosh_1 | whoosh: to_swing_whoosh_2
+  stunt wings (x1): ambience: far dinosaur call | mech: hh_sting_launch | voice: Barker wings_2 | whoosh: to_swing_whoosh_2
+  changed (x7): ambience: dinosaur Dino ptero (lagoon ptero) | ambience: dinosaur Dino trike (standing trike) | ambience: far dinosaur call | chime: to_amb_chimes_1 | chime: to_fun_ding_1 | impact: hh_canopy_scrape | voice: Barker gateway_1
+  shortcut (x4): chime: to_amb_chimes_1 | chime: to_amb_chimes_2 | mech: hh_gear_down | voice: Barker shortcut_3 | whoosh: to_swing_whoosh_1
+  change into Car (x2): crowd: Waterfall landing gg_crowd_cheer_small_3 | mech: hh_gear_down | splash: splash_2 | whoosh: to_swing_whoosh_1 | whoosh: to_swing_whoosh_2
+  wall (x1): chime: to_fun_ding_1 | impact: hh_canopy_scrape
+  wall (shallow) (x1): chime: to_fun_ding_1 | impact: hh_canopy_scrape
+  split (x8): ambience: dinosaur Dino bronto (pool bronto) | ambience: dinosaur Dino ptero (lagoon ptero) | chime: to_fun_ding_1 | crowd: to_cheer_big | mech: hh_sting_launch | music: results | voice: Barker fill_7 | voice: Barker toplane_2 | voice: Barker vault_1 | whoosh: to_swing_whoosh_1
+  voice (x1): mech: to_void_bloop_2 | voice: Abigail mishit_1
+  messup (x1): mech: to_void_bloop_2 | voice: Abigail mishit_1
+  reset (x1): mech: to_void_bloop_2 | voice: Abigail mishit_1
+  dino (x1): ambience: dinosaur Dino trex (cliff T. rex)
+  change into Boat (x2): splash: to_sea_splash_1 | splash: to_sea_splash_2 | voice: Barker toboat_3 | whoosh: to_swing_whoosh_2
+  change into Sub (x1): mech: hh_canopy_slam | whoosh: to_swing_whoosh_2
+  gate G10 (the finish line) (x1): crowd: to_cheer_big | music: results
+  finish (x1): crowd: to_cheer_big | music: results
+  results (x2): crowd: to_cheer_big | music: results
+  reaction (x1): crowd: to_cheer_big | music: results
+  music / jingle starts: -3.0 s music race race_paradise, 132.9 s music results; jingles 0
+SOUNDS PASS: 0 events with two sounds of one kind (two music / jingle, crowd, splash, whoosh, impact or chime cues at once); Tee'd Off's win jingle played 0x; sounds skipped by the one-of-a-kind rule: 5
+CROWD (item 3b): 4 stands, 1182 fans (Gridiron Glory's instanced fan sprites): Start W 306, Start E 306, Loop 330, Waterfall landing 240
+  Start W: centre (-29, 6, -18), drawn by the camera at the grid: 306
+  Start E: centre (29, 6, -18), drawn by the camera at the grid: 306
+  Loop: centre (-29, 6, 540), drawn by the camera at the grid: 330
+  Waterfall landing: centre (28, 6, -227), drawn by the camera at the grid: 240
+  Start W: 306 fans, cheers 9 (a racer passing within reach, the GO, the finish), last 133.3 s into the race
+  Start E: 306 fans, cheers 9 (a racer passing within reach, the GO, the finish), last 133.3 s into the race
+  Loop: 330 fans, cheers 8 (a racer passing within reach, the GO, the finish), last 8.8 s into the race
+  Waterfall landing: 240 fans, cheers 11 (a racer passing within reach, the GO, the finish), last 129.5 s into the race
+CROWD PASS: 1182 fans in 4 stands, every stand cheered: True; the crowd's own CPU time 0.015 ms a frame (all stands; the GPU cost is in the frame time below, compared with a -noCrowd run)
+BIKE (item 3c): design Scrambler: forms Car/Boat/Plane/Sub, steering grips/grips/grips/grips, canopy none/none/none/sphere, astride Car/Boat/Plane/Sub, lean Car
+  lean: up to 35 deg (left) at 62 m/s in the weave (max 35); leaning now True; the hull's own roll 0.1 deg (the handling is the hull's: unchanged)
+  Car: rider astride True (scale 0.97), mechanism grips at (0.00, 0.53, 0.25), seat (0.00, 0.20, -0.35), hands 17 / 17 cm off the grips (IK 1.00), glass sphere False, bubble canopy False
+  Boat: rider astride True (scale 0.97), mechanism grips at (0.00, 0.75, 0.12), seat (0.00, 0.27, -0.35), hands 48 / 48 cm off the grips (IK 0.00), glass sphere False, bubble canopy False
+  Plane: rider astride True (scale 0.97), mechanism grips at (0.00, 0.43, 0.16), seat (0.00, 0.07, -0.33), hands 9 / 9 cm off the grips (IK 1.00), glass sphere False, bubble canopy False
+  Sub: rider astride True (scale 0.97), mechanism grips at (0.00, 0.60, 0.24), seat (0.00, 0.25, -0.25), hands 8 / 8 cm off the grips (IK 1.00), glass sphere True, bubble canopy False
+GARAGE: menu page Garage, designs Gray box, GrandPrix, Hotrod, Jetstream, Scrambler; items: Design: Jetstream   (4 of 5, A: next) | Form: Car - Tripo model   (A: next, with the change) | Racing with this design | Back
+  Gray box: Car gray box 4.0 x 2.6 x 4.2 m; Boat gray box 3.8 x 2.6 x 4.2 m; Plane gray box 6.9 x 2.0 x 5.8 m; Sub gray box 4.3 x 1.9 x 4.3 m
+  Gray box: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  GrandPrix: Car Tripo model 4.1 x 1.4 x 4.4 m; Boat Tripo model 3.5 x 1.6 x 3.9 m; Plane Tripo model 5.6 x 1.6 x 5.6 m; Sub Tripo model 4.6 x 2.1 x 4.8 m
+  GrandPrix: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Hotrod: Car Tripo model 4.3 x 2.0 x 4.6 m; Boat Tripo model 4.0 x 1.9 x 4.3 m; Plane Tripo model 5.6 x 1.6 x 5.6 m; Sub Tripo model 5.0 x 1.9 x 5.1 m
+  Hotrod: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Jetstream: Car Tripo model 3.7 x 1.4 x 4.1 m; Boat Tripo model 3.8 x 1.3 x 4.1 m; Plane Tripo model 5.5 x 1.1 x 5.5 m; Sub Tripo model 3.8 x 1.6 x 4.2 m
+  Jetstream: change Car->Plane in the Garage: done True, swapped True, bursts 1
+  Scrambler: Car Tripo model 2.6 x 1.8 x 2.8 m; Boat Tripo model 2.5 x 1.6 x 2.7 m; Plane Tripo model 3.6 x 1.4 x 3.6 m; Sub Tripo model 2.6 x 1.6 x 2.8 m
+  Scrambler: change Car->Plane in the Garage: done True, swapped True, bursts 1
+GARAGE race with 'Scrambler': player's design Scrambler (forms imported: Car/Boat/Plane/Sub), rivals in it 1/3, saved setting Scrambler
+GARAGE race in 'Scrambler': shown form Car, Abi seat offset (0.00, 0.03, -0.30), Abi shown True
+DESIGNS (item 3c): GrandPrix (Car/Boat/Plane/Sub, rival Rae), Hotrod (Car/Boat/Plane/Sub, rival Vivi), Jetstream (Car/Boat/Plane/Sub), Scrambler (Car/Boat/Plane/Sub)
+  Rocket Rae: races GrandPrix (its own design)
+  Chip "Showtime" Sterling: races Scrambler (its own design)
+  Vivi: races Hotrod (its own design)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.23 ms, 95th pct 3.55 ms, 99th pct 4.58 ms, worst 419.75 ms over 152550 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  sounds       Drive->Fly  z   652.9  0.601 s  frames worst 11.10 / mean 3.04 ms
+  sounds       Fly->Drive  z   906.6  0.601 s  frames worst 9.25 / mean 3.12 ms
+  sounds       Drive->Fly  z   944.9  0.601 s  frames worst 10.26 / mean 2.28 ms
+  sounds       Fly->Boat   z  -606.7  0.603 s  frames worst 4.66 / mean 2.82 ms
+  sounds       Boat->Dive  z  -203.5  0.602 s  frames worst 10.52 / mean 2.83 ms
+  sounds       Dive->Boat  z  -467.0  0.601 s  frames worst 5.87 / mean 2.72 ms
+  sounds       Boat->Drive z  -305.1  0.602 s  frames worst 12.91 / mean 3.36 ms
+  crowd        Drive->Fly  z   652.9  0.602 s  frames worst 4.57 / mean 2.81 ms
+  crowd        Fly->Drive  z   906.6  0.602 s  frames worst 7.51 / mean 2.92 ms
+  crowd        Drive->Fly  z   944.6  0.601 s  frames worst 11.50 / mean 2.46 ms
+  crowd        Fly->Boat   z  -606.8  0.601 s  frames worst 7.50 / mean 2.59 ms
+  crowd        Boat->Dive  z  -202.1  0.600 s  frames worst 6.85 / mean 2.88 ms
+  crowd        Dive->Boat  z  -466.6  0.601 s  frames worst 7.68 / mean 2.97 ms
+  crowd        Boat->Drive z  -304.6  0.601 s  frames worst 6.62 / mean 2.72 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 2, Abi lines: messup: mishit_1; waterfall: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -55,13 +55,16 @@ namespace ShiftStorm
             m.SetColor("_BaseColor", Color.white); m.SetFloat("_VertexColor", 1); m.SetColor("_Emission", emission); m.SetFloat("_OutlineScale", 1);
             cache[key] = m; return m;
         }
+        static readonly System.Collections.Generic.Dictionary<(Texture2D, bool), Material> texCache = new System.Collections.Generic.Dictionary<(Texture2D, bool), Material>();
         public static Material Textured(Texture2D tex, bool withOutline = true)
         {
-            string key = "TX" + (tex ? tex.name : "none") + withOutline;
-            if (cache.TryGetValue(key, out var m) && m) return m;
-            m = new Material(withOutline ? Base(ref outline, "ToonOutline") : Base(ref toon, "Toon")) { name = key };
+            // Round 9: cached by the texture itself (every vehicle design's is named "Car_basecolor" etc.: by name, the first design loaded
+            // lent its texture to all of them)
+            var tk = (tex, withOutline);
+            if (texCache.TryGetValue(tk, out var m) && m) return m;
+            m = new Material(withOutline ? Base(ref outline, "ToonOutline") : Base(ref toon, "Toon")) { name = "TX" + (tex ? tex.name : "none") + withOutline };
             m.SetColor("_BaseColor", Color.white); if (tex) m.SetTexture("_BaseMap", tex); m.SetFloat("_VertexColor", 0); m.SetFloat("_OutlineScale", 1);
-            cache[key] = m; return m;
+            texCache[tk] = m; return m;
         }
         public static Material WaterMat(Color deep, Color light, Color crest, float swell = .12f, float scale = 1f)
         {

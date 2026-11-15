@@ -1,0 +1,25 @@
+ShiftStorm check 'crowd', 2026-11-15 02:08, build 0.8.2, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CROWD (item 3b): 4 stands, 1182 fans (Gridiron Glory's instanced fan sprites): Start W 306, Start E 306, Loop 330, Waterfall landing 240
+  Start W: centre (-29, 6, -18), drawn by the camera at the grid: 306
+  Start E: centre (29, 6, -18), drawn by the camera at the grid: 306
+  Loop: centre (-29, 6, 540), drawn by the camera at the grid: 330
+  Waterfall landing: centre (28, 6, -227), drawn by the camera at the grid: 240
+  Start W: 306 fans, cheers 4 (a racer passing within reach, the GO, the finish), last 132.9 s into the race
+  Start E: 306 fans, cheers 4 (a racer passing within reach, the GO, the finish), last 132.9 s into the race
+  Loop: 330 fans, cheers 4 (a racer passing within reach, the GO, the finish), last 8.8 s into the race
+  Waterfall landing: 240 fans, cheers 5 (a racer passing within reach, the GO, the finish), last 129.0 s into the race
+CROWD PASS: 1182 fans in 4 stands, every stand cheered: True; the crowd's own CPU time 0.014 ms a frame (all stands; the GPU cost is in the frame time below, compared with a -noCrowd run)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.36 ms, 95th pct 3.44 ms, 99th pct 4.22 ms, worst 53.66 ms over 57957 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  crowd        Drive->Fly  z   652.9  0.602 s  frames worst 10.35 / mean 2.94 ms
+  crowd        Fly->Drive  z   906.6  0.601 s  frames worst 4.45 / mean 2.77 ms
+  crowd        Drive->Fly  z   944.6  0.601 s  frames worst 4.33 / mean 2.36 ms
+  crowd        Fly->Boat   z  -607.3  0.603 s  frames worst 4.08 / mean 2.56 ms
+  crowd        Boat->Dive  z  -204.5  0.601 s  frames worst 4.38 / mean 2.56 ms
+  crowd        Dive->Boat  z  -466.7  0.602 s  frames worst 10.03 / mean 2.85 ms
+  crowd        Boat->Drive z  -304.7  0.601 s  frames worst 6.42 / mean 2.61 ms
+sound: music results playing (its own signal peak 0.000), splashes played 1, Abi lines: waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -1,6 +1,30 @@
 {
   "designs": [
     {
+      "name": "GrandPrix",
+      "forms": [
+        "Car",
+        "Boat",
+        "Plane",
+        "Sub"
+      ],
+      "driver": true,
+      "title": "Grand Prix",
+      "rival": "Rae"
+    },
+    {
+      "name": "Hotrod",
+      "forms": [
+        "Car",
+        "Boat",
+        "Plane",
+        "Sub"
+      ],
+      "driver": true,
+      "title": "Hot Rod",
+      "rival": "Vivi"
+    },
+    {
       "name": "Jetstream",
       "forms": [
         "Car",
@@ -8,7 +32,44 @@
         "Plane",
         "Sub"
       ],
-      "driver": true
+      "driver": true,
+      "default": true
+    },
+    {
+      "name": "Scrambler",
+      "forms": [
+        "Car",
+        "Boat",
+        "Plane",
+        "Sub"
+      ],
+      "driver": true,
+      "title": "Scrambler",
+      "rival": "Chip",
+      "steering": [
+        "grips",
+        "grips",
+        "grips",
+        "grips"
+      ],
+      "canopy": [
+        "none",
+        "none",
+        "none",
+        "sphere"
+      ],
+      "astride": [
+        "Car",
+        "Boat",
+        "Plane",
+        "Sub"
+      ],
+      "lean": [
+        "Car"
+      ],
+      "sphere": 0.9,
+      "sphereY": 0.93,
+      "riderScale": 1.4
     }
   ]
 }

@@ -20,7 +20,46 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 9 — sensible steering, racing lines, one finish sound, the crowd, three new designs** (2026-11-15, release `build-11` / 0.8.2).
 - **Round 8b — dinosaurs you can actually see** (2026-11-14, release `build-10` / 0.8.1). Status below.
+
+### Round 9 delivery (2026-11-15) — status per item
+Evidence: `Docs/Checks/round9/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy job at a
+time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound never unmuted.
+1. **Steering at a sensible size — done.** Real proportions to Abi (a 0.26 m wheel = a real 0.38 m one), low where her hands still reach;
+   the first-person camera 17 cm over her eyes, 5 deg down (was 12), its FOV 70 -> 80 (was 69 -> 98). Measured by rendering with and
+   without the mechanism (what is really seen): wheel 11 / 16 / 18 % of the screen height (rest / top speed / boost), helm 5-13 %, yoke
+   12-18 % (19-24 % at full bank on boost), levers 5-13 %; build 10 ~65 %. Chase views 1-6 %. Hands on the grips 4-13 cm (19 at full lock).
+2. **Every line fits racing — done.** Out: Abi "That's not where I aimed", Rae "Too much muscle!", "Who planted that?!", "The lake can have
+   it!", Vivi "Second place suits no one" (said for last place), plus two unused Abi clips. In (ElevenLabs, their own voices, -16 LUFS):
+   Abi "That was NOT the racing line.", Rae "Too much throttle!", "Who put a WALL there?!", "I came here to race, not to swim!", Vivi "Last?
+   Darling, that is simply not my colour." Barker's 158 lines all fit (his 7 Tee'd Off clips too). Every clip transcribed back (local
+   speech-to-text): `Docs/Checks/round9/voice_lines.md`.
+3. **One finish sound — done.** Tee'd Off's win jingle removed; one crowd sound per finish + Dan's song; no chime on the finish gate. Audit
+   of every event in a full race (`sounds` check): 0 events with two sounds of a kind (build 10 also doubled: the landing splash, a jump's
+   whoosh with the change's, a wall hit under a scrape); a one-of-a-kind rule now prevents it (`Core/SoundLog.cs`). `Docs/SOUNDS.md`.
+3b. **The crowd from Gridiron Glory — done.** Its instanced fan sprites, atlas and shader (ported to URP) in four grandstands: both sides
+   of the start / finish, the loop, the waterfall landing; 1,182 fans in tropical shirts, x1.35 size; they stand, jump, wave and clap as
+   each racer passes (the cheer ripples along the stand at the racer's speed), roar at GO; murmur bed + cheers (never doubling a sound).
+   Frame time with / without: 2.36 / 2.52 ms mean (noise), the crowd's CPU 0.014 ms a frame.
+3c. **Hot Rod, Scrambler, Grand Prix — done (all 12 models in).** Garage shows all four designs ("Grand Prix", "Hot Rod" titles); Rae races
+   the Grand Prix, Chip the Scrambler, Vivi the Hot Rod (in their own colours; recoloured only if you race the same one). Hot Rod: the
+   chrome T-handle cut out of every form, the game's steering instead. Scrambler: 2.6 m bikes ridden by a 1.4x Abi astride, leaning into
+   turns (up to 35 deg, looks only: same hull and handling), centre stand cut away, her hands on its own bars, a clear glass sphere on the
+   sub's chrome ring. Raptor and plesiosaur: Dan's models rigged with Tee'd Off's rigger (copied) replace the stand-ins. Found and fixed
+   on the way: every design's texture was shared by name (all designs showed the first one's texture). Note: Dan's first "hotrod" files
+   were the Grand Prix; both are now in their own folders.
+4. **Strip E6 — done (no change needed).** Passes on build 10 and on this build in three runs (Boat->Drive done 0.63 s before touchdown).
+5. **Wrap-up — done.** Regression: round9 (steering, sounds, crowd, bike, designs), dinos, round1 x3 all PASS; soak (Normal, 50 AI laps,
+   time scale 3): 50 of 50, 0 bad gate sequences, laps 130.9 / 133.8 / 146.9 s, 6 resets; `CLAUDE.md`, `Docs/REUSE-AUDIT.md`, `Docs/SOUNDS.md`; commit, push, release build-11.
+
+#### For Dan to check (Round 9)
+- First person in every form: the wheel / helm / yoke / levers low in the view, the road clear; does the higher eye point feel right?
+- The finish: only Dan's finish song and one crowd sound.
+- The crowd at the start (GO roar), the loop and the waterfall landing: noticeable enough?
+- Garage: Grand Prix, Hot Rod, Scrambler (all forms); confirm the owners Rae / Vivi / Chip.
+- Scrambler: the lean, Abi astride (her hands are ~10-20 cm short of the bars in some forms), the glass sphere on the sub.
+- The raptors on the promenade and the long-neck in the lagoon (Dan's models).
 
 ### Round 8b delivery (2026-11-14) — status per item
 Evidence: `Docs/Checks/round8b/` (reports, set-piece pictures from the player's chase view). Every run: built exe, `-batchmode -mute`, no
@@ -249,7 +288,7 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 9: steering wheel size, lines that fit, one finish sound, crowd, new designs
+## Current Objective — Round 9 (delivered 2026-11-15, build-11 / 0.8.2; status under Completed Tasks; waiting for Dan's review)
 
 **Dan's review of build 10 (0.8.1), 2026-11-14, quoted:**
 1. "The steering wheel is far too big. It takes up too much of the screen
@@ -325,7 +364,7 @@ chastain_rush, Hostile-Horizon read-only.
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- …
+- See "For Dan to check (Round 9)" under Completed Tasks.
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks** from the concept: Clockwork Cascade (driving + boating),
