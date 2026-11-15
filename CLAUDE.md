@@ -261,4 +261,6 @@ Dan reviewed build 7: "everything good so far."
 
 Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes became Round 8.
 
-Round 8 delivered as build 9 (0.8.0), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").
+Round 8 delivered as build 9 (0.8.0), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").Current objective: **Round 8b — dinosaurs you can actually see** (Dan: "not really seeing dinosaurs"): cartoon-huge, close, in
+the forward view, one set-piece per segment, a stricter visibility check (8 % of screen height for 1 s). Release build 10 (0.8.1).
+See `TODO.md`.

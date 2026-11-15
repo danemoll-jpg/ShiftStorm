@@ -1033,3 +1033,146 @@ run. Sound was never unmuted. No window was opened (the fullscreen look is left 
 
 - **Round 2b — fixes from Dan's Steam Deck test** (2026-11-13, release `build-3` / 0.2.1). Status in the section below.
 
+## Current Objective — Round 8: Jurassic Par for real, louder Barker, driver reactions, steering
+
+**Dan's review of build 8 (0.7.0), 2026-11-14, quoted:**
+1. "I don't understand the level created is supposed to be based on Jurassic
+   Par or no? I mean I think it is fine if it isn't but if it is there should
+   be more dinos."
+2. "Can't hear most of Barnaby's lines and he didn't talk as much as I
+   thought he should."
+3. "Have the driver scream just 'Noooo' or 'oh no!' when they mess up. They
+   could say something else based on their specific character. But Barnaby
+   should be doing the narration overall."
+4. "Should be able to see the steering wheel ... Depending on the vehicle the
+   steering mechanism can be different."
+5. "Why is the driver clapping when they come in last place?"
+6. "Need to be able to control the sounds but engine sounds should be
+   quieter, music and Barnaby louder."
+7. "Sometimes the jump where you choose jump or fly should be different paths."
+Run unattended — don't stop to ask; anything needing a visible window or
+Dan's OK gets skipped and noted (exception: item 9 has Dan's OK for a
+visible window). Tee-dOff, chastain_rush, Hostile-Horizon read-only.
+
+1. **Make it clearly Jurassic Par — lots more dinosaurs.** Yes, it is meant
+   to feel like Jurassic Par. Dinosaurs are the signature, so they should be
+   everywhere a player looks, alive and moving, never on the racing line:
+   - Herds of brontosaurs wading in the lake and grazing by the road;
+     triceratops in the mangrove; a T. rex roaring on a cliff above the
+     Cliffside Climb (camera shake, roar); raptors running alongside the road
+     for a stretch; pterodactyls swooping past the flight and the loop; a
+     plesiosaur / long-neck in the lagoon; something big glimpsed through the
+     flooded cave's windows; nests with eggs, footprints, dino skeleton arches
+     and fossils in the cave walls.
+   - **Animate them:** Tee'd Off's dinos have rigs (`Art/Characters/Dinos/`
+     — bronto, trike, trex, ptero; the round-7 port copied static meshes
+     only). Copy the rigs and any animations; where none exist, simple
+     procedural motion (walk cycles by bone, head bobs, tail sway, wing
+     flaps). Sounds: Tee'd Off's dino calls, positional.
+   - Also replace the worst "primitive lumps" (Round 7's own note: cliffs,
+     statues, the crowd as spheres) with Tee'd Off meshes where they exist.
+     If an essential model doesn't exist anywhere (e.g. raptor, plesiosaur),
+     write Tripo prompts in `Docs/MODELS-NEEDED.md` for Dan and use a
+     stand-in meanwhile — don't wait.
+   - Budget: dinos are LOD'd / culled; frame time on the lap reported.
+   *Check:* player-view pictures along the lap: count of dinos visible per
+   segment (aim: at least one group in every segment); none in the route.
+2. **TeedOff Barker: louder and talks more.**
+   - Mix: Barker always clearly audible over engines and music — duck the
+     music and engines under his lines (about -6 to -9 dB), and raise his
+     level. Subtitles stay.
+   - More talk: roughly one line every 6–10 s of racing (never over another
+     line), more pools and many more lines (ElevenLabs, his voice, as in
+     Round 7): every form change, overtakes (by rival name), position
+     changes, near misses and penalties, wall hits, the loop, each jump,
+     landmarks and dinos ("Look out for the T. rex!"), close racing,
+     falling behind / catching up, the last stretch, finish. Varied, funny,
+     Tee'd Off-style. At least 120 lines total.
+   *Check:* a race log: lines per minute, longest silence, 0 overlaps, 0
+   repeats inside a race; his measured level vs engines and music.
+3. **Driver reactions when they mess up.** On a hard wall hit, a reset, a
+   missed gate / penalty, a failed loop or a short jump, the driver who messed
+   up yells a short reaction — "Noooo!", "Oh no!", or something in their own
+   character's voice and style (Abi, Rae, Chip, Vivi; their Tee'd Off voice
+   clips where they fit, otherwise ElevenLabs in their Tee'd Off voices).
+   Short, with cooldowns, never over Barker (Barker has priority; he is the
+   narrator). Rivals' reactions only when they're near the player. Split
+   screen: each player's own driver.
+   *Check:* each driver has at least 6 mess-up lines; triggered in a race,
+   none overlaps Barker.
+4. **Visible steering mechanism, per form.** Car: a steering wheel that turns
+   with your steering; boat: a ship's wheel / helm; plane: a control stick
+   (or yoke) that tilts with bank and pitch; sub: twin levers or a joystick.
+   It swaps with the form change. Abi's hands on it (hand IK), visible in
+   first person and in the chase views. Built so a future vehicle can bring
+   its own mechanism (e.g. a motorcycle's handlebars).
+   *Check:* pictures of each form in first person and chase, wheel at full
+   left / centre / full right; hands follow.
+5. **Results reactions by place.** 1st: celebrate (clap / cheer); 2nd–3rd:
+   thumbs up / OK; last: disappointed (Sitting Disapproval or a head shake),
+   never clapping. Barker's results line matches the player's place.
+   *Check:* results for 1st, 2nd and 4th place: the right clip and line.
+6. **Sound levels.** Settings volumes: **Music, Voices (Barker + drivers),
+   Engines, Effects** (Engines split out of Effects). New defaults: engines
+   noticeably quieter, music and voices louder (state the numbers); ducking
+   as in item 2. Existing saved settings migrate sensibly.
+   *Check:* measured levels per bus in a race with defaults (runs stay
+   muted; log the would-be levels).
+7. **Choice jumps can lead to different paths.** Rework the Lake Jump so the
+   two choices really go different ways: the car line takes its own road
+   (e.g. through a jungle canyon or along the beach past the bronto herd), the
+   fly line goes out over the lake through the rings — different scenery,
+   different hazards, rejoining before the next main gate with similar time.
+   If there's room, a second choice jump later in the lap (e.g. on the
+   Waterfall Return or the mangrove bank) whose paths also split. Same gate,
+   near-miss and AI rules as Round 7; the route strip and HUD arrow follow
+   whichever line you took.
+   *Check:* both lines on each choice jump timed, 0 resets; AI 25 laps
+   through them with 0 stuck; pictures of each line.
+8. **Fix the new hitches.** Build 8's lap had 27 frames over 50 ms (worst
+   216 ms; build 7: 6–10). Find what causes them (likely new art / audio
+   loading, ElevenLabs clips loading on first play, dino or crowd
+   instancing) with a profile, fix, and report before / after.
+9. **Coral Vault tunnel climb-out reshape — Dan's OK for a visible window
+   (Dan, 2026-11-14: "yeah add that").** The tunnel saves ~1.15 s (target
+   2–3 s) because every run glances the climb-out walls. **For this item
+   only**, you may open a visible game / editor window to look at it — still
+   muted, no other item gets this OK. Keep the window small and the session
+   short, and say in the report when it was open and for how long. Reshape
+   the climb-out so a clean run doesn't touch the walls, keep it demanding.
+   *Check:* time saved for a clean run (same entry speed, no boost; target
+   2–3 s), 25 AI runs through it with 0 stuck, a deliberate miss / scrape
+   loses time but never traps; pictures.
+10. **Playtest logging (Dan, 2026-11-14).** For the concept's playtest with
+   friends: every race / time trial writes a small log per player (in the
+   game's data folder, one file per session): driver, mode, difficulty, lap
+   and segment times, resets (where and why), missed gates and penalties,
+   shortcut and choice-jump picks, form-change incidents, wall hits, place.
+   Menu > Settings: "Save playtest logs" On / Off (default On) and an "Open
+   log folder" option on PC. A small script (`Tools/playtest_summary.py`)
+   turns a folder of logs into one readable summary (per player and per
+   segment).
+   *Check:* two scripted races (one split screen) produce logs; the summary
+   script reads them.
+11. **Regression + 50-lap AI soak (Normal), wrap-up, release build 9
+   (0.8.0).** Per-item status for all 11 items, "For Dan to check", update
+   `CLAUDE.md` (Settings volumes; reactions; steering; playtest logs), commit, push,
+   publish, clean the disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (Round 8)
+- **Barker:** can you hear him now over the engines and music, and is a line every ~6 s too much? (Never heard here: all runs muted.)
+  Voices / Engines / Music in Menu > Settings if the mix needs moving.
+- **Dinosaurs:** does it read as Jurassic Par now? The T. rex on the climb's cliff (and its roar), the raptors beside the promenade, the
+  lake herd. Raptor and plesiosaur are stand-ins: make the Tripo models in `Docs/MODELS-NEEDED.md` only if they look wrong.
+- **Deck FPS (R3)** on the promenade, the Sky Arch and the Waterfall Return with four cars and the dinosaurs; and whether the **first race
+  after installing** stutters (the shader cache fills on the first run) and the second is smooth.
+- **Steering in first person (X):** the wheel / helm / yoke / levers big enough (or too big), the hands on them; the slightly lower view.
+- **Driver yells** after a crash or reset: "Noooo!" / "Oh no!" — funny or annoying?
+- **The Lake Jump's two roads:** the canyon vs the flight over the lake — different enough?
+- **The Coral Vault tunnel:** worth taking now (~2 s); does it still feel like it rubs the walls?
+- **Engines** at 60 %: quiet enough? An existing settings file was moved to Engines = 60 % of its old Effects.
+- **Playtest logs:** Menu > Settings > Open log folder (on the Deck it may not open a file browser: the folder is shown in the menu row).
+
