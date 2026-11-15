@@ -272,4 +272,7 @@ Round 7 delivered as build 8 (0.7.0); Dan reviewed it 2026-11-14 and his notes b
   on the PC.
 
 Round 8 delivered as build 9 (0.8.0); Round 8b delivered as build 10 (0.8.1), 2026-11-14 — waiting for Dan's review (`TODO.md`: per-item
-status and "For Dan to check").
+status and "For Dan to check").Current objective: **Round 9** — steering mechanisms at a sensible size (first person), every voice line must fit racing (no
+Tee'd Off golf lines), one finish sound (no Tee'd Off jingle doubling ours), the crowd ported from Gridiron Glory, three new vehicle designs (Hot Rod, Scrambler motorcycle,
+Grand Prix) imported as Dan's Tripo models arrive, fix the strip's E6 check. Release build 11 (0.8.2).
+See `TODO.md`.

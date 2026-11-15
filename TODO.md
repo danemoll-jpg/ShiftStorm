@@ -249,79 +249,85 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 8b: dinosaurs you can actually see
+## Current Objective — Round 9: steering wheel size, lines that fit, one finish sound, crowd, new designs
 
-**Dan's review of build 9 (0.8.0), 2026-11-14, quoted:** "Not really seeing
-dinosaurs, hear them being mentioned but not very visible."
+**Dan's review of build 10 (0.8.1), 2026-11-14, quoted:**
+1. "The steering wheel is far too big. It takes up too much of the screen
+   when you choose first person pov."
+2. "She says 'that's not where I aimed' which doesn't make sense in the
+   context of driving." (`Resources/Audio/Voice/abigail/lines.json`: a
+   Tee'd Off golf line.)
+3. "The finish plays both the finish from Tee'd Off and the new one we
+   created for this game."
+(The dinosaurs from Round 8b: no complaint this time.)
+Run unattended; don't stop to ask; no visible window. Tee-dOff,
+chastain_rush, Hostile-Horizon read-only.
 
-**Why (planning chat, from Round 8's own pictures `dinos-02/04/13`):** the
-46 dinos are there but tiny and far away — brontos as small figures out in
-the lake, pterodactyls as specks, the T. rex on the climb's cliff about the
-height of a palm tree, the trike a small shape on the far mangrove bank. At
-140 mph they're gone in a blink. Round 8's check counted a dino as "seen"
-if it was in the frame at all, even a few pixels tall — that check passed
-when it shouldn't have.
-
-Run unattended; don't stop to ask; no visible window. Tee-dOff read-only.
-
-1. **Big, close, in front of you.** Cartoon-huge and placed where the camera
-   looks, not off to the side or on the horizon:
-   - **Scale up:** brontos tower over everything (head well above the palms
-     — roughly 25–30 m tall), T. rex clearly bigger than the vehicle and
-     the palms (about 12–15 m), trikes about 2–3× the car's height,
-     pterodactyls with wingspans wider than the road.
-   - **Closer:** most dinos 15–60 m from the road edge (outside the
-     barriers / banks, never on the route), on the **outside of bends and
-     at the end of straights**, so they sit in the forward view for 2–3 s
-     at racing speed.
-   - **Set-piece moments** (at least one per segment), e.g.: a bronto's
-     neck arching **over** the road like a bridge on the promenade; the T.
-     rex leaning out from the cliff right above the climb road and roaring
-     as you pass; raptors running **alongside** you inside the barrier line
-     for a few seconds; a pterodactyl swooping across in front of you
-     during the flight; brontos wading right next to the boat line in the
-     lagoon; a trike charging along the mangrove bank; a long-neck's head
-     rising out of the water beside the sub at the cave entrance (the cave
-     has no windows — do it at the Sunken Gateway pool instead); brontos
-     watching from beside the waterfall landing.
-   - **Barker's dino lines play only when a dino is actually big on screen**
-     at that moment.
-   - Keep them off the route and out of the gates' view (readability first).
-2. **A real visibility check.** Count a dino as "seen" only if it covers at
-   least **8 % of the screen height for at least 1 s** from the player's
-   chase view at racing speed. Report per segment how many seen and for how
-   long (aim: every segment, at least one moment of 2 s+). Player-view
-   pictures of every set-piece moment — and **look at them** before calling
-   it done.
-3. **Performance.** Bigger and closer costs more: keep the lap's 95th
-   percentile frame time near Round 8's; LODs and culling as before. Report
-   before / after.
-4. **Wrap-up, release build 10 (0.8.1).** Per-item status, "For Dan to
-   check", update `CLAUDE.md`, commit, push, publish, clean the disk.
+1. **Steering mechanisms at a sensible size.** Real proportions to Abi and
+   the cockpit: in first person the car's wheel sits low in the view and
+   takes no more than about **15–20 % of the screen height**, the road ahead
+   clear. Same check for the boat helm, the plane stick and the sub levers.
+   Hands still on it (IK). Also check the chase views (not oversized there).
+   *Check:* first-person pictures of all four forms, wheel centred and at
+   full lock; report the % of screen each mechanism covers.
+2. **Every line must fit racing.** Go through **all** driver lines (Abi,
+   Rae, Chip, Vivi) and Barker's reused Tee'd Off clips: anything that only
+   makes sense in golf (aiming, shots, putts, clubs, holes, the green,
+   "fore" used as a golf call, caddies, par…) is removed from the racing
+   pools. Replace them with new racing lines in the same voices (ElevenLabs,
+   as in Round 8), in each character's style. Keep the short mess-up yells
+   ("Noooo!", "Oh no!"). List every line removed and every line added.
+   *Check:* a written list of all lines now in use, per character, and
+   each one makes sense in a race.
+3. **One finish sound.** The finish plays both Tee'd Off's finish jingle and
+   our own (Dan's "Chequered Flag" / the new finish). Keep only ShiftStorm's
+   own; remove Tee'd Off's jingle from the finish. Then audit every race
+   event (GO, gates, form changes, loop, jumps, penalties, finish, results)
+   for any other doubled sound (two sounds for one event), and fix them.
+   *Check:* an event-by-event list of which sound(s) play; none plays two
+   music/jingle cues at once.
+3b. **The crowd from Gridiron Glory** (Dan, 2026-11-14: "I didn't even notice a
+   crowd. But can we take the crowd work from Gridiron Glory? There was
+   already extensive work to make the crowd look more real."). Find Dan's
+   Gridiron Glory project (`C:\Users\danmo\footballGame`, confirmed by Dan; read-only —
+   copy, never edit) and port its crowd system (models,
+   animation, instancing / LOD, colours, cheering) into the grandstands at the
+   start / finish and anywhere else a crowd fits (the loop, the waterfall
+   landing). Dress them for Jurassic Par where cheap. The crowd should be
+   **noticeable** as you pass (same idea as the dinos: big enough, close
+   enough, reacting — cheering, waving). Keep frame cost in check (report).
+   *Check:* player-view pictures at the grandstands; crowd counted and
+   animated; frame time before / after.
+3c. **Three new vehicle designs, ready for Dan's models.** Dan drew one form
+   each: **Hot Rod** (lavender; his image is the sub), **Scrambler** (a
+   motorcycle; his image is the land form) and **Grand Prix** (1930s
+   maroon / brass racer; his image is the car). Prompts for the other nine
+   forms are in `Docs/MODELS-NEEDED.md`; import whatever arrives
+   (`Tools/import_vehicles.py`), show them in the Garage, and give them to the
+   rivals (suggested: Hot Rod → Vivi, Grand Prix → Rae, Scrambler → Chip; Dan
+   to confirm). For the **Scrambler**: a motorcycle needs its own feel and
+   look on land — the rider sits astride (pose / IK on the handlebars),
+   the bike leans into turns (visual lean; same handling stats), the
+   kickstand is hidden while riding; its **sub form is enclosed in a clear
+   glass sphere** (Dan) mounted on the model's chrome ring, made in the
+   game like the other canopies. Steering mechanism per design (Round 8):
+   handlebars for the Scrambler.
+   *Check:* Garage pictures of every form that has arrived; the Scrambler's
+   lean and rider pose; the glass sphere on its sub.
+4. **Small fold-in: the Round 1 test strip's E6 check** has failed since
+   Round 5's speed-up (the strip's wheels-down zone fires 1 m past the ramp).
+   Fix the strip so its check passes again (the real course already passes).
+5. **Wrap-up, release build 11 (0.8.2).** Regression + 50-lap AI soak
+   (Normal); per-item status, "For Dan to check", update `CLAUDE.md`,
+   commit, push, publish, clean the disk.
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- Drive the promenade: the two brontos' necks over the road after the Creek Jump; raptors running beside you off the start.
-- The T. rex dead ahead at the top of the climb (corner2): big enough, and does its roar / camera shake land right?
-- The flight: the pterodactyl flying with you on the right, the second one swooping across in front after the arch. Too distracting?
-- Lagoon / Mangrove: brontos right beside the boat line, the long-neck swimming with you, the charging triceratops on the bank.
-- Sunken Gateway: the long-neck rising out of the pool beside you before the dive.
-- Coral Vault: the long skeletons on the cave walls — readable as skeletons, or just "ribs"?
-- Barker's dino lines: do they now come when you can see the dinosaur?
-- Frame rate on the Deck (the dinos cost ~1.4 ms on the PC; the Mangrove and the finish are the heaviest).
+- …
 
 ## Next Steps (Do Not Start Yet)
-- **More vehicle designs** (Dan, 2026-11-13: "we can add different designs
-  later"). Tee Shot and Mudlark prompts are parked in `Docs/MODELS-NEEDED.md`;
-  the concept wants each driver's machine to fit their personality, so a
-  natural use is giving rivals their own designs. Deferred, not decided against.
-- **A motorcycle design** (Dan, 2026-11-14): "when it comes time to making
-  vehicles, I want one that is a motorcycle when as an automobile" — a
-  vehicle whose land form is a motorcycle (handlebars as its steering
-  mechanism, see Round 8 item 4), boat / plane / sub forms to match. Goes
-  through the Tripo pipeline like Jetstream (prompts first, Dan models).
 - **More tracks** from the concept: Clockwork Cascade (driving + boating),
   Cloud Orchard (driving + flying), Lantern Reef (boating + diving), each in
   a Tee'd Off setting — after Paradise Plunge is finished.

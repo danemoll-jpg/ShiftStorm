@@ -1176,3 +1176,66 @@ visible window). Tee-dOff, chastain_rush, Hostile-Horizon read-only.
 - **Engines** at 60 %: quiet enough? An existing settings file was moved to Engines = 60 % of its old Effects.
 - **Playtest logs:** Menu > Settings > Open log folder (on the Deck it may not open a file browser: the folder is shown in the menu row).
 
+## Current Objective — Round 8b: dinosaurs you can actually see
+
+**Dan's review of build 9 (0.8.0), 2026-11-14, quoted:** "Not really seeing
+dinosaurs, hear them being mentioned but not very visible."
+
+**Why (planning chat, from Round 8's own pictures `dinos-02/04/13`):** the
+46 dinos are there but tiny and far away — brontos as small figures out in
+the lake, pterodactyls as specks, the T. rex on the climb's cliff about the
+height of a palm tree, the trike a small shape on the far mangrove bank. At
+140 mph they're gone in a blink. Round 8's check counted a dino as "seen"
+if it was in the frame at all, even a few pixels tall — that check passed
+when it shouldn't have.
+
+Run unattended; don't stop to ask; no visible window. Tee-dOff read-only.
+
+1. **Big, close, in front of you.** Cartoon-huge and placed where the camera
+   looks, not off to the side or on the horizon:
+   - **Scale up:** brontos tower over everything (head well above the palms
+     — roughly 25–30 m tall), T. rex clearly bigger than the vehicle and
+     the palms (about 12–15 m), trikes about 2–3× the car's height,
+     pterodactyls with wingspans wider than the road.
+   - **Closer:** most dinos 15–60 m from the road edge (outside the
+     barriers / banks, never on the route), on the **outside of bends and
+     at the end of straights**, so they sit in the forward view for 2–3 s
+     at racing speed.
+   - **Set-piece moments** (at least one per segment), e.g.: a bronto's
+     neck arching **over** the road like a bridge on the promenade; the T.
+     rex leaning out from the cliff right above the climb road and roaring
+     as you pass; raptors running **alongside** you inside the barrier line
+     for a few seconds; a pterodactyl swooping across in front of you
+     during the flight; brontos wading right next to the boat line in the
+     lagoon; a trike charging along the mangrove bank; a long-neck's head
+     rising out of the water beside the sub at the cave entrance (the cave
+     has no windows — do it at the Sunken Gateway pool instead); brontos
+     watching from beside the waterfall landing.
+   - **Barker's dino lines play only when a dino is actually big on screen**
+     at that moment.
+   - Keep them off the route and out of the gates' view (readability first).
+2. **A real visibility check.** Count a dino as "seen" only if it covers at
+   least **8 % of the screen height for at least 1 s** from the player's
+   chase view at racing speed. Report per segment how many seen and for how
+   long (aim: every segment, at least one moment of 2 s+). Player-view
+   pictures of every set-piece moment — and **look at them** before calling
+   it done.
+3. **Performance.** Bigger and closer costs more: keep the lap's 95th
+   percentile frame time near Round 8's; LODs and culling as before. Report
+   before / after.
+4. **Wrap-up, release build 10 (0.8.1).** Per-item status, "For Dan to
+   check", update `CLAUDE.md`, commit, push, publish, clean the disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (fill in at end of round)
+- Drive the promenade: the two brontos' necks over the road after the Creek Jump; raptors running beside you off the start.
+- The T. rex dead ahead at the top of the climb (corner2): big enough, and does its roar / camera shake land right?
+- The flight: the pterodactyl flying with you on the right, the second one swooping across in front after the arch. Too distracting?
+- Lagoon / Mangrove: brontos right beside the boat line, the long-neck swimming with you, the charging triceratops on the bank.
+- Sunken Gateway: the long-neck rising out of the pool beside you before the dive.
+- Coral Vault: the long skeletons on the cave walls — readable as skeletons, or just "ribs"?
+- Barker's dino lines: do they now come when you can see the dinosaur?
+- Frame rate on the Deck (the dinos cost ~1.4 ms on the PC; the Mangrove and the finish are the heaviest).
+
