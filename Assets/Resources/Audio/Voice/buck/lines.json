@@ -1,0 +1,217 @@
+{
+ "speaker": "Buck Barlow",
+ "lines": [
+  {
+   "id": "brief_cc_1",
+   "text": "Ladies and gentlemen, opening night! Oh, no. We're not jumping over the Ferris wheel. That'd be irresponsible. We're going through it."
+  },
+  {
+   "id": "brief_cc_2",
+   "text": "I used to jump six buses right over there. Seven, according to the posters. We counted the snack wagon. Tonight it's your turn to give these folks a show."
+  },
+  {
+   "id": "brief_cc_3",
+   "text": "The roller coaster is perfectly safe. It's been tested by professionals. Well, by me. I used to be a professional. Hold on, lean in, and enjoy the fireworks!"
+  },
+  {
+   "id": "brief_cc_4",
+   "text": "A real crowd tonight, folks. Fireworks, string lights, the whole pier lit up. I haven't seen this park this full since my last show. Let's give them something to remember."
+  },
+  {
+   "id": "brief_pp_1",
+   "text": "Welcome, welcome, one and all! Now, this is just a gentle introductory outing. A little drive, a little float, a little flight, a little dip. I checked every ramp myself. Twice. Mostly."
+  },
+  {
+   "id": "brief_pp_2",
+   "text": "Folks, a word about the wildlife. The big fellow's a plant eater. Lovely disposition. Now, the other fellow... let's keep moving. Engines on!"
+  },
+  {
+   "id": "brief_pp_3",
+   "text": "Car, boat, plane and submarine. One machine, four ways to have a wonderful afternoon. If it changes shape on you, that means it's working. If it doesn't... keep your elbows in."
+  },
+  {
+   "id": "brief_pp_4",
+   "text": "This is a private trial, just us and a few curious dinosaurs. Nobody's watching. Which is a shame, because I've got a feeling this is going to be spectacular."
+  },
+  {
+   "id": "res_cc_back_1",
+   "text": "Not this time, but the crowd's still clapping. Opening nights are like that. Shall we go again?"
+  },
+  {
+   "id": "res_cc_back_2",
+   "text": "The coaster takes a little getting used to. My first ride, I came off at the top. On purpose. Mostly."
+  },
+  {
+   "id": "res_cc_back_3",
+   "text": "Chin up! Every great show has a rehearsal. That was the rehearsal."
+  },
+  {
+   "id": "res_cc_first_1",
+   "text": "First place on opening night! Listen to that crowd! They haven't cheered like that since 1987."
+  },
+  {
+   "id": "res_cc_first_2",
+   "text": "A winner! Through the wheel, over the gap and under the pier. The posters will need a bigger font."
+  },
+  {
+   "id": "res_cc_first_3",
+   "text": "Now that's a big finish! I may have to give you my nickname. Just borrow it. Just for tonight."
+  },
+  {
+   "id": "res_cc_podium_1",
+   "text": "On the podium on opening night! The crowd loved it. So did the octopus, I think."
+  },
+  {
+   "id": "res_cc_podium_2",
+   "text": "Lovely racing. You rode that coaster like you were born on it. Were you? No? Well, close enough."
+  },
+  {
+   "id": "res_cc_podium_3",
+   "text": "A podium! The fireworks were for you, by the way. And partly for me."
+  },
+  {
+   "id": "res_pp_back_1",
+   "text": "Back of the pack, but you finished, and you finished in one piece. That counts for a lot around here."
+  },
+  {
+   "id": "res_pp_back_2",
+   "text": "Don't you worry. My first stunt, I jumped one bus. Well, into one bus. Try again!"
+  },
+  {
+   "id": "res_pp_back_3",
+   "text": "Everybody starts somewhere. I started in a cannon. Let's have another go."
+  },
+  {
+   "id": "res_pp_first_1",
+   "text": "First place! I told everyone this was a gentle outing. You made it look gentle."
+  },
+  {
+   "id": "res_pp_first_2",
+   "text": "A win on the very first trial! Somebody fetch me a bigger poster."
+  },
+  {
+   "id": "res_pp_first_3",
+   "text": "Well, look at that. Not a scratch on the machine, and only a little dinosaur drool. Wonderful!"
+  },
+  {
+   "id": "res_pp_podium_1",
+   "text": "A podium finish! And all four shapes came back. That's a successful trial in my book."
+  },
+  {
+   "id": "res_pp_podium_2",
+   "text": "Very nice driving. The plant eater was very impressed. The other fellow, I didn't ask."
+  },
+  {
+   "id": "res_pp_podium_3",
+   "text": "On the podium! See? Gentle introductory outing. Nothing to worry about."
+  },
+  {
+   "id": "short_cc_1",
+   "text": "Opening night, folks! Through the wheel, not over it!"
+  },
+  {
+   "id": "short_cc_2",
+   "text": "Coaster, flume, sea and pier. Have fun out there!"
+  },
+  {
+   "id": "short_pp_1",
+   "text": "Gentle introductory outing, folks. Mind the dinosaurs."
+  },
+  {
+   "id": "short_pp_2",
+   "text": "Four shapes, one lap. Off you go!"
+  },
+  {
+   "id": "tour_done_1",
+   "text": "Two stops, two shows, and a tour that's really happening. Thank you, partner. Now, about that volcano..."
+  },
+  {
+   "id": "tour_s1_intro_1",
+   "text": "Well, hello there! You must be one of my racers. Buck Barlow. They call me Big Finish. Long story."
+  },
+  {
+   "id": "tour_s1_intro_2",
+   "text": "I've had a dream for years, a racing tour where one machine drives, sails, flies and dives, all in one lap."
+  },
+  {
+   "id": "tour_s1_intro_3",
+   "text": "Before we go public, a private trial. A gentle introductory outing at a lovely little jungle course."
+  },
+  {
+   "id": "tour_s1_intro_4",
+   "text": "Finish in the top three and the tour's on. Don't mind the dinosaurs. Most of them are vegetarian."
+  },
+  {
+   "id": "tour_s1_pass_1",
+   "text": "That's it! That's the tour! I knew it! I'm calling the park tonight."
+  },
+  {
+   "id": "tour_s1_pass_2",
+   "text": "You've earned your spot, partner. Next stop: Coaster Coast, and this time there'll be a crowd."
+  },
+  {
+   "id": "tour_s1_retry_1",
+   "text": "Not quite the top three. That's all right. The trial's for learning. The dinosaurs will wait."
+  },
+  {
+   "id": "tour_s1_retry_2",
+   "text": "Take another run at it, and keep an eye on that route strip at the top. It never lies. Unlike my posters."
+  },
+  {
+   "id": "tour_s2_intro_1",
+   "text": "Coaster Coast. I did my stunt shows on this very pier. The owner still owes me a hot dog."
+  },
+  {
+   "id": "tour_s2_intro_2",
+   "text": "Tonight it's the tour's public opening. Grandstands, fireworks, the whole town watching."
+  },
+  {
+   "id": "tour_s2_intro_3",
+   "text": "The route goes up the roller coaster, through the Ferris wheel, down the log flume and under the pier. Perfectly safe."
+  },
+  {
+   "id": "tour_s2_intro_4",
+   "text": "Top three keeps the tour rolling. No pressure. Well, a little pressure. It's a show!"
+  },
+  {
+   "id": "tour_s2_pass_1",
+   "text": "Listen to them! That's the sound of a tour that's here to stay!"
+  },
+  {
+   "id": "tour_s2_pass_2",
+   "text": "Folks are already asking where we go next. I've got a few ideas. Most of them are probably fine."
+  },
+  {
+   "id": "tour_s2_retry_1",
+   "text": "Opening nights are tricky. The crowd's still here, the coaster's still running. Let's go again."
+  },
+  {
+   "id": "tour_s2_retry_2",
+   "text": "Ride the coaster all the way and take the wheel's middle if you dare. You've got this."
+  },
+  {
+   "id": "yarn_1",
+   "text": "A quick safety note: the signs say 'no flying over the crowd'. Somebody fixed my signs again. They used to say 'please'."
+  },
+  {
+   "id": "yarn_2",
+   "text": "When I was your age I jumped a canyon on a lawnmower. Small canyon. Very big lawnmower."
+  },
+  {
+   "id": "yarn_3",
+   "text": "Safety first, folks. That's why I always do the dangerous bits second."
+  },
+  {
+   "id": "yarn_4",
+   "text": "They called me Big Finish because I never once stopped halfway. Started halfway, once or twice."
+  },
+  {
+   "id": "yarn_5",
+   "text": "If anything goes wrong, remember: it's not a crash, it's an unscheduled transformation."
+  },
+  {
+   "id": "yarn_6",
+   "text": "I once raced a hot air balloon across a lake. I won. The balloon was going the other way, but I won."
+  }
+ ]
+}

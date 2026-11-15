@@ -30,7 +30,9 @@ namespace ShiftStorm
         public readonly List<ShiftVehicle> Rivals = new List<ShiftVehicle>();
 
         // ---- the menu ----
-        public enum Page { Main, Settings, Quit, Garage, Split }
+        public enum Page { Main, Settings, Quit, Garage, Split, Tour, Pick }   // Round 11: The Tour, choose your racer
+        public enum PickFor { Race, Trial, Tour }
+        PickFor pickFor; int pickStop; public TourRunner TourRun { get; private set; }
         public string MenuNote { get; private set; } = "";
         // Round 6: the second player (split screen) and both players
         public ShiftVehicle Player2 => SplitScreen.Session ? SplitScreen.Session.P2 : null;
@@ -41,7 +43,7 @@ namespace ShiftStorm
         public List<ShiftVehicle> ActiveRivals()
         {
             var l = new List<ShiftVehicle>();
-            for (int k = 0; k < Rivals.Count; k++) { if (SplitScreen.Active && k == SplitScreen.P2Pick) continue; if (SplitScreen.Active && l.Count >= SplitScreen.AiCount) break; l.Add(Rivals[k]); }
+            for (int k = 0; k < Rivals.Count; k++) { if (SplitScreen.Active && Rivals[k].RacerName == Lineup.P2.name) continue; if (SplitScreen.Active && l.Count >= SplitScreen.AiCount) break; l.Add(Rivals[k]); }   // Round 11: the AI = the drivers no player picked
             return l;
         }
         // split screen: the two players side by side on the back row (11 m apart, the same distance to the line); the AI ahead
@@ -87,6 +89,8 @@ namespace ShiftStorm
             Cam.gameObject.AddComponent<CameraViews>();   // Round 6: X / V cycles Chase, Far chase, First person, Front
             CourseAudio.Make(Cam.gameObject, Player);
             Caller.Make(this).Watch(Player);   // Round 7: TeedOff Barker calls the race
+            Buck.Make(this).Watch(Player);   // Round 11: Buck briefs before a race and remarks after it
+            TourRun = TourRunner.Make(this);   // Round 11: The Tour
             GameSounds.Make(Cam.gameObject, this).Watch(Player);   // Round 7: the sound pass
             PlaytestLog.Make(this);   // Round 8 item 10: playtest logs
             Trial = gameObject.AddComponent<TimeTrial>(); Trial.v = Player;
@@ -95,6 +99,7 @@ namespace ShiftStorm
             gameObject.AddComponent<RouteGuide>().v = Player;
             if (!FindAnyObjectByType<Light>()) { var l = new GameObject("Sun").AddComponent<Light>(); l.type = LightType.Directional; l.transform.rotation = Quaternion.Euler(50, -30, 0); l.shadows = LightShadows.Soft; }
             var a = Environment.GetCommandLineArgs();
+            Lineup.Apply(this);   // Round 11: the saved driver / machine picks (Abi + Jetstream by default); the rest are the AI
             int start = 0; int i = Array.IndexOf(a, "-course"); if (i >= 0 && i + 1 < a.Length) int.TryParse(a[i + 1], out start);
             bool race = Array.IndexOf(a, "-race") >= 0 || (!QuietRun.Check && Array.IndexOf(a, "-trial") < 0);
             StartCourse(Mathf.Clamp(start, 0, Courses.Count - 1), race);
@@ -115,10 +120,20 @@ namespace ShiftStorm
 
         // Start (or restart) a course. race: against the rivals on the grid (only a time-trial course, Paradise Plunge); otherwise alone.
         public void StartCourse(int index) => StartCourse(index, RaceMode);
-        public void StartCourse(int index, bool race)
+        public void StartCourse(int index, bool race) => StartCourse(index, race, true);
+        // Round 11: a stop of The Tour (its scene instead of the briefing)
+        public void StartTourCourse(int index) => StartCourse(index, true, false);
+        void StartCourse(int index, bool race, bool brief)
         {
             CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex;
             var c = Courses[CourseIndex];
+            // Round 11: Buck's briefing before a course's first race / time trial of the session (Barker's start line waits for it)
+            brief = brief && Buck.Instance && Buck.Instance.WantsBriefing(CourseIndex) && c.timeTrial;
+            if (brief) Buck.Instance.Hold();
+            try { StartCourseInner(c, race); } finally { if (brief) Buck.Instance.Briefing(CourseIndex); }
+        }
+        void StartCourseInner(Course c, bool race)
+        {
             RaceMode = race && c.timeTrial;
             CourseLook.Apply(c);   // Round 10: only this course is shown (its look and sky); the other one is hidden
             CourseAudio.Instance?.SetCourse(c);
@@ -143,7 +158,11 @@ namespace ShiftStorm
             Race.Setup(RaceMode, Player, RaceMode ? Rivals : null);
         }
         // Reset after the finish (Y / R), or Race again on the results: the same course again, the same way
-        public void Restart() => StartCourse(CourseIndex, RaceMode);
+        public void Restart()
+        {
+            if (Tour.ActiveStop >= 0 && !Tour.Running) { TourRun.Play(Tour.ActiveStop, false); return; }   // Round 11: retry the Tour stop (no scene)
+            StartCourse(CourseIndex, RaceMode);
+        }
         // Reset (Y / R) after the finish: the same course again; in split screen only once both players are done (the results are up)
         public void ResetAfterFinish(ShiftVehicle who) { if (!SplitScreen.Active || AllHumansFinished) Restart(); }
 
@@ -153,7 +172,9 @@ namespace ShiftStorm
             if (SplitScreen.P2Device == null) { MenuNote = "Player 2: press A on another controller (or Enter on the keyboard) first"; ShowPage(Page.Split, MenuIndex); return; }
             if (Garage.Active) Garage.Instance.Close();
             if (!SplitScreen.Active) SplitScreen.Begin();
-            else if (SplitScreen.Session.P2 && SplitScreen.Session.P2.RacerName != SplitScreen.P2Rival.name) { SplitScreen.Begin(); }   // another driver picked: a new player 2
+            else if (SplitScreen.Session.P2 && SplitScreen.Session.P2.RacerName != Lineup.P2.name) { SplitScreen.Begin(); }   // another driver picked: a new player 2
+            Tour.ActiveStop = -1; Lineup.Apply(this);   // Round 11: player 1's pick and the AI fill
+            if (Player2) { Player2.Forms.SetOwnDesign(Lineup.P2Machine); Player2.Tint = Lineup.P2.color; }
             MenuNote = ""; CloseMenu(); StartCourse(MenuCourse, race);
         }
         public void EndSplit(bool restart = true)
@@ -172,6 +193,8 @@ namespace ShiftStorm
             var inp = Player.Input;
             if (full) ScreenSetting.Toggle();
             if (stats) ToggleStats();
+            // Round 11: Buck's card (a briefing or a Tour scene): A / Enter (or Menu / B) skips him
+            if (Buck.Instance && Buck.Instance.CardOn) { if (confirm || menuP || backP) Buck.Instance.Skip(); return; }
             if (MenuOpen)
             {
                 if (MenuPage == Page.Split) SplitJoin();
@@ -236,7 +259,7 @@ namespace ShiftStorm
 
         void ShowPage(Page page, int select = -1)
         {
-            if (page != Page.Garage && Garage.Active) Garage.Instance.Close();
+            if (page != Page.Garage && page != Page.Pick && Garage.Active) Garage.Instance.Close();
             if (MenuPage == Page.Split && page != Page.Split) LeaveSplitPage();
             if (page != Page.Split) MenuNote = "";
             MenuPage = page; MenuItems.Clear(); menuActions.Clear();
@@ -254,14 +277,17 @@ namespace ShiftStorm
                     break;
                 case Page.Split:
                     {
-                        var p2 = SplitScreen.P2Device; bool ready = p2 != null; var pick = SplitScreen.P2Rival;
-                        Item($"Player 1:   {SplitScreen.DeviceName(SplitScreen.P1Device)}  -  Abi (Jetstream green)", null);
+                        var p2 = SplitScreen.P2Device; bool ready = p2 != null; var pick = Lineup.P2;
+                        Item($"Player 1:   {SplitScreen.DeviceName(SplitScreen.P1Device)}  -  {Lineup.P1.name} ({VehicleDesigns.Title(Settings.Design)})", null);
+                        Item($"Player 1 driver:   {Lineup.P1.name}   (A: next)", () => { Settings.Driver = (Settings.Driver + 1) % 4; ShowPage(Page.Split, 1); });
+                        Item($"Player 1 machine:   {VehicleDesigns.Title(Settings.Design)}   (A: next)", () => { Settings.Design = Lineup.NextMachine(Settings.Design); UseDesign(Settings.Design); ShowPage(Page.Split, 2); });
                         Item(ready ? $"Player 2:   {SplitScreen.DeviceName(p2)}   (A: let go)" : "Player 2:   press A on another controller (or Enter on the keyboard)",
-                            () => { if (SplitScreen.Active) { MenuNote = "End 2 players first to change player 2's controller"; ShowPage(Page.Split, 1); return; } SplitScreen.P2Device = null; ShowPage(Page.Split, 1); });
-                        Item($"Player 2 driver:   {pick.name}   (A: next)", () => { SplitScreen.P2Pick = (SplitScreen.P2Pick + 1) % Rival.Roster.Length; ShowPage(Page.Split, 2); });
-                        Item($"AI racers:   {SplitScreen.AiCount}   (A: 0 / 1 / 2)", () => { SplitScreen.AiCount = (SplitScreen.AiCount + 1) % 3; ShowPage(Page.Split, 3); });
-                        Item("Screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Split, 4); });
-                        Item($"Course:   {pp.courseName}   (A: next)", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Split, 5); });
+                            () => { if (SplitScreen.Active) { MenuNote = "End 2 players first to change player 2's controller"; ShowPage(Page.Split, 3); return; } SplitScreen.P2Device = null; ShowPage(Page.Split, 3); });
+                        Item($"Player 2 driver:   {pick.name}   (A: next)", () => { Lineup.NextP2(); ShowPage(Page.Split, 4); });
+                        Item($"Player 2 machine:   {VehicleDesigns.Title(Lineup.P2Machine)}   (A: next)", () => { Settings.Design2 = Lineup.NextMachine(Lineup.P2Machine); ShowPage(Page.Split, 5); });
+                        Item($"AI racers:   {SplitScreen.AiCount}   (A: 0 / 1 / 2)", () => { SplitScreen.AiCount = (SplitScreen.AiCount + 1) % 3; ShowPage(Page.Split, 6); });
+                        Item("Screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Split, 7); });
+                        Item($"Course:   {pp.courseName}   (A: next)", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Split, 8); });
                         Item($"Race {pp.courseName}: 2 players + {SplitScreen.AiCount} AI" + (ready ? "" : "   (waiting for player 2)"), () => StartSplit(true));
                         Item($"Time Trial {pp.courseName}: 2 players" + (ready ? "" : "   (waiting for player 2)"), () => StartSplit(false));
                         Item("Back", () => ShowPage(Page.Main));
@@ -271,8 +297,9 @@ namespace ShiftStorm
                     Item("Resume", CloseMenu);
                     Item("Restart " + Courses[CourseIndex].courseName + (RaceMode ? " (race)" : ""), () => { CloseMenu(); Restart(); });
                     Item($"Course: {pp.courseName}   (A: next, {MenuCourse + 1} of {Courses.Count})", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Main, 2); });
-                    Item($"Race: {pp.courseName}  (vs 3 rivals)", () => { CloseMenu(); StartCourse(MenuCourse, true); });
-                    Item($"Time Trial: {pp.courseName}  (alone)", () => { CloseMenu(); StartCourse(MenuCourse, false); });
+                    Item($"Race: {pp.courseName}  (vs 3 rivals)", () => ShowPick(PickFor.Race));
+                    Item($"Time Trial: {pp.courseName}  (alone)", () => ShowPick(PickFor.Trial));
+                    Item("The Tour (story)", () => ShowPage(Page.Tour));
                     Item("2 Players (split screen)", OpenSplitPage);
                     Item("Garage (vehicle designs)", () => ShowPage(Page.Garage));
                     Item("Settings", () => ShowPage(Page.Settings));
@@ -289,11 +316,12 @@ namespace ShiftStorm
                     Item($"Engines volume: {Settings.Engines * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("engine"); ShowPage(Page.Settings, 6); });
                     Item($"Effects volume: {Settings.Effects * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("sfx"); ShowPage(Page.Settings, 7); });
                     Item("Save playtest logs: " + (Settings.PlaytestLogs ? "On" : "Off"), () => { Settings.PlaytestLogs = !Settings.PlaytestLogs; ShowPage(Page.Settings, 8); });
-                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 9); });
+                    Item("Buck's briefings: " + Settings.BuckNames[Settings.BuckBriefings] + "   (On / Short / Off)", () => { Settings.BuckBriefings = (Settings.BuckBriefings + 1) % 3; ShowPage(Page.Settings, 9); });   // Round 11
+                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 10); });
                     if (SplitScreen.Active)
                     {
-                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 10); });
-                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 11); });
+                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 11); });
+                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 12); });
                     }
                     Item("Back", () => ShowPage(Page.Main));
                     break;
@@ -307,6 +335,24 @@ namespace ShiftStorm
                         Item("Back", () => ShowPage(Page.Main));
                     }
                     break;
+                case Page.Tour:
+                    // Round 11 item 3: the stops in order, best place and points; a locked stop says what unlocks it
+                    for (int k = 0; k < Tour.Stops.Length; k++) { int stop = k; Item(Tour.Row(stop), stop + 1 <= Tour.Unlocked ? () => ShowPick(PickFor.Tour, stop) : (Action)null); }
+                    Item($"Points: {Tour.Total}   (1st 10, 2nd 6, 3rd 4, 4th 2; top {Tour.QualifyPlace} unlocks the next stop)", null);
+                    Item("Back", () => ShowPage(Page.Main));
+                    break;
+                case Page.Pick:
+                    {
+                        // Round 11 item 4: choose your racer: a driver and a machine (the Garage's turntable shows it); the others race as the AI
+                        var gar = Garage.Get(); if (!Garage.Active) gar.Open(Cam); if (gar.Design != Settings.Design) gar.SetDesign(Settings.Design);
+                        string go = pickFor == PickFor.Race ? $"Race {pp.courseName}" : pickFor == PickFor.Trial ? $"Time Trial {pp.courseName}" : $"Tour stop {pickStop + 1}: {Tour.Stops[pickStop].title}";
+                        Item($"Driver: {Lineup.P1.name}   (A: next, {Settings.Driver + 1} of 4)", () => { Settings.Driver = (Settings.Driver + 1) % 4; ShowPage(Page.Pick, 0); });
+                        Item($"Machine: {VehicleDesigns.Title(Settings.Design)}{OwnerOf(Settings.Design)}   (A: next)", () => { Settings.Design = Lineup.NextMachine(Settings.Design); gar.SetDesign(Settings.Design); ShowPage(Page.Pick, 1); });
+                        Item($"Form: {FormName(gar.Form)}   (A: next, with the change)", () => { gar.NextForm(); ShowPage(Page.Pick, 2); });
+                        Item($"Go: {go}", () => GoPick());
+                        Item("Back", () => ShowPage(pickFor == PickFor.Tour ? Page.Tour : Page.Main));
+                    }
+                    break;
                 case Page.Quit:
                     Item("No, keep playing", () => ShowPage(Page.Main));
                     Item("Yes, quit", Quit);
@@ -315,7 +361,19 @@ namespace ShiftStorm
             MenuIndex = Mathf.Clamp(select >= 0 ? select : 0, 0, Mathf.Max(0, MenuItems.Count - 1));
             for (int k = 0; k < menuActions.Count && menuActions[MenuIndex] == null; k++) MenuIndex = (MenuIndex + 1) % menuActions.Count;   // an information row is never selected
         }
-        public string MenuTitle => MenuPage == Page.Main ? (SplitScreen.Active ? "MENU (2 PLAYERS)" : "MENU") : MenuPage == Page.Settings ? "SETTINGS" : MenuPage == Page.Garage ? "GARAGE" : MenuPage == Page.Split ? "2 PLAYERS" : "QUIT SHIFTSTORM?";
+        public string MenuTitle => MenuPage == Page.Main ? (SplitScreen.Active ? "MENU (2 PLAYERS)" : "MENU") : MenuPage == Page.Settings ? "SETTINGS" : MenuPage == Page.Garage ? "GARAGE" : MenuPage == Page.Split ? "2 PLAYERS" : MenuPage == Page.Tour ? "THE TOUR" : MenuPage == Page.Pick ? "CHOOSE YOUR RACER" : "QUIT SHIFTSTORM?";
+        // Round 11: choose your racer, then the race / time trial / Tour stop
+        void ShowPick(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; ShowPage(Page.Pick, 3); }
+        public void PickAndGo(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; GoPick(); }   // checks
+        static string OwnerOf(string design) { foreach (var r in Lineup.All) if (Lineup.MachineOf(r) == design) return $" ({r.name}'s)"; return ""; }
+        void GoPick()
+        {
+            if (SplitScreen.Active) { CloseMenuForced(); EndSplit(false); }
+            UseDesign(Settings.Design); Lineup.Apply(this);
+            CloseMenu();
+            if (pickFor == PickFor.Tour) { TourRun.Play(pickStop, true); return; }
+            Tour.ActiveStop = -1; StartCourse(MenuCourse, pickFor == PickFor.Race);
+        }
         static string Invert2Item => "Player 2 invert flight / dive controls: " + (Settings.InvertVertical2 ? "On" : "Off") + "   (player 2's View)";
         void CloseMenuForced() { MenuOpen = false; Time.timeScale = 1; }
         static string DifficultyItem => "AI difficulty: " + Settings.Difficulty + "   (Easy / Normal / Hard)";

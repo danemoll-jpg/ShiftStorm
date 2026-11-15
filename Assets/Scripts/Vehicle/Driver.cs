@@ -71,11 +71,12 @@ namespace ShiftStorm
         // Round 3: the rivals' drivers too (Tee'd Off's Chip, Rae and Vivi, copied to Resources/Drivers/<name>), with Abi's shared seated
         // clips and no voice (only the player's driver speaks).
         string modelPath = "Driver/Abigail", texPath = "Driver/Abigail_basecolor", who = "Abigail";
-        public static Driver Make(ShiftVehicle v, string character = null)
+        // Round 11 (choose your racer): any of the four in any vehicle: "Abigail" (or null) is Abi; main = player 1's driver (Instance)
+        public static Driver Make(ShiftVehicle v, string character = null, bool? main = null)
         {
             var d = v.gameObject.AddComponent<Driver>(); d.v = v; d.forms = v.Forms;
-            if (character != null) { d.who = character; d.modelPath = $"Drivers/{character}/{character}"; d.texPath = $"Drivers/{character}/{character}_basecolor"; }
-            else Instance = d;
+            if (character != null && character != "Abigail") { d.who = character; d.modelPath = $"Drivers/{character}/{character}"; d.texPath = $"Drivers/{character}/{character}_basecolor"; }
+            if (main ?? character == null) Instance = d;
             d.Seat(); d.Voice(); All.Add(d);
             return d;
         }
@@ -372,7 +373,7 @@ namespace ShiftStorm
                     lines[kv.Key] = list.ToArray(); n += list.Count;
                 }
             LinesLoaded = n;
-            v.Event += (kind, text) =>
+            v.Event += onEvent = (kind, text) =>
             {
                 if (kind == "finish") StartCoroutine(FinishReact());
                 else if (kind == "reset") { MessUp(text.Contains("water") || text.Contains("creek") ? "water" : "messup", "reset: " + text); PlayOnce(Grumble); }
@@ -382,8 +383,8 @@ namespace ShiftStorm
                 else if (kind == "missed") MessUp("messup", "missed gate");
                 else if (kind == "change") { if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive && v.Human) Say("waterfall"); PlayOnce(Thumbs); }
             };
-            v.Stunt += st => { if (st == "loopfail") MessUp("messup", "loop failed"); };
-            v.WallHit += (angle, keep, what) => { if (keep < .7f && !v.Finished && !v.Holding) MessUp("messup", $"wall hit ({angle:0} deg)"); };
+            v.Stunt += onStunt = st => { if (st == "loopfail") MessUp("messup", "loop failed"); };
+            v.WallHit += onWall = (angle, keep, what) => { if (keep < .7f && !v.Finished && !v.Holding) MessUp("messup", $"wall hit ({angle:0} deg)"); };
             Debug.Log($"[Driver] voice: {n} {who} lines loaded");
         }
         // the finish: a reaction by place (Round 8 item 5: 1st claps, 2nd-3rd thumbs up, last is disappointed, never clapping)
@@ -448,5 +449,23 @@ namespace ShiftStorm
         }
         public AudioSource VoiceSource => voice;
         void OnDestroy() { All.Remove(this); if (graph.IsValid()) graph.Destroy(); }
+        // Round 11 (choose your racer): another driver in this vehicle: this one leaves (events unhooked, model, voice and clip graph gone,
+        // at once so GetComponent<Driver> finds the new one this frame); the steering mechanism stays and the new driver rebuilds it
+        System.Action<string, string> onEvent; System.Action<string> onStunt; System.Action<float, float, string> onWall;
+        public static Driver Swap(ShiftVehicle v, string character, bool main)
+        {
+            var old = v.GetComponent<Driver>();
+            if (old) { if (old.Who == (character ?? "Abigail") && (Instance == old) == main) return old; old.Retire(); }
+            return Make(v, character ?? "Abigail", main);
+        }
+        void Retire()
+        {
+            StopAllCoroutines();
+            if (v) { if (onEvent != null) v.Event -= onEvent; if (onStunt != null) v.Stunt -= onStunt; if (onWall != null) v.WallHit -= onWall; }
+            if (model) DestroyImmediate(model.gameObject);
+            if (voice) DestroyImmediate(voice);
+            if (Instance == this) Instance = null;
+            DestroyImmediate(this);
+        }
     }
 }

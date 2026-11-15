@@ -100,11 +100,12 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Invert climb / dive (per player, saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
-| Menu: Resume, Restart, Course (Paradise Plunge / Coaster Coast), Race, Time Trial, 2 Players (its own Course row), Garage, Settings, Quit game | Menu (Start), either player | Esc |
+| Menu: Resume, Restart, Course (Paradise Plunge / Coaster Coast), Race, Time Trial, The Tour, 2 Players (its own Course row), Garage, Settings, Quit game; Race / Time Trial / a Tour stop go through Choose your racer (driver, machine) | Menu (Start), either player | Esc |
+| Skip Buck (a briefing or a Tour scene) | A (or Menu / B) | Enter / Space (or Esc / Backspace) |
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker + drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
+Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
 with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
 starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
 back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
@@ -144,6 +145,9 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   `-oldEdges` builds build 11's promenade / finishing-road edges (before pictures, before sweep). `coaster` = `cclap` (Coaster Coast lap: segments,
   set-piece visibility, rails, perf) + `ccrails` (each rail full / slow / very slow) + `ccsplits` (Midway Jump car / fly, Lighthouse round / rocks);
   `soak` and `split` take `-course 1` for Coaster Coast. `ccprobe`: diagnostics (see Round 10).
+  Round 11: `round11` = `buck` (a race per course: briefing -> Barker -> Buck's remark, voice overlaps by speaker, skip, once per
+  session, Short / Off) + `tour` (fresh tour.json: both stops scene -> race -> reaction -> unlock, reload, a 4th-place retry, Race
+  again) + `racers` (16 driver x machine starts, pictures, a split-screen pick).
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -168,6 +172,8 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
 - Round-end disk clean-up: `python Tools/cleanup_round.py`
 - Voices (Round 8): `python Tools/Audio/caller_lines.py` (Barker; `--go`, `--redo` re-records all), `python Tools/Audio/driver_lines.py` (drivers'
   mess-ups), then `python Tools/Audio/normalize_voice.py` (every voice clip to -16 LUFS). Playtest logs: `python Tools/playtest_summary.py <folder> [--out x.md]`.
+- Buck (Round 11): `python Tools/Audio/buck_lines.py` (dry run; `--go` records missing lines in the ElevenLabs voice "ShiftStorm Buck",
+  `--redo id ...`), then `python Tools/Audio/buck_audit.py` (local speech-to-text -> `Docs/Checks/round11/buck_lines.md`).
 
 ## Where things stand
 **Always check `TODO.md` for the current objective before starting work.**
@@ -327,4 +333,24 @@ Round 9 delivered as build 11 (0.8.2), 2026-11-15.
     through Coaster Coast's station straight on five lines, logging heading jumps and the colliders round it. Known: ~1 AI lap in 3 on
     Coaster Coast is reset just after the Midway flight (thrown sideways near the station; not reproduced with one car).
 
-Round 10 delivered as build 12 (0.9.0), 2026-11-15 — waiting for Dan's review (`TODO.md`: per-item status and "For Dan to check").
+Round 10 delivered as build 12 (0.9.0), 2026-11-15.
+
+- **Round 11 (build 13, 0.10.0): Buck arrives, The Tour, choose your racer** (Docs/STORY.md is the story direction):
+  - **Buck "Big Finish" Barlow** (`Race/Buck.cs`): the tour's organiser; TeedOff Barker still calls the races, Buck talks before and
+    after them and in The Tour's scenes, never at once (Barker plays nothing while `Buck.Busy`; `Buck.Hold` stops Barker and the
+    drivers). 53 lines, ElevenLabs voice "ShiftStorm Buck" (`Resources/Audio/Voice/buck`, pools by prefix: brief_pp/cc, short_pp/cc,
+    res_<pp|cc>_<first|podium|back>, yarn, tour_*). Briefing: before a course's first race / time trial of the session, time stopped,
+    a card (placeholder portrait `Buck.Portrait`, name, subtitles) on the HUD, A / Enter skips; Settings "Buck's briefings" On / Short /
+    Off. Results remark after Barker's results line (races, not The Tour). Checks: `Buck.Enabled` (off in check runs unless a check
+    turns it on).
+  - **The Tour** (`Race/Tour.cs`): Menu > The Tour; Stop 1 The Trial (Paradise Plunge), Stop 2 Opening Night (Coaster Coast): scene
+    (Buck's lines over a camera flight along the course, skippable) -> race -> Buck's reaction; points 10 / 6 / 4 / 2, a top-3 finish
+    unlocks the next stop, best place / points kept on a retry; `tour.json` beside settings.json; Race again retries the stop (no scene).
+  - **Choose your racer** (`Race/Lineup.cs`): before Race, Time Trial and a Tour stop (Menu page "Choose your racer", the Garage
+    turntable): a driver (Abi, Rae, Chip, Vivi) and a machine (Jetstream, Grand Prix, Hot Rod, Scrambler); the other three race as the
+    AI in their own machines (Abi's: Jetstream; recoloured only when a player races the same one). 2 Players: each player's driver and
+    machine on its page. Saved (`settings.json` "driver", "design", "driver2", "design2"). Vehicles are re-seated in place
+    (`Driver.Swap`, `FormSet.SetBody` / `SetOwnDesign`), so everything holding a vehicle keeps it. Barker's overtake / winner lines go
+    by name (4 new "Abi" lines).
+  - Buck's look: 3 image prompts (human / bear / dog) and his Mixamo clip list in `Docs/MODELS-NEEDED.md`; the placeholder card stays.
+

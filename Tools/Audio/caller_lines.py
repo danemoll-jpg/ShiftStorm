@@ -241,6 +241,14 @@ ROUND10 = {
     "ppres_2": "[delighted] That was Paradise Plunge, folks! Jungle, lagoon and all!",
 }
 LINES.update(ROUND10)
+# Round 11: choose your racer: Abi can be an AI rival now (passed by / passing her, like Rae / Chip / Vivi)
+ROUND11 = {
+    "passabi_1": "[showman] Right past Abi! The competitor won't take that lying down!",
+    "passabi_2": "[excited] And Abi gets overtaken! She'll want that one back!",
+    "byabi_1": "[showman] Here comes Abi! Focused, fearless and flying by!",
+    "byabi_2": "[excited] Abi takes the place! What a move!",
+}
+LINES.update(ROUND11)
 # his Tee'd Off clips that fit a race (copied as they are): id here -> Tee'd Off file
 EXISTING = {
     "win_any_1": "winner_1", "win_any_2": "winner_3", "win_any_3": "winner_5", "win_any_4": "finale_1",

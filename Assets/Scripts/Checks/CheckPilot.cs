@@ -222,6 +222,10 @@ namespace ShiftStorm
             if (cc || which == "ccrails") yield return CoasterRails();
             if (cc || which == "ccsplits") yield return CoasterSplits();
             if (which == "ccprobe") yield return CoasterProbe();
+            bool r11 = which == "round11";   // Round 11: Buck, The Tour, choose your racer
+            if (r11 || which == "buck") yield return BuckCheck();
+            if (r11 || which == "tour") yield return TourCheck();
+            if (r11 || which == "racers") yield return RacersCheck();
             bool r9 = which == "round9";
             if (r9) yield return SteeringCheck();
             if (r9 || which == "sounds") yield return SoundsCheck();

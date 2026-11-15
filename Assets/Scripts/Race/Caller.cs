@@ -32,7 +32,11 @@ namespace ShiftStorm
         public string Subtitle { get; private set; } = ""; public float SubtitleUntil { get; private set; } = -1;
         public int Clips => pools.Values.Sum(l => l.Count);
         public int Pools => pools.Count;
-        public bool Talking => Time.time < busyUntil && voice && voice.isPlaying;
+        public bool BarkerTalking => Time.time < busyUntil && voice && voice.isPlaying;
+        public bool Talking => BarkerTalking || (Buck.Instance && Buck.Instance.Busy);   // Round 11: the drivers wait for Buck too
+        // Round 11: after Buck's briefing, Barker's start line (held back while Buck talked)
+        public void Quiet() { if (voice) voice.Stop(); busyUntil = Time.time; SubtitleUntil = 0; }   // Round 11: Buck starts a briefing / scene
+        public void AfterBriefing(ShiftVehicle p) { if (p && p.Course && p.Course.timeTrial) Call(game.Race && game.Race.Active ? "start" : "trial", p, true); }
         public AudioSource Voice => voice;
         // Round 8: the music and the engines under his lines (and a little under a driver's yell): 1 = full, 0.4 = -8 dB
         public static float Duck { get; private set; } = 1;
@@ -51,7 +55,7 @@ namespace ShiftStorm
             ["wings"] = (25, 2), ["stay"] = (25, 1), ["shortcut"] = (25, 1), ["miss"] = (12, 2), ["wall"] = (12, 0), ["splash"] = (20, 1), ["final"] = (60, 1),
             ["photo"] = (60, 3), ["win"] = (60, 3), ["results"] = (60, 2), ["podium"] = (60, 2), ["last"] = (60, 2),
             ["tocar"] = (14, 1), ["toboat"] = (14, 1), ["toplane"] = (14, 1), ["tosub"] = (14, 1),
-            ["passrae"] = (20, 1), ["passchip"] = (20, 1), ["passvivi"] = (20, 1), ["byrae"] = (20, 1), ["bychip"] = (20, 1), ["byvivi"] = (20, 1),
+            ["passrae"] = (20, 1), ["passchip"] = (20, 1), ["passvivi"] = (20, 1), ["byrae"] = (20, 1), ["bychip"] = (20, 1), ["byvivi"] = (20, 1), ["passabi"] = (20, 1), ["byabi"] = (20, 1),
             ["up"] = (14, 1), ["down"] = (14, 1), ["close"] = (22, 1), ["behind"] = (35, 0), ["catch"] = (30, 1),
             ["creek"] = (30, 1), ["cliff"] = (30, 1), ["boost"] = (30, 0), ["canyon"] = (40, 0),
             ["fill"] = (7, 0),
@@ -253,7 +257,7 @@ namespace ShiftStorm
                     bool now = order.IndexOf(h) < order.IndexOf(r);
                     if (ahead.TryGetValue((h, r), out var was) && was != now && Mathf.Abs(h.RaceDistance - r.RaceDistance) < .02f + 30f / Mathf.Max(1f, h.Course.Length))
                     {
-                        string who = r.RacerName.StartsWith("Rocket") ? "rae" : r.RacerName.StartsWith("Chip") ? "chip" : r.RacerName.StartsWith("Vivi") ? "vivi" : "";
+                        string who = NameKey(r);   // Round 11: by the racer's name (any driver may be an AI rival now)
                         if (who != "" && Call((now ? "pass" : "by") + who, now ? h : r)) named = true;
                     }
                     ahead[(h, r)] = now;
@@ -329,9 +333,10 @@ namespace ShiftStorm
         readonly Dictionary<ShiftVehicle, float> finishedAt = new Dictionary<ShiftVehicle, float>();
         float FinishedAt(ShiftVehicle v) { if (!finishedAt.TryGetValue(v, out var t)) finishedAt[v] = t = Time.time; return t; }
 
+        static string NameKey(ShiftVehicle r) => r.RacerName.StartsWith("Rocket") ? "rae" : r.RacerName.StartsWith("Chip") ? "chip" : r.RacerName.StartsWith("Vivi") ? "vivi" : r.RacerName.StartsWith("Abi") ? "abi" : "";
         void CallWinner(ShiftVehicle w)
         {
-            string id = w == game.Player ? "win_abi" : w == game.Player2 ? "win_p2" : w.RacerName.StartsWith("Rocket") ? "win_rae" : w.RacerName.StartsWith("Chip") ? "win_chip" : w.RacerName.StartsWith("Vivi") ? "win_vivi" : "";
+            string id = w == game.Player2 ? "win_p2" : NameKey(w) != "" ? "win_" + NameKey(w) : "";   // Round 11: the winner by name (player 1 may drive anyone)
             if (!pools.TryGetValue("win", out var all)) return;
             var own = all.Where(c => c.name == id).ToList(); var any = all.Where(c => c.name.StartsWith("win_any")).ToList();
             var pick = own.Count > 0 && (any.Count == 0 || Random.value < .7f) ? own : any.Count > 0 ? any : all;
@@ -341,6 +346,7 @@ namespace ShiftStorm
         public bool Call(string pool, ShiftVehicle who, bool force = false)
         {
             pool = ForCourse(pool, who); if (pool == "") return false;
+            if (Buck.Instance && Buck.Instance.Busy) { Skipped.Add($"{Time.time:0.0} {pool}: Buck talking"); return false; }   // Round 11: never over Buck
             if (!pools.TryGetValue(pool, out var list) || list.Count == 0) { Skipped.Add($"{Time.time:0.0} {pool}: no clips"); return false; }
             if (pool == "results") list = list.Where(c => !c.name.StartsWith("results_lost")).ToList();
             return Play(pool, list, Rules.TryGetValue(pool, out var r) ? r.pri : 1, who, force);
@@ -348,6 +354,7 @@ namespace ShiftStorm
         bool Play(string pool, List<AudioClip> list, int pri, ShiftVehicle who, bool force = false)
         {
             float now = Time.time; var rule = Rules.TryGetValue(pool, out var r) ? r : (20f, 1);
+            if (Buck.Instance && Buck.Instance.Busy) { Skipped.Add($"{now:0.0} {pool}: Buck talking"); return false; }   // Round 11: never over Buck, not even GO / the winner
             if (poolNext.TryGetValue(pool, out var t) && now < t && !force) { Skipped.Add($"{now:0.0} {pool}: cooldown"); return false; }
             bool talking = Talking;
             // never over another line: only the top calls (GO, the winner, a photo finish) cut him off; a driver's short yell waits out a normal call

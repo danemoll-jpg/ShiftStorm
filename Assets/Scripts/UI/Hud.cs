@@ -82,7 +82,18 @@ namespace ShiftStorm
             menuPanel = Panel(p, new Vector2(700, 560), new Color(.05f, .07f, .06f, .9f));
             menu = Label(menuPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 26, TextAnchor.MiddleCenter, new Vector2(680, 540)); menu.supportRichText = true;
             menuPanel.SetActive(false);
+            // Round 11 item 2: Buck's card (a briefing, a Tour scene): portrait placeholder, his name, the subtitle, the skip hint
+            buckCard = Panel(p, new Vector2(860, 170), new Color(.08f, .05f, .03f, .88f));
+            var bkr = buckCard.GetComponent<RectTransform>(); bkr.anchorMin = bkr.anchorMax = bkr.pivot = new Vector2(.5f, 0); bkr.anchoredPosition = new Vector2(0, 150);
+            var pg = new GameObject("Buck portrait"); pg.transform.SetParent(buckCard.transform, false); var pi = pg.AddComponent<RawImage>(); pi.texture = Buck.Portrait;
+            var pr = pi.rectTransform; pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0, .5f); pr.anchoredPosition = new Vector2(14, 0); pr.sizeDelta = new Vector2(144, 144);
+            var bt = Label(buckCard.transform, new Vector2(0, 1), new Vector2(176, -12), 22, TextAnchor.UpperLeft, new Vector2(660, 30)); bt.text = Buck.Title; bt.color = new Color(1f, .78f, .3f);
+            buckSub = Label(buckCard.transform, new Vector2(0, 1), new Vector2(176, -44), 22, TextAnchor.UpperLeft, new Vector2(660, 100)); buckSub.horizontalOverflow = HorizontalWrapMode.Wrap;
+            buckHint = Label(buckCard.transform, new Vector2(1, 0), new Vector2(-14, 10), 16, TextAnchor.LowerRight, new Vector2(300, 22)); buckHint.color = new Color(.85f, .85f, .75f);
+            buckCard.SetActive(false);
         }
+        GameObject buckCard; Text buckSub, buckHint;
+        public bool BuckCardShown => buckCard && buckCard.activeSelf;
 
         Camera cam;
         static string Form(Mode m) => m == Mode.Drive ? "CAR" : m == Mode.Boat ? "BOAT" : m == Mode.Fly ? "WINGS" : "SUB";
@@ -98,6 +109,9 @@ namespace ShiftStorm
             string extra = v.Drifting ? "  DRIFT" : v.Carving ? "  CARVE" : "";
             mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}{extra}";
             UpdateGuide();
+            var bk = Buck.Instance; bool card = bk && (bk.CardOn || (bk.Voice && bk.Voice.isPlaying && bk.Subtitle != ""));
+            if (buckCard && card != buckCard.activeSelf) buckCard.SetActive(card);
+            if (card) { buckSub.text = bk.Subtitle; buckHint.text = bk.CardOn ? bk.Hint : ""; }
             boostFill.offsetMax = new Vector2(3 + 314 * v.Boost, -3); boostImage.color = v.Boosting ? new Color(1, .45f, .1f) : new Color(1, .78f, .15f);
             var c = v.Course; bool trial = c && c.timeTrial;
             float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime + v.Penalty;   // Round 4: near-miss penalties count at once
@@ -119,7 +133,8 @@ namespace ShiftStorm
             }
             else segment.text = "";
             // center: countdown, then cues
-            if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }
+            if (Buck.Instance && Buck.Instance.CardOn) center.text = "";   // Round 11: no frozen countdown number under Buck's card
+            else if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }
             else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
             else if (v.WingsOpen && v.GroundedWheels == 0)   // Round 7: the choice jump's wings window
             { center.fontSize = 64; center.color = new Color(.55f, .95f, 1f); center.text = v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }
@@ -169,6 +184,8 @@ namespace ShiftStorm
         {
             var sb = new StringBuilder(); var race = game.Race;
             sb.AppendLine($"<size=30><b>{c.courseName}</b></size>{(race && race.Active ? $"   <size=24>RACE: <b>{Race.Ordinal(race.Place(v))}</b> of {race.Racers.Count}</size>" : "   <size=22>TIME TRIAL</size>")}");
+            // Round 11: The Tour's result at the top (Buck's card covers the bottom while he talks)
+            if (Tour.ActiveStop >= 0 && Tour.Note != "" && player != 2) sb.AppendLine($"<size=19><color=#ffd34d>{Tour.Note}</color>   (total {Tour.Total} points)</size>");
             if (race && race.Active)
             {
                 var order = race.Order();

@@ -106,7 +106,7 @@ namespace ShiftStorm
         {
             scenario = "split"; Clear(); coast = true; BeginAt(ArgInt("-course", 0), 0); yield return Wait(.3f);   // Round 10: -course 1 = Coaster Coast
             Pads();
-            SplitScreen.P1Device = pad1; SplitScreen.P2Device = pad2; SplitScreen.P2Pick = 0; SplitScreen.AiCount = 2;
+            SplitScreen.P1Device = pad1; SplitScreen.P2Device = pad2; Settings.Driver2 = 1; SplitScreen.AiCount = 2;
             var lr = Environment.GetCommandLineArgs().Contains("-leftRight"); if (lr) Settings.SplitLeftRight = true;
             game.StartSplit(true); yield return null;
             var s = SplitScreen.Session; var p2 = s.P2; var h1 = Hud.Instance; var h2 = s.Hud2;

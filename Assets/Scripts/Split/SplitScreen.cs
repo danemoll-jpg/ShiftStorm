@@ -29,7 +29,7 @@ namespace ShiftStorm
         public static int P2Pick;            // index into Rival.Roster: player 2's driver and colour
         public static int AiCount = 2;       // 0-2 AI racers in a 2-player race
         public static bool LeftRight => Settings.SplitLeftRight;
-        public static Rival P2Rival => Rival.Roster[Mathf.Clamp(P2Pick, 0, Rival.Roster.Length - 1)];
+        public static Rival P2Rival => Lineup.P2;   // Round 11: any driver player 1 did not pick (Settings.Driver2)
         public static string DeviceName(InputDevice d) => d == null ? "-" : d is Keyboard ? "Keyboard" : d is Gamepad g ? "Controller " + (Gamepad.all.ToList().IndexOf(g) + 1) + (string.IsNullOrEmpty(g.displayName) ? "" : " (" + g.displayName + ")") : d.displayName;
         public static readonly List<Camera> Views = new List<Camera>();
         public static int PlayerOf(ShiftVehicle v) => !Session || !v ? (v && v.IsPlayer ? 1 : 0) : v == Session.P1 ? 1 : v == Session.P2 ? 2 : 0;

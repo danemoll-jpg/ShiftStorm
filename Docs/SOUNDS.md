@@ -91,3 +91,14 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   the helter-skelter, fireworks, the balloon, the flume, the lighthouse, the pier, the carousel, the octopus, the whale / dolphins, the splash
   pool, and a results line naming each course (`ccres_*`, `ppres_*`). On Coaster Coast the Paradise Plunge pools that name the jungle swap
   for these (`Caller.ForCourse`); set-piece lines only while it is big on screen (`SetPiece`).
+
+## Round 11 (2026-11-15): Buck "Big Finish" Barlow (`Race/Buck.cs`, **Voices** volume)
+- **53 lines** in his own ElevenLabs voice **"ShiftStorm Buck"** (Dan's, eleven_v3; `Tools/Audio/buck_lines.py`, 2,602 credits), levelled
+  to -16 LUFS like every voice: `Resources/Audio/Voice/buck/<id>.ogg` + `lines.json` (subtitles). Pools: briefings per course (4 each),
+  short briefings (2 each), results remarks by place per course (9 each), anecdotes (6), The Tour's scenes and reactions (17).
+  Transcribed back with local speech-to-text: `Docs/Checks/round11/buck_lines.md` (52 of 53 at a 0.80+ word match; the 53rd is
+  "all right" heard as "alright").
+- Never over anyone: while he talks Barker plays nothing (not even GO or the winner: `Caller.Play`), drivers wait (`Caller.Talking`), and
+  his briefing / scene starts by stopping Barker and any driver line (`Buck.Hold`). Music and engines duck under him as under Barker.
+- Barker: 4 new lines for Abi as an AI rival (passabi_1-2, byabi_1-2, his voice, 101 credits); overtakes and the winner's line now go
+  by the racer's name (any driver can be player 1 or the AI).

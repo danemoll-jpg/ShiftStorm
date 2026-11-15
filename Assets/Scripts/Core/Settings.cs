@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; }   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
+        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; public int buck; public int driver; public int driver2 = 1; public string design2 = ""; }   // Round 11: Buck's briefings 0 On / 1 Short / 2 Off; player 1's / 2's driver (Lineup.All: 0 Abi, 1 Rae, 2 Chip, 3 Vivi) and player 2's machine   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -93,6 +93,13 @@ namespace ShiftStorm
             get { var a = Environment.GetCommandLineArgs(); int i = Array.IndexOf(a, "-design"); if (i >= 0 && i + 1 < a.Length) return a[i + 1]; return string.IsNullOrEmpty(D.design) ? VehicleDesigns.Default : D.design; }
             set { D.design = value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] vehicle design {value}{(QuietRun.Check ? " (check run: not saved)" : " (saved)")}"); }
         }
+        // Round 11: Buck's briefings (Menu > Settings: On / Short / Off); each player's driver and player 2's machine (choose your racer).
+        // A check run reads the defaults (briefings On, Abi + Jetstream) and saves nothing.
+        public static int BuckBriefings { get => Mathf.Clamp(D.buck, 0, 2); set { D.buck = Mathf.Clamp(value, 0, 2); if (!QuietRun.Check) Save(); Debug.Log($"[Settings] Buck's briefings {BuckNames[D.buck]}"); } }
+        public static readonly string[] BuckNames = { "On", "Short", "Off" };
+        public static int Driver { get => Mathf.Clamp(D.driver, 0, 3); set { D.driver = Mathf.Clamp(value, 0, 3); if (!QuietRun.Check) Save(); } }
+        public static int Driver2 { get => Mathf.Clamp(D.driver2, 0, 3); set { D.driver2 = Mathf.Clamp(value, 0, 3); if (!QuietRun.Check) Save(); } }
+        public static string Design2 { get => string.IsNullOrEmpty(D.design2) ? "" : D.design2; set { D.design2 = value ?? ""; if (!QuietRun.Check) Save(); } }
         static bool overrideSet; static Difficulty overrideLevel;   // the player has set it once: the first-flight note is no longer needed
     }
 }

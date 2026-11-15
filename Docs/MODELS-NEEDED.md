@@ -2,6 +2,67 @@
 
 Keep each round's list short; each item is Dan's time.
 
+## Round 11 — Buck "Big Finish" Barlow: pick one of three looks (image AI, then Tripo and Mixamo by hand)
+
+Buck is the tour's organiser (`Docs/STORY.md`): a barrel-chested older showman, a retired stunt performer, warm and unshakably
+confident. Until his model exists the game shows a placeholder card (a silhouette with a hat, mustache and scarf) beside his
+subtitles. **Dan: make the three images, pick one, then one Tripo model.** Distinct from Tee'd Off's cast (Tee'd Off already has a
+grumpy old golfer with a walrus mustache: Buck's is a curled showman's handlebar, and he is cheerful). Same art direction as Tee'd
+Off's characters (`Tee-dOff/docs/characters.md`): cute stylized 3D cartoon, head about 1/5-1/4 of body height, not chibi, flat
+colours, big readable shapes, original.
+
+### Shared for all three images
+Full body, **A-pose** (arms straight, angled down about 45 degrees, away from the body; legs slightly apart), **front view**, plain
+white background, even lighting, no shadows, no cropping, empty hands, no props, no text. Optional for Tripo multiview: the same
+character from the side and from the back, same pose.
+
+### 1. Human — `Art/Concepts/Characters/Buck/Buck_Human.png`
+*"Full-body character concept art of an original cartoon showman, front view, standing in an A-pose with arms straight and angled
+down away from the body, plain white background, even lighting, no shadows. A big, barrel-chested older man in his sixties, a
+retired stunt performer, with a huge friendly grin, rosy cheeks, bushy grey eyebrows and an impressive grey handlebar mustache
+curled up at both ends, a faded red-and-gold stunt jacket with gold piping, epaulettes and a few old embroidered patches, a bright
+canary-yellow silk scarf knotted at the neck with its ends flying, a white undershirt, a wide brown belt with a big star buckle,
+cream riding trousers tucked into tall brown boots, and a battered red ringmaster-style top hat. Warm, genial, endlessly confident.
+Cute stylized 3D cartoon style, head slightly large but normal proportions, not chibi. Empty hands, no props."*
+
+### 2. Broad bear — `Art/Concepts/Characters/Buck/Buck_Bear.png`
+*"Full-body character concept art of an original cartoon showman, front view, standing upright on two legs in an A-pose with arms
+straight and angled down away from the body, plain white background, even lighting, no shadows. A big, broad, barrel-chested older
+brown bear, a retired stunt performer, with a greying muzzle, a huge friendly grin, small round ears, and an impressive cream
+handlebar mustache curled up at both ends, wearing a faded red-and-gold stunt jacket with gold piping, epaulettes and old
+embroidered patches, a bright canary-yellow silk scarf knotted at the neck with its ends flying, a wide brown belt with a big star
+buckle, cream trousers and tall brown boots, and a battered red ringmaster-style top hat between his ears. Warm, genial, endlessly
+confident. Cute stylized 3D cartoon style, head slightly large but normal proportions, not chibi. Empty hands (paws with five short
+fingers), no props."*
+
+### 3. Stocky dog — `Art/Concepts/Characters/Buck/Buck_Dog.png`
+*"Full-body character concept art of an original cartoon showman, front view, standing upright on two legs in an A-pose with arms
+straight and angled down away from the body, plain white background, even lighting, no shadows. A stocky, barrel-chested older
+bulldog-type dog, a retired stunt performer, with a broad jowly face, a greying muzzle, floppy ears, a huge friendly underbite grin
+and an impressive white handlebar mustache curled up at both ends, wearing a faded red-and-gold stunt jacket with gold piping,
+epaulettes and old embroidered patches, a bright canary-yellow silk scarf knotted at the neck with its ends flying, a wide brown
+belt with a big star buckle, cream trousers and tall brown boots, and a battered red ringmaster-style top hat. Warm, genial,
+endlessly confident. Cute stylized 3D cartoon style, head slightly large but normal proportions, not chibi. Empty hands (paws with
+five short fingers), no props."*
+
+### Tripo (the picked one)
+Image to Model (multiview if you made side / back images), **textured, detailed (not low-poly), FBX**, A-pose kept. Save to
+`Art/Incoming/Characters/Buck/Buck.fbx` (or the Tripo zip as downloaded). Code then cleans it in Blender (scale ~1.85 m tall,
+origin at the feet, facing +Z, LOD), renders previews and stops to show you.
+
+### Mixamo (after the model is approved)
+Upload `Buck.fbx`, auto-rig, then download **FBX for Unity, with skin** for the rig, and each clip **without skin, 30 fps, In Place
+where offered**, into `Art/Incoming/Characters/Buck/Animations/` with these file names:
+| File | Mixamo search name | Used for |
+|---|---|---|
+| `Buck_Talking.fbx` | "Talking" | his briefings and scenes (loop under any line) |
+| `Buck_Gesture.fbx` | "Explaining" | the big "perfectly safe" explanations |
+| `Buck_Flourish.fbx` | "Bow" (the showman's bow) | the opening of a briefing / scene |
+| `Buck_ThumbsUp.fbx` | "Thumbs Up" | results: a podium |
+| `Buck_Laugh.fbx` | "Laughing" | the nervous little laugh after a wild claim |
+| `Buck_Clap.fbx` | "Clapping" | results: a win |
+| `Buck_Idle.fbx` | "Happy Idle" | standing between lines |
+
 ## Round 10 — Coaster Coast: three set-piece creatures (Tripo, by hand) — optional, stand-ins in the game now
 
 Coaster Coast runs with primitive stand-ins for these three (they already move: the balloon bobs, the whale and the octopus are

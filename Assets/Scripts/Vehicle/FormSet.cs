@@ -36,6 +36,7 @@ namespace ShiftStorm
         // recoloured to the rival's colour only while the player races the same design
         public string OwnDesign { get; private set; }
         public void SetOwnDesign(string design) { OwnDesign = design; Restyle(); }
+        public void SetBody(Color c) { body = c; }   // Round 11: a rival vehicle re-seated as another driver takes their colour (applied by the next Restyle)
         public void Restyle() { if (string.IsNullOrEmpty(OwnDesign)) Build(Settings.Design); else Build(OwnDesign); }
         Color TextureTint => !string.IsNullOrEmpty(OwnDesign) && OwnDesign != Settings.Design ? VehicleDesigns.PlayerTint : body;
         public VehicleDesigns.Design Design { get; private set; }
