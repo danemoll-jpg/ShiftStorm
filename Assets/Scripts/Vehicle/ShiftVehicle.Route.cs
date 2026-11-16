@@ -45,7 +45,7 @@ namespace ShiftStorm
             // follows the shortcut
             Shortcut near = null; float nearS = 0;
             if (!sc) foreach (var s2 in Course.shortcuts)
-                    if (s2.nextGate == GatesPassed) { float ss = s2.Project(p, -1, out var a2, out _); if (ss > 5 && ss < s2.Length - 5 && Vector3.Distance(p, a2) < s2.halfWidth) { near = s2; nearS = ss; break; } }
+                    if (s2.nextGate == GatesPassed && (OldFlight || s2.entry.Allows(Mode))) { float ss = s2.Project(p, -1, out var a2, out _); if (ss > 5 && ss < s2.Length - 5 && Vector3.Distance(p, a2) < s2.halfWidth) { near = s2; nearS = ss; break; } }
             offFor = OffLine > OffRouteLimit && !near ? offFor + dt : 0; OffRoute = offFor > .4f;
             // travel direction: the velocity when moving, else the nose
             var vel = Body.linearVelocity; var travel = vel.sqrMagnitude > 9f ? vel.normalized : transform.forward;
@@ -68,6 +68,7 @@ namespace ShiftStorm
             if (past)
             {
                 if (MissedGate != g) { MissedGate = g; missedFor = 0; Note("missed", $"missed gate {g.label} ({over:0} m past it, {Mode}): turn back"); }
+                if (!OldFlight && !g.Allows(Mode) && shared.missedGateResetMeters < 9000) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label} as {Mode}"); return; }   // Round 12: in the wrong form turning back cannot earn it
                 var toGate = g.transform.position - p; returning = Vector3.Dot(travel, toGate.normalized) > .5f;
                 if (!returning) missedFor += dt;
                 if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label}"); return; }
@@ -78,7 +79,10 @@ namespace ShiftStorm
             float ahead = Mathf.Clamp(Speed * 1.6f, 45f, 170f);
             float aim = Progress + (OffRoute ? ahead * .6f : ahead);
             if (g) aim = Mathf.Min(aim, g.progress + 2f);
-            GuideTarget = MissedGate ? MissedGate.transform.position : sc ? sc.PointAt(scS + ahead, out _) : near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
+            // Round 12 item 3: the arrow follows a shortcut only once it is entered. Build 13 followed any shortcut whose line was within its width
+            // before its entry: the Sky Arch slit's line starts on the route 490 m before the arch, so the arrow led every plane to a 22 m slit
+            // 190 m off the line; a miss there was reset to the anchor before the flight (lip + 90) and the arrow led it back in: a loop.
+            GuideTarget = MissedGate ? MissedGate.transform.position : sc ? sc.PointAt(scS + ahead, out _) : OldFlight && near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
 
             // the cue, most important first
             if (Holding || Finished || Time.time < MissCueUntil) return;

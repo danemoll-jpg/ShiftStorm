@@ -664,13 +664,30 @@ namespace ShiftStorm
                 g.transform.SetPositionAndRotation(q, Facing(p)); var a = g.AddComponent<RecoveryAnchor>(); a.mode = mode; a.progress = p; a.speed = speed; c.anchors.Add(a);
             }
             // Round 7: one before each jump with a higher restart speed (45 m/s; the gaps need about 38), one before the loop's boost pad
-            A(M("start"), Mode.Drive); A(M("jA") - 150, Mode.Drive, 45); A(M("promMid"), Mode.Drive); A(M("loopIn") - BoostPadBefore - 60, Mode.Drive, 30); A(M("loopOut") + 20, Mode.Drive, 45); A(M("jC") + 80, Mode.Drive, 40);
+            A(M("start"), Mode.Drive); A(M("jA") - 150, Mode.Drive, 45); A(M("promMid"), Mode.Drive); A(M("loopIn") - BoostPadBefore - 60, Mode.Drive, 30); A(M("loopOut") + 20, Mode.Drive, 45); A(M("jC") + 80, Mode.Drive, 40); if (!ShiftVehicle.OldFlight) A(M("G1") - 25, Mode.Drive, 45);   /* Round 12: the Lake flight's rejoin */
             A(M("climbMid") - 80 - 160, Mode.Drive, 45); A(M("climb0") - 15, Mode.Drive); A(M("climbMid"), Mode.Drive, 40); A(M("rampStart") - 35, Mode.Drive);
             A(M("lip") + 90, Mode.Fly); A(M("arch") + 90, Mode.Fly);
+            if (!ShiftVehicle.OldFlight) A(M("splash") + 22, Mode.Boat);   /* Round 12: in the landing corridor before G4 (a plane over G4 resets here) */
             A(M("splash") + 70, Mode.Boat); A(M("bend2"), Mode.Boat); A(M("bend4") - 20, Mode.Boat); A(M("G5") + 12, Mode.Boat);
             A(M("portal") + 45, Mode.Dive); A(M("hi2") - 25, Mode.Dive); A(M("G7") - 30, Mode.Dive);
             A(M("G8") - 14, Mode.Boat); A(M("G9") + 20, Mode.Drive);
+            if (!ShiftVehicle.OldFlight) FillAnchors(A);
             c.Finish();
+        }
+        // Round 12 item 3 ("a reset never costs more than a few seconds of progress"): between two anchors of the same form more than 330 m
+        // apart, more anchors on the line every ~220 m, never within 60 m after or 320 m before a jump's lip, near the loop, or in the air
+        // (the flight sections reset on the flight line itself: ShiftVehicle.Recover)
+        static void FillAnchors(System.Action<float, Mode, float> A)
+        {
+            var list = new List<(float p, Mode m)>(); foreach (var a in c.anchors) list.Add((a.progress, a.mode)); list.Sort((x, y) => x.p.CompareTo(y.p));
+            bool Bad(float p) { foreach (var j in Jumps) if (p > j.lip - 320 && p < j.lip + j.gap + 60) return true; return StuntNear(p) || InGap(p); }
+            for (int i = 0; i + 1 < list.Count; i++)
+            {
+                var (p0, m0) = list[i]; var (p1, m1) = list[i + 1];
+                if (m0 != m1 || m0 == Mode.Fly || p1 - p0 < 330) continue;
+                int n = Mathf.CeilToInt((p1 - p0) / 220f);
+                for (int k = 1; k < n; k++) { float p = Mathf.Lerp(p0, p1, k / (float)n); if (!Bad(p)) { A(p, m0, -1); Debug.Log($"[Course] extra anchor {m0} at {p:0} m (between {p0:0} and {p1:0})"); } }
+            }
         }
         static void Signs()
         {
@@ -709,7 +726,7 @@ namespace ShiftStorm
             Box(root, "Slit buttress moss", q + r * -179 + Vector3.up * (top + 1), new Vector3(242, 2, 26), moss, f, false);
             var sz = Vol<SlipstreamZone>("Slit updraft", q + r * slit + Vector3.up * 52, f, new Vector3(half * 2 - 2, hi - lo - 2, 44)); sz.speed = 108;
             var sk = new List<Vector3> { At(ar - 490), At(ar - 450), q + r * slit + Vector3.up * 52, At(ar + 600), At(ar + 640) };
-            MakeShortcut("Sky Arch slit", sk, ar - 490, ar + 640, 3, 3, 30f, new Vector2(half + 3, (hi - lo) * .5f + 3), new Vector2(32, 26), -2, 70f, Mode.Fly);
+            MakeShortcut("Sky Arch slit", sk, ar - 490, ar + 640, 3, 3, 30f, new Vector2(half + 3, (hi - lo) * .5f + 3), new Vector2(32, 26), -2, 70f, Mode.Fly).flight = true;   // Round 12: a reset on it goes forward (G3 counted, +3 s)
             LakeFlight();   // Round 7: the choice jump's flight branch
 
             // 2 Coral Vault low tunnel: down through an opening in the cave floor just after the first curtain (lo1), under the chamber's

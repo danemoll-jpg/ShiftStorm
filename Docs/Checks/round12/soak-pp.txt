@@ -1,0 +1,102 @@
+ShiftStorm check 'soak', 2026-11-15 23:02, build 0.10.1, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SOAK (Paradise Plunge): 50 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+  race 1: Rocket Rae 132.1 [Lake flight], Chip "Showtime" Sterling 133.8, Vivi 134.9, Abi 135.7
+  race 2: Rocket Rae 133.0, Abi 133.2 [Lake flight+Coral Vault tunnel], Chip "Showtime" Sterling 133.6 [Coral Vault tunnel], Vivi 134.7 (1 resets) [Lake flight]
+  race 3: Rocket Rae 132.7, Abi 133.6 [Lake flight], Vivi 133.7 [Lake flight], Chip "Showtime" Sterling 134.2 (1 resets) [Lake flight+Coral Vault tunnel]
+  race 4: Rocket Rae 131.7 [Lake flight], Chip "Showtime" Sterling 133.4 [Coral Vault tunnel], Vivi 133.6 [Lake flight], Abi 134.1
+  race 5: Rocket Rae 131.4 [Lake flight], Chip "Showtime" Sterling 134.0, Vivi 134.6, Abi 135.2
+  race 6: Rocket Rae 133.2, Abi 133.3 [Lake flight], Chip "Showtime" Sterling 134.3, Vivi 134.9
+  race 7: Rocket Rae 133.5 (1 resets) [Lake flight], Chip "Showtime" Sterling 134.3 [Lake flight], Abi 134.6, Vivi 136.3 [Lake flight]
+  race 8: Rocket Rae 130.8 [Lake flight+Sky Arch slit], Abi 134.9, Vivi 135.0, Chip "Showtime" Sterling 135.6 [Lake flight+Coral Vault tunnel]
+  race 9: Rocket Rae 132.8, Chip "Showtime" Sterling 133.4 [Lake flight], Abi 133.5 [Lake flight+Coral Vault tunnel], Vivi 134.5
+  race 10: Chip "Showtime" Sterling 132.2 [Lake flight+Coral Vault tunnel], Rocket Rae 133.3, Abi 133.6 [Lake flight], Vivi 135.9
+  race 11: Rocket Rae 131.1 [Lake flight+Sky Arch slit], Abi 132.4 [Lake flight+Sky Arch slit+Coral Vault tunnel], Chip "Showtime" Sterling 135.0, Vivi 135.7
+  race 12: Chip "Showtime" Sterling 132.3 [Lake flight+Coral Vault tunnel], Rocket Rae 133.2, Vivi 134.2 [Lake flight], Abi 134.5
+  race 13: Rocket Rae 131.5 [Lake flight], Abi 133.3, Vivi 135.4, Chip "Showtime" Sterling 137.6 [Lake flight]
+SOAK PASS: 50 of 50 laps finished within 300 s (need 48); 0 counted finishes with a bad gate sequence; lap times min 130.8 / median 133.6 / max 136.3 s; shortcuts taken: Lake flight 24, Coral Vault tunnel 9, Sky Arch slit 3
+  resets: 6 in 50 laps; by reason: fell off the climb 6
+  stuck spot near x 80, z 1120: 6 resets (fell off the climb 6; Vivi, Chip "Showtime" Sterling, Rocket Rae)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.88 ms, 95th pct 4.32 ms, 99th pct 5.80 ms, worst 212.20 ms over 206820 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  soak1        Drive->Fly  z   944.8  0.601 s  frames worst 12.97 / mean 2.75 ms
+  soak1        Fly->Boat   z  -607.2  0.602 s  frames worst 8.35 / mean 3.01 ms
+  soak1        Boat->Dive  z  -204.1  0.601 s  frames worst 7.32 / mean 3.13 ms
+  soak1        Dive->Boat  z  -466.6  0.601 s  frames worst 9.50 / mean 3.45 ms
+  soak1        Boat->Drive z  -304.7  0.605 s  frames worst 7.95 / mean 2.80 ms
+  soak2        Drive->Fly  z   652.0  0.603 s  frames worst 9.43 / mean 3.20 ms
+  soak2        Fly->Drive  z   929.4  0.609 s  frames worst 8.29 / mean 3.37 ms
+  soak2        Drive->Fly  z   944.8  0.601 s  frames worst 5.44 / mean 2.90 ms
+  soak2        Fly->Boat   z  -607.3  0.608 s  frames worst 8.90 / mean 3.09 ms
+  soak2        Boat->Dive  z  -202.7  0.607 s  frames worst 8.88 / mean 3.29 ms
+  soak2        Dive->Boat  z  -467.0  0.605 s  frames worst 9.68 / mean 3.12 ms
+  soak2        Boat->Drive z  -305.1  0.607 s  frames worst 9.56 / mean 3.15 ms
+  soak3        Drive->Fly  z   652.0  0.605 s  frames worst 5.76 / mean 3.52 ms
+  soak3        Fly->Drive  z   929.2  0.604 s  frames worst 7.09 / mean 3.05 ms
+  soak3        Drive->Fly  z   944.7  0.602 s  frames worst 6.61 / mean 2.77 ms
+  soak3        Fly->Boat   z  -607.0  0.604 s  frames worst 11.08 / mean 3.38 ms
+  soak3        Boat->Dive  z  -202.8  0.601 s  frames worst 6.37 / mean 2.86 ms
+  soak3        Dive->Boat  z  -466.6  0.607 s  frames worst 7.60 / mean 3.05 ms
+  soak3        Boat->Drive z  -304.7  0.604 s  frames worst 6.50 / mean 3.01 ms
+  soak4        Drive->Fly  z   944.6  0.604 s  frames worst 8.18 / mean 2.58 ms
+  soak4        Fly->Boat   z  -606.3  0.601 s  frames worst 7.94 / mean 3.26 ms
+  soak4        Boat->Dive  z  -203.2  0.611 s  frames worst 11.32 / mean 4.08 ms
+  soak4        Dive->Boat  z  -466.5  0.630 s  frames worst 26.43 / mean 7.24 ms
+  soak4        Boat->Drive z  -304.6  0.601 s  frames worst 9.56 / mean 3.17 ms
+  soak5        Drive->Fly  z   944.9  0.603 s  frames worst 9.45 / mean 3.08 ms
+  soak5        Fly->Boat   z  -607.2  0.605 s  frames worst 8.18 / mean 3.19 ms
+  soak5        Boat->Dive  z  -203.5  0.605 s  frames worst 8.55 / mean 3.18 ms
+  soak5        Dive->Boat  z  -467.0  0.601 s  frames worst 14.52 / mean 3.13 ms
+  soak5        Boat->Drive z  -305.0  0.607 s  frames worst 11.90 / mean 3.37 ms
+  soak6        Drive->Fly  z   652.0  0.601 s  frames worst 10.74 / mean 3.96 ms
+  soak6        Fly->Drive  z   929.2  0.606 s  frames worst 7.12 / mean 3.63 ms
+  soak6        Drive->Fly  z   945.3  0.601 s  frames worst 6.29 / mean 2.59 ms
+  soak6        Fly->Boat   z  -606.4  0.608 s  frames worst 9.69 / mean 3.03 ms
+  soak6        Boat->Dive  z  -202.9  0.609 s  frames worst 7.23 / mean 3.33 ms
+  soak6        Dive->Boat  z  -466.6  0.603 s  frames worst 6.90 / mean 3.22 ms
+  soak6        Boat->Drive z  -305.0  0.606 s  frames worst 8.92 / mean 3.15 ms
+  soak7        Drive->Fly  z   945.3  0.600 s  frames worst 11.70 / mean 3.04 ms
+  soak7        Fly->Boat   z  -606.6  0.605 s  frames worst 6.86 / mean 3.36 ms
+  soak7        Boat->Dive  z  -202.2  0.604 s  frames worst 6.58 / mean 3.71 ms
+  soak7        Dive->Boat  z  -466.9  0.608 s  frames worst 26.08 / mean 4.43 ms
+  soak7        Boat->Drive z  -304.9  0.601 s  frames worst 8.31 / mean 3.37 ms
+  soak8        Drive->Fly  z   944.7  0.608 s  frames worst 9.42 / mean 3.02 ms
+  soak8        Fly->Boat   z  -607.1  0.600 s  frames worst 6.63 / mean 3.24 ms
+  soak8        Boat->Dive  z  -203.1  0.604 s  frames worst 8.93 / mean 3.45 ms
+  soak8        Dive->Boat  z  -466.8  0.602 s  frames worst 10.14 / mean 3.40 ms
+  soak8        Boat->Drive z  -305.0  0.602 s  frames worst 9.82 / mean 3.19 ms
+  soak9        Drive->Fly  z   652.0  0.607 s  frames worst 6.64 / mean 3.52 ms
+  soak9        Fly->Drive  z   929.2  0.604 s  frames worst 8.67 / mean 3.65 ms
+  soak9        Drive->Fly  z   944.8  0.608 s  frames worst 7.37 / mean 3.02 ms
+  soak9        Fly->Boat   z  -606.7  0.609 s  frames worst 9.89 / mean 3.28 ms
+  soak9        Boat->Dive  z  -203.3  0.606 s  frames worst 8.88 / mean 3.09 ms
+  soak9        Dive->Boat  z  -466.9  0.604 s  frames worst 7.89 / mean 3.58 ms
+  soak9        Boat->Drive z  -305.1  0.602 s  frames worst 9.32 / mean 3.09 ms
+  soak10       Drive->Fly  z   652.0  0.602 s  frames worst 7.53 / mean 3.52 ms
+  soak10       Fly->Drive  z   929.4  0.602 s  frames worst 7.83 / mean 3.48 ms
+  soak10       Drive->Fly  z   944.9  0.600 s  frames worst 5.88 / mean 2.81 ms
+  soak10       Fly->Boat   z  -606.3  0.611 s  frames worst 9.87 / mean 3.60 ms
+  soak10       Boat->Dive  z  -202.1  0.607 s  frames worst 11.07 / mean 4.37 ms
+  soak10       Dive->Boat  z  -467.0  0.605 s  frames worst 9.85 / mean 4.23 ms
+  soak10       Boat->Drive z  -305.1  0.608 s  frames worst 45.75 / mean 3.82 ms
+  soak11       Drive->Fly  z   652.0  0.607 s  frames worst 7.75 / mean 3.62 ms
+  soak11       Fly->Drive  z   929.4  0.604 s  frames worst 7.27 / mean 3.81 ms
+  soak11       Drive->Fly  z   944.6  0.606 s  frames worst 8.38 / mean 3.12 ms
+  soak11       Fly->Boat   z  -607.4  0.605 s  frames worst 9.13 / mean 3.06 ms
+  soak11       Boat->Dive  z  -202.6  0.601 s  frames worst 6.82 / mean 3.36 ms
+  soak11       Dive->Boat  z  -466.9  0.627 s  frames worst 20.10 / mean 3.60 ms
+  soak11       Boat->Drive z  -305.0  0.607 s  frames worst 11.18 / mean 3.81 ms
+  soak12       Drive->Fly  z   944.5  0.603 s  frames worst 8.86 / mean 2.71 ms
+  soak12       Fly->Boat   z  -606.7  0.609 s  frames worst 6.51 / mean 3.09 ms
+  soak12       Boat->Dive  z  -204.0  0.607 s  frames worst 8.59 / mean 3.22 ms
+  soak12       Dive->Boat  z  -466.8  0.606 s  frames worst 7.67 / mean 3.25 ms
+  soak12       Boat->Drive z  -305.1  0.601 s  frames worst 8.02 / mean 3.30 ms
+  soak13       Drive->Fly  z   944.6  0.602 s  frames worst 10.20 / mean 2.90 ms
+  soak13       Fly->Boat   z  -606.4  0.608 s  frames worst 9.79 / mean 3.18 ms
+  soak13       Boat->Dive  z  -203.1  0.609 s  frames worst 7.81 / mean 3.33 ms
+  soak13       Dive->Boat  z  -466.9  0.609 s  frames worst 13.72 / mean 3.54 ms
+  soak13       Boat->Drive z  -305.0  0.604 s  frames worst 7.13 / mean 2.93 ms
+sound: music results playing (its own signal peak 0.000), splashes played 13, Abi lines: waterfall: laugh_1; win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: lucky_1; waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

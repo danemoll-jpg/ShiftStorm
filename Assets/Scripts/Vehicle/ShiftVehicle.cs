@@ -271,7 +271,14 @@ namespace ShiftStorm
             while (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
             {
                 var g = gates[GatesPassed];
-                if (!g.Allows(Mode)) { Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); break; }
+                if (!g.Allows(Mode))
+                {
+                    Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn);
+                    // Round 12 item 3: turning back cannot help (a zone changes the form only once, so the racer stays in the wrong form): build
+                    // 13 said TURN BACK and a plane past Coaster Coast's G1 circled it for good. Now: at once to the anchor before the gate, in its form.
+                    if (!OldFlight && !Finished) { Recover($"{g.label} crossed as {Mode}"); return; }
+                    break;
+                }
                 PassGate(g, "");
             }
             // Round 4 item 6: just beside the next gate (through its plane, outside the frame, inside the near-miss band), in a permitted
@@ -279,7 +286,7 @@ namespace ShiftStorm
             if (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].CrossedNear(lastPos, p, shared.nearMissMargin, out float outBy))
             {
                 var g = gates[GatesPassed];
-                if (!g.Allows(Mode)) { Note("rejected", $"near miss of {g.label} as {Mode} ({outBy:0.0} m outside): not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); }
+                if (!g.Allows(Mode)) { Note("rejected", $"near miss of {g.label} as {Mode} ({outBy:0.0} m outside): not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); if (!OldFlight && !Finished) { Recover($"{g.label} passed as {Mode}"); return; } }
                 else if (TravelAlong(p) < .5f) Note("rejected", $"near miss of {g.label} ({outBy:0.0} m outside) not heading along the route: not counted");
                 else { AddPenalty(g.label, outBy); PassGate(g, $" (near miss, {outBy:0.0} m outside, +{shared.nearMissPenalty:0} s)"); }
             }

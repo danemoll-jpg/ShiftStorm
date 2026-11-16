@@ -40,14 +40,51 @@ namespace ShiftStorm
             if (wrongWaterFor > shared.wrongWaterSeconds) { Recover("into the water outside the landing corridor"); return; }
         }
 
+        // Round 12 item 3 (Dan: the flying shortcut "kept ... resetting me back too far and kept making me repeat the same sequence"):
+        //   on (or within 8 s of leaving) a flight branch, a reset goes FORWARD to the last anchor before the branch's rejoin (a branch that
+        //   stands in for a gate counts it), with ShiftTuning.branchRecoveryPenalty seconds added: never back behind the jump just made;
+        //   in the air anywhere else, a reset never goes more than flightResetMaxBack metres back along the line: when the earned anchor is
+        //   further back it restarts on the flight line itself, 30 m before min(best progress, the next gate), flying.
+        // a point of the line where a plane may restart: the next gate takes a plane, or the line there is well up in the air (8 m over the
+        // ground and 6 m over any water), so the plane flies on into the next form's zone as it would have
+        public static bool FlightPointOk(Course c, float p, ProgressGate next)
+        {
+            if (next == null || next.Allows(Mode.Fly)) return true;
+            var q = c.PointAt(p, out _);
+            if (Physics.Raycast(q, Vector3.down, 8f, GroundMask, QueryTriggerInteraction.Ignore)) return false;
+            return !(WaterVolume.SurfaceAt(q, out float s, 0f) && q.y - s < 6f);
+        }
+        public string LastResetHow { get; private set; } = "";
+        public float LastResetBack { get; private set; }   // metres of progress the last reset cost (negative: it went forward)
+        RecoveryAnchor flightAnchor;
         public void Recover(string reason)
         {
-            var anchor = Course.AnchorFor(BestProgress, GatesPassed);
+            float best0 = BestProgress; string how = "anchor";
+            var anchor = BranchAnchor(out var br);
+            if (anchor)
+            {
+                how = $"forward from the {br.label}";
+                if (br.replacesGate >= 0 && GatesPassed == br.replacesGate) { var g = Course.gates[GatesPassed]; GatesPassed++; GateLog.Add(g.index); ShortcutsTaken.Add(br.label + " (recovered)"); Note("gate", $"gate {g.label} counted by the {br.label}'s forward recovery ({GatesPassed}/{Course.gates.Count})"); }
+                Penalty += shared.branchRecoveryPenalty; NearMisses.Add(br.label.Replace(" ", "-") + "-reset"); MissCueUntil = Time.time + 2.5f;
+            }
+            else
+            {
+                anchor = Course.AnchorFor(BestProgress, GatesPassed);
+                float limit = BestProgress; var ng = NextGate; if (ng) limit = Mathf.Min(limit, ng.progress);
+                if (!OldFlight && anchor.mode == Mode.Fly && limit - anchor.progress > shared.flightResetMaxBack && FlightPointOk(Course, limit - 30f, ng))
+                {
+                    if (!flightAnchor) { var go = new GameObject("flight reset point"); go.transform.SetParent(transform.parent, false); flightAnchor = go.AddComponent<RecoveryAnchor>(); flightAnchor.mode = Mode.Fly; flightAnchor.speed = -1; }
+                    float p = limit - 30f; var q = Course.PointAt(p, out var d); flightAnchor.transform.SetPositionAndRotation(q, Quaternion.LookRotation(d.sqrMagnitude > 1e-4f ? d : Vector3.forward, Vector3.up)); flightAnchor.progress = p;
+                    anchor = flightAnchor; how = "on the flight line";
+                }
+            }
             bool wasChanging = Changing; var at = Body.position; float sp = Speed;
-            Resets++; LastResetReason = reason;
+            Resets++; LastResetReason = reason; LastResetHow = how; LastResetBack = best0 - anchor.progress; leftBranch = null;
             Place(anchor, anchor.mode, anchor.speed >= 0 ? anchor.speed : shared.resetSpeed);
+            if (anchor.progress > BestProgress) { BestProgress = anchor.progress; lastBest = BestProgress; }
             GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer);
-            Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}, at {p3(at)}, {sp:0} m/s, {OffLine:0} m off the line) to the anchor at {anchor.progress:0} m in {anchor.mode}");
+            if (how != "anchor") ShowCue(how.StartsWith("forward") ? $"BACK ON COURSE +{shared.branchRecoveryPenalty:0} s" : "BACK ON COURSE", CueKind.Guide, 2.5f);
+            Note("reset", $"reset ({reason}{(wasChanging ? ", during a change" : "")}, at {p3(at)}, {sp:0} m/s, {OffLine:0} m off the line) to {(how == "anchor" ? "the anchor" : how == "on the flight line" ? "the flight line" : $"the anchor ({how}, +{shared.branchRecoveryPenalty:0} s)")} at {anchor.progress:0} m in {anchor.mode}, {best0 - anchor.progress:0} m behind the best progress");
         }
 
         // Checks only: put the vehicle somewhere by hand (the skip / out-of-order tests), in a form, at a speed along its facing. Race progress

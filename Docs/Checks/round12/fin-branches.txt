@@ -1,0 +1,51 @@
+ShiftStorm check 'branches', 2026-11-15 23:43, build 0.10.1, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BRANCHES: scripted failures on every flight branch; after the fault the human-like pilot carries on by the HUD; pass = through, never reset behind the jump / branch start, no loop
+  Paradise Plunge Lake flight no-steering PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 promenade exit after 5.4 s, penalty 0 s
+  Paradise Plunge Lake flight hard-left PASS: resets 1: missed gate G1 promenade exit as Fly -> forward from the Lake flight at +314 m from the lip (65 m back); behind the jump / branch 0, loops 0; reached G1 promenade exit after 7.8 s, penalty 3 s
+  Paradise Plunge Lake flight hard-right PASS: resets 1: missed gate G1 promenade exit as Fly -> forward from the Lake flight at +314 m from the lip (66 m back); behind the jump / branch 0, loops 0; reached G1 promenade exit after 7.1 s, penalty 3 s
+  Paradise Plunge Lake flight too-high PASS: resets 1: missed gate G1 promenade exit as Fly -> anchor at +314 m from the lip (111 m back); behind the jump / branch 0, loops 0; reached G1 promenade exit after 7.4 s, penalty 0 s
+  Paradise Plunge Lake flight too-low PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 promenade exit after 5.5 s, penalty 0 s
+  Paradise Plunge Lake flight exit-missed PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 promenade exit after 5.4 s, penalty 0 s
+  Paradise Plunge Lake flight reset-button PASS: resets 1: reset button -> forward from the Lake flight at +314 m from the lip (-294 m back); behind the jump / branch 0, loops 0; reached G1 promenade exit after 2.1 s, penalty 3 s
+  Coaster Coast Midway flight no-steering PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 coaster station after 8.3 s, penalty 0 s
+  Coaster Coast Midway flight hard-left PASS: resets 1: missed gate G1 coaster station as Fly -> forward from the Midway flight at +508 m from the lip (63 m back); behind the jump / branch 0, loops 0; reached G1 coaster station after 10.9 s, penalty 3 s
+  Coaster Coast Midway flight hard-right PASS: resets 1: missed gate G1 coaster station as Fly -> forward from the Midway flight at +508 m from the lip (62 m back); behind the jump / branch 0, loops 0; reached G1 coaster station after 10.5 s, penalty 3 s
+  Coaster Coast Midway flight too-high PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 coaster station after 8.7 s, penalty 3 s
+  Coaster Coast Midway flight too-low PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 coaster station after 19.0 s, penalty 0 s
+  Coaster Coast Midway flight exit-missed PASS: resets 1: missed gate G1 coaster station -> anchor at +508 m from the lip (173 m back); behind the jump / branch 0, loops 0; reached G1 coaster station after 11.1 s, penalty 0 s
+  Coaster Coast Midway flight reset-button PASS: resets 0; behind the jump / branch 0, loops 0; reached G1 coaster station after 8.4 s, penalty 0 s
+  Paradise Plunge Sky Arch slit slit-buttress PASS: resets 0; behind the jump / branch 0, loops 0; reached G3 arch exit after 18.3 s, penalty 0 s
+  Paradise Plunge Sky Arch slit slit-veer PASS: resets 0; behind the jump / branch 0, loops 0; reached G3 arch exit after 6.7 s, penalty 0 s
+  Paradise Plunge Sky Arch slit past-G3-wide PASS: resets 0; behind the jump / branch 0, loops 0; reached G3 arch exit after 7.1 s, penalty 0 s
+  Paradise Plunge Sky Arch slit slit-reset-button PASS: resets 1: reset button -> on the flight line at +172 m from the branch start (30 m back); behind the jump / branch 0, loops 0; reached G3 arch exit after 8.0 s, penalty 0 s
+  Paradise Plunge Sky Arch slit hud-only PASS: resets 0; behind the jump / branch 0, loops 0; reached G3 arch exit after 7.0 s, penalty 0 s
+BRANCHES PASS: 19 of 19 scripted failures ended ahead or at most one anchor back with no loop
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.45 ms, 95th pct 2.68 ms, 99th pct 3.26 ms, worst 27.68 ms over 151368 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  branch-0-no-steering Drive->Fly  z   667.9  0.601 s  frames worst 10.61 / mean 2.60 ms
+  branch-0-no-steering Fly->Drive  z   929.8  0.602 s  frames worst 8.51 / mean 2.39 ms
+  branch-0-hard-left Drive->Fly  z   667.9  0.602 s  frames worst 4.25 / mean 2.59 ms
+  branch-0-hard-right Drive->Fly  z   667.9  0.601 s  frames worst 4.19 / mean 2.59 ms
+  branch-0-too-high Drive->Fly  z   667.9  0.601 s  frames worst 20.72 / mean 3.15 ms
+  branch-0-too-low Drive->Fly  z   667.9  0.602 s  frames worst 6.11 / mean 2.92 ms
+  branch-0-too-low Fly->Drive  z   930.1  0.601 s  frames worst 7.69 / mean 2.42 ms
+  branch-0-exit-missed Drive->Fly  z   667.9  0.602 s  frames worst 5.05 / mean 2.43 ms
+  branch-0-exit-missed Fly->Drive  z   929.7  0.600 s  frames worst 4.44 / mean 2.33 ms
+  branch-0-reset-button Drive->Fly  z   667.9  cancelled by the reset  frames worst 13.92 / mean 1.86 ms
+  branch-1-no-steering Drive->Fly  z   249.6  0.601 s  frames worst 2.79 / mean 1.24 ms
+  branch-1-no-steering Fly->Drive  z   704.2  0.601 s  frames worst 8.09 / mean 1.37 ms
+  branch-1-hard-left Drive->Fly  z   249.6  0.601 s  frames worst 2.37 / mean 1.23 ms
+  branch-1-hard-right Drive->Fly  z   249.6  0.600 s  frames worst 2.69 / mean 1.28 ms
+  branch-1-too-high Drive->Fly  z   249.6  0.601 s  frames worst 2.44 / mean 1.19 ms
+  branch-1-too-high Fly->Drive  z   704.2  0.601 s  frames worst 7.85 / mean 1.21 ms
+  branch-1-too-low Drive->Fly  z   249.6  0.600 s  frames worst 3.07 / mean 1.22 ms
+  branch-1-too-low Fly->Drive  z   704.3  0.600 s  frames worst 2.74 / mean 1.26 ms
+  branch-1-exit-missed Drive->Fly  z   249.6  0.600 s  frames worst 3.08 / mean 1.25 ms
+  branch-1-exit-missed Fly->Drive  z   704.2  0.601 s  frames worst 2.60 / mean 1.21 ms
+  branch-1-reset-button Drive->Fly  z   249.6  0.601 s  frames worst 3.37 / mean 1.25 ms
+  branch-1-reset-button Fly->Drive  z   703.7  0.600 s  frames worst 7.85 / mean 1.24 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: line_1; messup: skipped (another driver, reset: reset (missed gate G1 promenade exit as Fly, at 1025.1 (x -286.1, y 10.1), 92 m/s, 336 m off the line) to the anchor (forward from the Lake flight, +3 s) at 1217 m in Drive, 65 m behind the best progress); messup: messup_3; messup: skipped (another driver, reset: reset (missed gate G1 promenade exit as Fly, at 1026.2 (x -77.0, y 10.7), 91 m/s, 127 m off the line) to the anchor (forward from the Lake flight, +3 s) at 1217 m in Drive, 66 m behind the best progress); messup: mishit_1; messup: skipped (another driver, reset: reset (missed gate G1 promenade exit as Fly, at 1106.2 (x 66.1, y 41.0), 93 m/s, 53 m off the line) to the anchor at 1217 m in Drive, 111 m behind the best progress); messup: skipped (Barker talking, reset: reset (reset button, during a change, at 670.1 (x 16.0, y 8.2), 68 m/s, 1 m off the line) to the anchor (forward from the Lake flight, +3 s) at 1217 m in Drive, -294 m behind the best progress); messup: bogey_1; messup: skipped (another driver, reset: reset (missed gate G1 coaster station as Fly, at 800.6 (x 7750.6, y 9.9), 92 m/s, 249 m off the line) to the anchor (forward from the Midway flight, +3 s) at 798 m in Drive, 63 m behind the best progress); messup: skipped (Barker talking, reset: reset (missed gate G1 coaster station as Fly, at 800.5 (x 8088.3, y 7.9), 92 m/s, 88 m off the line) to the anchor (forward from the Midway flight, +3 s) at 798 m in Drive, 62 m behind the best progress); messup: skipped (Barker talking, reset: reset (missed gate G1 coaster station, at 910.5 (x 8011.4, y 25.8), 73 m/s, 11 m off the line) to the anchor at 798 m in Drive, 173 m behind the best progress); messup: mishit_1; messup: disaster_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

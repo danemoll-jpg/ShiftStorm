@@ -53,6 +53,10 @@ namespace ShiftStorm
         [Range(0, 1)] public float wallNoseAlign = .8f;   // a car's nose is turned this share of the way along the wall when it points into it
         [Header("Near-miss gates (Round 4)")]
         public float nearMissPenalty = 3f;            // seconds added for each gate counted as a near miss
+        public float branchAssistYaw = 14f;           // Round 12: on a flight branch a person's plane is turned toward its line ahead up to this many deg/s (less while steering hard)
+        public float branchAssistPitch = 10f;         //   ... and pitched toward it up to this many deg/s while the stick is near centre
+        public float branchRecoveryPenalty = 3f;      //   a reset on (or just off) a flight branch goes forward to its rejoin, with this many seconds added
+        public float flightResetMaxBack = 200f;       //   in the air a reset never goes further back than this along the line (a point on the flight line instead of an anchor far behind)
         public float nearMissMargin = 1f;             // passing outside the frame but within this many gate widths (or heights) of it
     }
 }

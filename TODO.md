@@ -20,6 +20,66 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 12 — Coaster Coast unlocked, flight-branch fixes** (2026-11-15, release `build-14` / 0.10.1). Status below.
+
+### Round 12 delivery (2026-11-15) — status per item
+Evidence: `Docs/Checks/round12/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy job at a
+time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+**Dan's playtest logs:** none on this PC (`%USERPROFILE%\AppData\LocalLow\ShiftStorm\ShiftStorm` has no `playtest` folder, and no copy
+anywhere else). They are on the Deck, inside Proton's prefix (see For Dan). So the causes were found in the code and reproduced with
+scripted runs of build 13's behaviour (`-oldFlight`):
+- Lake flight: build 13's line came back to the road in an S-bend of ~60 m radius; the plane turns at 150 m (75 m/s) to 200 m (92 m/s) at
+  full bank. A human-like pilot on build 13: 7 of 10 made it, only 2 without a +3 s miss of the exit frame.
+- "Reset back too far, repeat": on build 13 a reset during the Lake flight (the reset button, or a crash early in it) went to the anchor
+  89 m BEFORE the Lake Jump's lip, so you jumped and flew it again (reproduced: the reset button -> 2 resets behind the jump). The Sky Arch
+  slit: the reset button on it went 236 m back, behind the branch.
+- The HUD arrow followed any shortcut line within its width: it steered cars in the Lake Jump's canyon toward the flight line (the human
+  car line took 7.1 s on build 13, 5.4 s now) and planes after the launch toward the Sky Arch slit, 190 m off the route.
+- Coaster Coast: a plane that missed the wheels-down zone was told TURN BACK at G1 (a car-only gate) and circled it for good (a zone changes
+  the form once, so turning back could never earn it). A car down from the Midway flight crossed the station's rail entry still a few
+  metres up, missed the rail and was reset "out of bounds" (Round 10-11's known reset after the Midway flight).
+1. **Every course open — DONE.** Race, Time Trial and 2 Players never lock; the choose-your-racer page shows a Course row too. Menu >
+   Settings "Unlock all Tour stops" (default On; for the release set `Settings.UnlockTourDefault = false`: a player who never touched the
+   setting then plays the Tour in order). *Check (`unlock`, fresh settings.json / tour.json):* Coaster Coast started from Race, Time Trial
+   and 2 Players: PASS; the Tour's Stop 2 open with the setting On, "locked: top 3 at Stop 1" with it Off: PASS.
+2. **Lake flight with room — DONE.** Out 22 m and 28 m up over the canyon's west wall (not round it), every bend >= 250 m radius, the
+   rejoin / wheels-down 30 m further on (G1 - 45), the branch entered as the wings open, 60 x 40 m entry and exit frames (the exit takes a
+   car too), rings radius 16, a 70 m wide wheels-down zone, a light steering assist toward the line (people only, up to 14 deg/s yaw and
+   10 deg/s pitch, less while steering hard). The same frames / zone / assist on Coaster Coast's Midway flight. *Check (`humanfly`: steers
+   only by the HUD arrow, 0.25-0.45 s late, keys or a noisy stick, LB 0.2-0.7 s into the window, no boost, 45-75 m/s, +-5 m, +-5 deg):*
+   Lake flight **10 of 10** (9 with no penalty; build 13: 7 / 2), Midway flight **10 of 10** (9; build 13: 8 / 5). Lip -> G1: Lake fly
+   4.32 s / car 5.43 s (human), 4.43 / 5.78 s (AI pilot; Rounds 8-11: 4.65 / 5.78): the fly line stays ~1.1-1.3 s faster, as before.
+3. **Flight branches never send you back — DONE.** A reset on (or within 8 s of leaving) a flight branch goes forward to the anchor before
+   its rejoin, +3 s ("BACK ON COURSE +3 s"; the slit counts G3); in the air elsewhere a reset restarts on the flight line at most 200 m
+   back; a gate crossed in a form it does not take resets at once to the anchor before it; the arrow follows a shortcut only once entered;
+   new anchors at both rejoins, in the lagoon corridor and in long same-form gaps (climb, Mangrove, Coral Vault); the coaster rail's entry
+   catches a car up to 9 m over the track. *Check (`branches`, 19 scripted failures: no steering, hard left / right, too high / low, the
+   exit missed, the reset button on each of the Lake / Midway flights; on the slit: into the buttress, veered out, G3 passed wide, the
+   reset button, HUD only):* **19 of 19** end ahead or at most one anchor back, 0 behind the jump, 0 loops, the lap goes on (build 13: 17 of
+   19, both reset-button cases behind the jump / branch). *Reset audit* (`resetaudit`, every 20 m): Paradise Plunge worst 298 m back (the
+   promenade; build 13: 1,149 m in the Sky Arch / lagoon flight); 6 places over ~6 s, all at the end of the Coral Vault (228-268 m).
+   Coaster Coast: the long ones are on the coaster rails, where no reset happens; elsewhere 380-434 m (boardwalk, flume; not changed).
+4. **UTF-8 — DONE.** TODO.md / CLAUDE.md read and written as UTF-8 without a BOM (checked: no BOM, no mojibake apart from Dan's quoted
+   example).
+5. **Regression, soaks, release — DONE.** PASS: round2 (lap 124.58 s, skips, Abi), choice, cclap (107.8 s, 8 / 8 set-pieces), ccsplits,
+   round11 (Buck, Tour, 16 / 16 racers), nearmiss, starts (25, 0 resets), settings, quit (exit 0), round10 (strand 0 of 36, strip, E1-E6,
+   slow fps), round6 (bind, split). Fixed on the way: the finish-out-of-order check's own switch (the new wrong-form reset now honours it);
+   E4 failed once on timing and passed on the rerun. Soaks (Normal, 50 laps, time scale 3): **Paradise Plunge 50 / 50**, 0 bad gate
+   sequences, median 133.6 s, 6 resets (all "fell off the climb" at x 80, z 1120; Round 11: 3); **Coaster Coast 50 / 50**, 0 bad gate sequences, median 117.0 s, 8 resets, all at the station after the Midway
+   flight (x 8080, z 760), all on Abi's car driven by the soak's AI (Round 11: 19; the human-like pilot no longer meets it: reduced, not gone).
+
+#### For Dan to check (Round 12)
+- Menu > Race / Time Trial / 2 Players: Coaster Coast straight away (the Course row on the menu and on the choose-your-racer page).
+- The Lake Jump's flight: LB off the lip and follow the arrow; does it feel roomy now? Is the steering assist noticeable / too much?
+- Miss on purpose (fly wide, too high, press Y on the flight): you should be put on the road just before G1 with "BACK ON COURSE +3 s",
+  never back before the jump. The same on Coaster Coast's Midway flight and the Sky Arch slit.
+- Please copy the Deck's playtest logs so they can be read next round: Menu > Settings "Open log folder" shows the path (Proton:
+  `~/.local/share/Steam/steamapps/compatdata/<id>/pfx/drive_c/users/steamuser/AppData/LocalLow/ShiftStorm/ShiftStorm/playtest`); put the
+  `session-*.jsonl` files in `Docs/Playtest/` on the PC.
+- For a release: "Unlock all Tour stops" is On by default while we build (`Settings.UnlockTourDefault`).
+- Known: the soak's AI in Abi's car is still reset at Coaster Coast's station after the Midway flight (8 in 50 laps; Round 11: 19).
+- Known: Paradise Plunge's AI falls off the climb about 1 lap in 8 (x 80, z 1120); on Coaster Coast a car on the car line was once reset just
+  after the Midway Jump's landing (x 7924, z 408).
 - **Round 11 — Buck arrives, The Tour, choose your racer** (2026-11-15, release `build-13` / 0.10.0).
 - **Round 10 — no stranding walls, test tracks out, Coaster Coast** (2026-11-15, release `build-12` / 0.9.0).
 - **Round 9 — sensible steering, racing lines, one finish sound, the crowd, three new designs** (2026-11-15, release `build-11` / 0.8.2).
@@ -383,7 +443,7 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 12: Coaster Coast unlocked, flight-branch fixes
+## Current Objective — Round 12: Coaster Coast unlocked, flight-branch fixes (delivered as build 14; waiting for Dan's review)
 
 **Dan's notes on build 13 (0.10.0), 2026-11-15, quoted:** "I wanted to try the new track but it was locked behind the tour.
 Let's unlock that as I am building as I don't want to keep racing through the first track. Also there seems to be a couple of
@@ -422,8 +482,8 @@ Run unattended; don't stop to ask; no visible window. Same testing rules. Read-o
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check (fill in at end of round)
-- …
+### For Dan to check
+- See "For Dan to check (Round 12)" above.
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

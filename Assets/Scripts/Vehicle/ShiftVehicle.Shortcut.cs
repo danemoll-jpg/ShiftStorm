@@ -11,6 +11,45 @@ namespace ShiftStorm
         public readonly List<string> ShortcutsTaken = new List<string>();
         public readonly List<int> GateLog = new List<int>();
         float scS, scOffFor;
+        Shortcut leftBranch; float leftBranchAt = -99;
+        // checks only ("-oldFlight"): build 13's flight branches for before / after runs: its Lake flight and Midway flight, the arrow
+        // following a nearby shortcut, no forward recovery or flight-line reset, no assist, the branch entered only at its entry frame
+        public static readonly bool OldFlight = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldFlight") >= 0;
+
+        // Round 12: the wings opened off a choice jump: on its flight branch at once (build 13 waited for the entry frame 70 m out, and the
+        // arrow, the assist and the forward recovery only knew the branch from there)
+        void EnterChoiceBranch(Vector3 p)
+        {
+            if (!Course || OnShortcut || OldFlight) return;
+            foreach (var sc in Course.shortcuts)
+                if (sc.choice && sc.nextGate == GatesPassed && sc.entry.Allows(Mode.Fly) && Vector3.Distance(p, sc.line[0]) < 80f) { EnterShortcut(sc, p); return; }
+        }
+
+        // Round 12: a light steering assist on a flight branch (people only): the plane is turned toward the branch's line ahead, less while
+        // the player steers hard, and pitched toward it while the stick is near centre. Never more than ShiftTuning.branchAssist* deg/s.
+        void BranchAssist(float dt, ref float yaw, ref float pitch, float steerIn, float vertIn)
+        {
+            var sc = OnShortcut; if (!Human || !sc || !sc.flight || Changing || OldFlight) return;
+            var tgt = sc.PointAt(scS + Mathf.Max(45f, Airspeed * 1.1f), out _); var to = tgt - Body.position; var flat = new Vector2(to.x, to.z);
+            if (flat.sqrMagnitude < 1f) return;
+            float wantYaw = Mathf.Atan2(to.x, to.z) * Mathf.Rad2Deg, k = 1f - .7f * Mathf.Clamp01(Mathf.Abs(steerIn));
+            if (Mathf.Abs(Mathf.DeltaAngle(yaw, wantYaw)) < 100f) yaw = Mathf.MoveTowardsAngle(yaw, wantYaw, shared.branchAssistYaw * k * dt);
+            if (Mathf.Abs(vertIn) < .3f) { float wantPitch = Mathf.Clamp(Mathf.Atan2(to.y, flat.magnitude) * Mathf.Rad2Deg, -fly.maxPitchDown, fly.maxPitchUp); pitch = Mathf.MoveTowards(pitch, wantPitch, shared.branchAssistPitch * dt); }
+        }
+
+        // Round 12 item 3: where a reset on a flight branch goes: forward, to the last anchor before its rejoin (+ a little), never past an
+        // unearned gate (a branch standing in for a gate counts it). null: not on (or just off) a flight branch.
+        RecoveryAnchor BranchAnchor(out Shortcut br)
+        {
+            if (OldFlight) { br = null; return null; }
+            br = OnShortcut && OnShortcut.flight ? OnShortcut : leftBranch && Time.time - leftBranchAt < 8f && Progress < leftBranch.mainTo + 80f ? leftBranch : null;
+            if (!br || br.nextGate != GatesPassed) { br = null; return null; }
+            int gates = GatesPassed + (br.replacesGate >= 0 && GatesPassed == br.replacesGate ? 1 : 0);
+            float limit = br.mainTo + 60f; if (gates < Course.gates.Count) limit = Mathf.Min(limit, Course.gates[gates].progress);
+            RecoveryAnchor pick = null; foreach (var a in Course.anchors) if (a.progress <= limit + .5f && a.progress > br.mainFrom + 1f) pick = a;
+            if (!pick) br = null;
+            return pick;
+        }
 
         readonly List<(string label, float outBy)> scPenalties = new List<(string, float)>();
         void EnterShortcut(Shortcut sc, Vector3 p, float nearBy = -1)
@@ -47,6 +86,7 @@ namespace ShiftStorm
             bool backOut = sc.entry.CrossedBackward(lastPos, p);
             if (backOut || scOffFor > 1f)
             {
+                if (sc.flight) { leftBranch = sc; leftBranchAt = Time.time; }   // Round 12: a reset soon after still goes forward (Recover)
                 OnShortcut = null; scPenalties.Clear();
                 Note("shortcut", $"shortcut {sc.label}: left without finishing it ({(backOut ? "back out through the entry" : $"{off:0} m off its line")})");
                 Progress = Course.Project(p, sc.mainFrom, out at, out dir);

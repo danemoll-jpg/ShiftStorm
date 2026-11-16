@@ -93,6 +93,7 @@ namespace ShiftStorm
             if (!v || !v.Course) return;
             Record();
             if (aiDrives) return;   // Round 3: a RivalPilot drives the player's vehicle (shortcut and soak checks)
+            if (custom != null) { custom(); return; }   // Round 12: the human-like pilot
             if (!v.Holding) topSpeed[v.Mode] = Mathf.Max(topSpeed.TryGetValue(v.Mode, out var ts) ? ts : 0, v.Speed);
             if (coast) { input.sThrottle = input.sBrake = input.sSteer = input.sVertical = 0; input.sBoost = input.sSecondary = false; return; }
             if (guided) { Guided(); return; }
@@ -150,7 +151,7 @@ namespace ShiftStorm
         }
 
         bool straight; float straightSteer, laneOffset;
-        void Clear() { straight = false; straightSteer = 0; laneOffset = 0; guided = coast = false; holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
+        Action custom; void Clear() { custom = null; straight = false; straightSteer = 0; laneOffset = 0; guided = coast = false; holdSpeed = -1; boost = secondary = reverse = smart = false; steerWeave = null; yOverride = null; throttleCap = 1; v.debugEntryPitch = float.NaN; }
         IEnumerator Until(Func<bool> done, float timeout) { float end = Time.time + timeout; while (!done() && Time.time < end) yield return null; }
         IEnumerator Wait(float s) { float end = Time.time + s; while (Time.time < end) yield return null; }
         void Line(string s) { report.AppendLine(s); Debug.Log("[Check] " + s); }
@@ -226,6 +227,7 @@ namespace ShiftStorm
             if (r11 || which == "buck") yield return BuckCheck();
             if (r11 || which == "tour") yield return TourCheck();
             if (r11 || which == "racers") yield return RacersCheck();
+            if (which == "round12" || which == "unlock" || which == "resetaudit" || which == "humanfly" || which == "branches") yield return Round12(which);   // Round 12
             bool r9 = which == "round9";
             if (r9) yield return SteeringCheck();
             if (r9 || which == "sounds") yield return SoundsCheck();

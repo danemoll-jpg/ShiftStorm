@@ -100,7 +100,7 @@ namespace ShiftStorm
             try { if (File.Exists(Tour.FilePath)) File.Delete(Tour.FilePath); } catch (Exception) { }
             Tour.Reload(); Buck.Enabled = true; Settings.BuckBriefings = 0; Settings.Difficulty = Difficulty.Easy;
             var run = game.TourRun; bool ok = true;
-            Line($"TOUR: fresh {Tour.FilePath}; stops {Tour.Stops.Length}, unlocked {Tour.Unlocked}; points 1st {Tour.PointsFor(1)} / 2nd {Tour.PointsFor(2)} / 3rd {Tour.PointsFor(3)} / 4th {Tour.PointsFor(4)}, top {Tour.QualifyPlace} unlocks the next");
+            Line($"TOUR: fresh {Tour.FilePath}; stops {Tour.Stops.Length}, unlocked {Tour.Earned}; points 1st {Tour.PointsFor(1)} / 2nd {Tour.PointsFor(2)} / 3rd {Tour.PointsFor(3)} / 4th {Tour.PointsFor(4)}, top {Tour.QualifyPlace} unlocks the next");
             for (int stop = 0; stop < Tour.Stops.Length; stop++)
             {
                 scenario = $"tour-stop{stop + 1}"; Clear(); smart = true; boost = true; run.Steps.Clear(); Buck.Instance.Said.Clear();
@@ -111,17 +111,17 @@ namespace ShiftStorm
                 Time.timeScale = 3f; yield return Until(() => v.Finished, 300f); Time.timeScale = 1f;
                 yield return RealUntil(() => !Tour.Running, 60f);
                 Capture("results");
-                bool pass = Tour.LastPassed && Tour.Unlocked >= Math.Min(Tour.Stops.Length, stop + 2) && !Tour.Running;
+                bool pass = Tour.LastPassed && Tour.Earned >= Math.Min(Tour.Stops.Length, stop + 2) && !Tour.Running;
                 ok &= pass;
-                Line($"TOUR stop {stop + 1} {Tour.Stops[stop].title} {(pass ? "PASS" : "FAIL")}: {string.Join(" -> ", run.Steps.Select(s => s.Substring(s.IndexOf(' ') + 1)))}; unlocked {Tour.Unlocked}, total {Tour.Total} points; results line \"{Tour.Note}\"");
+                Line($"TOUR stop {stop + 1} {Tour.Stops[stop].title} {(pass ? "PASS" : "FAIL")}: {string.Join(" -> ", run.Steps.Select(s => s.Substring(s.IndexOf(' ') + 1)))}; unlocked {Tour.Earned}, total {Tour.Total} points; results line \"{Tour.Note}\"");
                 Line($"    Buck: {string.Join(", ", Buck.Instance.Said.Select(s => $"{s.id} ({s.what})"))}");
             }
             // read back as after a restart
             string file = File.Exists(Tour.FilePath) ? File.ReadAllText(Tour.FilePath).Replace("\n", " ").Replace("  ", " ") : "(missing)";
-            int[] best = { Tour.Best(0), Tour.Best(1) }; int total = Tour.Total, unl = Tour.Unlocked;
+            int[] best = { Tour.Best(0), Tour.Best(1) }; int total = Tour.Total, unl = Tour.Earned;
             Tour.Reload();
-            bool reloadOk = Tour.Best(0) == best[0] && Tour.Best(1) == best[1] && Tour.Total == total && Tour.Unlocked == unl && Tour.Done;
-            Line($"TOUR RELOAD {(reloadOk ? "PASS" : "FAIL")}: read back best {Race.Ordinal(Tour.Best(0))} / {Race.Ordinal(Tour.Best(1))}, {Tour.Total} points, unlocked {Tour.Unlocked}, done {Tour.Done}; file: {file}");
+            bool reloadOk = Tour.Best(0) == best[0] && Tour.Best(1) == best[1] && Tour.Total == total && Tour.Earned == unl && Tour.Done;
+            Line($"TOUR RELOAD {(reloadOk ? "PASS" : "FAIL")}: read back best {Race.Ordinal(Tour.Best(0))} / {Race.Ordinal(Tour.Best(1))}, {Tour.Total} points, unlocked {Tour.Earned}, done {Tour.Done}; file: {file}");
             // a 4th place at stop 1: retry without losing anything
             scenario = "tour-retry"; Clear(); smart = true; throttleCap = .5f; run.Steps.Clear(); Buck.Instance.Said.Clear();
             int best0 = Tour.Best(0), pts0 = Tour.Points(0), tries0 = Tour.Tries(0);
@@ -129,8 +129,8 @@ namespace ShiftStorm
             yield return RealUntil(() => run.Steps.Any(s => s.Contains(" race")), 30f);
             Time.timeScale = 3f; yield return Until(() => v.Finished, 400f); Time.timeScale = 1f;
             yield return RealUntil(() => !Tour.Running, 60f);
-            bool retryOk = Tour.LastPlace > Tour.QualifyPlace && Tour.Best(0) == best0 && Tour.Points(0) == pts0 && Tour.Unlocked == unl && Tour.Tries(0) == tries0 + 1 && Buck.Instance.Said.Any(s => s.id.StartsWith("tour_s1_retry"));
-            Line($"TOUR RETRY {(retryOk ? "PASS" : "FAIL")}: finished {Race.Ordinal(Tour.LastPlace)} (throttle 50 %): best kept {Race.Ordinal(Tour.Best(0))}, points kept {Tour.Points(0)}, unlocked {Tour.Unlocked}, tries {Tour.Tries(0)}; Buck: {string.Join(", ", Buck.Instance.Said.Select(s => s.id))}; results line \"{Tour.Note}\"");
+            bool retryOk = Tour.LastPlace > Tour.QualifyPlace && Tour.Best(0) == best0 && Tour.Points(0) == pts0 && Tour.Earned == unl && Tour.Tries(0) == tries0 + 1 && Buck.Instance.Said.Any(s => s.id.StartsWith("tour_s1_retry"));
+            Line($"TOUR RETRY {(retryOk ? "PASS" : "FAIL")}: finished {Race.Ordinal(Tour.LastPlace)} (throttle 50 %): best kept {Race.Ordinal(Tour.Best(0))}, points kept {Tour.Points(0)}, unlocked {Tour.Earned}, tries {Tour.Tries(0)}; Buck: {string.Join(", ", Buck.Instance.Said.Select(s => s.id))}; results line \"{Tour.Note}\"");
             Capture("retry-results");
             // Race again: the same stop, no scene
             run.Steps.Clear(); game.Restart(); yield return RealWait(1f);

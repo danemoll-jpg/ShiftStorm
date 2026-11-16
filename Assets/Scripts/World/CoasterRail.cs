@@ -54,7 +54,11 @@ namespace ShiftStorm
             lateral = 0; var F = tan[0]; float a = Vector3.Dot(from - p[0], F), b = Vector3.Dot(to - p[0], F);
             if (!(a < 0 && b >= 0)) return false;
             var hit = Vector3.Lerp(from, to, -a / (b - a)); var right = Vector3.Cross(up[0], F).normalized; lateral = Vector3.Dot(hit - p[0], right);
-            return Mathf.Abs(lateral) < capture && Mathf.Abs(Vector3.Dot(hit - p[0], up[0])) < 4.5f;
+            // Round 12: up to 9 m over the track (build 13: 4.5 m either way): a car down from the Midway flight is still a few metres up at
+            // the station's entry plane, missed the rail, ran on along the boardwalk and was reset "out of bounds" 76 m off the line (Round 10 /
+            // 11's known reset after the Midway flight: 19 in the Round 11 soak)
+            float h = Vector3.Dot(hit - p[0], up[0]);
+            return Mathf.Abs(lateral) < capture && h > -4.5f && h < (ShiftVehicle.OldFlight ? 4.5f : 9f);
         }
     }
 }

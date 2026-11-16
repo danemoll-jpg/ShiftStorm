@@ -105,7 +105,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
+Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Unlock all Tour stops On / Off (Round 12, default On while building: `Settings.UnlockTourDefault`), Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
 with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
 starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
 back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
@@ -148,6 +148,11 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   Round 11: `round11` = `buck` (a race per course: briefing -> Barker -> Buck's remark, voice overlaps by speaker, skip, once per
   session, Short / Off) + `tour` (fresh tour.json: both stops scene -> race -> reaction -> unlock, reload, a 4th-place retry, Race
   again) + `racers` (16 driver x machine starts, pictures, a split-screen pick).
+  Round 12: `round12` = `unlock` (fresh save: Coaster Coast in Race / Time Trial / 2 Players, the Tour setting On / Off) + `resetaudit`
+  (how far back a reset goes, every 20 m of both laps) + `humanfly` (a human-like pilot by the HUD arrow, late / noisy inputs, LB late, no
+  boost, `-tries N`, on both choice jumps' fly and car lines) + `branches` (scripted failures on the Lake flight, the Sky Arch slit and the
+  Midway flight: no steering, hard left / right, too high / low, exit missed, slit missed, reset button). `-oldFlight` = build 13's flight
+  branches, arrow and resets (before numbers).
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -353,6 +358,27 @@ Round 10 delivered as build 12 (0.9.0), 2026-11-15.
     (`Driver.Swap`, `FormSet.SetBody` / `SetOwnDesign`), so everything holding a vehicle keeps it. Barker's overtake / winner lines go
     by name (4 new "Abi" lines).
   - Buck's look: 3 image prompts (human / bear / dog) and his Mixamo clip list in `Docs/MODELS-NEEDED.md`; the placeholder card stays.
-Current objective: **Round 12** — every track open in Race / Time Trial / 2 Players (the Tour alone is gated), the Lake Jump's
+Round 11 delivered as build 13 (0.10.0), 2026-11-15.
+
+- **Round 12 (build 14, 0.10.1): every course open, flight branches fixed:**
+  - **Courses:** Race / Time Trial / 2 Players never lock (the choose-your-racer page has a Course row too); The Tour's stops are in order
+    only when Menu > Settings "Unlock all Tour stops" is Off (default On: `Settings.UnlockTourDefault`, set it false for a release; `Tour.Earned`
+    = what the Tour itself unlocked).
+  - **Lake flight** (`ParadisePlunge.LakeFlight`): build 13's return S-bend was ~60 m radius (the plane turns at 150-200 m); now out 22 m and
+    28 m up, every bend >= 250 m, rejoin / wheels-down at G1 - 45 (`LakeRejoinBack`; was 75), entry 12 m off the lip, 30 x 20 m half-size
+    entry / exit frames, the exit takes a car too, a 70 m wide wheels-down zone, rings radius 16. Midway flight (Coaster Coast): same
+    entry / exit / wheels-down treatment.
+  - **Flight branches** (`Shortcut.flight`, `ShiftVehicle.Recover` / `.Shortcut`): the wings put you on the choice branch at once; a light
+    steering assist on a flight branch (people only, `ShiftTuning.branchAssist*`); a reset on (or within 8 s of leaving) a flight branch goes
+    forward to the anchor before its rejoin (a branch standing in for a gate counts it) +3 s (`branchRecoveryPenalty`); in the air elsewhere a
+    reset restarts on the flight line at most `flightResetMaxBack` (200 m) back (`FlightPointOk`); crossing / passing a gate in a form it
+    does not take resets at once to the anchor before it (turning back could never earn it: a plane circled Coaster Coast's G1 for good);
+    the HUD arrow follows a shortcut only once it is entered (it used to steer cars in the Lake Jump's canyon toward the flight line and
+    planes toward the Sky Arch slit). New anchors: the Lake / Midway rejoins (G1 - 25 / - 22), the lagoon corridor (splash + 22), and
+    `FillAnchors` (same-form gaps over 330 m filled every ~220 m, away from jumps and the loop). `-oldFlight` restores build 13's.
+    The coaster rail's entry catches a car up to 9 m over the track (`CoasterRail.Entered`; build 13: 4.5 m: Round 10-11's reset after the
+    Midway flight). Dan's playtest logs live on the Deck (Proton prefix), not on this PC.
+
+Current objective: **waiting for Dan's review of build 14.** Previous objective: **Round 12** — every track open in Race / Time Trial / 2 Players (the Tour alone is gated), the Lake Jump's
 fly line given room to make its exit, flight branches never resetting you back to repeat them (read Dan's playtest logs first).
 Release build 14 (0.10.1). See `TODO.md`.

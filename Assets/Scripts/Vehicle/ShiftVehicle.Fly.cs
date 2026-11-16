@@ -48,6 +48,7 @@ namespace ShiftStorm
                 PitchDeg = Mathf.Clamp(PitchDeg, -fly.maxPitchDown, fly.maxPitchUp);
             }
             float bankIn = Input.Steer * Authority;
+            { float pd = PitchDeg; BranchAssist(dt, ref yawDeg, ref pd, bankIn, vin); PitchDeg = pd; }   // Round 12: a flight branch's light assist
             RollDeg = Mathf.MoveTowards(RollDeg, bankIn * fly.maxBank, (Mathf.Abs(bankIn) > .05f ? fly.rollRate : fly.levelRate) * dt);
             float turn = Mathf.Rad2Deg * 9.81f * Mathf.Tan(RollDeg * Mathf.Deg2Rad) / Mathf.Max(Airspeed, 15f) + bankIn * fly.bankTurnBonus;
             yawDeg += turn * dt;

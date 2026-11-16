@@ -52,7 +52,8 @@ namespace ShiftStorm
             catch (Exception e) { Debug.LogWarning("[Tour] could not save " + FilePath + ": " + e.Message); }
         }
         public static void Reload() => d = null;   // checks: read the file again (a "restart")
-        public static int Unlocked => D.unlocked;
+        public static int Unlocked => Settings.UnlockAllTour ? Stops.Length : D.unlocked;   // Round 12: "Unlock all Tour stops" (Settings)
+        public static int Earned => D.unlocked;   // what the Tour itself has unlocked (top 3 finishes)
         public static bool Done => D.done;
         public static int Best(int stop) => D.best[stop];
         public static int Points(int stop) => D.points[stop];
@@ -83,7 +84,7 @@ namespace ShiftStorm
         {
             var s = Stops[stop]; string course = Game.Instance ? Game.Instance.Courses[s.course].courseName : "";
             if (stop + 1 > Unlocked) return $"Stop {stop + 1}: {s.title} ({course})   - locked: top {QualifyPlace} at Stop {stop} -";
-            return $"Stop {stop + 1}: {s.title} ({course})   " + (Best(stop) > 0 ? $"best {Race.Ordinal(Best(stop))}, {Points(stop)} pts" : "not raced yet");
+            return $"Stop {stop + 1}: {s.title} ({course})   " + (Best(stop) > 0 ? $"best {Race.Ordinal(Best(stop))}, {Points(stop)} pts" : "not raced yet") + (stop + 1 > Earned ? "   (open: Unlock all Tour stops)" : "");
         }
     }
 
@@ -124,7 +125,7 @@ namespace ShiftStorm
             while (!(p.Finished && game.Trial.HasResults)) { if (Tour.ActiveStop != stop) { Tour.Running = false; yield break; } yield return null; }
             int place = game.Race.Place(p);
             Tour.Record(stop, place);
-            Step($"finished {Race.Ordinal(place)}: {Tour.LastPoints} points, passed {Tour.LastPassed}, unlocked {Tour.Unlocked}");
+            Step($"finished {Race.Ordinal(place)}: {Tour.LastPoints} points, passed {Tour.LastPassed}, unlocked {Tour.Earned} (playable {Tour.Unlocked})");
             if (talk)
             {
                 // after Barker's results line, when nobody is talking (as Buck's results remark)

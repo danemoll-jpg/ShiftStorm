@@ -286,30 +286,39 @@ namespace ShiftStorm
         }
 
         // the choice jump's flight branch: out over the lake through three rings and back to the road before G1 (Shortcut "Lake flight")
+        // Round 12 item 2 (Dan: "there is not enough space to direct your plane into the end of that sequence so I always miss it"). Build 13's
+        // line swung 34 m west and came back to the road over the last 100 m: an S-bend of about 60 m radius, while the plane turns at 150 m
+        // (75 m/s) to 200 m (92 m/s) even at full bank, so only a pilot cutting the corner made the 18 m exit frame. Now: the wheels-down zone
+        // and the exit 30 m later (G1 - 45), the line out 22 m and 28 m up (over the canyon's west wall, not round it), every bend 250 m or
+        // more (half stick), the entry right at the lip (and entered as the wings open), bigger rings, a 60 x 40 m exit frame that takes the
+        // car too (a plane already through the wheels-down zone), a 70 m wide wheels-down zone, and a gentle steering assist along the line
+        // (ShiftVehicle.BranchAssist). LakeRejoinBack: metres before G1.
+        public const float LakeRejoinBack = 45f;
+        public static bool OldLake => ShiftVehicle.OldFlight;   // checks ("-oldFlight"): build 13's flight
         static void LakeFlight()
         {
-            float lip = M("jC"), rejoin = M("G1") - 75; var a = At(lip); var b = At(rejoin);
+            bool old = OldLake;
+            float lip = M("jC"), rejoin = M("G1") - (old ? 75 : LakeRejoinBack); var a = At(lip); var b = At(rejoin);
             var up = Vector3.up; float y0 = RoadY;
-            // a climb over the lake-side beach and back (first runs: a 95 m swing out over the lake needed turns tighter than the plane's
-            // ~170 m turning circle at 80 m/s; climbing and diving it does quickly). Round 8 item 7: the car line now bends inland through
-            // the canyon, so this one swings the other way: out west over the beach and the wading herd, up to 32 m from the car line and
-            // 25 m up, over the canyon's west wall only where the wall has ended (the last quarter), down to the wheels-down zone.
             Vector3 L(float t, float side, float h) { float p = Mathf.Lerp(lip, rejoin, t); return At(p) - Right(p) * side + up * h; }
-            var ctrl = new List<Vector3> { a + up * 1.5f, L(.12f, 4, 8), L(.3f, 20, 17), L(.45f, 30, 23), L(.62f, 34, 25), L(.8f, 24, 18), L(.93f, 8, 9),
-                                           b + up * 6f, At(rejoin + 12) + up * 5f };
+            var ctrl = old ? new List<Vector3> { a + up * 1.5f, L(.12f, 4, 8), L(.3f, 20, 17), L(.45f, 30, 23), L(.62f, 34, 25), L(.8f, 24, 18), L(.93f, 8, 9), b + up * 6f, At(rejoin + 12) + up * 5f }
+                           : new List<Vector3> { a + up * 1.5f, L(.1f, 1.5f, 7), L(.22f, 6, 13), L(.34f, 13, 20), L(.46f, 20, 26), L(.58f, 22, 28), L(.7f, 18, 24), L(.82f, 11, 17), L(.92f, 5, 10), b + up * 6f, At(rejoin + 14) + up * 4.5f };
             for (int i = 0; i < ctrl.Count; i++) { var p = ctrl[i]; p.y = Mathf.Max(p.y, y0 + 2); ctrl[i] = p; }
-            var sc = MakeShortcut("Lake flight", ctrl, lip, rejoin + 12, 1, -1, 45f, new Vector2(16, 12), new Vector2(18, 12), 70f, 30f, Mode.Fly);
-            sc.choice = true;
+            var sc = old ? MakeShortcut("Lake flight", ctrl, lip, rejoin + 12, 1, -1, 45f, new Vector2(16, 12), new Vector2(18, 12), 70f, 30f, Mode.Fly)
+                         : MakeShortcut("Lake flight", ctrl, lip, rejoin + 14, 1, -1, 55f, new Vector2(30, 20), new Vector2(30, 20), 12f, 34f, Mode.Fly);
+            sc.choice = true; sc.flight = true;
+            if (!old) sc.exit.modes = new[] { Mode.Fly, Mode.Drive };   // a plane already turned into a car by the wheels-down zone still finishes it
             // three gold rings to thread (visual: the sub-gates count), a buoy at each foot so they read against the lake
-            var rings = new MeshKit.Batch(); var gold = new Color(1f, .82f, .3f, .7f);
+            var rings = new MeshKit.Batch(); var gold = new Color(1f, .82f, .3f, .7f); float RR = old ? 12f : 16f;
             foreach (float frac in new[] { .32f, .5f, .68f })
             {
-                float s = sc.Length * frac; var q = sc.PointAt(s, out var d); var frame = Quaternion.LookRotation(d, up); const float R = 12f;
-                for (int i = 0; i < 16; i++) { float an = i * 360f / 16; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(an * Mathf.Deg2Rad), Mathf.Sin(an * Mathf.Deg2Rad), 0) * R), frame * Quaternion.Euler(0, 0, an), new Vector3(.9f, R * .42f, .9f), gold); }
+                float s = sc.Length * frac; var q = sc.PointAt(s, out var d); var frame = Quaternion.LookRotation(d, up);
+                for (int i = 0; i < 16; i++) { float an = i * 360f / 16; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(an * Mathf.Deg2Rad), Mathf.Sin(an * Mathf.Deg2Rad), 0) * RR), frame * Quaternion.Euler(0, 0, an), new Vector3(.9f, RR * .42f, .9f), gold); }
             }
             rings.Object(scen, "Lake flight rings", GateMarker.Beacon, false, false);
             // wheels down: the marked zone on the road where the plane turns back into a car (cars pass through it unchanged)
-            var z = Vol<TransformZone>("Wheels down (lake flight)", b + up * 13, Facing(rejoin), new Vector3(40, 30, 16)); z.target = Mode.Drive; z.label = "Wheels down (lake flight)";
+            var z = old ? Vol<TransformZone>("Wheels down (lake flight)", b + up * 13, Facing(rejoin), new Vector3(40, 30, 16)) : Vol<TransformZone>("Wheels down (lake flight)", b + up * 18 - Right(rejoin) * 8, Facing(rejoin), new Vector3(70, 44, 26));
+            z.target = Mode.Drive; z.label = "Wheels down (lake flight)";
             for (int i = 0; i < 4; i++) Box(root, "wheels-down chevron", new Vector3(b.x, RoadY + .04f, b.z) + Flat(Dir(rejoin)) * (-10 + i * 6), new Vector3(10, .05f, 1.2f), Mt(new Color(.95f, .5f, .1f)), Facing(rejoin) * Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), false);
             var hs = new GameObject("Sign wheels down"); hs.transform.SetParent(scen, false); hs.transform.SetPositionAndRotation(new Vector3(b.x, RoadY, b.z) - Right(rejoin) * 15.5f - Flat(Dir(rejoin)) * 40, Facing(rejoin)); WorldBuilder.Sign(hs.transform, Vector3.zero, Mode.Drive, 6);
         }

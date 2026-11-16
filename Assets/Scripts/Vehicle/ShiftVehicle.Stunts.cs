@@ -50,7 +50,7 @@ namespace ShiftStorm
             // the wings button
             if (Input.ConsumeWings())
             {
-                if (WingsOpen && GroundedWheels == 0 && !Changing) { WingsUsed++; WingsUntil = -1; Change(Mode.Fly, "wings out (choice jump)"); Stunt?.Invoke("wings"); }
+                if (WingsOpen && GroundedWheels == 0 && !Changing) { WingsUsed++; WingsUntil = -1; Change(Mode.Fly, "wings out (choice jump)"); Stunt?.Invoke("wings"); EnterChoiceBranch(p); }
                 else { WingsIgnored++; Note("wings", $"wings pressed: nothing here ({(Mode != Mode.Drive ? Mode.ToString() : WingsUntil > 0 && Time.time >= WingsUntil ? "after the window" : GroundedWheels > 0 && WingsOpen ? "still on the lip" : "not a choice jump")})"); }
             }
             if (rail) { StepRail(dt); return true; }

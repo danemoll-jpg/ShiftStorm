@@ -260,7 +260,7 @@ namespace ShiftStorm
                 var q = At(p); var g = new GameObject($"Anchor {mode} {p:0}"); g.transform.SetParent(root, false);
                 g.transform.SetPositionAndRotation(q, Facing(p)); var a = g.AddComponent<RecoveryAnchor>(); a.mode = mode; a.progress = p; a.speed = speed; c.anchors.Add(a);
             }
-            A(M("start"), Mode.Drive); A(M("jM") - 150, Mode.Drive, 45); A(M("jM") + 120, Mode.Drive, 40); A(M("G1") + 5, Mode.Drive, 40);
+            A(M("start"), Mode.Drive); A(M("jM") - 150, Mode.Drive, 45); A(M("jM") + 120, Mode.Drive, 40); if (!ShiftVehicle.OldFlight) A(M("G1") - 22, Mode.Drive, 40);   /* Round 12: the Midway flight's rejoin */ A(M("G1") + 5, Mode.Drive, 40);
             A(M("landA") + 6, Mode.Drive, 35);
             A(M("crest") + 120, Mode.Fly); A(M("helter") + 60, Mode.Fly); A(M("fw1"), Mode.Fly); A(M("fw3"), Mode.Fly);
             A(M("splash") + 80, Mode.Boat); A(M("fl2"), Mode.Boat); A(M("underLift"), Mode.Boat); A(M("cross") + 30, Mode.Boat);
@@ -308,9 +308,13 @@ namespace ShiftStorm
             var ctrl = new List<Vector3> { a + Vector3.up * 1.5f, Vector3.Lerp(a, w, .35f) + Vector3.up * 4f, w + Vector3.back * 60 + Vector3.up * -2, w, w + Vector3.forward * 55 + Vector3.down * 6,
                                            new Vector3(-16, 22, 560) + O, new Vector3(-4, 14, b.z - O.z - 75) + O, b + Vector3.up * 6f, At(rejoin + 12) + Vector3.up * 5f };
             for (int i = 0; i < ctrl.Count; i++) { var p = ctrl[i]; p.y = Mathf.Max(p.y, DeckY + 2); ctrl[i] = p; }
-            var sc = MakeShortcut("Midway flight", ctrl, lip, rejoin + 12, 1, -1, 40f, new Vector2(14, 12), new Vector2(18, 12), 60f, 30f, Mode.Fly);
-            sc.choice = true;
-            var z = Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 13, Facing(rejoin), new Vector3(40, 30, 16)); z.target = Mode.Drive; z.label = "Wheels down (midway flight)";
+            // Round 12 item 3: the entry right off the lip (and entered as the wings open), bigger entry / exit frames, the exit taking a car
+            // (a plane already through the wheels-down zone), a wider and taller wheels-down zone; a reset on it goes forward (Shortcut.flight)
+            bool old = ShiftVehicle.OldFlight;
+            var sc = old ? MakeShortcut("Midway flight", ctrl, lip, rejoin + 12, 1, -1, 40f, new Vector2(14, 12), new Vector2(18, 12), 60f, 30f, Mode.Fly)
+                         : MakeShortcut("Midway flight", ctrl, lip, rejoin + 12, 1, -1, 48f, new Vector2(26, 18), new Vector2(28, 18), 12f, 30f, Mode.Fly);
+            sc.choice = true; sc.flight = true; if (!old) sc.exit.modes = new[] { Mode.Fly, Mode.Drive };
+            var z = old ? Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 13, Facing(rejoin), new Vector3(40, 30, 16)) : Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 16, Facing(rejoin), new Vector3(60, 40, 24)); z.target = Mode.Drive; z.label = "Wheels down (midway flight)";
             var chev = new MeshKit.Batch();
             for (int i = 0; i < 4; i++) chev.Add(MeshKit.Cube, new Vector3(b.x, DeckY + .05f, b.z) + Flat(Dir(rejoin)) * (-10 + i * 6), Facing(rejoin) * Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), new Vector3(10, .05f, 1.2f), new Color(.95f, .5f, .1f));
             chev.Object(scen, "wheels-down chevrons", CoasterLook.Vc(false), false, false);

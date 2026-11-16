@@ -317,11 +317,12 @@ namespace ShiftStorm
                     Item($"Effects volume: {Settings.Effects * 100:0} %   (A: lower, 0 -> 100)", () => { Settings.Step("sfx"); ShowPage(Page.Settings, 7); });
                     Item("Save playtest logs: " + (Settings.PlaytestLogs ? "On" : "Off"), () => { Settings.PlaytestLogs = !Settings.PlaytestLogs; ShowPage(Page.Settings, 8); });
                     Item("Buck's briefings: " + Settings.BuckNames[Settings.BuckBriefings] + "   (On / Short / Off)", () => { Settings.BuckBriefings = (Settings.BuckBriefings + 1) % 3; ShowPage(Page.Settings, 9); });   // Round 11
-                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 10); });
+                    Item("Unlock all Tour stops: " + (Settings.UnlockAllTour ? "On" : "Off") + "   (Race / Time Trial: every course is always open)", () => { Settings.UnlockAllTour = !Settings.UnlockAllTour; ShowPage(Page.Settings, 10); });   // Round 12
+                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 11); });
                     if (SplitScreen.Active)
                     {
-                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 11); });
-                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 12); });
+                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 12); });
+                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 13); });
                     }
                     Item("Back", () => ShowPage(Page.Main));
                     break;
@@ -349,6 +350,7 @@ namespace ShiftStorm
                         Item($"Driver: {Lineup.P1.name}   (A: next, {Settings.Driver + 1} of 4)", () => { Settings.Driver = (Settings.Driver + 1) % 4; ShowPage(Page.Pick, 0); });
                         Item($"Machine: {VehicleDesigns.Title(Settings.Design)}{OwnerOf(Settings.Design)}   (A: next)", () => { Settings.Design = Lineup.NextMachine(Settings.Design); gar.SetDesign(Settings.Design); ShowPage(Page.Pick, 1); });
                         Item($"Form: {FormName(gar.Form)}   (A: next, with the change)", () => { gar.NextForm(); ShowPage(Page.Pick, 2); });
+                        if (pickFor != PickFor.Tour) Item($"Course: {pp.courseName}   (A: next, {MenuCourse + 1} of {Courses.Count}, all open)", () => { MenuCourse = (MenuCourse + 1) % Courses.Count; ShowPage(Page.Pick, 3); });   // Round 12 item 1
                         Item($"Go: {go}", () => GoPick());
                         Item("Back", () => ShowPage(pickFor == PickFor.Tour ? Page.Tour : Page.Main));
                     }
@@ -363,7 +365,7 @@ namespace ShiftStorm
         }
         public string MenuTitle => MenuPage == Page.Main ? (SplitScreen.Active ? "MENU (2 PLAYERS)" : "MENU") : MenuPage == Page.Settings ? "SETTINGS" : MenuPage == Page.Garage ? "GARAGE" : MenuPage == Page.Split ? "2 PLAYERS" : MenuPage == Page.Tour ? "THE TOUR" : MenuPage == Page.Pick ? "CHOOSE YOUR RACER" : "QUIT SHIFTSTORM?";
         // Round 11: choose your racer, then the race / time trial / Tour stop
-        void ShowPick(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; ShowPage(Page.Pick, 3); }
+        void ShowPick(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; ShowPage(Page.Pick, what == PickFor.Tour ? 3 : 4); }
         public void PickAndGo(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; GoPick(); }   // checks
         static string OwnerOf(string design) { foreach (var r in Lineup.All) if (Lineup.MachineOf(r) == design) return $" ({r.name}'s)"; return ""; }
         void GoPick()

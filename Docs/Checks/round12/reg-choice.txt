@@ -1,0 +1,16 @@
+ShiftStorm check 'choice', 2026-11-15 22:17, build 0.10.1, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CHOICE (Lake Jump): car line 308 m of road from the lip to the rejoin; fly line 319 m (rings, entry / exit sub-gates, wheels-down zone before G1)
+  car line PASS: 5.78 s from the lip to G1, resets 0, wings 0, changes , shortcut none, penalty 0 s, gates 1
+  fly line PASS: 4.43 s from the lip to G1, resets 0, wings 1, changes Drive->Fly Fly->Drive, shortcut Lake flight, penalty 0 s, gates 1
+  CHOICE balance: fly +1.35 s faster than the car line (23 %) (aim: about equal, the fly line slightly faster)
+  LB late PASS: pressed 0.4 s after the 1 s window -> still Drive, logged "wings pressed: nothing here (after the window)"
+  LB elsewhere PASS: pressed on the start straight and in the air off the Creek Jump -> Drive, 2 presses ignored, wings used 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.71 ms, 95th pct 2.74 ms, 99th pct 3.22 ms, worst 24.57 ms over 24458 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  choice-fly   Drive->Fly  z   652.4  0.602 s  frames worst 11.71 / mean 2.49 ms
+  choice-fly   Fly->Drive  z   929.2  0.600 s  frames worst 7.12 / mean 2.21 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
