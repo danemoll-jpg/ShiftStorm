@@ -33,7 +33,7 @@ namespace ShiftStorm
 
         LoopRail loop; float loopTh, loopV, loopLat, loopSlipAt, loopEnterSpeed; bool loopSlip;
         BoostPad lastPad; Vector3 stuntPrev; bool stuntPrevSet;
-        float airFor, airFlat, landHoldUntil = -1, landHold;
+        float airFor, airFlat, landHoldUntil = -1, landHold; Vector3 airDir;
 
         void ClearStunts()
         {
@@ -72,7 +72,7 @@ namespace ShiftStorm
             lastPad = onPad;
             // airtime and the landing's speed hold
             var lv = Body.linearVelocity; float fl = new Vector2(lv.x, lv.z).magnitude;
-            if (GroundedWheels == 0) { airFor += dt; airFlat = fl; if (airFor >= .35f && airFor - dt < .35f) Stunt?.Invoke("air"); }
+            if (GroundedWheels == 0) { airFor += dt; airFlat = fl; if (fl > 1f) airDir = new Vector3(lv.x, 0, lv.z) / fl; if (airFor >= .35f && airFor - dt < .35f) Stunt?.Invoke("air"); }
             else
             {
                 if (airFor > .35f && !(EnteredDriveAt > 0 && Time.time - EnteredDriveAt < shared.wheelsDownSeconds))
@@ -82,7 +82,7 @@ namespace ShiftStorm
                 }
                 airFor = 0;
             }
-            if (Time.time < landHoldUntil && fl < landHold && fl > 1f) { var k = landHold / fl; Body.linearVelocity = new Vector3(lv.x * k, lv.y, lv.z * k); }
+            if (Time.time < landHoldUntil && fl < landHold && fl > 1f) HoldLanding(lv, fl, landHold, airDir);   // Round 13: in the way it came down
             else if (landHoldUntil > 0 && Time.time >= landHoldUntil) { LastLandingOut = fl; landHoldUntil = -1; }
             return false;
         }

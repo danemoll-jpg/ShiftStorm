@@ -40,7 +40,7 @@ namespace ShiftStorm
         {
             new Rival { name = "Rocket Rae", character = "Rae", color = new Color(.85f, .12f, .15f), lane = -2.5f, brakeMargin = .92f, boostMeter = .5f, boostStraight = 11f, shortcut = "Sky Arch slit|Lighthouse rocks", shortcutRate = .5f, seed = 11 },
             new Rival { name = "Chip \"Showtime\" Sterling", character = "Chip", color = new Color(.15f, .4f, .95f), lane = 2.5f, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Coral Vault tunnel|Lighthouse rocks", shortcutRate = .5f, seed = 23 },
-            new Rival { name = "Vivi", character = "Vivi", color = new Color(.62f, .25f, .9f), lane = 0f, brakeMargin = .88f, boostMeter = .65f, boostStraight = 8f, seed = 37 },
+            new Rival { name = "Vivi", character = "Vivi", color = new Color(.62f, .25f, .9f), lane = 0f, brakeMargin = .88f, boostMeter = .65f, boostStraight = 8f, shortcut = "Mangrove bypass", shortcutRate = .5f, seed = 37 },   // Round 13: the bypass
         };
     }
 

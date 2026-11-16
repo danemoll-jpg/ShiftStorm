@@ -1,0 +1,204 @@
+ShiftStorm check 'trace', 2026-11-16 00:24, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+TRACE (Coaster Coast): 40 AI laps (four AI cars per race, Abi's car driven by an AI too), time scale 3.0; every reset dumps the racer's last 4 s (every 0.1 s)
+  RESET race 1 Abi: reset (out of bounds, at 763.1 (x 8075.7, y 4.7), 67 m/s, 76 m off the line) to the anchor at 798 m in Drive, 25 m behind the best progress
+      8.54 Fly    p (7980.9,25.7,493.6) v (8,-7,91) |v| 91 yaw 5 fwd (0.08,-0.07,0.99) prog 555 off 9 wheels 0 in thr 1.0 brk 0.0 steer +0.01 sc Midway flight under North plaza@21.7
+      8.65 Fly    p (7981.7,25.0,502.7) v (8,-7,91) |v| 91 yaw 5 fwd (0.09,-0.08,0.99) prog 564 off 8 wheels 0 in thr 1.0 brk 0.0 steer +0.01 sc Midway flight under North plaza@21.0
+      8.75 Fly    p (7982.7,24.2,513.3) v (9,-7,91) |v| 92 yaw 5 fwd (0.10,-0.08,0.99) prog 575 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@20.2
+      8.85 Fly    p (7983.6,23.4,522.3) v (9,-8,91) |v| 92 yaw 6 fwd (0.10,-0.08,0.99) prog 584 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@19.4
+      8.96 Fly    p (7984.6,22.6,531.4) v (9,-8,91) |v| 92 yaw 6 fwd (0.10,-0.09,0.99) prog 593 off 6 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@18.7
+      9.06 Fly    p (7985.5,21.9,540.5) v (10,-8,91) |v| 92 yaw 6 fwd (0.10,-0.09,0.99) prog 602 off 5 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@17.9
+      9.16 Fly    p (7986.5,21.1,549.6) v (10,-8,91) |v| 92 yaw 6 fwd (0.10,-0.09,0.99) prog 611 off 5 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@17.1
+      9.27 Fly    p (7987.6,20.2,560.1) v (9,-8,90) |v| 90 yaw 6 fwd (0.10,-0.08,0.99) prog 621 off 4 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@16.2
+      9.37 Fly    p (7988.5,19.4,569.0) v (9,-7,89) |v| 89 yaw 6 fwd (0.10,-0.08,0.99) prog 630 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@15.4
+      9.47 Fly    p (7989.3,18.8,577.8) v (8,-7,88) |v| 88 yaw 6 fwd (0.10,-0.08,0.99) prog 638 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@14.8
+      9.58 Fly    p (7990.1,18.1,586.5) v (8,-6,87) |v| 87 yaw 5 fwd (0.09,-0.07,0.99) prog 647 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@14.1
+      9.68 Fly    p (7990.9,17.5,595.1) v (8,-6,86) |v| 86 yaw 5 fwd (0.09,-0.07,0.99) prog 656 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@13.5
+      9.78 Fly    p (7991.6,17.0,603.7) v (7,-5,85) |v| 85 yaw 5 fwd (0.08,-0.06,0.99) prog 664 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@13.0
+      9.88 Fly    p (7992.3,16.5,612.1) v (7,-5,84) |v| 85 yaw 5 fwd (0.08,-0.06,1.00) prog 672 off 0 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.5
+      9.98 Fly    p (7993.0,16.0,620.5) v (6,-5,83) |v| 84 yaw 4 fwd (0.08,-0.05,1.00) prog 680 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.0
+     10.09 Fly    p (7993.7,15.5,630.2) v (6,-4,83) |v| 83 yaw 4 fwd (0.07,-0.05,1.00) prog 690 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@11.5
+     10.19 Fly    p (7994.3,15.0,638.4) v (6,-5,82) |v| 82 yaw 4 fwd (0.07,-0.05,1.00) prog 698 off 2 wheels 0 in thr 0.0 brk 0.0 steer -0.01 sc Midway flight under Boardwalk@11.0
+     10.30 Fly    p (7994.9,14.5,647.9) v (5,-5,81) |v| 82 yaw 4 fwd (0.06,-0.06,1.00) prog 708 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.5
+     10.41 Fly    p (7995.4,14.0,656.0) v (5,-5,81) |v| 81 yaw 4 fwd (0.06,-0.06,1.00) prog 716 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.0
+     10.51 Fly    p (7995.9,13.5,664.1) v (5,-4,80) |v| 80 yaw 4 fwd (0.06,-0.05,1.00) prog 724 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.5
+     10.61 Fly    p (7996.4,13.1,672.0) v (5,-4,80) |v| 80 yaw 4 fwd (0.06,-0.05,1.00) prog 731 off 2 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.1
+     10.71 Fly    p (7997.0,12.8,680.0) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.04,1.00) prog 739 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.8
+     10.82 Fly    p (7997.5,12.5,688.0) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.03,1.00) prog 747 off 2 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.5
+     10.92 Fly    p (7998.1,12.2,697.3) v (5,-2,80) |v| 80 yaw 4 fwd (0.06,-0.03,1.00) prog 756 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.2
+     11.02 Drive* p (7998.6,11.7,705.3) v (5,-5,75) |v| 75 yaw 4 fwd (0.06,-0.05,1.00) prog 764 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.11 sc - under Boardwalk@7.7 | shortcut: shortcut Midway flight: out (Fly, 80 m/s); change: Fly->Drive at z 704.0 (x 7998.5, y 11.8) (Wheels down (midway flight)); speed 81.5 -> 75.0 m/s; 
+     11.12 Drive* p (7999.0,11.1,712.8) v (5,-7,75) |v| 75 yaw 4 fwd (0.06,-0.01,1.00) prog 772 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.11 sc - under Boardwalk@7.1
+     11.22 Drive* p (7999.5,10.3,720.2) v (5,-8,75) |v| 75 yaw 4 fwd (0.06,-0.01,1.00) prog 779 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.13 sc - under Boardwalk@6.3
+     11.34 Drive* p (8000.0,9.2,728.9) v (5,-10,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 788 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.16 sc - under Boardwalk@5.2
+     11.45 Drive* p (8000.5,8.1,736.4) v (5,-12,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 795 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.19 sc - under Boardwalk@4.1
+     11.55 Drive* p (8001.0,6.5,745.1) v (5,-14,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 804 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.20 sc - under Boardwalk@2.5
+     11.66 Drive  p (8001.5,5.0,752.6) v (5,-16,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 811 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.22 sc - under Boardwalk@1.0
+     11.76 Drive  p (8004.2,4.4,756.5) v (74,2,7) |v| 74 yaw 85 fwd (0.05,0.01,1.00) prog 816 off 3 wheels 4 in thr 0.0 brk 0.0 steer -0.25 sc - under Boardwalk@0.4
+     11.86 Drive  p (8011.6,4.7,757.2) v (74,4,7) |v| 74 yaw 85 fwd (0.01,0.01,1.00) prog 817 off 10 wheels 4 in thr 0.0 brk 0.0 steer -0.41 sc - under Boardwalk@0.7
+     11.97 Drive  p (8020.1,5.1,758.0) v (73,3,7) |v| 73 yaw 85 fwd (-0.04,0.00,1.00) prog 818 off 19 wheels 0 in thr 0.0 brk 0.0 steer -0.56 sc - under North plaza@1.1
+     12.08 Drive  p (8027.4,5.4,758.7) v (73,2,7) |v| 73 yaw 85 fwd (-0.08,0.00,1.00) prog 819 off 26 wheels 0 in thr 0.0 brk 0.0 steer -0.67 sc - under North plaza@1.4
+     12.18 Drive  p (8034.7,5.5,759.4) v (73,1,7) |v| 73 yaw -7 fwd (-0.13,-0.01,0.99) prog 819 off 34 wheels 0 in thr 0.0 brk 0.0 steer -0.78 sc - under North plaza@1.5
+     12.29 Drive  p (8043.3,5.6,760.1) v (73,0,7) |v| 73 yaw -10 fwd (-0.17,-0.01,0.99) prog 820 off 42 wheels 0 in thr 0.0 brk 0.0 steer -0.89 sc - under North plaza@1.6 | rejected: near miss of G1 coaster station (26.7 m outside) not heading along the route: not counted; 
+     12.39 Drive  p (8050.6,5.5,760.8) v (73,-1,7) |v| 73 yaw -12 fwd (-0.21,-0.01,0.98) prog 821 off 49 wheels 0 in thr 0.0 brk 0.0 steer -0.98 sc - under North plaza@1.5
+     12.49 Drive  p (8057.9,5.3,761.5) v (73,-2,7) |v| 73 yaw -14 fwd (-0.24,-0.02,0.97) prog 821 off 57 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@1.3
+     12.59 Drive  p (8065.2,5.1,762.2) v (73,-3,7) |v| 73 yaw -16 fwd (-0.28,-0.02,0.96) prog 822 off 64 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@1.1
+  race 1: Rocket Rae 113.5 [Midway flight+Lighthouse rocks], Vivi 116.6 [Midway flight], Chip "Showtime" Sterling 116.9, Abi 118.7 (1 resets) [Midway flight]
+  race 2: Rocket Rae 115.2 [Midway flight], Abi 117.3, Chip "Showtime" Sterling 117.8, Vivi 117.8
+  race 3: Rocket Rae 114.4 [Midway flight], Chip "Showtime" Sterling 115.5 [Midway flight+Lighthouse rocks], Vivi 118.1, Abi 118.5
+  RESET race 4 Abi: reset (out of bounds, at 752.8 (x 8075.6, y 4.9), 45 m/s, 76 m off the line) to the anchor at 798 m in Drive, 18 m behind the best progress
+      8.77 Fly    p (7982.9,24.1,514.8) v (9,-7,91) |v| 92 yaw 6 fwd (0.10,-0.08,0.99) prog 576 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@20.1
+      8.87 Fly    p (7983.8,23.3,523.9) v (9,-8,91) |v| 92 yaw 6 fwd (0.10,-0.08,0.99) prog 585 off 6 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@19.3
+      8.98 Fly    p (7984.7,22.5,532.9) v (10,-8,91) |v| 92 yaw 6 fwd (0.10,-0.09,0.99) prog 594 off 6 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@18.5
+      9.08 Fly    p (7985.7,21.7,542.0) v (10,-8,91) |v| 92 yaw 6 fwd (0.10,-0.09,0.99) prog 603 off 5 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@17.7
+      9.18 Fly    p (7986.8,20.8,552.6) v (9,-8,91) |v| 91 yaw 6 fwd (0.10,-0.09,0.99) prog 613 off 4 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@16.8
+      9.29 Fly    p (7987.7,20.0,561.6) v (9,-7,89) |v| 90 yaw 6 fwd (0.10,-0.08,0.99) prog 622 off 4 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@16.0
+      9.39 Fly    p (7988.6,19.3,570.5) v (9,-7,88) |v| 89 yaw 6 fwd (0.10,-0.08,0.99) prog 631 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@15.3
+      9.50 Fly    p (7989.4,18.6,579.3) v (8,-7,87) |v| 88 yaw 5 fwd (0.09,-0.07,0.99) prog 640 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@14.6
+      9.60 Fly    p (7990.2,18.0,588.0) v (8,-6,86) |v| 87 yaw 5 fwd (0.09,-0.07,0.99) prog 648 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@14.0
+      9.70 Fly    p (7991.1,17.3,598.0) v (7,-6,85) |v| 86 yaw 5 fwd (0.09,-0.07,0.99) prog 658 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@13.3
+      9.81 Fly    p (7991.9,16.8,606.5) v (7,-5,85) |v| 85 yaw 5 fwd (0.08,-0.06,0.99) prog 667 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.8
+      9.91 Fly    p (7992.5,16.3,614.9) v (7,-5,84) |v| 84 yaw 5 fwd (0.08,-0.06,1.00) prog 675 off 0 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.3
+     10.01 Fly    p (7993.2,15.8,623.3) v (6,-5,83) |v| 84 yaw 4 fwd (0.08,-0.05,1.00) prog 683 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@11.8
+     10.11 Fly    p (7993.8,15.4,631.6) v (6,-4,83) |v| 83 yaw 4 fwd (0.07,-0.05,1.00) prog 691 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@11.4
+     10.22 Fly    p (7994.4,14.9,641.1) v (5,-5,82) |v| 82 yaw 4 fwd (0.06,-0.06,1.00) prog 701 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.9
+     10.32 Fly    p (7995.0,14.4,649.3) v (5,-5,81) |v| 81 yaw 4 fwd (0.06,-0.06,1.00) prog 709 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.4
+     10.42 Fly    p (7995.5,13.9,657.4) v (5,-5,81) |v| 81 yaw 4 fwd (0.06,-0.06,1.00) prog 717 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.9
+     10.52 Fly    p (7996.0,13.5,665.4) v (5,-4,80) |v| 80 yaw 4 fwd (0.06,-0.05,1.00) prog 725 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.5
+     10.63 Fly    p (7996.5,13.1,673.4) v (5,-4,80) |v| 80 yaw 4 fwd (0.06,-0.05,1.00) prog 733 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.1
+     10.73 Fly    p (7997.0,12.7,681.4) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.04,1.00) prog 741 off 2 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.7
+     10.83 Fly    p (7997.6,12.4,689.3) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.04,1.00) prog 749 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.4
+     10.93 Fly    p (7998.1,12.2,697.3) v (5,-2,80) |v| 80 yaw 4 fwd (0.06,-0.03,1.00) prog 756 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.2
+     11.04 Drive* p (7998.7,11.6,706.5) v (5,-5,75) |v| 75 yaw 4 fwd (0.06,-0.04,1.00) prog 765 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.11 sc - under Boardwalk@7.6 | shortcut: shortcut Midway flight: out (Fly, 80 m/s); change: Fly->Drive at z 704.0 (x 7998.5, y 11.8) (Wheels down (midway flight)); speed 81.5 -> 75.0 m/s; 
+     11.15 Drive* p (7999.1,11.0,714.0) v (5,-7,75) |v| 75 yaw 4 fwd (0.06,-0.01,1.00) prog 773 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.12 sc - under Boardwalk@7.0
+     11.33 Drive* p (8000.0,9.4,727.7) v (5,-10,75) |v| 76 yaw 4 fwd (0.06,-0.01,1.00) prog 786 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.15 sc - under Boardwalk@5.4
+     11.43 Drive* p (8000.5,8.1,736.4) v (5,-12,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 795 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.18 sc - under Boardwalk@4.1
+     11.53 Drive* p (8001.0,6.8,743.9) v (5,-14,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 803 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.20 sc - under Boardwalk@2.8
+     11.63 Drive  p (8001.4,5.3,751.3) v (5,-15,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 810 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.22 sc - under Boardwalk@1.3
+     11.74 Drive  p (8003.0,4.4,756.2) v (74,1,-6) |v| 74 yaw 3 fwd (0.05,0.00,1.00) prog 816 off 2 wheels 4 in thr 0.0 brk 0.0 steer -0.22 sc - under Boardwalk@0.4
+     11.84 Drive  p (8010.3,4.6,755.6) v (74,3,-6) |v| 74 yaw 3 fwd (0.05,-0.01,1.00) prog 816 off 9 wheels 4 in thr 0.0 brk 0.0 steer -0.45 sc - under Boardwalk@0.6
+     11.95 Drive  p (8017.7,4.9,755.0) v (73,2,-6) |v| 73 yaw 3 fwd (0.06,-0.01,1.00) prog 815 off 16 wheels 4 in thr 0.0 brk 0.0 steer -0.73 sc - under North plaza@0.9
+     12.05 Drive  p (8025.9,5.0,754.3) v (69,1,-6) |v| 70 yaw 4 fwd (0.08,0.00,1.00) prog 814 off 25 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@1.0
+     12.15 Drive  p (8032.9,5.1,753.7) v (69,0,-6) |v| 70 yaw 95 fwd (0.10,0.00,1.00) prog 814 off 32 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@1.1
+     12.25 Drive  p (8039.8,5.0,753.1) v (69,-1,-6) |v| 70 yaw 95 fwd (0.12,0.01,0.99) prog 813 off 39 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@1.1
+     12.36 Drive  p (8046.7,4.9,752.5) v (67,-1,-6) |v| 68 yaw 95 fwd (0.13,0.00,0.99) prog 813 off 46 wheels 4 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.46 Drive  p (8053.2,4.8,752.0) v (63,0,-5) |v| 63 yaw 95 fwd (0.10,0.00,0.99) prog 812 off 52 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.56 Drive  p (8059.2,4.8,751.7) v (59,0,-1) |v| 59 yaw 92 fwd (0.07,0.00,1.00) prog 812 off 58 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.8
+     12.66 Drive  p (8064.9,4.8,751.7) v (55,0,2) |v| 55 yaw 89 fwd (0.03,0.00,1.00) prog 812 off 64 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.8
+     12.76 Drive  p (8070.1,4.9,752.1) v (50,0,5) |v| 50 yaw 85 fwd (-0.03,0.00,1.00) prog 812 off 69 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.87 Drive  p (8075.6,4.9,752.8) v (45,0,8) |v| 45 yaw 81 fwd (-0.09,0.00,1.00) prog 813 off 75 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+  race 4: Rocket Rae 115.1 [Midway flight], Vivi 116.2 [Midway flight], Abi 117.9 (1 resets) [Midway flight], Chip "Showtime" Sterling 118.0
+  race 5: Rocket Rae 115.3, Vivi 117.2, Abi 117.3, Chip "Showtime" Sterling 117.4
+  race 6: Rocket Rae 115.0 [Midway flight], Abi 116.6 [Midway flight], Vivi 116.7 [Midway flight], Chip "Showtime" Sterling 117.2
+  race 7: Rocket Rae 115.8 [Lighthouse rocks], Abi 117.3, Vivi 117.4, Chip "Showtime" Sterling 118.0
+  race 8: Rocket Rae 114.6 [Midway flight], Chip "Showtime" Sterling 115.0 [Midway flight+Lighthouse rocks], Vivi 117.0 [Midway flight], Abi 118.1
+  RESET race 9 Abi: reset (out of bounds, at 765.8 (x 8075.1, y 4.9), 18 m/s, 75 m off the line) to the anchor at 798 m in Drive, 28 m behind the best progress
+      9.20 Fly    p (7986.9,20.7,554.1) v (9,-8,90) |v| 91 yaw 6 fwd (0.10,-0.08,0.99) prog 615 off 4 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under North plaza@16.7
+      9.30 Fly    p (7987.9,19.9,563.1) v (9,-7,89) |v| 90 yaw 6 fwd (0.10,-0.08,0.99) prog 624 off 4 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@15.9
+      9.41 Fly    p (7988.7,19.2,572.0) v (9,-7,88) |v| 89 yaw 6 fwd (0.10,-0.08,0.99) prog 633 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@15.2
+      9.51 Fly    p (7989.6,18.5,580.7) v (8,-7,87) |v| 88 yaw 5 fwd (0.09,-0.07,0.99) prog 641 off 3 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@14.5
+      9.62 Fly    p (7990.5,17.8,590.8) v (8,-6,86) |v| 87 yaw 5 fwd (0.09,-0.07,0.99) prog 651 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@13.8
+      9.72 Fly    p (7991.3,17.2,599.4) v (7,-6,85) |v| 86 yaw 5 fwd (0.09,-0.06,0.99) prog 660 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@13.2
+      9.83 Fly    p (7992.0,16.7,607.9) v (7,-5,85) |v| 85 yaw 5 fwd (0.08,-0.06,0.99) prog 668 off 0 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.7
+      9.93 Fly    p (7992.8,16.1,617.7) v (7,-5,84) |v| 84 yaw 4 fwd (0.08,-0.06,1.00) prog 678 off 0 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@12.1
+     10.04 Fly    p (7993.4,15.7,626.0) v (6,-4,83) |v| 83 yaw 4 fwd (0.07,-0.05,1.00) prog 686 off 1 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@11.7
+     10.14 Fly    p (7994.0,15.2,634.3) v (6,-4,82) |v| 83 yaw 4 fwd (0.07,-0.05,1.00) prog 694 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@11.2
+     10.24 Fly    p (7994.5,14.8,642.5) v (5,-5,82) |v| 82 yaw 4 fwd (0.06,-0.06,1.00) prog 702 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.8
+     10.35 Fly    p (7995.1,14.2,652.0) v (5,-5,81) |v| 81 yaw 4 fwd (0.06,-0.06,1.00) prog 712 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@10.2
+     10.45 Fly    p (7995.7,13.8,660.0) v (5,-4,80) |v| 81 yaw 4 fwd (0.06,-0.06,1.00) prog 720 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.8
+     10.55 Fly    p (7996.2,13.3,668.1) v (5,-4,80) |v| 80 yaw 4 fwd (0.06,-0.05,1.00) prog 728 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@9.3
+     10.66 Fly    p (7996.8,12.9,677.4) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.04,1.00) prog 737 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.9
+     10.77 Fly    p (7997.3,12.6,685.4) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.04,1.00) prog 745 off 2 wheels 0 in thr 1.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.6
+     10.88 Fly    p (7997.8,12.3,693.3) v (5,-3,80) |v| 80 yaw 4 fwd (0.06,-0.03,1.00) prog 752 off 2 wheels 0 in thr 0.0 brk 0.0 steer +0.00 sc Midway flight under Boardwalk@8.3
+     10.98 Fly    p (7998.3,12.0,701.3) v (5,-4,81) |v| 81 yaw 4 fwd (0.06,-0.05,1.00) prog 760 off 7 wheels 0 in thr 1.0 brk 0.0 steer -0.12 BOOST sc - under Boardwalk@8.0 | shortcut: shortcut Midway flight: out (Fly, 80 m/s); 
+     11.08 Drive* p (7998.8,11.4,709.0) v (5,-6,75) |v| 75 yaw 4 fwd (0.06,-0.02,1.00) prog 768 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.13 sc - under Boardwalk@7.4 | change: Fly->Drive at z 704.0 (x 7998.5, y 11.8) (Wheels down (midway flight)); speed 81.5 -> 75.0 m/s; 
+     11.18 Drive* p (7999.3,10.6,717.7) v (5,-8,75) |v| 75 yaw 4 fwd (0.06,-0.01,1.00) prog 776 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.15 sc - under Boardwalk@6.6
+     11.34 Drive* p (8000.0,9.2,728.9) v (5,-10,75) |v| 76 yaw 4 fwd (0.06,-0.01,1.00) prog 788 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.17 sc - under Boardwalk@5.2
+     11.44 Drive* p (8000.5,8.1,736.4) v (5,-12,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 795 off 0 wheels 0 in thr 0.0 brk 0.0 steer -0.19 sc - under Boardwalk@4.1
+     11.55 Drive* p (8001.0,6.8,743.9) v (5,-14,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 803 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.20 sc - under Boardwalk@2.8
+     11.65 Drive  p (8001.5,5.0,752.6) v (5,-16,75) |v| 76 yaw 4 fwd (0.06,0.00,1.00) prog 811 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.22 sc - under Boardwalk@1.0
+     11.76 Drive  p (8004.2,4.4,756.2) v (74,1,-5) |v| 74 yaw 3 fwd (0.05,0.00,1.00) prog 816 off 3 wheels 4 in thr 0.0 brk 0.0 steer -0.25 sc - under Boardwalk@0.4
+     11.87 Drive  p (8012.8,4.6,755.6) v (74,2,-5) |v| 74 yaw 2 fwd (0.04,-0.01,1.00) prog 816 off 12 wheels 4 in thr 0.0 brk 0.0 steer -0.52 sc - under Boardwalk@0.6
+     11.98 Drive  p (8020.1,4.8,755.1) v (72,1,-5) |v| 72 yaw 3 fwd (0.05,0.00,1.00) prog 815 off 19 wheels 4 in thr 0.0 brk 0.0 steer -0.81 sc - under North plaza@0.8
+     12.08 Drive  p (8027.1,4.9,754.7) v (67,0,-4) |v| 68 yaw 3 fwd (0.06,0.00,1.00) prog 815 off 26 wheels 4 in thr 0.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.18 Drive  p (8033.5,4.9,754.2) v (63,0,-4) |v| 63 yaw 94 fwd (0.07,0.00,1.00) prog 814 off 32 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.29 Drive  p (8040.6,4.9,754.1) v (58,0,0) |v| 58 yaw 90 fwd (0.06,0.00,1.00) prog 814 off 40 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.39 Drive  p (8046.1,4.9,754.3) v (54,0,3) |v| 54 yaw 87 fwd (0.01,0.00,1.00) prog 814 off 45 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.50 Drive  p (8051.3,4.9,754.7) v (49,0,6) |v| 50 yaw 84 fwd (-0.05,0.00,1.00) prog 815 off 50 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.60 Drive  p (8056.7,4.9,755.6) v (44,0,9) |v| 45 yaw 79 fwd (-0.12,0.00,0.99) prog 815 off 56 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.71 Drive  p (8060.8,4.9,756.6) v (39,0,11) |v| 41 yaw 75 fwd (-0.19,0.00,0.98) prog 816 off 60 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.81 Drive  p (8064.4,4.9,757.8) v (34,0,13) |v| 37 yaw 70 fwd (-0.25,0.00,0.97) prog 818 off 64 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     12.91 Drive  p (8067.6,4.9,759.2) v (29,0,14) |v| 33 yaw 65 fwd (-0.32,0.00,0.95) prog 819 off 67 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     13.01 Drive  p (8070.2,4.9,760.7) v (24,0,15) |v| 29 yaw 59 fwd (-0.39,0.00,0.92) prog 820 off 70 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     13.12 Drive  p (8072.6,4.9,762.6) v (18,0,16) |v| 24 yaw 50 fwd (-0.47,0.00,0.88) prog 822 off 72 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     13.22 Drive  p (8074.1,4.9,764.2) v (13,0,16) |v| 21 yaw 40 fwd (-0.56,0.00,0.83) prog 824 off 74 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+     13.32 Drive  p (8075.1,4.9,765.8) v (8,0,16) |v| 18 yaw 28 fwd (-0.65,0.00,0.76) prog 826 off 75 wheels 4 in thr 1.0 brk 0.0 steer -1.00 sc - under North plaza@0.9
+  race 9: Rocket Rae 114.4 [Lighthouse rocks], Chip "Showtime" Sterling 116.5 [Midway flight], Vivi 116.9, Abi 118.4 (1 resets) [Midway flight]
+  race 10: Rocket Rae 114.2 [Midway flight], Chip "Showtime" Sterling 116.4 [Midway flight], Abi 117.0 [Lighthouse rocks], Vivi 118.0
+TRACE: 3 resets in 40 laps
+  Abi: reset (out of bounds, at 763.1 (x 8075.7, y 4.7), 67 m/s, 76 m off the line) to the anchor at 798 m in Drive, 25 m behind the best progress
+  Abi: reset (out of bounds, at 752.8 (x 8075.6, y 4.9), 45 m/s, 76 m off the line) to the anchor at 798 m in Drive, 18 m behind the best progress
+  Abi: reset (out of bounds, at 765.8 (x 8075.1, y 4.9), 18 m/s, 75 m off the line) to the anchor at 798 m in Drive, 28 m behind the best progress
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.87 ms, 95th pct 3.01 ms, 99th pct 4.65 ms, worst 182.33 ms over 214614 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  trace1       Drive->Fly  z   232.9  0.604 s  frames worst 6.69 / mean 1.91 ms
+  trace1       Fly->Drive  z   704.0  0.600 s  frames worst 9.30 / mean 2.33 ms
+  trace1       Drive->Fly  z   572.0  0.601 s  frames worst 9.53 / mean 1.96 ms
+  trace1       Fly->Boat   z   909.6  0.744 s  frames worst 182.33 / mean 12.13 ms
+  trace1       Boat->Dive  z  -367.1  0.603 s  frames worst 4.45 / mean 1.86 ms
+  trace1       Dive->Boat  z  -473.5  0.604 s  frames worst 7.28 / mean 2.06 ms
+  trace1       Boat->Drive z  -370.5  0.602 s  frames worst 5.14 / mean 1.84 ms
+  trace2       Drive->Fly  z   572.0  0.601 s  frames worst 10.63 / mean 1.76 ms
+  trace2       Fly->Boat   z   909.1  0.602 s  frames worst 9.52 / mean 2.17 ms
+  trace2       Boat->Dive  z  -366.6  0.600 s  frames worst 9.27 / mean 2.00 ms
+  trace2       Dive->Boat  z  -473.4  0.603 s  frames worst 4.19 / mean 1.84 ms
+  trace2       Boat->Drive z  -370.3  0.601 s  frames worst 7.84 / mean 2.59 ms
+  trace3       Drive->Fly  z   572.0  0.602 s  frames worst 9.79 / mean 1.61 ms
+  trace3       Fly->Boat   z   909.7  0.604 s  frames worst 5.05 / mean 1.74 ms
+  trace3       Boat->Dive  z  -367.3  0.601 s  frames worst 4.02 / mean 1.71 ms
+  trace3       Dive->Boat  z  -473.5  0.603 s  frames worst 4.41 / mean 1.84 ms
+  trace3       Boat->Drive z  -370.4  0.602 s  frames worst 5.09 / mean 1.76 ms
+  trace4       Drive->Fly  z   232.9  0.602 s  frames worst 5.68 / mean 1.84 ms
+  trace4       Fly->Drive  z   704.0  0.601 s  frames worst 8.47 / mean 1.73 ms
+  trace4       Drive->Fly  z   572.0  0.603 s  frames worst 8.02 / mean 1.75 ms
+  trace4       Fly->Boat   z   909.5  0.601 s  frames worst 4.77 / mean 1.64 ms
+  trace4       Boat->Dive  z  -367.0  0.603 s  frames worst 4.48 / mean 1.66 ms
+  trace4       Dive->Boat  z  -473.7  0.604 s  frames worst 4.74 / mean 1.73 ms
+  trace4       Boat->Drive z  -370.9  0.604 s  frames worst 3.90 / mean 1.65 ms
+  trace5       Drive->Fly  z   572.0  0.602 s  frames worst 13.97 / mean 1.96 ms
+  trace5       Fly->Boat   z   908.6  0.601 s  frames worst 6.93 / mean 1.70 ms
+  trace5       Boat->Dive  z  -367.1  0.601 s  frames worst 8.01 / mean 1.97 ms
+  trace5       Dive->Boat  z  -473.7  0.600 s  frames worst 16.00 / mean 4.53 ms
+  trace5       Boat->Drive z  -370.4  0.603 s  frames worst 4.74 / mean 2.12 ms
+  trace6       Drive->Fly  z   233.5  0.603 s  frames worst 8.32 / mean 2.21 ms
+  trace6       Fly->Drive  z   703.3  0.603 s  frames worst 7.63 / mean 2.06 ms
+  trace6       Drive->Fly  z   572.0  0.604 s  frames worst 5.77 / mean 1.82 ms
+  trace6       Fly->Boat   z   909.7  0.602 s  frames worst 7.53 / mean 1.82 ms
+  trace6       Boat->Dive  z  -367.1  0.604 s  frames worst 5.76 / mean 1.93 ms
+  trace6       Dive->Boat  z  -473.2  0.602 s  frames worst 4.10 / mean 1.90 ms
+  trace6       Boat->Drive z  -370.3  0.603 s  frames worst 5.83 / mean 1.80 ms
+  trace7       Drive->Fly  z   572.0  0.603 s  frames worst 8.29 / mean 1.82 ms
+  trace7       Fly->Boat   z   908.9  0.601 s  frames worst 8.00 / mean 1.90 ms
+  trace7       Boat->Dive  z  -366.8  0.700 s  frames worst 44.31 / mean 8.26 ms
+  trace7       Dive->Boat  z  -473.9  0.601 s  frames worst 10.77 / mean 2.98 ms
+  trace7       Boat->Drive z  -370.3  0.603 s  frames worst 6.03 / mean 2.50 ms
+  trace8       Drive->Fly  z   572.0  0.601 s  frames worst 11.13 / mean 2.46 ms
+  trace8       Fly->Boat   z   909.2  0.604 s  frames worst 6.54 / mean 2.19 ms
+  trace8       Boat->Dive  z  -366.5  0.605 s  frames worst 4.59 / mean 1.88 ms
+  trace8       Dive->Boat  z  -473.3  0.604 s  frames worst 4.82 / mean 2.18 ms
+  trace8       Boat->Drive z  -370.3  0.603 s  frames worst 15.09 / mean 2.30 ms
+  trace9       Drive->Fly  z   232.9  0.601 s  frames worst 4.52 / mean 1.80 ms
+  trace9       Fly->Drive  z   704.0  0.602 s  frames worst 8.54 / mean 3.33 ms
+  trace9       Drive->Fly  z   572.0  0.602 s  frames worst 8.39 / mean 1.72 ms
+  trace9       Fly->Boat   z   908.8  0.600 s  frames worst 4.09 / mean 1.81 ms
+  trace9       Boat->Dive  z  -366.7  0.603 s  frames worst 4.27 / mean 1.79 ms
+  trace9       Dive->Boat  z  -473.5  0.604 s  frames worst 3.97 / mean 1.59 ms
+  trace9       Boat->Drive z  -370.5  0.609 s  frames worst 6.84 / mean 1.80 ms
+  trace10      Drive->Fly  z   572.0  0.604 s  frames worst 7.70 / mean 1.84 ms
+  trace10      Fly->Boat   z   909.5  0.601 s  frames worst 5.22 / mean 1.82 ms
+  trace10      Boat->Dive  z  -365.8  0.601 s  frames worst 4.06 / mean 1.86 ms
+  trace10      Dive->Boat  z  -473.4  0.602 s  frames worst 7.35 / mean 2.01 ms
+  trace10      Boat->Drive z  -370.6  0.609 s  frames worst 7.88 / mean 2.48 ms
+sound: music results playing (its own signal peak 0.000), splashes played 10, Abi lines: messup: line_1; waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: lucky_1; win: skipped (Barker talking); messup: bogey_1; waterfall: lucky_1; waterfall: skipped (Barker talking); waterfall: laugh_1; waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); messup: mishit_1; waterfall: lucky_1; win: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

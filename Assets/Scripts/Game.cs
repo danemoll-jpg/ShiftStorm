@@ -33,6 +33,7 @@ namespace ShiftStorm
         public enum Page { Main, Settings, Quit, Garage, Split, Tour, Pick }   // Round 11: The Tour, choose your racer
         public enum PickFor { Race, Trial, Tour }
         PickFor pickFor; int pickStop; public TourRunner TourRun { get; private set; }
+        public ChallengeRunner ChallengeRun { get; private set; }   // Round 13 item 4
         public string MenuNote { get; private set; } = "";
         // Round 6: the second player (split screen) and both players
         public ShiftVehicle Player2 => SplitScreen.Session ? SplitScreen.Session.P2 : null;
@@ -83,6 +84,7 @@ namespace ShiftStorm
             Cam.farClipPlane = 2600; Cam.nearClipPlane = .2f;
             { var cull = new float[32]; cull[ParadisePlunge.DetailLayer] = ParadisePlunge.DetailCullDistance; Cam.layerCullDistances = cull; Cam.layerCullSpherical = true; }   // Round 5: the polished stretch's detail
             Cam.fieldOfView = 65; Cam.clearFlags = CameraClearFlags.Skybox;
+            GraphicsPreset.Apply();   // Round 13 item 5: Auto = Deck on a Steam Deck, High elsewhere
             if (!FindAnyObjectByType<AudioListener>()) Cam.gameObject.AddComponent<AudioListener>();
             Cam.gameObject.AddComponent<AudioMeter>();
             Cam.gameObject.AddComponent<ChaseCam>().target = Player;
@@ -91,6 +93,7 @@ namespace ShiftStorm
             Caller.Make(this).Watch(Player);   // Round 7: TeedOff Barker calls the race
             Buck.Make(this).Watch(Player);   // Round 11: Buck briefs before a race and remarks after it
             TourRun = TourRunner.Make(this);   // Round 11: The Tour
+            ChallengeRun = ChallengeRunner.Make(this);   // Round 13: rival challenges
             GameSounds.Make(Cam.gameObject, this).Watch(Player);   // Round 7: the sound pass
             PlaytestLog.Make(this);   // Round 8 item 10: playtest logs
             Trial = gameObject.AddComponent<TimeTrial>(); Trial.v = Player;
@@ -125,6 +128,7 @@ namespace ShiftStorm
         public void StartTourCourse(int index) => StartCourse(index, true, false);
         void StartCourse(int index, bool race, bool brief)
         {
+            if (ChallengeRun) ChallengeRun.Abort();   // Round 13: any other start ends a rival challenge
             CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex;
             var c = Courses[CourseIndex];
             // Round 11: Buck's briefing before a course's first race / time trial of the session (Barker's start line waits for it)
@@ -160,9 +164,21 @@ namespace ShiftStorm
         // Reset after the finish (Y / R), or Race again on the results: the same course again, the same way
         public void Restart()
         {
+            if (Challenge.Last >= 0 && (Challenge.Active != null || ChallengeRun.Frozen)) { ChallengeRun.Play(Challenge.Last); return; }   // Round 13: replay the rival challenge
             if (Tour.ActiveStop >= 0 && !Tour.Running) { TourRun.Play(Tour.ActiveStop, false); return; }   // Round 11: retry the Tour stop (no scene)
             StartCourse(CourseIndex, RaceMode);
         }
+        // Round 13 item 4: a rival challenge: the player and one rival side by side at an anchor part-way round the lap (the others parked)
+        public void StartChallenge(int index, RecoveryAnchor at, ShiftVehicle rival)
+        {
+            if (SplitScreen.Active) EndSplit(false);
+            CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex; var c = Courses[CourseIndex];
+            RaceMode = true; CourseLook.Apply(c); CourseAudio.Instance?.SetCourse(c); ResultsIndex = 0;
+            Player.Begin(c, at, new Vector3(-5.5f, 0, 0));
+            foreach (var rv in Rivals) { bool on = rv == rival; rv.gameObject.SetActive(on); if (on) rv.Begin(c, at, new Vector3(5.5f, 0, 0)); }
+            Race.Setup(true, Player, new List<ShiftVehicle> { rival });
+        }
+        public void ShowTourPage() { OpenMenu(); ShowPage(Page.Tour, Tour.Stops.Length + 1); }
         // Reset (Y / R) after the finish: the same course again; in split screen only once both players are done (the results are up)
         public void ResetAfterFinish(ShiftVehicle who) { if (!SplitScreen.Active || AllHumansFinished) Restart(); }
 
@@ -246,7 +262,7 @@ namespace ShiftStorm
         void LeaveSplitPage() { if (!SplitScreen.Active) Player.Input.Bind(null); }
 
         public void OpenMenu() { MenuOpen = true; Time.timeScale = 0; ShowPage(Page.Main); }
-        public void CloseMenu() { if (SplitScreen.Session && SplitScreen.Session.MissingPlayer != 0) return; if (MenuPage == Page.Split) LeaveSplitPage(); MenuOpen = false; Time.timeScale = 1; if (Garage.Active) Garage.Instance.Close(); }
+        public void CloseMenu() { if (SplitScreen.Session && SplitScreen.Session.MissingPlayer != 0) return; if (MenuPage == Page.Split) LeaveSplitPage(); MenuOpen = false; Time.timeScale = 1; if (Garage.Active) Garage.Instance.Close(); if (ChallengeRun && ChallengeRun.Frozen) { ChallengeRun.Abort(); StartCourse(CourseIndex, true); } }   // Round 13: Resume after a challenge's result: a normal race there
         public static string FormName(Mode m) => m == Mode.Drive ? "Car" : m == Mode.Boat ? "Boat" : m == Mode.Fly ? "Plane" : "Sub";
         // Round 5: race with a design: saved, and every vehicle's (and sign's) models rebuilt in it, keeping each one's form
         public void UseDesign(string design)
@@ -318,11 +334,12 @@ namespace ShiftStorm
                     Item("Save playtest logs: " + (Settings.PlaytestLogs ? "On" : "Off"), () => { Settings.PlaytestLogs = !Settings.PlaytestLogs; ShowPage(Page.Settings, 8); });
                     Item("Buck's briefings: " + Settings.BuckNames[Settings.BuckBriefings] + "   (On / Short / Off)", () => { Settings.BuckBriefings = (Settings.BuckBriefings + 1) % 3; ShowPage(Page.Settings, 9); });   // Round 11
                     Item("Unlock all Tour stops: " + (Settings.UnlockAllTour ? "On" : "Off") + "   (Race / Time Trial: every course is always open)", () => { Settings.UnlockAllTour = !Settings.UnlockAllTour; ShowPage(Page.Settings, 10); });   // Round 12
-                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 11); });
+                    Item(GraphicsPreset.MenuRow, () => { GraphicsPreset.Cycle(); ShowPage(Page.Settings, 11); });   // Round 13 item 5
+                    if (!Application.isMobilePlatform) Item("Open log folder   (" + PlaytestLog.Folder + ")", () => { PlaytestLog.OpenFolder(); ShowPage(Page.Settings, 12); });
                     if (SplitScreen.Active)
                     {
-                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 12); });
-                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 13); });
+                        Item(Invert2Item, () => { Settings.InvertVertical2 = !Settings.InvertVertical2; ShowPage(Page.Settings, 13); });
+                        Item("Split screen:   " + (SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)"), () => { Settings.SplitLeftRight = !Settings.SplitLeftRight; SplitScreen.Session?.Relayout(); ShowPage(Page.Settings, 14); });
                     }
                     Item("Back", () => ShowPage(Page.Main));
                     break;
@@ -333,6 +350,7 @@ namespace ShiftStorm
                         Item($"Design: {VehicleDesigns.Title(gar.Design)}{(VehicleDesigns.Find(gar.Design)?.rival is string rv && rv != "" ? $" ({rv}'s)" : "")}   ({names.IndexOf(gar.Design) + 1} of {names.Count}, A: next)", () => { gar.NextDesign(); ShowPage(Page.Garage, 0); });
                         Item($"Form: {FormName(gar.Form)} - {gar.FormInfo(gar.Form)}   (A: next, with the change)", () => { gar.NextForm(); ShowPage(Page.Garage, 1); });
                         Item(gar.Design == Settings.Design ? "Racing with this design" : "Race with this design", () => { UseDesign(gar.Design); ShowPage(Page.Garage, 2); });
+                        Item(Paints.Row, () => { Settings.Paint = Paints.Next(); gar.SetDesign(gar.Design); Lineup.Apply(this); ShowPage(Page.Garage, 3); });   // Round 13 item 4: paint won in rival challenges
                         Item("Back", () => ShowPage(Page.Main));
                     }
                     break;
@@ -340,6 +358,9 @@ namespace ShiftStorm
                     // Round 11 item 3: the stops in order, best place and points; a locked stop says what unlocks it
                     for (int k = 0; k < Tour.Stops.Length; k++) { int stop = k; Item(Tour.Row(stop), stop + 1 <= Tour.Unlocked ? () => ShowPick(PickFor.Tour, stop) : (Action)null); }
                     Item($"Points: {Tour.Total}   (1st 10, 2nd 6, 3rd 4, 4th 2; top {Tour.QualifyPlace} unlocks the next stop)", null);
+                    // Round 13 item 4: a one-on-one rival challenge per cleared stop
+                    for (int k = 0; k < Challenge.All.Length; k++) { int ci = k; Item(Challenge.Row(ci), Challenge.Open(ci) ? () => { CloseMenuForced(); ChallengeRun.Play(ci); } : (Action)null); }
+                    if (Challenge.Note != "") Item(Challenge.Note, null);
                     Item("Back", () => ShowPage(Page.Main));
                     break;
                 case Page.Pick:

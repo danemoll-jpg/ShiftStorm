@@ -23,6 +23,7 @@ namespace ShiftStorm
         public static readonly List<Crowd> All = new List<Crowd>();
         public static bool Off = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noCrowd") >= 0;   // checks: the frame time without it
         public const float DrawDistance = 700f;
+        public static float Density = 1f;   // Round 13 item 5: the share of each stand's fans drawn (GraphicsPreset)
         public string StandName { get; private set; }
         public int Fans { get; private set; }
         public int Cheers { get; private set; }
@@ -182,8 +183,9 @@ namespace ShiftStorm
             if (!mat || !cam || (cam.transform.position - Center).sqrMagnitude > DrawDistance * DrawDistance) return;
             if ((cam.cullingMask & (1 << gameObject.layer)) == 0) return;
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            for (int i = 0; i < batches.Count; i++) Graphics.DrawMeshInstanced(mesh, 0, mat, batches[i], counts[i], blocks[i], UnityEngine.Rendering.ShadowCastingMode.Off, false, gameObject.layer, cam);
-            DrawnLastFrame = Fans; sw.Stop(); CpuMs += sw.Elapsed.TotalMilliseconds;
+            int drawn = 0;
+            for (int i = 0; i < batches.Count; i++) { int n = Mathf.Clamp(Mathf.CeilToInt(counts[i] * Density), 1, counts[i]); drawn += n; Graphics.DrawMeshInstanced(mesh, 0, mat, batches[i], n, blocks[i], UnityEngine.Rendering.ShadowCastingMode.Off, false, gameObject.layer, cam); }
+            DrawnLastFrame = drawn; sw.Stop(); CpuMs += sw.Elapsed.TotalMilliseconds;
         }
         public int DrawnLastFrame { get; private set; }
         public static int Total { get { int n = 0; foreach (var c in All) n += c.Fans; return n; } }

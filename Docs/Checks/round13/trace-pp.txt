@@ -1,0 +1,122 @@
+ShiftStorm check 'trace', 2026-11-16 00:33, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+TRACE (Paradise Plunge): 40 AI laps (four AI cars per race, Abi's car driven by an AI too), time scale 3.0; every reset dumps the racer's last 4 s (every 0.1 s)
+  race 1: Rocket Rae 132.1 [Lake flight], Chip "Showtime" Sterling 133.8, Vivi 134.9, Abi 135.6
+  race 2: Rocket Rae 133.1, Abi 133.5 [Lake flight+Coral Vault tunnel], Vivi 133.7 [Lake flight], Chip "Showtime" Sterling 133.8 [Coral Vault tunnel]
+  RESET race 3 Chip "Showtime" Sterling: reset (fell off the climb, at 1130.0 (x 99.5, y 0.6), 71 m/s, 38 m off the line) to the anchor at 1329 m in Drive, 79 m behind the best progress
+     15.40 Fly    p (6.6,24.5,825.2) v (9,-9,79) |v| 80 yaw 6 fwd (0.12,-0.11,0.99) prog 1076 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.58 sc Lake flight under West arm@22.6
+     15.51 Fly    p (7.6,23.6,833.1) v (11,-10,79) |v| 80 yaw 8 fwd (0.14,-0.13,0.98) prog 1084 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.57 sc Lake flight under canyon wall@10.9
+     15.61 Fly    p (8.8,22.5,840.9) v (13,-11,78) |v| 80 yaw 9 fwd (0.17,-0.14,0.98) prog 1092 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.55 sc Lake flight under canyon wall@10.3
+     15.72 Fly    p (10.5,21.1,850.0) v (15,-12,78) |v| 80 yaw 11 fwd (0.19,-0.16,0.97) prog 1101 off 7 wheels 0 in thr 0.0 brk 0.0 steer +0.53 sc Lake flight under canyon wall@11.8
+     15.83 Fly    p (12.5,19.6,859.0) v (17,-12,77) |v| 80 yaw 13 fwd (0.22,-0.16,0.96) prog 1110 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.49 sc Lake flight under West arm@17.6
+     15.94 Fly    p (14.3,18.4,866.7) v (19,-12,77) |v| 80 yaw 14 fwd (0.24,-0.15,0.96) prog 1118 off 7 wheels 0 in thr 1.0 brk 0.0 steer +0.42 sc Lake flight under West arm@16.4
+     16.04 Fly    p (16.3,17.1,874.4) v (20,-12,76) |v| 80 yaw 15 fwd (0.25,-0.15,0.96) prog 1125 off 8 wheels 0 in thr 1.0 brk 0.0 steer +0.32 sc Lake flight under West arm@15.2
+     16.14 Fly    p (18.4,16.0,882.0) v (21,-11,77) |v| 80 yaw 16 fwd (0.27,-0.13,0.95) prog 1133 off 8 wheels 0 in thr 0.0 brk 0.0 steer +0.30 sc Lake flight under West arm@14.0
+     16.25 Fly    p (21.0,14.9,890.9) v (23,-9,76) |v| 80 yaw 16 fwd (0.28,-0.12,0.95) prog 1142 off 8 wheels 0 in thr 0.0 brk 0.0 steer +0.30 sc Lake flight under West arm@12.9
+     16.36 Fly    p (23.3,14.0,898.6) v (24,-8,76) |v| 80 yaw 17 fwd (0.29,-0.10,0.95) prog 1150 off 8 wheels 0 in thr 1.0 brk 0.0 steer +0.29 sc Lake flight under West arm@12.1
+     16.46 Fly    p (25.7,13.3,906.2) v (25,-7,76) |v| 80 yaw 18 fwd (0.31,-0.09,0.95) prog 1158 off 8 wheels 0 in thr 1.0 brk 0.0 steer +0.30 sc Lake flight under West arm@11.3
+     16.57 Fly    p (28.6,12.5,915.0) v (26,-6,76) |v| 80 yaw 19 fwd (0.32,-0.08,0.94) prog 1166 off 8 wheels 0 in thr 0.0 brk 0.0 steer +0.31 sc Lake flight under West arm@10.5
+     16.67 Fly    p (31.3,11.9,922.5) v (27,-6,75) |v| 80 yaw 20 fwd (0.34,-0.07,0.94) prog 1174 off 8 wheels 0 in thr 1.0 brk 0.0 steer +0.33 sc Lake flight under Road@9.9
+     16.78 Fly    p (34.0,11.4,930.0) v (27,-6,75) |v| 80 yaw 20 fwd (0.34,-0.08,0.94) prog 1183 off 14 wheels 0 in thr 0.0 brk 0.0 steer -0.47 sc - under Road@9.4 | shortcut: shortcut Lake flight: out (Fly, 80 m/s); 
+     16.88 Drive* p (37.0,10.6,938.2) v (26,-8,70) |v| 75 yaw 20 fwd (0.35,-0.03,0.94) prog 1192 off 9 wheels 0 in thr 0.0 brk 0.0 steer -0.54 sc - under Road@8.6 | change: Fly->Drive at z 930.0 (x 34.0, y 11.4) (Wheels down (lake flight)); speed 80.2 -> 75.0 m/s; 
+     16.98 Drive* p (39.6,9.7,945.3) v (26,-9,70) |v| 75 yaw 20 fwd (0.35,0.00,0.94) prog 1199 off 7 wheels 0 in thr 0.0 brk 0.0 steer -0.63 sc - under Road@7.8
+     17.09 Drive* p (42.1,8.7,952.3) v (26,-11,70) |v| 76 yaw 20 fwd (0.35,0.00,0.94) prog 1207 off 5 wheels 0 in thr 0.0 brk 0.0 steer -0.73 sc - under Road@6.7
+     17.19 Drive* p (44.7,7.5,959.3) v (26,-13,70) |v| 76 yaw 20 fwd (0.35,0.00,0.94) prog 1214 off 3 wheels 0 in thr 0.0 brk 0.0 steer -0.83 sc - under West arm@5.5
+     17.30 Drive* p (47.2,6.1,966.3) v (26,-14,70) |v| 76 yaw 20 fwd (0.35,0.00,0.94) prog 1221 off 1 wheels 0 in thr 0.0 brk 0.0 steer -0.92 sc - under West arm@4.1
+     17.40 Drive  p (50.2,4.3,974.5) v (26,-16,70) |v| 77 yaw 20 fwd (0.35,0.00,0.94) prog 1229 off 1 wheels 0 in thr 0.0 brk 0.0 steer -1.00 sc - under Road@2.3
+     17.51 Drive  p (52.8,2.5,981.5) v (25,-17,70) |v| 76 yaw 20 fwd (0.35,0.00,0.94) prog 1237 off 3 wheels 4 in thr 0.0 brk 0.0 steer -1.00 sc - under Road@0.6
+     17.74 Drive  p (58.6,2.9,997.8) v (24,3,70) |v| 74 yaw 19 fwd (0.22,0.01,0.98) prog 1253 off 9 wheels 4 in thr 0.0 brk 0.0 steer -0.94 sc - under Road@0.9 | touch Road n (0.00,1.00,0.00) rel 77; touch West arm n (0.00,1.00,0.00) rel 77; gate: gate G1 promenade exit passed (2/11); 
+     17.85 Drive  p (60.9,3.1,1004.7) v (23,2,68) |v| 72 yaw 19 fwd (0.13,0.00,0.99) prog 1260 off 11 wheels 0 in thr 0.0 brk 0.0 steer -0.76 sc - under Road@1.1
+     17.95 Drive  p (63.2,3.2,1011.5) v (23,1,68) |v| 72 yaw 19 fwd (0.04,0.00,1.00) prog 1266 off 13 wheels 0 in thr 0.0 brk 0.0 steer -0.56 sc - under West arm@1.3
+     18.05 Drive  p (65.7,3.9,1019.4) v (20,6,67) |v| 70 yaw 17 fwd (-0.05,0.00,1.00) prog 1274 off 16 wheels 2 in thr 0.0 brk 0.0 steer -0.35 sc - under West arm@1.9 | touch guard wall n (0.00,1.00,0.00) rel 72; touch guard wall n (0.00,1.00,0.00) rel 72; 
+     18.15 Drive  p (67.7,4.4,1026.1) v (20,5,67) |v| 70 yaw 17 fwd (-0.13,-0.04,0.99) prog 1281 off 18 wheels 0 in thr 0.0 brk 0.5 steer -0.19 sc - under West arm@2.5
+     18.26 Drive  p (69.8,4.9,1032.8) v (20,4,67) |v| 70 yaw 17 fwd (-0.21,-0.07,0.98) prog 1288 off 20 wheels 0 in thr 0.0 brk 0.9 steer -0.03 sc - under West arm@2.9
+     18.37 Drive  p (72.2,5.3,1040.7) v (20,3,67) |v| 70 yaw 17 fwd (-0.28,-0.10,0.96) prog 1296 off 22 wheels 0 in thr 0.0 brk 0.3 steer +0.17 sc - under West arm@3.4
+     18.47 Drive  p (74.2,5.6,1047.4) v (20,2,67) |v| 70 yaw 17 fwd (-0.34,-0.12,0.93) prog 1302 off 24 wheels 0 in thr 0.0 brk 1.0 steer +0.34 sc - under West arm@3.6
+     18.57 Drive  p (76.3,5.7,1054.1) v (20,1,67) |v| 70 yaw 17 fwd (-0.40,-0.13,0.91) prog 1309 off 26 wheels 0 in thr 0.0 brk 1.0 steer +0.51 sc - under West arm@3.8
+     18.67 Drive  p (78.3,5.8,1060.8) v (20,0,67) |v| 70 yaw 17 fwd (-0.46,-0.13,0.88) prog 1316 off 28 wheels 0 in thr 0.0 brk 1.0 steer +0.71 sc - under West arm@3.8
+     18.78 Drive  p (80.4,5.7,1067.5) v (20,-1,67) |v| 70 yaw 17 fwd (-0.51,-0.13,0.85) prog 1323 off 30 wheels 0 in thr 0.0 brk 1.0 steer +0.92 sc - under West arm@3.8
+     18.88 Drive  p (82.8,5.6,1075.3) v (20,-2,67) |v| 70 yaw 17 fwd (-0.56,-0.12,0.82) prog 1332 off 32 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under West arm@3.6
+     18.99 Drive  p (84.8,5.3,1082.0) v (20,-3,67) |v| 70 yaw 17 fwd (-0.60,-0.11,0.79) prog 1340 off 34 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under West arm@3.3
+     19.10 Drive  p (86.9,5.0,1088.7) v (20,-4,67) |v| 70 yaw 17 fwd (-0.64,-0.09,0.76) prog 1347 off 35 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+     19.20 Drive  p (89.3,4.4,1096.5) v (20,-5,67) |v| 70 yaw 17 fwd (-0.68,-0.08,0.73) prog 1355 off 37 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+     19.31 Drive  p (91.3,3.9,1103.2) v (20,-6,67) |v| 70 yaw 17 fwd (-0.71,-0.06,0.70) prog 1362 off 38 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+     19.41 Drive  p (93.4,3.2,1109.9) v (20,-7,67) |v| 70 yaw 17 fwd (-0.74,-0.05,0.67) prog 1370 off 40 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+     19.52 Drive  p (95.8,2.3,1117.7) v (20,-8,67) |v| 71 yaw 17 fwd (-0.76,-0.03,0.64) prog 1382 off 41 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+     19.62 Drive  p (97.8,1.4,1124.4) v (20,-9,67) |v| 71 yaw 17 fwd (-0.79,-0.02,0.62) prog 1405 off 40 wheels 0 in thr 0.0 brk 1.0 steer +1.00 sc - under nothing within 30 m
+  race 3: Rocket Rae 132.6, Abi 133.5 [Lake flight], Vivi 133.6 [Lake flight], Chip "Showtime" Sterling 134.1 (1 resets) [Lake flight+Coral Vault tunnel]
+  race 4: Rocket Rae 131.6 [Lake flight], Vivi 133.5 [Lake flight], Chip "Showtime" Sterling 133.8 [Coral Vault tunnel], Abi 134.5
+  race 5: Chip "Showtime" Sterling 134.1, Vivi 134.4, Abi 135.4, Rocket Rae 135.6 [Lake flight]
+  race 6: Abi 133.2 [Lake flight], Rocket Rae 133.3, Chip "Showtime" Sterling 134.2, Vivi 134.9
+  race 7: Rocket Rae 132.0 [Lake flight], Vivi 133.4 [Lake flight], Chip "Showtime" Sterling 134.8 [Lake flight], Abi 135.1
+  race 8: Rocket Rae 130.8 [Lake flight+Sky Arch slit], Vivi 134.7, Chip "Showtime" Sterling 134.8 [Lake flight+Coral Vault tunnel], Abi 134.9
+  race 9: Rocket Rae 133.1, Abi 133.4 [Lake flight+Coral Vault tunnel], Chip "Showtime" Sterling 133.5 [Lake flight], Vivi 134.4
+  race 10: Rocket Rae 133.6, Chip "Showtime" Sterling 133.7 [Lake flight+Coral Vault tunnel], Abi 134.1 [Lake flight], Vivi 136.0
+TRACE: 1 resets in 40 laps
+  Chip "Showtime" Sterling: reset (fell off the climb, at 1130.0 (x 99.5, y 0.6), 71 m/s, 38 m off the line) to the anchor at 1329 m in Drive, 79 m behind the best progress
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.85 ms, 95th pct 4.28 ms, 99th pct 5.62 ms, worst 233.68 ms over 160261 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  trace1       Drive->Fly  z   944.8  0.603 s  frames worst 11.57 / mean 2.82 ms
+  trace1       Fly->Boat   z  -607.2  0.605 s  frames worst 8.78 / mean 2.90 ms
+  trace1       Boat->Dive  z  -204.1  0.603 s  frames worst 7.73 / mean 2.90 ms
+  trace1       Dive->Boat  z  -466.4  0.611 s  frames worst 9.97 / mean 3.34 ms
+  trace1       Boat->Drive z  -304.5  0.604 s  frames worst 8.06 / mean 2.91 ms
+  trace2       Drive->Fly  z   652.0  0.606 s  frames worst 7.21 / mean 3.36 ms
+  trace2       Fly->Drive  z   929.2  0.602 s  frames worst 6.89 / mean 3.10 ms
+  trace2       Drive->Fly  z   944.7  0.602 s  frames worst 6.40 / mean 2.78 ms
+  trace2       Fly->Boat   z  -605.8  0.601 s  frames worst 6.05 / mean 2.77 ms
+  trace2       Boat->Dive  z  -203.9  0.605 s  frames worst 7.73 / mean 3.19 ms
+  trace2       Dive->Boat  z  -466.6  0.604 s  frames worst 10.35 / mean 3.53 ms
+  trace2       Boat->Drive z  -304.7  0.601 s  frames worst 8.19 / mean 2.85 ms
+  trace3       Drive->Fly  z   652.0  0.608 s  frames worst 6.70 / mean 3.20 ms
+  trace3       Fly->Drive  z   929.2  0.600 s  frames worst 5.96 / mean 2.94 ms
+  trace3       Drive->Fly  z   944.5  0.604 s  frames worst 7.81 / mean 3.07 ms
+  trace3       Fly->Boat   z  -605.6  0.611 s  frames worst 10.03 / mean 3.04 ms
+  trace3       Boat->Dive  z  -204.9  0.607 s  frames worst 7.68 / mean 3.01 ms
+  trace3       Dive->Boat  z  -466.6  0.607 s  frames worst 9.36 / mean 3.63 ms
+  trace3       Boat->Drive z  -304.7  0.601 s  frames worst 7.51 / mean 3.30 ms
+  trace4       Drive->Fly  z   944.9  0.603 s  frames worst 9.70 / mean 3.01 ms
+  trace4       Fly->Boat   z  -607.2  0.607 s  frames worst 7.12 / mean 3.18 ms
+  trace4       Boat->Dive  z  -204.4  0.605 s  frames worst 10.26 / mean 3.17 ms
+  trace4       Dive->Boat  z  -466.5  0.604 s  frames worst 10.76 / mean 3.40 ms
+  trace4       Boat->Drive z  -304.5  0.613 s  frames worst 11.50 / mean 3.57 ms
+  trace5       Drive->Fly  z   945.3  0.606 s  frames worst 10.12 / mean 3.00 ms
+  trace5       Fly->Boat   z  -607.3  0.600 s  frames worst 8.97 / mean 3.30 ms
+  trace5       Boat->Dive  z  -203.4  0.603 s  frames worst 10.11 / mean 3.45 ms
+  trace5       Dive->Boat  z  -466.6  0.602 s  frames worst 9.63 / mean 3.21 ms
+  trace5       Boat->Drive z  -304.6  0.600 s  frames worst 7.69 / mean 2.75 ms
+  trace6       Drive->Fly  z   652.0  0.607 s  frames worst 7.69 / mean 3.55 ms
+  trace6       Fly->Drive  z   929.2  0.604 s  frames worst 5.99 / mean 3.28 ms
+  trace6       Drive->Fly  z   944.6  0.604 s  frames worst 5.87 / mean 2.74 ms
+  trace6       Fly->Boat   z  -607.1  0.607 s  frames worst 15.88 / mean 3.22 ms
+  trace6       Boat->Dive  z  -203.4  0.602 s  frames worst 13.16 / mean 3.45 ms
+  trace6       Dive->Boat  z  -466.7  0.603 s  frames worst 7.74 / mean 3.19 ms
+  trace6       Boat->Drive z  -304.9  0.605 s  frames worst 6.88 / mean 3.28 ms
+  trace7       Drive->Fly  z   944.6  0.600 s  frames worst 9.62 / mean 2.80 ms
+  trace7       Fly->Boat   z  -606.8  0.604 s  frames worst 9.91 / mean 3.04 ms
+  trace7       Boat->Dive  z  -202.1  0.609 s  frames worst 8.66 / mean 3.25 ms
+  trace7       Dive->Boat  z  -466.8  0.602 s  frames worst 8.90 / mean 3.49 ms
+  trace7       Boat->Drive z  -304.8  0.601 s  frames worst 8.85 / mean 3.34 ms
+  trace8       Drive->Fly  z   944.5  0.601 s  frames worst 7.05 / mean 3.04 ms
+  trace8       Fly->Boat   z  -606.4  0.620 s  frames worst 233.68 / mean 18.12 ms
+  trace8       Boat->Dive  z  -203.4  0.604 s  frames worst 6.48 / mean 3.06 ms
+  trace8       Dive->Boat  z  -467.0  0.609 s  frames worst 10.39 / mean 3.60 ms
+  trace8       Boat->Drive z  -305.1  0.601 s  frames worst 7.06 / mean 3.39 ms
+  trace9       Drive->Fly  z   652.0  0.605 s  frames worst 6.83 / mean 3.44 ms
+  trace9       Fly->Drive  z   929.6  0.605 s  frames worst 6.55 / mean 3.29 ms
+  trace9       Drive->Fly  z   944.8  0.601 s  frames worst 9.75 / mean 3.00 ms
+  trace9       Fly->Boat   z  -607.1  0.606 s  frames worst 5.64 / mean 2.77 ms
+  trace9       Boat->Dive  z  -203.8  0.606 s  frames worst 7.22 / mean 3.25 ms
+  trace9       Dive->Boat  z  -466.4  0.600 s  frames worst 7.20 / mean 3.20 ms
+  trace9       Boat->Drive z  -304.5  0.601 s  frames worst 10.41 / mean 3.30 ms
+  trace10      Drive->Fly  z   652.0  0.607 s  frames worst 8.29 / mean 3.12 ms
+  trace10      Fly->Drive  z   929.2  0.601 s  frames worst 6.06 / mean 3.27 ms
+  trace10      Drive->Fly  z   945.0  0.604 s  frames worst 8.06 / mean 3.08 ms
+  trace10      Fly->Boat   z  -606.4  0.604 s  frames worst 9.67 / mean 3.24 ms
+  trace10      Boat->Dive  z  -201.3  0.612 s  frames worst 100.21 / mean 4.65 ms
+  trace10      Dive->Boat  z  -466.9  0.601 s  frames worst 6.93 / mean 3.22 ms
+  trace10      Boat->Drive z  -305.0  0.610 s  frames worst 6.24 / mean 3.24 ms
+sound: music results playing (its own signal peak 0.000), splashes played 10, Abi lines: waterfall: laugh_1; win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: quipgood_1; waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -1577,3 +1577,53 @@ Run unattended; don't stop to ask; no visible window. Same testing rules. Read-o
 ### For Dan to check
 - See "For Dan to check (Round 12)" above.
 
+## Round 13 spec (moved from TODO.md, delivered 2026-11-16): known bugs, more route choices, rival challenges
+
+**Dan, 2026-11-16:** "I am busy and can't test — what can we queue up now." So this round needs **no testing or choices
+from Dan**: no new tracks (Dan picks those), no new characters / voices (Dan designs those), no Tripo. Run unattended;
+don't stop to ask; no visible window. Same testing rules. Read-only references as before. Round 12's "For Dan to check"
+list stays open for when he has time.
+
+1. **Fix the known reset / AI bugs from Round 12's report:**
+   - Coaster Coast: the AI in Abi's car is reset at the station after the Midway flight (8 in 50 laps).
+   - Paradise Plunge: the AI falls off the climb about 1 lap in 8 (x 80, z 1120).
+   - Coaster Coast: a car on the car line reset just after the Midway Jump's landing (x 7924, z 408).
+   Find each real cause (record, don't guess), fix, and make sure a player can't hit the same thing.
+   *Check:* 50-lap soak on each track with **0** resets at those three spots; the player-side reproduction passes.
+2. **A second choice jump with split paths on Paradise Plunge** (Dan, 2026-11-14: "Sometimes the jump where you choose
+   jump or fly should be different paths"; deferred in Round 8). Where there's room (the Waterfall Return or the mangrove
+   bank, or the Cliffside Climb): LB / E in the first second off the lip flies a short branch; staying a car takes its own
+   different road. Both about equal in time, with the Round 12 rules from the start (room to make the exit, forward
+   recovery, no repeat loops, near misses). Route strip / arrow follow the line taken. AI picks before the lip.
+   *Check:* both lines timed, the human-like pilot makes the fly line ≥ 9 of 10, branch failure checks, AI 25 laps, 0 stuck.
+3. **The Mangrove submerged bypass** (the concept's "later experiment"): an optional underwater route in Mangrove Run —
+   dive before the S-bend, resurface before the Sunken Gateway — as a real choice (boat on the surface vs. sub
+   underneath), about equal in time, with its own dive / surface zones, anchors and gates, and some underwater sights
+   (roots, glowing fish, a sunken log arch). AI takes it on some laps.
+   *Check:* both lines timed, transitions clean (no boat ↔ sub flicker), branch failure checks, AI 25 laps.
+4. **Rival challenges in the Tour** (STORY.md: "optional rival challenges and practice events reuse the tracks to develop
+   relationships"). After each Tour stop is cleared, unlock a short optional challenge on that track with one rival
+   (e.g. "Beat Rae from the waterfall to the finish", "Stay ahead of Chip through the coaster"), with a few lines from the
+   rival (their existing voices / ElevenLabs in their own voices, as before) and Buck / Barker. A small reward (a paint
+   colour or a Garage badge). Saved in `tour.json`.
+   *Check:* each challenge plays start to finish (win and lose), saves, and its lines fit (transcribed like Round 9).
+5. **Steam Deck performance presets** (measured on the PC, Dan checks the Deck later): a **Graphics** setting
+   (Deck / Low / Medium / High), auto **Deck** on a Steam Deck: render scale, shadows, draw distance, crowd and set-piece
+   density, texture quality. Split screen picks a lighter preset automatically. Report frame times per preset on both
+   tracks, single and split screen.
+5c. **Coaster Coast: lost under the boardwalk / pier** (Dan, 2026-11-16: "it's too easy to get stuck under the boardwalk / pier and
+   not know where to go"). Read his playtest logs; make the way through obvious (a clear lane between the pier legs, guide lights / a
+   lit channel, the next gate and the HUD arrow visible from inside, the exit light visible early); no dead ends or pockets (close off or
+   open up gaps; soft walls / currents back to the route); off the route a few seconds: THIS WAY + the arrow; truly stuck: forward
+   recovery (Round 12's rules). AI and the human-like pilot get through without help.
+   *Check:* player-view pictures along the under-pier route; scripted runs that wander off in each direction come back or are recovered
+   forward; AI 25 laps with 0 stuck there.
+6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 15 (0.11.0).** Per-item status,
+   "For Dan to check" (add to Round 12's open list, don't replace it), update `CLAUDE.md`, commit, push, publish, clean the
+   disk. Keep the .md files UTF-8.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (fill in at end of round)
+- …

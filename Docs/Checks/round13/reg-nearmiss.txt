@@ -1,0 +1,27 @@
+ShiftStorm check 'nearmiss', 2026-11-16 04:17, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+NEAR MISS: a gate passed outside its frame but within 1.0 gate width (8-30 m) of it, in a permitted form, heading along the route, counts with +3 s; the band per gate:
+  G0 start: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  G1 promenade exit: frame +-22 x +-8 m, near-miss band to +-52 x +-24 m
+  G2 launch: frame +-13 x +-10 m, near-miss band to +-39 x +-30 m
+  G3 arch exit: frame +-42 x +-28 m, near-miss band to +-72 x +-58 m
+  G4 lagoon landing: frame +-48 x +-12 m, near-miss band to +-78 x +-36 m
+  G5 mangrove exit: frame +-22 x +-8 m, near-miss band to +-52 x +-24 m
+  G6 dive portal: frame +-17 x +-6 m, near-miss band to +-47 x +-18 m
+  G7 chamber exit: frame +-21 x +-10 m, near-miss band to +-51 x +-30 m
+  G8 surfacing pool: frame +-22 x +-10 m, near-miss band to +-52 x +-30 m
+  G9 road landing: frame +-15 x +-9 m, near-miss band to +-45 x +-27 m
+  G10 finish: frame +-15 x +-8 m, near-miss band to +-45 x +-24 m
+  road: G1 passed 3 m outside its post, on the grass beyond the barrier: counted, penalty +3 s, cue "MISSED G1 +3 s", resets 0; log: [   2.63] gate G1 promenade exit passed (near miss, 5.2 m outside, +3 s) (2/11)  PASS
+  flight: G3 passed 8 m under its frame (beside it the arch's pillars stand in the way): counted, penalty +3 s, cue "MISSED G3 +3 s", resets 0; log: [   2.48] gate G3 arch exit passed (near miss, 8.0 m outside, +3 s) (4/11)  PASS
+  water: G4 passed 8 m outside its frame on the lagoon: counted, penalty +3 s, cue "MISSED G4 +3 s", resets 0; log: [   1.96] gate G4 lagoon landing passed (near miss, 6.6 m outside, +3 s) (5/11)  PASS
+  pool: G8 passed 5 m outside its frame (the cave gates G6 / G7 fill the cave's cross-section: they cannot be passed beside): counted, penalty +3 s, cue "MISSED G8 +3 s", resets 0; log: [   0.74] gate G8 surfacing pool passed (near miss, 5.0 m outside, +3 s) (9/11)  PASS
+  far miss: G3 passed 15 m beyond the band: not counted, cue "", TURN BACK shown, resets 1 (missed gate G3 arch exit); log: [   3.72] missed gate G3 arch exit (40 m past it, Fly): turn back | [   5.52] reset (missed gate G3 arch exit, at 239.6 (x 255.8, y 51.4), 72 m/s, 90 m off the line) to the flight line at 2876 m in Fly, 180 m behind the best progress  PASS (rejected)
+  wrong form: G4 (boat only) flown over as a plane 8 m above its frame: counted, penalty +0 s, cue "", resets 1 (G4 lagoon landing passed as Fly); log: [   2.55] reset (G4 lagoon landing passed as Fly, at -695.4 (x 738.7, y 19.9), 72 m/s, 20 m off the line) to the anchor at 4062 m in Boat, 28 m behind the best progress | [   3.57] gate G4 lagoon landing passed (5/11)  PASS (rejected)
+NEAR MISS PENALTY PASS: the most a near miss could save anywhere on the lap: 1.14 s at G7 chamber exit (320 m either side, 50.0 m shorter at 44 m/s); penalty 3 s (clearly above it: a lap with a near miss is never faster than the clean lap)
+NEAR MISS PASS
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.67 ms, 95th pct 6.42 ms, 99th pct 13.97 ms, worst 99.04 ms over 6379 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: skipped (Barker talking, penalty); messup: bogey_1; messup: skipped (another driver, reset: reset (missed gate G3 arch exit, at 239.6 (x 255.8, y 51.4), 72 m/s, 90 m off the line) to the flight line at 2876 m in Fly, 180 m behind the best progress)
+Abi's clips: 6 loaded, one-shots played: Sitting Disapproval, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

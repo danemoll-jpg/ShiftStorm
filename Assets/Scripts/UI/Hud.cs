@@ -134,7 +134,8 @@ namespace ShiftStorm
             else segment.text = "";
             // center: countdown, then cues
             if (Buck.Instance && Buck.Instance.CardOn) center.text = "";   // Round 11: no frozen countdown number under Buck's card
-            else if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }
+            else if (game && game.ChallengeRun && game.ChallengeRun.Frozen && player != 2) { center.fontSize = 34; center.color = Challenge.Note.StartsWith("CHALLENGE WON") ? new Color(.5f, 1, .5f) : new Color(1, .6f, .25f); center.text = Challenge.Note.Replace(": ", "\n").Replace("  -  ", "\n"); }   // Round 13: a rival challenge's result
+            else if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 5 ? "" : left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }   // Round 13: a long hold (a challenge's lines) shows no number
             else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
             else if (v.WingsOpen && v.GroundedWheels == 0)   // Round 7: the choice jump's wings window
             { center.fontSize = 64; center.color = new Color(.55f, .95f, 1f); center.text = v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }

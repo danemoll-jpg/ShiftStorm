@@ -35,7 +35,7 @@ namespace ShiftStorm
         public override bool Narrow(float p, Mode mode)
         {
             var m = ParadisePlunge.Marks; if (m.Count == 0) return true;
-            if (ParadisePlunge.StuntNear(p)) return true;   // Round 7: on its line into the loop (7 m half) and over the jumps
+            if (ParadisePlunge.StuntNear(p) || ParadisePlunge.InDiveLane(p)) return true;   // Round 13: the bypass's dive lane beside the line   // Round 7: on its line into the loop (7 m half) and over the jumps
             foreach (var k in new[] { "lip", "splash", "diveZone", "portal", "surface", "rampFoot", "rampLip", "landing", "G1", "G5", "G7", "G8", "G9", "finish" })
                 if (Mathf.Abs(p - m[k]) < 45) return true;
             if (p > m["rampStart"] - 20 && p < m["lip"]) return true;

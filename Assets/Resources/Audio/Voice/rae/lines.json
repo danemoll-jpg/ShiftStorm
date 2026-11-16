@@ -2,6 +2,18 @@
  "speaker": "rae",
  "lines": [
   {
+   "id": "chintro_1",
+   "text": "One on one, rookie? Try to keep my bubbles in sight!"
+  },
+  {
+   "id": "chlose_1",
+   "text": "Okay. Okay! You earned that one."
+  },
+  {
+   "id": "chwin_1",
+   "text": "Ha! The waterfall is MY turf!"
+  },
+  {
    "id": "disaster_1",
    "text": "Are you kidding me?!"
   },

@@ -89,13 +89,19 @@ namespace ShiftStorm
             Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
             Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); Penalty = 0; NearMisses.Clear(); Scrapes = 0; WallHits = 0; MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
-            Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0, fromStart ? grid : default);
+            Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0, grid);   // Round 13: an offset at any anchor (a rival challenge's two lanes)
             OnShortcut = null; ShortcutsTaken.Clear(); GateLog.Clear(); scrapeUntil = -1;
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
             BestProgress = lastBest = Progress; foreach (var g in course.gates) if (g.progress < Progress - 1f) GatesPassed++;
             held = course.timeTrial && fromStart && shared.countdownSeconds > 0;
             if (held) { HoldUntil = Time.time + shared.countdownSeconds; StartTime = HoldUntil; Body.isKinematic = true; } else HoldUntil = -1;
             Note("start", $"start on {course.courseName} in {Mode}{(held ? $", countdown {shared.countdownSeconds:0} s" : "")}");
+        }
+
+        // Round 13: held where it is for a while (a rival challenge's lines and its 3-2-1, then its result); clock: the run's time starts at GO
+        public void HoldFor(float seconds, bool clock = true)
+        {
+            held = true; HoldUntil = Time.time + seconds; if (clock) StartTime = HoldUntil; Body.isKinematic = true;
         }
 
         public static int FixedSteps;   // physics steps so far (the stats readout: steps per rendered frame)
@@ -152,10 +158,11 @@ namespace ShiftStorm
             if (Mode == Mode.Drive && EnteredDriveAt > 0 && Time.time - EnteredDriveAt < shared.wheelsDownSeconds)
             {
                 var lv0 = Body.linearVelocity; float flat0 = new Vector2(lv0.x, lv0.z).magnitude;
-                if (FirstWheelContactAt < 0) { if (GroundedWheels == 0) Body.AddForce(Vector3.down * shared.wheelsDownExtraGravity, ForceMode.Acceleration); landKeep = flat0; }
+                if (ChangeFrom == Mode.Fly && !OldFlight && !OldLanding) WheelsDownLanding(dt, ref lv0, ref flat0);
+                if (FirstWheelContactAt < 0) { if (GroundedWheels == 0) Body.AddForce(Vector3.down * shared.wheelsDownExtraGravity, ForceMode.Acceleration); landKeep = flat0; if (flat0 > 1f) landDir = new Vector3(lv0.x, 0, lv0.z) / flat0; }
                 // the spring takes the landing's downward speed, never the forward speed: for a moment after the first touch the flat speed
                 // is held at what it was in the air (the hull's touch on the road would otherwise brake it by about 3 m/s)
-                else if (Time.time - FirstWheelContactAt < .25f && flat0 < landKeep && flat0 > 1f) { var k = landKeep / flat0; Body.linearVelocity = new Vector3(lv0.x * k, lv0.y, lv0.z * k); }
+                else if (Time.time - FirstWheelContactAt < .25f && flat0 < landKeep && flat0 > 1f) HoldLanding(lv0, flat0, landKeep, landDir);
             }
             if (CarryTarget < 0) return;
             if (!Changing || Speed >= CarryTarget - .05f) { CarryTarget = -1; return; }
@@ -194,7 +201,39 @@ namespace ShiftStorm
         public float TopOf(Mode m) => m == Mode.Drive ? drive.topSpeed : m == Mode.Boat ? boat.topSpeed : m == Mode.Fly ? fly.topSpeed : dive.topSpeed;
         float EntryMax(Mode m) => m == Mode.Drive ? drive.entrySpeed.y : m == Mode.Boat ? boat.entrySpeed.y : m == Mode.Fly ? fly.entrySpeed.y : dive.entrySpeed.y;
         public float CarryTarget { get; private set; } = -1;   // Round 3: the speed being eased in over a change into a faster form
-        float carryRate, landKeep; public float EnteredDriveAt { get; private set; } = -1;
+        float carryRate, landKeep; Vector3 landDir; public float EnteredDriveAt { get; private set; } = -1;
+
+        // Round 13 item 1 (recorded with the "trace" check, Round 12's three known resets):
+        //   the landing's speed hold scaled whatever flat velocity was left after the first touch back up to the speed in the air. At Coaster
+        //   Coast's station the hull's touch on the boardwalk (75 m/s forward, 16 m/s down) took nearly all the forward speed and left 5 m/s
+        //   sideways; the hold made that 74 m/s sideways, 90 deg off the route, into the sea's out-of-bounds (8 of 50 soak laps). Now it keeps
+        //   the direction the car came down in unless a wall turned it (a wall's glance is real).
+        // checks only ("-oldLanding"): build 14's landing (the hold scales whatever is left, no wheels-down alignment, no soft touchdown)
+        public static readonly bool OldLanding = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldLanding") >= 0;
+        void HoldLanding(Vector3 lv, float flat, float keep, Vector3 dir)
+        {
+            if (OldLanding) { var k0 = keep / flat; Body.linearVelocity = new Vector3(lv.x * k0, lv.y, lv.z * k0); return; }
+            var fv = new Vector3(lv.x, 0, lv.z); bool turned = dir.sqrMagnitude > .5f && Vector3.Angle(fv, dir) > 20f;
+            if (turned && Time.time - lastGlanceAt > .3f) { var nv = dir * keep; Body.linearVelocity = new Vector3(nv.x, lv.y, nv.z); Note("landing", $"landing: the touch turned the car {Vector3.Angle(fv, dir):0} deg off its way at {flat:0} m/s; kept its way at {keep:0} m/s"); }
+            else if (!turned) { var k = keep / flat; Body.linearVelocity = new Vector3(lv.x * k, lv.y, lv.z * k); }
+        }
+        //   after a plane's wheels-down the car came down still pointing where the plane did: off Paradise Plunge's Lake flight 15-20 deg to the
+        //   right of the road at 70 m/s and 17 m/s down; it bounced off the road, rode up onto the climb's guard wall and flew off the ground's end
+        //   (the "fell off the climb" resets). Now the car is turned onto the route's way while it comes down (up to wheelsDownAlignMaxDeg off,
+        //   wheelsDownAlignRate deg/s, nose and velocity together, until 0.6 s after the first touch) and touches down at no more than
+        //   wheelsDownMaxFall m/s down. People and the AI alike.
+        void WheelsDownLanding(float dt, ref Vector3 lv, ref float flat)
+        {
+            if (FirstWheelContactAt > 0 && Time.time - FirstWheelContactAt > .6f) return;
+            if (GroundedWheels == 0 && lv.y < -shared.wheelsDownMaxFall && Physics.Raycast(Body.position, Vector3.down, out var hit, 4f, GroundMask, QueryTriggerInteraction.Ignore) && hit.normal.y > .7f)
+            { lv.y = -shared.wheelsDownMaxFall; Body.linearVelocity = lv; }
+            var rd = Vector3.ProjectOnPlane(RouteDir, Vector3.up); if (rd.sqrMagnitude < 1e-3f || flat < 10f) return;
+            var fv = new Vector3(lv.x, 0, lv.z); float off = Vector3.SignedAngle(fv, rd.normalized, Vector3.up);
+            if (Mathf.Abs(off) < 1f || Mathf.Abs(off) > shared.wheelsDownAlignMaxDeg) return;
+            float turn = Mathf.Clamp(off, -shared.wheelsDownAlignRate * dt, shared.wheelsDownAlignRate * dt); var q = Quaternion.AngleAxis(turn, Vector3.up);
+            fv = q * fv; lv = new Vector3(fv.x, lv.y, fv.z); Body.linearVelocity = lv; Body.MoveRotation(q * Body.rotation);
+            if (landDir.sqrMagnitude > .5f) landDir = q * landDir;
+        }
 
         public void Change(Mode to, string why, bool animate = true)
         {

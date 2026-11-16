@@ -11,7 +11,7 @@ namespace ShiftStorm
     // machine (FormSet) in place, so every system holding a vehicle keeps it.
     public static class Lineup
     {
-        public static readonly Rival Abi = new Rival { name = "Abi", character = "Abigail", color = new Color(.95f, .45f, .1f), lane = -1f, brakeMargin = .9f, boostMeter = .55f, boostStraight = 10f, shortcut = "Coral Vault tunnel|Lighthouse rocks", shortcutRate = .35f, seed = 5 };
+        public static readonly Rival Abi = new Rival { name = "Abi", character = "Abigail", color = new Color(.95f, .45f, .1f), lane = -1f, brakeMargin = .9f, boostMeter = .55f, boostStraight = 10f, shortcut = "Mangrove bypass|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .35f, seed = 5 };
         public static readonly Rival[] All = { Abi, Rival.Roster[0], Rival.Roster[1], Rival.Roster[2] };
         public static string[] Names => new[] { "Abi", "Rocket Rae", "Chip \"Showtime\" Sterling", "Vivi" };
         public static string Short(int i) => i == 0 ? "Abi" : i == 1 ? "Rae" : i == 2 ? "Chip" : "Vivi";
@@ -48,7 +48,7 @@ namespace ShiftStorm
             var p1 = P1;
             var d = Driver.Swap(g.Player, p1.character, true);
             g.Player.RacerName = p1.name; g.Player.Tint = p1.color;
-            g.Player.Forms.Restyle();
+            g.Player.Forms.SetBody(Paints.Color); g.Player.Forms.Restyle();   // Round 13: the Garage paint (rival challenges)
             var ai = AiRivals(false);
             for (int k = 0; k < g.Rivals.Count && k < ai.Count; k++)
             {

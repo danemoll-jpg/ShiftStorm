@@ -44,7 +44,7 @@ namespace ShiftStorm
             if (!sky) { var b = Resources.Load<Material>("Materials/Jurassic/Sky"); if (b) sky = new Material(b) { name = "Coaster sky" }; }
             if (sky) RenderSettings.skybox = sky;
             RenderSettings.fog = true; RenderSettings.fogMode = FogMode.Linear; RenderSettings.fogStartDistance = 260f; RenderSettings.fogEndDistance = 1500f;
-            ChaseCam.UnderwaterColor = UnderwaterFog; ChaseCam.UnderwaterDensity = UnderwaterDensity;
+            ChaseCam.UnderwaterColor = UnderwaterFog; ChaseCam.UnderwaterDensity = CoasterCoast.OldPier ? UnderwaterDensity : CoasterCoast.ClearUnderwaterDensity;   // Round 13 item 5c: clearer under the pier
             Evening(0); ChaseCam.ResetSkyFog();
         }
         public static float Now { get; private set; }

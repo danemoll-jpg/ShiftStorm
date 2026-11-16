@@ -41,8 +41,20 @@ ROUND9 = {
             "swim_1": "[angry] I came here to race, not to swim!"},                        # for water_1 "The lake can have it!" (the ball)
     "vivi": {"last_1": "[sighs] Last? Darling, that is simply not my colour."},            # for lose_1 "Second place suits no one." (said for last place)
 }
+# Round 13 item 4: the rival challenges (one on one with Rae on Paradise Plunge, with Chip on Coaster Coast): a taunt before, a line when
+# they win, a line when they lose
+ROUND13 = {
+    "rae": {"chintro_1": "[smug] One on one, rookie? Try to keep my bubbles in sight!",
+            "chwin_1": "[laughing] Ha! The waterfall is MY turf!",
+            "chlose_1": "[grudging] Okay. Okay! You earned that one."},
+    "chip": {"chintro_1": "[showman] Ladies and gentlemen, the Showtime coaster special! Try to keep up!",
+             "chwin_1": "[cheering] And THAT, folks, is how you ride a coaster!",
+             "chlose_1": "[stunned] You beat me on my own coaster? That's going in YOUR highlight reel."},
+}
 REMOVED = {"abigail": ["trouble_1"], "rae": ["mishit_1", "trouble_2", "water_1"], "vivi": ["lose_1"]}
 for _who, _d in ROUND9.items():
+    NEW.setdefault(_who, {}).update(_d)
+for _who, _d in ROUND13.items():
     NEW.setdefault(_who, {}).update(_d)
 WORDS_NEW = {who: {k: v.split("] ", 1)[-1] for k, v in d.items()} for who, d in NEW.items()}
 # their Tee'd Off clips that fit a race (copied as they are)

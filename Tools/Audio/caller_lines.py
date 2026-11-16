@@ -249,6 +249,14 @@ ROUND11 = {
     "byabi_2": "[excited] Abi takes the place! What a move!",
 }
 LINES.update(ROUND11)
+# Round 13: the rival challenges in The Tour (one on one)
+ROUND13 = {
+    "chstart_1": "[showman] A grudge match, folks! One on one, and only one of them gets bragging rights!",
+    "chstart_2": "[excited] Head to head, nowhere to hide! Let's see who blinks first!",
+    "chwon_1": "[delighted] And the challenge goes to the challenger! What a statement!",
+    "chlost_1": "[showman] Not this time! The rival holds on, but there's always a rematch, folks!",
+}
+LINES.update(ROUND13)
 # his Tee'd Off clips that fit a race (copied as they are): id here -> Tee'd Off file
 EXISTING = {
     "win_any_1": "winner_1", "win_any_2": "winner_3", "win_any_3": "winner_5", "win_any_4": "finale_1",

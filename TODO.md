@@ -20,6 +20,71 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 13 delivery (2026-11-16) — status per item
+Evidence: `Docs/Checks/round13/` (reports, pictures, `challenge_lines.md`). Every run: built exe, `-batchmode -mute`, no window, Below Normal,
+one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+**Dan's playtest logs:** still not on this PC (they are on the Deck), so item 1's causes were recorded with a new `trace` check and 5c's
+stuck places with a wander sweep.
+1. **Known resets — DONE (2 of 3 fixed; the third not reproduced).** Recorded with `trace` (a 4 s per-racer buffer dumped at each reset):
+   - *Coaster Coast station after the Midway flight:* the car came down at 75 m/s forward, 16 m/s down; the touch on the boardwalk (and the
+     plaza box 5 mm under it) took the forward speed and left 5 m/s sideways; the landing's speed hold then scaled that to 74 m/s sideways,
+     90 deg off the route, into the sea's out-of-bounds. Fix: the hold keeps the way the car came down unless a wall turned it (jump landings
+     too), and a wheels-down car touches down at no more than 8 m/s down. *Soak (50 laps, Normal):* **0 resets there** (Round 12: 8).
+   - *Paradise Plunge climb (x 80, z 1120):* off the Lake flight's wheels-down the car came down 15-20 deg right of the road at 70 m/s, bounced
+     (17 m/s down), rode up onto the 1.2 m guard wall's top and flew off the ground's end. Fix: after a plane's wheels-down the car is turned
+     onto the route (up to 40 deg, 45 deg/s) and touches down softly; the guard wall is 2.6 m. *Soak:* **0 resets in 50 laps** (Round 12: 6).
+   - *Coaster Coast car line after the Midway Jump (x 7924, z 408):* not reproduced: 40 forced car-line laps with build 14's landing
+     (`-oldLanding`) 0 resets, 40 with the fix 0 (Round 12: once in 50). The same landing hold was the likely cause; it is fixed.
+   - New in the final Coaster Coast soak: 3 resets, two AI cars pinned against each other on the south plaza just after G9, pressing Reset
+     (63 m off the line). Not reproduced: a 52-lap `trace` afterwards had 0 resets. Open (For Dan: none; watched next round).
+2. **Cliff flight (second choice jump) — DONE.** The Cliff Gap on the climb: LB / E off its lip flies over the hillside, round the outside of
+   corner2, three rings, into the Sky Arch flight (stands in for G2); the car keeps the climb road and the ramp. Round 12 rules from the
+   start. *Checks:* AI lip -> past the rejoin car 13.95 s / fly 12.45 s (fly 1.5 s faster; the Lake flight is 1.1 s faster); human-like pilot
+   **10 of 10** on the fly line (no penalty); branch failures (no steering, hard left / right, too high / low, reset button) **6 of 6**; soak
+   50 laps: Cliff flight taken 26 times, 0 resets. The
+   human-like car line made 3 of 5: that pilot never brakes and leaves the climb at corner2 at full throttle; build 14's climb
+   (`-noCliffFlight`) gives it 2 of 5, so not new.
+3. **Mangrove bypass — DONE.** A dive bay cut into the left bank before the S-bend (root posts along its river edge, so a boat drifting wide
+   never dives by accident: the first try had the lane in the river and plain AI boats dived into it), a root cavern under the river bed
+   (hanging roots, glowing fungus, schools of glowing fish, a sunken log arch, a 7 m/s current), up through the bed after bend4 and a
+   surfacing zone before G5; its own anchors (a reset in it restarts in it). *Checks:* boat 18.90 s / sub 18.10 s; transitions clean (one
+   Boat->Dive, one Dive->Boat) **3 of 3**; failures (no steering, hard left / right, climb / dive hard, reset button, entry missed) **7 of 7**;
+   soak: taken 5 times (Vivi, Abi's AI), 0 resets.
+4. **Rival challenges — DONE.** The Tour page: Rae's Waterfall Dash (Paradise Plunge: Coral Vault -> G9) and Chip's Coaster Showdown (Coaster
+   Coast: station -> top hat), open once the stop is cleared top 3 (or with "Unlock all Tour stops"). Buck's word, the rival's taunt, 3-2-1,
+   first through the gate wins; Barker, the rival and Buck react; a first win gives a Garage paint (Rocket Red, Showtime Blue). 13 new
+   ElevenLabs lines (Rae 3, Chip 3, Buck 3, Barker 4); speech-to-text: 13 of 13 match >= 0.83 (`challenge_lines.md`). *Check (`challenges`):*
+   each won and lost **4 of 4**: result, tour.json saved and read back, all three voices; the Garage paint row recolours the machine.
+5. **Graphics presets — DONE (Deck numbers are Dan's).** Menu > Settings > Graphics: Auto / Deck / Low / Medium / High (Auto = Deck when
+   Steam reports a Deck). Render scale (FSR below 1), shadows, far clip, detail range, dino range, crowd density, texture mip, LOD bias; two
+   players one lighter. *PC (GTX 1660 Ti, batch, CPU-bound: render scale barely shows here), whole frame mean / 95th:* 1 player Paradise
+   Plunge Deck 9.9 / 14.5 ms, High 10.7 / 16.1; Coaster Coast Deck 8.0 / 13.2, High 6.7 / 10.5; 2 players Paradise Plunge Deck 17.6 / 25.3,
+   High 16.9 / 27.6; Coaster Coast Deck 11.7 / 21.0, High 10.7 / 16.0. Triangles Deck vs High: -14 % (Paradise Plunge), about equal (CC).
+5c. **Coaster Coast under the boardwalk / pier — DONE.** Found by sweep: the plazas are decks on legs with open water under them and the
+   legs had no colliders, so a boat leaving the flume's channel under the boardwalk drifted in under a 250 m deck; under the fishing pier
+   the anchors were up to 280 m apart, so a lost sub was reset 300-440 m back. Now: plank skirts round every plaza edge (nothing goes under
+   a deck), lanterns along the channel, a lit channel between the pier legs (guide lights and a seabed stripe), the pool's gold exit frame
+   and a light column, clearer water (sight ~100 m, was 73), currents back toward the dive route, anchors every 60-80 m, and lost there
+   (6 s without progress) / stuck / out of bounds / the reset button go forward to the next anchor (never past an unearned gate). THIS WAY
+   and the arrow were already there. *Check (`underpier`, 90 wander-offs left / right 50 and 90 deg, down, up, then by the HUD):* **89 of
+   90** back on the route or recovered close by (one 84 m back, one anchor), 0 stuck (build 14: 60 of 90, 30 reset back up to 340 m);
+   human-like pilot through **6 of 6** (build 14: 5 of 6); AI soak 50 laps: 0 resets under the pier.
+6. **Regression, soaks, release — DONE.** PASS: round2 (lap 124.58 s), choice, cclap (107.82 s, 8 / 8 set-pieces), ccsplits, round11 (Buck,
+   Tour, 16 / 16 racers), humanfly (Lake 10 / 10, Midway 10 / 10), branches (19 / 19), nearmiss, starts (25, 0 resets), settings, quit
+   (exit 0), round10 (strand 0 of 39), round6 (bind, split). Soaks 50 laps Normal: **Paradise Plunge 50 / 50, 0 resets**, median 133.9 s;
+   **Coaster Coast 50 / 50**, median 117.0 s, 3 resets (the pinned AI cars, item 1). UTF-8 kept (no BOM).
+
+#### For Dan to check (Round 13)
+- Paradise Plunge: LB off the Cliff Gap (on the climb): does the hillside flight feel good, and is it a fair choice against the climb road?
+- The Mangrove bypass: the violet-buoyed bay on the left after the lagoon: dive, the root cavern, up before G5. Easy to find? Worth it?
+- The Tour page: the two rival challenges (lose one, win one): do the lines land? The paint in the Garage (Paint row).
+- Menu > Settings > Graphics: on the Deck it should say "Auto (Deck, Steam Deck)". Frame rate on both courses, and with 2 players.
+- Coaster Coast: under the boardwalk (after the flume) and under the fishing pier: can you still get lost? Please copy the Deck's
+  playtest logs to `Docs/Playtest/` (Round 12's note) so the next round can read where you got stuck.
+- For a release: "Unlock all Tour stops" (and so the challenges) is still On by default (`Settings.UnlockTourDefault`).
+
 - **Round 12 — Coaster Coast unlocked, flight-branch fixes** (2026-11-15, release `build-14` / 0.10.1). Status below.
 
 ### Round 12 delivery (2026-11-15) — status per item
@@ -443,49 +508,8 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 13: known bugs, more route choices, rival challenges
-
-**Dan, 2026-11-16:** "I am busy and can't test — what can we queue up now." So this round needs **no testing or choices
-from Dan**: no new tracks (Dan picks those), no new characters / voices (Dan designs those), no Tripo. Run unattended;
-don't stop to ask; no visible window. Same testing rules. Read-only references as before. Round 12's "For Dan to check"
-list stays open for when he has time.
-
-1. **Fix the known reset / AI bugs from Round 12's report:**
-   - Coaster Coast: the AI in Abi's car is reset at the station after the Midway flight (8 in 50 laps).
-   - Paradise Plunge: the AI falls off the climb about 1 lap in 8 (x 80, z 1120).
-   - Coaster Coast: a car on the car line reset just after the Midway Jump's landing (x 7924, z 408).
-   Find each real cause (record, don't guess), fix, and make sure a player can't hit the same thing.
-   *Check:* 50-lap soak on each track with **0** resets at those three spots; the player-side reproduction passes.
-2. **A second choice jump with split paths on Paradise Plunge** (Dan, 2026-11-14: "Sometimes the jump where you choose
-   jump or fly should be different paths"; deferred in Round 8). Where there's room (the Waterfall Return or the mangrove
-   bank, or the Cliffside Climb): LB / E in the first second off the lip flies a short branch; staying a car takes its own
-   different road. Both about equal in time, with the Round 12 rules from the start (room to make the exit, forward
-   recovery, no repeat loops, near misses). Route strip / arrow follow the line taken. AI picks before the lip.
-   *Check:* both lines timed, the human-like pilot makes the fly line ≥ 9 of 10, branch failure checks, AI 25 laps, 0 stuck.
-3. **The Mangrove submerged bypass** (the concept's "later experiment"): an optional underwater route in Mangrove Run —
-   dive before the S-bend, resurface before the Sunken Gateway — as a real choice (boat on the surface vs. sub
-   underneath), about equal in time, with its own dive / surface zones, anchors and gates, and some underwater sights
-   (roots, glowing fish, a sunken log arch). AI takes it on some laps.
-   *Check:* both lines timed, transitions clean (no boat ↔ sub flicker), branch failure checks, AI 25 laps.
-4. **Rival challenges in the Tour** (STORY.md: "optional rival challenges and practice events reuse the tracks to develop
-   relationships"). After each Tour stop is cleared, unlock a short optional challenge on that track with one rival
-   (e.g. "Beat Rae from the waterfall to the finish", "Stay ahead of Chip through the coaster"), with a few lines from the
-   rival (their existing voices / ElevenLabs in their own voices, as before) and Buck / Barker. A small reward (a paint
-   colour or a Garage badge). Saved in `tour.json`.
-   *Check:* each challenge plays start to finish (win and lose), saves, and its lines fit (transcribed like Round 9).
-5. **Steam Deck performance presets** (measured on the PC, Dan checks the Deck later): a **Graphics** setting
-   (Deck / Low / Medium / High), auto **Deck** on a Steam Deck: render scale, shadows, draw distance, crowd and set-piece
-   density, texture quality. Split screen picks a lighter preset automatically. Report frame times per preset on both
-   tracks, single and split screen.
-6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 15 (0.11.0).** Per-item status,
-   "For Dan to check" (add to Round 12's open list, don't replace it), update `CLAUDE.md`, commit, push, publish, clean the
-   disk. Keep the .md files UTF-8.
-
-### Defaults (unchanged)
-- Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
+## Current Objective — Round 14 (not planned yet)
+Dan picks the next round. Open for him: "For Dan to check" for Round 13 (above) and Round 12 (still open).
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

@@ -2,6 +2,18 @@
  "speaker": "chip",
  "lines": [
   {
+   "id": "chintro_1",
+   "text": "Ladies and gentlemen, the Showtime coaster special! Try to keep up!"
+  },
+  {
+   "id": "chlose_1",
+   "text": "You beat me on my own coaster? That's going in YOUR highlight reel."
+  },
+  {
+   "id": "chwin_1",
+   "text": "And THAT, folks, is how you ride a coaster!"
+  },
+  {
    "id": "disaster_1",
    "text": "Nobody saw that. Right?"
   },

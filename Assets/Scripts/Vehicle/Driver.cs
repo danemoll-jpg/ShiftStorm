@@ -49,10 +49,12 @@ namespace ShiftStorm
             // have it!", Vivi "Second place suits no one" for last place), racing lines in the same voices in (Tools/Audio/driver_lines.py)
             ["rae"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
-                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "throttle_1", "gasp_1", "wall_1" } }, { "water", new[] { "swim_1", "messup_1" } } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "throttle_1", "gasp_1", "wall_1" } }, { "water", new[] { "swim_1", "messup_1" } },
+                { "chintro", new[] { "chintro_1" } }, { "chwin", new[] { "chwin_1" } }, { "chlose", new[] { "chlose_1" } } },   // Round 13: the rival challenge
             ["chip"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "lose_1" } },
-                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "messup_2", "disaster_1" } } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_2" } }, { "water", new[] { "messup_2", "disaster_1" } },
+                { "chintro", new[] { "chintro_1" } }, { "chwin", new[] { "chwin_1" } }, { "chlose", new[] { "chlose_1" } } },   // Round 13: the rival challenge
             ["vivi"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "last_1" } },
                 { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_2" } } },
@@ -65,6 +67,7 @@ namespace ShiftStorm
         public string FinishReaction { get; private set; } = "";
         public static readonly List<Driver> All = new List<Driver>();
         public string Who => who;
+        public ShiftVehicle Vehicle => v;   // Round 13: the rival challenges find a rival's driver
         public int LinesLoaded { get; private set; }
         public int LinesIn(string pool) => lines.TryGetValue(pool, out var l) ? l.Length : 0;
 

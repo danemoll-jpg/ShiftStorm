@@ -1,0 +1,39 @@
+ShiftStorm check 'branches13', 2026-11-16 03:02, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BRANCHES 13: scripted failures on the Cliff flight and in the Mangrove bypass; after the fault the human-like pilot carries on by the HUD; pass = through, never reset behind the jump / the dive lane, no loop
+  Cliff flight no-steering PASS: resets 0; behind 0, loops 0; reached G3 arch exit after 17.3 s, penalty 3 s, form changes Drive->Fly
+  Cliff flight hard-left PASS: resets 0; behind 0, loops 0; reached G3 arch exit after 18.6 s, penalty 0 s, form changes Drive->Fly
+  Cliff flight hard-right PASS: resets 0; behind 0, loops 0; reached G3 arch exit after 17.6 s, penalty 3 s, form changes Drive->Fly
+  Cliff flight too-high PASS: resets 0; behind 0, loops 0; reached G3 arch exit after 18.0 s, penalty 0 s, form changes Drive->Fly
+  Cliff flight too-low PASS: resets 0; behind 0, loops 0; reached G3 arch exit after 18.5 s, penalty 0 s, form changes Drive->Fly
+  Cliff flight reset-button PASS: resets 1: reset button -> forward from the Cliff flight at +734 m from the lip; behind 0, loops 0; reached G3 arch exit after 8.6 s, penalty 3 s, form changes Drive->Fly
+  Mangrove bypass no-steering PASS: resets 0; behind 0, loops 0; reached G5 mangrove exit after 31.2 s, penalty 3 s, form changes Boat->Dive
+  Mangrove bypass hard-left PASS: resets 0; behind 0, loops 0; reached G5 mangrove exit after 31.4 s, penalty 3 s, form changes Boat->Dive
+  Mangrove bypass hard-right PASS: resets 0; behind 0, loops 0; reached G5 mangrove exit after 31.2 s, penalty 3 s, form changes Boat->Dive
+  Mangrove bypass climb-hard PASS: resets 0; behind 0, loops 0; reached G5 mangrove exit after 31.0 s, penalty 0 s, form changes Boat->Dive Dive->Boat
+  Mangrove bypass dive-hard PASS: resets 0; behind 0, loops 0; reached G5 mangrove exit after 31.1 s, penalty 3 s, form changes Boat->Dive
+  Mangrove bypass reset-button PASS: resets 1: reset button -> anchor at +85 m from the lane; behind 0, loops 0; reached G5 mangrove exit after 33.1 s, penalty 0 s, form changes Boat->Dive
+  Mangrove bypass entry-missed PASS: dived in the lane, stayed in the river as a sub (not into the cavern: on it no); gates 7 (5 6), resets 0
+BRANCHES 13 PASS: 13 of 13 scripted failures ended ahead or at most one anchor back with no loop
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.09 ms, 95th pct 3.00 ms, 99th pct 3.66 ms, worst 549.77 ms over 173575 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  branch-cliff-no-steering Drive->Fly  z  1185.0  0.600 s  frames worst 85.79 / mean 2.66 ms
+  branch-cliff-hard-left Drive->Fly  z  1182.4  0.600 s  frames worst 3.93 / mean 2.31 ms
+  branch-cliff-hard-right Drive->Fly  z  1183.7  0.602 s  frames worst 5.73 / mean 2.45 ms
+  branch-cliff-too-high Drive->Fly  z  1185.3  0.601 s  frames worst 3.74 / mean 2.24 ms
+  branch-cliff-too-low Drive->Fly  z  1185.3  0.601 s  frames worst 5.51 / mean 2.48 ms
+  branch-cliff-reset-button Drive->Fly  z  1184.3  cancelled by the reset  frames worst 17.20 / mean 2.65 ms
+  branch-bypass-no-steering Boat->Dive  z  -963.0  0.601 s  frames worst 6.05 / mean 2.17 ms
+  branch-bypass-hard-left Boat->Dive  z  -963.2  0.601 s  frames worst 4.78 / mean 2.07 ms
+  branch-bypass-hard-right Boat->Dive  z  -963.1  0.601 s  frames worst 5.31 / mean 2.07 ms
+  branch-bypass-climb-hard Boat->Dive  z  -963.1  0.601 s  frames worst 10.32 / mean 2.33 ms
+  branch-bypass-climb-hard Dive->Boat  z  -312.1  0.601 s  frames worst 4.52 / mean 2.26 ms
+  branch-bypass-dive-hard Boat->Dive  z  -963.2  0.601 s  frames worst 4.24 / mean 2.16 ms
+  branch-bypass-reset-button Boat->Dive  z  -963.2  0.601 s  frames worst 4.16 / mean 1.99 ms
+  bypass-entry-missed Boat->Dive  z  -963.1  0.601 s  frames worst 3.73 / mean 2.06 ms
+  bypass-entry-missed Dive->Boat  z  -313.4  0.600 s  frames worst 4.28 / mean 2.11 ms
+  bypass-entry-missed Boat->Dive  z  -210.3  0.601 s  frames worst 16.42 / mean 2.54 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: disaster_1; messup: mishit_1; messup: messup_1; messup: gasp_1; messup: mishit_1; messup: bogey_1; messup: gasp_1; messup: mishit_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

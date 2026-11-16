@@ -27,6 +27,11 @@ namespace ShiftStorm
         public IReadOnlyDictionary<string, float> marks;   // Round 10: the course's named places along its line (progress, m)
         public CourseStunts stunts;            // Round 10: what the AI and the pilot need to know of its jumps and rails (null: none)
         public float windowBack = 60, windowAhead = 140;
+        // Round 13 item 5c: stretches where a racer who stops making progress is lost (under Coaster Coast's decks and pier): recovered sooner,
+        // and forward (ShiftVehicle.Recover)
+        public readonly List<Vector2> lostRanges = new List<Vector2>();
+        public bool InLost(float p) { foreach (var r in lostRanges) if (p >= r.x && p <= r.y) return true; return false; }
+        public const float LostSeconds = 6f;
         float[] cumulative;
         public float Length { get { Prepare(); return cumulative[cumulative.Length - 1]; } }
 

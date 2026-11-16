@@ -52,7 +52,7 @@ namespace ShiftStorm
         void Rebuild()
         {
             if (set) Destroy(set.gameObject);
-            set = FormSet.Make(turntable, Design, VehicleDesigns.PlayerTint, Form, 1f, true); set.Unscaled = true;
+            set = FormSet.Make(turntable, Design, Paints.Color, Form, 1f, true);   // Round 13: the paint won in rival challenges set.Unscaled = true;
         }
         public string FormInfo(Mode m) => set && set.IsImported(m) ? "Tripo model" : "gray box";
 

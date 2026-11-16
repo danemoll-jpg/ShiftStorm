@@ -19,6 +19,7 @@ namespace ShiftStorm
         public float mainFrom, mainTo;  // main-line progress where the shortcut leaves and rejoins
         public float halfWidth = 12;    // how far from its line a racer may be and still be on it
         public bool choice;             // Round 7: the choice jump's flight branch (the AI decides it with AiSkill.fly, and opens its wings for it)
+        public readonly List<(float s, RecoveryAnchor a)> ownAnchors = new List<(float, RecoveryAnchor)>();   // Round 13: anchors on its own line (the Mangrove bypass: a reset in it restarts in it)
         public bool flight;             // Round 12: a flight branch (a reset on it, or just off it, goes forward to its rejoin: ShiftVehicle.Recover)
         float[] cum;
 

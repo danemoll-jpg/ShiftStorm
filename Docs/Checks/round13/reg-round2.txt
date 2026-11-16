@@ -1,0 +1,81 @@
+ShiftStorm check 'round2', 2026-11-16 03:47, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+LAP: Paradise Plunge, line 7358 m, 11 gates, 8 segments, 31 anchors
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 124.58 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta
+  1 Beach Promenade     Driving            18.4 s    20 s  -1.6
+  2 Cliffside Climb     Driving            16.5 s    20 s  -3.5
+  3 Sky Arch            Flying             20.3 s    25 s  -4.8
+  4 Lagoon Landing      Boating            11.8 s    15 s  -3.2
+  5 Mangrove Run        Boating            19.5 s    20 s  -0.5
+  6 Sunken Gateway      Diving              9.5 s    10 s  -0.5
+  7 Coral Vault         Diving             17.4 s    25 s  -7.6
+  8 Waterfall Return    Dive-boat-drive    11.1 s    15 s  -3.9
+  top speed per form on the lap: Drive 76.2 m/s (170 mph), Boat 58.3 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 49.2 m/s (110 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+  log: [ 124.58] finish in 124.58 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 6.99 ms, 95th pct 12.00 ms, 99th pct 19.86 ms, worst 1133.24 ms over 11857 frames (195 over 16.7 ms); peak draw calls 0, batches 0, triangles 5042k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade      7.64 /  12.52 / 417.58 ms       0 draws    3128k tris
+  Cliffside Climb      8.06 /  12.16 / 1133.24 ms       0 draws    4246k tris
+  Sky Arch             8.62 /  13.91 / 398.08 ms       0 draws    5042k tris
+  Lagoon Landing       5.40 /   9.40 / 101.16 ms       0 draws    1842k tris
+  Mangrove Run         8.92 /  13.24 / 147.33 ms       0 draws    4615k tris
+  Sunken Gateway       7.27 /  12.60 / 169.96 ms       0 draws    3089k tris
+  Coral Vault          4.18 /   7.18 /  38.64 ms       0 draws    2760k tris
+  Waterfall Return     8.53 /  12.26 /  33.02 ms       0 draws    4678k tris
+  HITCHES (item 8): engine markers read (development build); blamed (largest marker of the frame before): Update.ScriptRunBehaviourUpdate x55, FixedUpdate.PhysicsFixedUpdate x2
+    68 ms at 5.4 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 26; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    68 ms at 6.9 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    65 ms at 8.1 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 22; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    423 ms at 11.4 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    107 ms at 11.7 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 16; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    153 ms at 12.5 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 20; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    68 ms at 14.0 s (Beach Promenade): Update.ScriptRunBehaviourUpdate 9; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    101 ms at 20.0 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    72 ms at 21.2 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 19; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    414 ms at 21.5 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 61; GC collections 0, allocated last frame 0 KB, heap 4 MB
+    82 ms at 21.6 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 25; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    233 ms at 21.8 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 80; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    240 ms at 22.1 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 229; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    55 ms at 25.7 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 12, PostLateUpdate.PlayerUpdateCanvases 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    67 ms at 25.8 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 12, PostLateUpdate.PlayerUpdateCanvases 7, FixedUpdate.PhysicsFixedUpdate 4; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    58 ms at 25.9 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 12; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    60 ms at 26.1 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 21, PreLateUpdate.ScriptRunBehaviourLateUpdate 4; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    126 ms at 26.3 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 57; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    61 ms at 26.9 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 10; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    136 ms at 27.0 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 27, PostLateUpdate.UpdateAudio 16; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    57 ms at 27.1 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 13, FixedUpdate.PhysicsFixedUpdate 3, FixedUpdate.ScriptRunBehaviourFixedUpdate 2; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    110 ms at 28.0 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 6; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    1137 ms at 28.6 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 9; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    55 ms at 28.6 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 1135; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    55 ms at 28.7 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 11, FixedUpdate.PhysicsFixedUpdate 5, FixedUpdate.ScriptRunBehaviourFixedUpdate 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    112 ms at 30.3 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 17; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    59 ms at 30.7 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 16, PreLateUpdate.ScriptRunBehaviourLateUpdate 3; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    79 ms at 32.1 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 18; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    130 ms at 32.2 s (Cliffside Climb): Update.ScriptRunBehaviourUpdate 37, FixedUpdate.PhysicsFixedUpdate 2; GC collections 0, allocated last frame 0 KB, heap 5 MB
+    64 ms at 35.0 s (Sky Arch): Update.ScriptRunBehaviourUpdate 13; GC collections 0, allocated last frame 0 KB, heap 5 MB
+  frames over 50 ms during the lap: 57; worst: 1137 ms at 28.6 s (Cliffside Climb, after "T. rex roars (300 m away)"); 423 ms at 11.4 s (Beach Promenade, after "into the loop at 73 m/s (0.0 m across)"); 414 ms at 21.5 s (Cliffside Climb, after "split Beach Promenade: 18.43 s (target 20 s), total 18.43 s"); 411 ms at 49.7 s (Sky Arch, after "gate G3 arch exit passed (4/11)"); 405 ms at 42.8 s (Sky Arch, after "gate G3 arch exit passed (4/11)"); 267 ms at 39.2 s (Sky Arch, after "Drive->Fly done in 0.609 s")
+RESULTS PASS: shown True, lap 124.58 s, 8 splits, new best True, best on file 124.58 s (local/round13/save\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 124.58 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "", then reset (missed gate G6 dive portal as Fly) to the anchor at 5504 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+RACE POSITION: gates + progress to the next gate (Course.RaceDistance); see the lap's log for its rise through the cave under the road
+ABI PASS: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69; head top 0.80 m under a closed canopy top of 0.87 m; Drive: 0 below the hull; Boat: 0 below the hull; Fly: 0 below the hull; Dive: 0 of 0 vertices outside the closed canopy above the body, 0 below the hull
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.27  FOV 90.0  particles 80  speed 102 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.24  FOV 90.0  particles 143  speed 100 % of top
+  Dive  pitch 1.64  wind 0.07  FOV 90.0  particles 114  speed 112 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 5.89 ms, 95th pct 14.29 ms, 99th pct 23.66 ms, worst 1136.80 ms over 26670 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  lap          Drive->Fly  z   944.6  0.609 s  frames worst 161.69 / mean 17.62 ms
+  lap          Fly->Boat   z  -606.2  0.609 s  frames worst 18.80 / mean 8.96 ms
+  lap          Boat->Dive  z  -202.5  0.605 s  frames worst 34.71 / mean 11.23 ms
+  lap          Dive->Boat  z  -466.8  0.615 s  frames worst 33.16 / mean 13.20 ms
+  lap          Boat->Drive z  -304.6  0.610 s  frames worst 16.34 / mean 11.14 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 1, Abi lines: waterfall: skipped (Barker talking); win: skipped (Barker talking); messup: skipped (Barker talking, reset: reset (missed gate G6 dive portal as Fly, at -201.2 (x 237.3, y 40.3), 87 m/s, 48 m off the line) to the anchor at 5504 m in Boat, 241 m behind the best progress); messup: skipped (Barker talking, missed gate)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

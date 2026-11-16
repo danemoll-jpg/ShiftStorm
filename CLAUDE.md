@@ -105,7 +105,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Unlock all Tour stops On / Off (Round 12, default On while building: `Settings.UnlockTourDefault`), Open log folder. Quit game asks "No / Yes" (No is preselected) and exits
+Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Unlock all Tour stops On / Off (Round 12, default On while building: `Settings.UnlockTourDefault`), Graphics Auto / Deck / Low / Medium / High (Round 13, saved; Auto = Deck on a Steam Deck, High elsewhere; 2 players one lighter), Open log folder. The Tour page also lists the rival challenges (Round 13); Garage has a Paint row (paints won in them). Quit game asks "No / Yes" (No is preselected) and exits
 with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
 starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
 back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
@@ -153,6 +153,13 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   boost, `-tries N`, on both choice jumps' fly and car lines) + `branches` (scripted failures on the Lake flight, the Sky Arch slit and the
   Midway flight: no steering, hard left / right, too high / low, exit missed, slit missed, reset button). `-oldFlight` = build 13's flight
   branches, arrow and resets (before numbers).
+  Round 13: `trace` (item 1's recorder: soak-like AI races, `-course N -laps N`, a 4 s ring buffer per racer dumped at every reset: position,
+  velocity, heading, form, wheels, shortcut, inputs, the collider under it, touches and wall hits; `-carLine` / `-flyLine` force the choice
+  jumps) + `round13` = `choice13` (Cliff Gap car vs fly, Mangrove bypass boat vs sub, `-runs N`) + `humancliff` (the human-like pilot on the
+  Cliff flight / car line) + `branches13` (scripted failures on the Cliff flight and in the bypass) + `challenges` (each rival challenge won
+  and lost: result, tour.json, the lines) + `presets` (frame times per Graphics preset, both courses, 1 / 2 players, `-seconds N`);
+  `underpier` (Coaster Coast under the boardwalk / pier: pictures, 90 wander-offs, the human-like pilot through). Before switches:
+  `-oldLanding` (build 14's landings), `-noCliffFlight`, `-noBypass`, `-oldPier`; `-graphics Deck|Low|Medium|High` for a run.
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -379,6 +386,31 @@ Round 11 delivered as build 13 (0.10.0), 2026-11-15.
     The coaster rail's entry catches a car up to 9 m over the track (`CoasterRail.Entered`; build 13: 4.5 m: Round 10-11's reset after the
     Midway flight). Dan's playtest logs live on the Deck (Proton prefix), not on this PC.
 
-Current objective: **Round 13** (no testing from Dan needed): fix the three known reset / AI spots, a second split-path choice
-jump on Paradise Plunge, the Mangrove submerged bypass, rival challenges in the Tour, Graphics presets for the Deck. Release build 15
-(0.11.0). See `TODO.md`.
+- **Round 13 (build 15, 0.11.0): known resets fixed, two new route choices, rival challenges, Graphics presets, Coaster Coast's pier:**
+  - **Landings** (`ShiftVehicle.HoldLanding` / `WheelsDownLanding`, found with the `trace` check): the landing's speed hold re-scaled whatever
+    flat speed was left after the first touch, so a touch that took the forward speed (Coaster Coast's station after the Midway flight)
+    became 74 m/s sideways into the sea; now it keeps the way the car came down unless a wall turned it (jump landings too). After a
+    plane's wheels-down the car is turned onto the route (up to 40 deg off, 45 deg/s) and touches down at no more than 8 m/s down
+    (`ShiftTuning.wheelsDown*`): off the Lake flight it came down 15-20 deg off the road, bounced, rode onto the climb's guard wall and fell
+    off the ground's end; the guard wall is 2.6 m now (`ClimbGuard`).
+  - **Cliff flight** (`ParadisePlunge.CliffFlight`): the Cliff Gap is a second choice jump (LB / E off its lip): over the hillside, round the
+    outside of corner2, three rings, into the Sky Arch flight 230 m past the ramp's lip; stands in for G2; the Round 12 rules (`Shortcut.flight`).
+  - **Mangrove bypass** (`ParadisePlunge.Bypass.cs`): a dive bay in the left bank before the S-bend (root posts along its river edge), a root
+    cavern under the river bed (`Tunnel(sc, floorY, ...)`), glowing fish, a sunken log arch, a 7 m/s current, its own dive / surfacing zones,
+    sub-gates and anchors (`Shortcut.ownAnchors`: a reset in it restarts in it); G5 takes a sub too. Vivi and Abi's AI take it sometimes.
+  - **Rival challenges** (`Race/Challenge.cs`): The Tour page lists one per stop (open once the stop is cleared top 3, or with "Unlock all
+    Tour stops"): Rae's Waterfall Dash (Paradise Plunge, Coral Vault -> G9) and Chip's Coaster Showdown (Coaster Coast, station -> G3);
+    Buck's word, the rival's taunt, 3-2-1 (`ShiftVehicle.HoldFor`), the first through the gate wins; lines from the rival, Barker (ch*) and
+    Buck (ch_*); a first win gives a Garage paint (`Paints`, settings.json "paint"); tour.json "cWon / cBest / cTries".
+  - **Graphics presets** (`Core/GraphicsPreset.cs`): Auto / Deck / Low / Medium / High; render scale (FSR below 1), shadows, far clip, the
+    Detail layer, dino draw range (`DinoActor.RangeScale`), crowd density (`Crowd.Density`), texture mip limit, LOD bias; split screen one lighter.
+  - **Coaster Coast under the boardwalk / pier** (`CoasterCoast.UnderPier.cs`): plank skirts round every plaza edge (nothing drifts under a
+    deck), a lit channel (lanterns, guide lights, a seabed stripe), the pool's exit frame and light column, clearer water (fog .016),
+    currents back toward the dive route, more anchors, and `Course.lostRanges`: lost there (6 s without progress), stuck, out of bounds or
+    the reset button go forward to the next anchor that is not past an unearned gate.
+  - Voices: `Tools/Audio/driver_lines.py` ROUND13, `buck_lines.py` ch_*, `caller_lines.py` ROUND13; `Tools/Audio/challenge_audit.py` ->
+    `Docs/Checks/round13/challenge_lines.md`.
+
+Round 13 delivered as build 15 (0.11.0), 2026-11-16.
+
+Current objective: **Round 14** - not planned yet (Dan picks). Round 12's and Round 13's "For Dan to check" lists in `TODO.md` are open.

@@ -156,6 +156,7 @@ namespace ShiftStorm
         public string style, segment = "", label = ""; public Kind kind; public bool standIn;
         public Vector3 a, b;                // Graze / Wade / Swim: walks between a and b; Run: runs from a to b; Swoop: circle centre a, radius b.x, height b.y
         public float speed = 1.2f, height = 10f, range = 650f, roarRange = 230f;
+        public static float RangeScale = 1f;   // Round 13 item 5: GraphicsPreset
         public const float ShadowRange = 100f;   // Round 8b: 140 m before; the dinosaurs are twice the size, so are their shadows
         public ShiftVehicle runWith;        // Run: paces this racer while it is in the stretch
         public float runFrom, runTo;        // Run: the stretch (progress)
@@ -289,7 +290,7 @@ namespace ShiftStorm
             if (staticRend) return;
             float dt = Time.deltaTime; clock += dt; frame++;
             float cd = CamDistance(transform.position);
-            bool draw = cd < range; if (smr && smr.enabled != draw) smr.enabled = draw;
+            bool draw = cd < range * (setPiece ? Mathf.Max(.85f, RangeScale) : RangeScale); if (smr && smr.enabled != draw) smr.enabled = draw;   // Round 13: the Graphics preset's draw range (set-pieces at least 85 %)
             if (smr) { var sh = cd < ShadowRange ? UnityEngine.Rendering.ShadowCastingMode.On : UnityEngine.Rendering.ShadowCastingMode.Off; if (smr.shadowCastingMode != sh) smr.shadowCastingMode = sh; }
             float moveSpeed = 0;
             switch (kind)

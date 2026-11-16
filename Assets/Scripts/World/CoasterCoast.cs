@@ -67,7 +67,7 @@ namespace ShiftStorm
             c = g.AddComponent<Course>(); c.courseName = "Coaster Coast"; c.shortName = "Coaster Coast"; c.timeTrial = true; c.look = "coaster"; c.music = "race_coaster";
             c.halfWidth = 75; c.airHalfWidth = 380; c.minY = SeaFloor - 6; c.maxY = 150; c.endMargin = 40; c.startMode = Mode.Drive;
             MakeLine();
-            Sea(); Boardwalk(); Plazas(); Flume(); BuildRails(); CoasterGap(); FishingPier(); SplashPool(); Lighthouse();
+            Sea(); Boardwalk(); Plazas(); Flume(); BuildRails(); CoasterGap(); FishingPier(); SplashPool(); Lighthouse(); UnderPier();   // Round 13 item 5c
             Scenery(); SetPieces(); Grandstands();
             Gates(); RouteMarks(); Zones(); Anchors(); Signs(); Segments(); Shortcuts();
             c.marks = new Dictionary<string, float>(mark); c.stunts = new CoasterStunts();
@@ -266,6 +266,8 @@ namespace ShiftStorm
             A(M("splash") + 80, Mode.Boat); A(M("fl2"), Mode.Boat); A(M("underLift"), Mode.Boat); A(M("cross") + 30, Mode.Boat);
             A(M("sea1"), Mode.Boat); A(M("sea2") - 30, Mode.Boat); A(M("diveZone") - 40, Mode.Boat);
             A(M("diveZone") + 70, Mode.Dive); A(M("portal") + 30, Mode.Dive); A(M("portal") + 190, Mode.Dive); A(M("carousel"), Mode.Dive); A(M("G8") - 12, Mode.Boat); A(M("G9") + 20, Mode.Drive);
+            // Round 13 item 5c: under the boardwalk and the pier an anchor every ~60-80 m, so a lost racer is put back close by (and forward)
+            if (!OldPier) { A(M("cross") - 70, Mode.Boat); A(M("seaOut") - 20, Mode.Boat); A(M("portal") - 35, Mode.Dive); A(M("portal") + 110, Mode.Dive); A(M("octo"), Mode.Dive); A(M("poolEdge") - 12, Mode.Dive); }
             c.Finish();
         }
         static void Signs()

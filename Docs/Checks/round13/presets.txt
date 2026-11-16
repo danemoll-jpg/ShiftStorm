@@ -1,0 +1,75 @@
+ShiftStorm check 'presets', 2026-11-16 01:44, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+GRAPHICS PRESETS: frame times per preset, both courses, one player and 2 players (PC: NVIDIA GeForce GTX 1660 Ti, every frame rendered at 1280x800 with the GPU waited for; batch mode, so CPU + GPU of the render, not the Deck); Steam Deck detected here: False; Auto here = High
+  1 player  Paradise Plunge Deck  : render mean 6.55 ms, 95th 10.34, 99th 14.30 ms; whole frame mean 9.90 ms, 95th 14.47 ms; triangles 1253k; Deck: render scale 0.80, shadows 80 m / 1024 / 1 cascade(s), far clip 1600 m, detail 520 m, dinos x0.75, crowd 50 %, texture mip limit 1, LOD bias 0.75, MSAA 1x
+  1 player  Paradise Plunge Low   : render mean 6.46 ms, 95th 10.21, 99th 13.35 ms; whole frame mean 9.84 ms, 95th 14.47 ms; triangles 1100k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  1 player  Paradise Plunge Medium: render mean 7.02 ms, 95th 10.94, 99th 14.64 ms; whole frame mean 10.66 ms, 95th 15.67 ms; triangles 1397k; Medium: render scale 1.00, shadows 95 m / 1024 / 1 cascade(s), far clip 2000 m, detail 650 m, dinos x0.85, crowd 75 %, texture mip limit 0, LOD bias 0.85, MSAA 1x
+  1 player  Paradise Plunge High  : render mean 6.84 ms, 95th 11.25, 99th 15.94 ms; whole frame mean 10.73 ms, 95th 16.11 ms; triangles 1458k; High: render scale 1.00, shadows 110 m / 2048 / 1 cascade(s), far clip 2600 m, detail 800 m, dinos x1.00, crowd 100 %, texture mip limit 0, LOD bias 1.00, MSAA 1x
+  1 player  Coaster Coast   Deck  : render mean 5.35 ms, 95th 9.09, 99th 15.72 ms; whole frame mean 8.03 ms, 95th 13.17 ms; triangles 386k; Deck: render scale 0.80, shadows 80 m / 1024 / 1 cascade(s), far clip 1600 m, detail 520 m, dinos x0.75, crowd 50 %, texture mip limit 1, LOD bias 0.75, MSAA 1x
+  1 player  Coaster Coast   Low   : render mean 4.76 ms, 95th 7.98, 99th 12.59 ms; whole frame mean 7.27 ms, 95th 11.44 ms; triangles 344k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  1 player  Coaster Coast   Medium: render mean 4.74 ms, 95th 8.17, 99th 12.51 ms; whole frame mean 7.20 ms, 95th 11.56 ms; triangles 413k; Medium: render scale 1.00, shadows 95 m / 1024 / 1 cascade(s), far clip 2000 m, detail 650 m, dinos x0.85, crowd 75 %, texture mip limit 0, LOD bias 0.85, MSAA 1x
+  1 player  Coaster Coast   High  : render mean 4.46 ms, 95th 7.41, 99th 10.96 ms; whole frame mean 6.74 ms, 95th 10.49 ms; triangles 394k; High: render scale 1.00, shadows 110 m / 2048 / 1 cascade(s), far clip 2600 m, detail 800 m, dinos x1.00, crowd 100 %, texture mip limit 0, LOD bias 1.00, MSAA 1x
+  2 players Paradise Plunge Deck  : render mean 12.12 ms, 95th 18.03, 99th 30.03 ms; whole frame mean 17.63 ms, 95th 25.28 ms; triangles 2518k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Paradise Plunge Low   : render mean 11.01 ms, 95th 16.81, 99th 19.49 ms; whole frame mean 15.24 ms, 95th 21.97 ms; triangles 2465k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Paradise Plunge Medium: render mean 11.56 ms, 95th 16.99, 99th 30.88 ms; whole frame mean 16.12 ms, 95th 23.07 ms; triangles 2446k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Paradise Plunge High  : render mean 12.02 ms, 95th 20.32, 99th 36.72 ms; whole frame mean 16.87 ms, 95th 27.57 ms; triangles 2596k; Medium: render scale 1.00, shadows 95 m / 1024 / 1 cascade(s), far clip 2000 m, detail 650 m, dinos x0.85, crowd 75 %, texture mip limit 0, LOD bias 0.85, MSAA 1x
+  2 players Coaster Coast   Deck  : render mean 8.02 ms, 95th 15.08, 99th 31.54 ms; whole frame mean 11.70 ms, 95th 21.00 ms; triangles 644k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Coaster Coast   Low   : render mean 9.24 ms, 95th 13.51, 99th 28.28 ms; whole frame mean 12.65 ms, 95th 18.06 ms; triangles 750k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Coaster Coast   Medium: render mean 8.24 ms, 95th 12.94, 99th 15.72 ms; whole frame mean 11.13 ms, 95th 16.29 ms; triangles 762k; Low: render scale 0.70, shadows 55 m / 512 / 1 cascade(s), far clip 1250 m, detail 400 m, dinos x0.60, crowd 35 %, texture mip limit 1, LOD bias 0.60, MSAA 1x
+  2 players Coaster Coast   High  : render mean 7.82 ms, 95th 12.54, 99th 15.09 ms; whole frame mean 10.70 ms, 95th 16.00 ms; triangles 783k; Medium: render scale 1.00, shadows 95 m / 1024 / 1 cascade(s), far clip 2000 m, detail 650 m, dinos x0.85, crowd 75 %, texture mip limit 0, LOD bias 0.85, MSAA 1x
+GRAPHICS PRESETS done (Dan checks the Deck: Menu > Settings > Graphics, Auto should say "Deck, Steam Deck")
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 29.12  wind 0.33  FOV 90.0  particles 104  speed 2360 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 105  speed 101 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 7.98 ms, 95th pct 17.45 ms, 99th pct 25.04 ms, worst 1161.14 ms over 86342 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  preset-Deck-0 Drive->Fly  z   652.1  0.608 s  frames worst 23.03 / mean 11.70 ms
+  preset-Deck-0 Fly->Drive  z   930.1  0.606 s  frames worst 16.12 / mean 9.00 ms
+  preset-Deck-0 Drive->Fly  z  1182.4  0.601 s  frames worst 18.87 / mean 8.08 ms
+  preset-Low-0 Drive->Fly  z   652.1  0.604 s  frames worst 14.87 / mean 10.59 ms
+  preset-Low-0 Fly->Drive  z   930.0  0.601 s  frames worst 15.23 / mean 8.84 ms
+  preset-Low-0 Drive->Fly  z  1182.3  0.601 s  frames worst 13.40 / mean 7.29 ms
+  preset-Medium-0 Drive->Fly  z   652.1  0.610 s  frames worst 42.08 / mean 13.73 ms
+  preset-Medium-0 Fly->Drive  z   930.0  0.601 s  frames worst 14.14 / mean 10.16 ms
+  preset-Medium-0 Drive->Fly  z  1182.2  0.600 s  frames worst 21.65 / mean 9.19 ms
+  preset-High-0 Drive->Fly  z   652.1  0.608 s  frames worst 16.21 / mean 13.36 ms
+  preset-High-0 Fly->Drive  z   930.1  0.620 s  frames worst 85.69 / mean 13.72 ms
+  preset-High-0 Drive->Fly  z  1182.4  0.600 s  frames worst 16.53 / mean 8.64 ms
+  preset-Deck-1 Drive->Fly  z   232.5  0.603 s  frames worst 21.26 / mean 10.03 ms
+  preset-Deck-1 Fly->Drive  z   703.9  0.605 s  frames worst 9.96 / mean 7.71 ms
+  preset-Deck-1 Drive->Fly  z   572.0  0.602 s  frames worst 14.00 / mean 5.91 ms
+  preset-Low-1 Drive->Fly  z   232.5  0.607 s  frames worst 17.32 / mean 9.25 ms
+  preset-Low-1 Fly->Drive  z   703.9  0.607 s  frames worst 19.93 / mean 7.63 ms
+  preset-Low-1 Drive->Fly  z   572.0  0.602 s  frames worst 14.48 / mean 5.40 ms
+  preset-Medium-1 Drive->Fly  z   232.5  0.601 s  frames worst 164.56 / mean 13.88 ms
+  preset-Medium-1 Fly->Drive  z   703.9  0.603 s  frames worst 14.45 / mean 7.18 ms
+  preset-Medium-1 Drive->Fly  z   572.0  0.605 s  frames worst 13.80 / mean 4.91 ms
+  preset-High-1 Drive->Fly  z   232.5  0.612 s  frames worst 23.27 / mean 9.30 ms
+  preset-High-1 Fly->Drive  z   703.9  0.610 s  frames worst 12.05 / mean 7.27 ms
+  preset-High-1 Drive->Fly  z   572.0  0.602 s  frames worst 11.45 / mean 4.95 ms
+  preset-Deck-0-split Drive->Fly  z  1182.3  0.606 s  frames worst 147.97 / mean 23.20 ms
+  preset-Low-0-split Drive->Fly  z   652.1  0.602 s  frames worst 26.54 / mean 19.66 ms
+  preset-Low-0-split Fly->Drive  z   930.0  0.604 s  frames worst 24.77 / mean 15.76 ms
+  preset-Low-0-split Drive->Fly  z  1182.8  0.609 s  frames worst 22.77 / mean 13.78 ms
+  preset-Medium-0-split Drive->Fly  z   652.6  0.601 s  frames worst 87.53 / mean 25.39 ms
+  preset-Medium-0-split Fly->Drive  z   929.3  0.603 s  frames worst 35.63 / mean 15.50 ms
+  preset-Medium-0-split Drive->Fly  z  1182.4  0.610 s  frames worst 30.80 / mean 14.37 ms
+  preset-High-0-split Drive->Fly  z   652.2  0.620 s  frames worst 235.08 / mean 23.42 ms
+  preset-High-0-split Fly->Drive  z   929.6  0.601 s  frames worst 17.83 / mean 14.94 ms
+  preset-High-0-split Drive->Fly  z  1182.4  0.608 s  frames worst 29.28 / mean 14.58 ms
+  preset-Deck-1-split Drive->Fly  z   233.1  0.609 s  frames worst 58.77 / mean 22.16 ms
+  preset-Deck-1-split Fly->Drive  z   703.6  0.604 s  frames worst 28.69 / mean 13.69 ms
+  preset-Deck-1-split Drive->Fly  z   572.0  0.605 s  frames worst 17.08 / mean 7.40 ms
+  preset-Low-1-split Drive->Fly  z   233.1  0.605 s  frames worst 315.45 / mean 17.93 ms
+  preset-Low-1-split Fly->Drive  z   703.7  0.601 s  frames worst 24.75 / mean 11.79 ms
+  preset-Low-1-split Drive->Fly  z   572.0  0.604 s  frames worst 19.71 / mean 9.72 ms
+  preset-Medium-1-split Drive->Fly  z   233.1  0.611 s  frames worst 20.04 / mean 15.43 ms
+  preset-Medium-1-split Fly->Drive  z   703.5  0.604 s  frames worst 17.47 / mean 12.03 ms
+  preset-Medium-1-split Drive->Fly  z   572.0  0.604 s  frames worst 13.07 / mean 9.03 ms
+  preset-High-1-split Drive->Fly  z   233.1  0.614 s  frames worst 18.31 / mean 14.04 ms
+  preset-High-1-split Fly->Drive  z   703.6  0.604 s  frames worst 16.79 / mean 11.54 ms
+  preset-High-1-split Drive->Fly  z   572.0  0.606 s  frames worst 12.63 / mean 8.55 ms
+sound: music race_coaster playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: disaster_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

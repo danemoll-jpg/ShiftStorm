@@ -1,0 +1,70 @@
+ShiftStorm check 'trace', 2026-11-16 03:20, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+TRACE (Coaster Coast): 40 AI laps (four AI cars per race, Abi's car driven by an AI too), time scale 3.0; every reset dumps the racer's last 4 s (every 0.1 s)
+  race 1: Rocket Rae 117.2, Vivi 118.1, Chip "Showtime" Sterling 118.6, Abi 119.9
+  race 2: Rocket Rae 116.0, Abi 117.0 [Lighthouse rocks], Chip "Showtime" Sterling 117.7, Vivi 118.5
+  race 3: Rocket Rae 114.5 [Lighthouse rocks], Vivi 117.1, Chip "Showtime" Sterling 117.7, Abi 118.2
+  race 4: Rocket Rae 115.3, Chip "Showtime" Sterling 116.9 [Lighthouse rocks], Abi 118.3, Vivi 118.3
+  race 5: Rocket Rae 116.2, Vivi 117.9, Chip "Showtime" Sterling 118.2, Abi 119.2
+  race 6: Rocket Rae 116.0, Chip "Showtime" Sterling 117.3, Abi 117.5, Vivi 117.5
+  race 7: Rocket Rae 114.9 [Lighthouse rocks], Chip "Showtime" Sterling 117.5, Vivi 117.5, Abi 118.4
+  race 8: Rocket Rae 115.7 [Lighthouse rocks], Chip "Showtime" Sterling 117.2 [Lighthouse rocks], Vivi 117.9, Abi 118.0
+  race 9: Chip "Showtime" Sterling 116.2 [Lighthouse rocks], Rocket Rae 116.4, Abi 118.0, Vivi 118.0
+  race 10: Rocket Rae 116.9, Vivi 118.6, Abi 118.8, Chip "Showtime" Sterling 119.1
+TRACE: 0 resets in 40 laps
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.55 ms, 95th pct 4.53 ms, 99th pct 8.74 ms, worst 678.25 ms over 158615 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  trace1       Drive->Fly  z   572.0  0.606 s  frames worst 50.45 / mean 5.56 ms
+  trace1       Fly->Boat   z   909.7  0.602 s  frames worst 5.40 / mean 2.46 ms
+  trace1       Boat->Dive  z  -366.5  0.604 s  frames worst 29.75 / mean 4.16 ms
+  trace1       Dive->Boat  z  -473.4  0.609 s  frames worst 45.29 / mean 5.86 ms
+  trace1       Boat->Drive z  -370.8  0.604 s  frames worst 9.84 / mean 2.50 ms
+  trace2       Drive->Fly  z   572.0  0.636 s  frames worst 24.15 / mean 5.88 ms
+  trace2       Fly->Boat   z   909.4  0.602 s  frames worst 6.67 / mean 2.03 ms
+  trace2       Boat->Dive  z  -366.5  0.604 s  frames worst 11.30 / mean 3.76 ms
+  trace2       Dive->Boat  z  -473.5  0.606 s  frames worst 25.18 / mean 4.63 ms
+  trace2       Boat->Drive z  -370.6  0.602 s  frames worst 50.86 / mean 3.27 ms
+  trace3       Drive->Fly  z   572.0  0.612 s  frames worst 13.59 / mean 3.45 ms
+  trace3       Fly->Boat   z   909.3  0.601 s  frames worst 6.10 / mean 2.20 ms
+  trace3       Boat->Dive  z  -366.3  0.603 s  frames worst 12.55 / mean 2.94 ms
+  trace3       Dive->Boat  z  -473.3  0.605 s  frames worst 6.23 / mean 2.26 ms
+  trace3       Boat->Drive z  -370.2  0.602 s  frames worst 9.03 / mean 2.32 ms
+  trace4       Drive->Fly  z   572.0  0.605 s  frames worst 16.95 / mean 2.54 ms
+  trace4       Fly->Boat   z   909.7  0.605 s  frames worst 5.84 / mean 2.42 ms
+  trace4       Boat->Dive  z  -366.6  0.610 s  frames worst 56.16 / mean 4.75 ms
+  trace4       Dive->Boat  z  -473.7  0.604 s  frames worst 4.87 / mean 1.80 ms
+  trace4       Boat->Drive z  -370.9  0.603 s  frames worst 40.32 / mean 2.06 ms
+  trace5       Drive->Fly  z   572.0  0.603 s  frames worst 9.15 / mean 1.93 ms
+  trace5       Fly->Boat   z   908.9  0.604 s  frames worst 4.92 / mean 2.15 ms
+  trace5       Boat->Dive  z  -366.4  0.605 s  frames worst 69.38 / mean 11.77 ms
+  trace5       Dive->Boat  z  -473.7  0.604 s  frames worst 4.84 / mean 2.11 ms
+  trace5       Boat->Drive z  -370.3  0.604 s  frames worst 37.52 / mean 3.10 ms
+  trace6       Drive->Fly  z   572.0  0.605 s  frames worst 9.72 / mean 2.25 ms
+  trace6       Fly->Boat   z   909.0  0.606 s  frames worst 12.45 / mean 2.64 ms
+  trace6       Boat->Dive  z  -366.9  0.625 s  frames worst 301.33 / mean 17.68 ms
+  trace6       Dive->Boat  z  -473.6  0.603 s  frames worst 6.87 / mean 2.34 ms
+  trace6       Boat->Drive z  -370.3  0.603 s  frames worst 5.47 / mean 2.00 ms
+  trace7       Drive->Fly  z   572.0  0.602 s  frames worst 10.44 / mean 2.19 ms
+  trace7       Fly->Boat   z   909.6  0.603 s  frames worst 6.96 / mean 2.12 ms
+  trace7       Boat->Dive  z  -367.2  0.601 s  frames worst 5.02 / mean 2.09 ms
+  trace7       Dive->Boat  z  -473.4  0.604 s  frames worst 4.84 / mean 2.14 ms
+  trace7       Boat->Drive z  -370.5  0.602 s  frames worst 18.75 / mean 3.66 ms
+  trace8       Drive->Fly  z   572.0  0.603 s  frames worst 9.87 / mean 2.34 ms
+  trace8       Fly->Boat   z   909.3  0.603 s  frames worst 5.17 / mean 1.81 ms
+  trace8       Boat->Dive  z  -366.1  0.626 s  frames worst 18.33 / mean 4.20 ms
+  trace8       Dive->Boat  z  -473.7  0.606 s  frames worst 7.83 / mean 2.18 ms
+  trace8       Boat->Drive z  -370.6  0.600 s  frames worst 27.96 / mean 2.43 ms
+  trace9       Drive->Fly  z   572.0  0.604 s  frames worst 8.02 / mean 1.93 ms
+  trace9       Fly->Boat   z   909.7  0.600 s  frames worst 10.59 / mean 2.53 ms
+  trace9       Boat->Dive  z  -367.0  0.605 s  frames worst 6.24 / mean 2.47 ms
+  trace9       Dive->Boat  z  -473.8  0.641 s  frames worst 27.15 / mean 4.05 ms
+  trace9       Boat->Drive z  -371.0  0.603 s  frames worst 145.64 / mean 5.07 ms
+  trace10      Drive->Fly  z   572.0  0.659 s  frames worst 116.13 / mean 7.20 ms
+  trace10      Fly->Boat   z   909.6  0.601 s  frames worst 6.59 / mean 2.03 ms
+  trace10      Boat->Dive  z  -367.5  0.604 s  frames worst 8.44 / mean 2.02 ms
+  trace10      Dive->Boat  z  -473.7  0.603 s  frames worst 5.39 / mean 2.02 ms
+  trace10      Boat->Drive z  -370.7  0.601 s  frames worst 7.18 / mean 2.20 ms
+sound: music results playing (its own signal peak 0.000), splashes played 10, Abi lines: waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: laugh_1; win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: lucky_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

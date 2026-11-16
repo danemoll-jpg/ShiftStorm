@@ -33,7 +33,7 @@ namespace ShiftStorm
             Jumps.Clear();
             Jumps.Add(new Jump { name = "Creek Jump", lip = M("jA"), kicker = 45, height = 3.2f, gap = 40, water = true });
             Jumps.Add(new Jump { name = "Lake Jump", lip = M("jC"), kicker = 45, height = 3.2f, gap = 40, water = true, choice = true });
-            Jumps.Add(new Jump { name = "Cliff Gap", lip = M("climbMid") - 80, kicker = 45, height = 3.2f, gap = 36 });
+            Jumps.Add(new Jump { name = "Cliff Gap", lip = M("climbMid") - 80, kicker = 45, height = 3.2f, gap = 36, choice = CliffChoice });   // Round 13 item 2: the second choice jump
         }
         // the kicker's rise above the line's road height (an ease-in: steepest at the lip, about 8 deg)
         public static float Lift(float p)
@@ -132,8 +132,10 @@ namespace ShiftStorm
             for (int i = 0; i < n; i++)
             {
                 var a = P(i / (float)n); var b = P((i + 1) / (float)n); var d = b - a; var f = Quaternion.LookRotation(d.normalized, Vector3.up);
-                Box(g.transform, "guard wall", (a + b) * .5f + Vector3.up * .1f, new Vector3(.7f, 2.2f, d.magnitude + .7f), stone, f, true, ShiftVehicle.ObstacleLayer);
-                Box(g.transform, "guard wall moss", (a + b) * .5f + Vector3.up * 1.25f, new Vector3(.8f, .12f, d.magnitude + .8f), moss, f, false);
+                // Round 13 item 1: 2.6 m over the road (build 14: 1.2 m; a car bouncing off a hard wheels-down landing rode up onto its top and flew
+                // off the ground's end beyond it: the trace check's "fell off the climb")
+                Box(g.transform, "guard wall", (a + b) * .5f + Vector3.up * .8f, new Vector3(.7f, 3.6f, d.magnitude + .7f), stone, f, true, ShiftVehicle.ObstacleLayer);
+                Box(g.transform, "guard wall moss", (a + b) * .5f + Vector3.up * 2.65f, new Vector3(.8f, .12f, d.magnitude + .8f), moss, f, false);
             }
         }
         static void ClimbFalls()
@@ -246,7 +248,7 @@ namespace ShiftStorm
                 // the wings window: crossing the lip as a car opens it (ShiftVehicle.Stunts); a winged sign beside the kicker
                 var lipVol = Vol<ChoiceLip>(j.name + " lip", new Vector3(lq.x, RoadTop(lip) + 3, lq.z), f, new Vector3(30, 8, 6)); lipVol.window = 1f;
                 var q = At(lip - 70); var h = new GameObject("Sign wings optional"); h.transform.SetParent(scen, false);
-                h.transform.SetPositionAndRotation(new Vector3(q.x, RoadY, q.z) + Right(lip - 70) * 15.5f, Facing(lip - 70)); WorldBuilder.Sign(h.transform, Vector3.zero, Mode.Fly, 5);
+                h.transform.SetPositionAndRotation(new Vector3(q.x, RoadTop(lip - 70), q.z) + Right(lip - 70) * 15.5f, Facing(lip - 70)); WorldBuilder.Sign(h.transform, Vector3.zero, Mode.Fly, 5);
             }
         }
 
@@ -321,6 +323,37 @@ namespace ShiftStorm
             z.target = Mode.Drive; z.label = "Wheels down (lake flight)";
             for (int i = 0; i < 4; i++) Box(root, "wheels-down chevron", new Vector3(b.x, RoadY + .04f, b.z) + Flat(Dir(rejoin)) * (-10 + i * 6), new Vector3(10, .05f, 1.2f), Mt(new Color(.95f, .5f, .1f)), Facing(rejoin) * Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), false);
             var hs = new GameObject("Sign wheels down"); hs.transform.SetParent(scen, false); hs.transform.SetPositionAndRotation(new Vector3(b.x, RoadY, b.z) - Right(rejoin) * 15.5f - Flat(Dir(rejoin)) * 40, Facing(rejoin)); WorldBuilder.Sign(hs.transform, Vector3.zero, Mode.Drive, 6);
+        }
+
+        // Round 13 item 2 (Dan, 2026-11-14: "Sometimes the jump where you choose jump or fly should be different paths"): the Cliff Gap on the
+        // climb is the second choice jump. Off its lip, LB / E in the first second opens the wings onto the "Cliff flight": up over the mossy
+        // hillside on the climb's left (the outside of corner2), through three rings round the outside of the bend, past the waterfall
+        // ledge, and down the ramp's east side into the Sky Arch flight 70 m past the ramp's lip; it stands in for G2 (the launch). Staying a
+        // car keeps the climb road (over the gap, corner2, the ramp). The Round 12 rules from the start: entered as the wings open, a wide
+        // exit frame, the steering assist, a reset on it (or just off it) goes forward to the Sky Arch's first anchor +3 s, near misses count.
+        // "-noCliffFlight": build 14's plain Cliff Gap (before numbers).
+        public static bool CliffChoice => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noCliffFlight") < 0;
+        public const float CliffRejoinAfter = 230f;
+        public static float CliffWide = 1f;   // the branch's sideways reach (tuned for an equal time with the car line)
+        static void CliffFlight()
+        {
+            if (!CliffChoice) return;
+            var gap = Jumps.Find(j => j.name == "Cliff Gap"); float lip = gap.lip, rejoin = M("lip") + CliffRejoinAfter; var a = At(lip); var up = Vector3.up;
+            // offsets to the left of the line (+: left, the hillside / the outside of corner2) and heights over the line
+            Vector3 L(float t, float side, float h) { float p = Mathf.Lerp(lip, rejoin, t); return At(p) - Right(p) * side * CliffWide + up * h; }
+            var ctrl = new List<Vector3> { a + up * 1.5f, L(.055f, 2, 7), L(.15f, 11, 17), L(.28f, 30, 30), L(.41f, 54, 42), L(.52f, 86, 48), L(.62f, 108, 46), L(.71f, 106, 40), L(.8f, 82, 30), L(.87f, 56, 20), L(.93f, 30, 11), L(.97f, 12, 5), L(.99f, 3, 1.5f), At(rejoin), At(rejoin + 25) };
+            var sc = MakeShortcut("Cliff flight", ctrl, lip, rejoin, 2, 2, 55f, new Vector2(30, 20), new Vector2(34, 24), 12f, 26f, Mode.Fly);
+            sc.choice = true; sc.flight = true;
+            var rings = new MeshKit.Batch(); var gold = new Color(1f, .82f, .3f, .7f); const float RR = 16f;
+            foreach (float frac in new[] { .3f, .5f, .7f })
+            {
+                float s = sc.Length * frac; var q = sc.PointAt(s, out var d); var frame = Quaternion.LookRotation(d, up);
+                for (int i = 0; i < 16; i++) { float an = i * 360f / 16; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(an * Mathf.Deg2Rad), Mathf.Sin(an * Mathf.Deg2Rad), 0) * RR), frame * Quaternion.Euler(0, 0, an), new Vector3(.9f, RR * .42f, .9f), gold); }
+            }
+            rings.Object(scen, "Cliff flight rings", GateMarker.Beacon, false, false);
+            // the hillside it crosses: a ledge waterfall pouring off the climb's cliff under the middle ring (looks only)
+            { float s = sc.Length * .5f; var q = sc.PointAt(s, out _); var fall = GameObject.CreatePrimitive(PrimitiveType.Quad); fall.name = "Cliff flight falls"; fall.transform.SetParent(scen, false); Object.Destroy(fall.GetComponent<Collider>());
+              fall.transform.SetPositionAndRotation(new Vector3(q.x, q.y - 22, q.z), Quaternion.LookRotation(-Flat(Dir(Mathf.Lerp(lip, rejoin, .5f))))); fall.transform.localScale = new Vector3(18, 26, 1); fall.GetComponent<MeshRenderer>().sharedMaterial = JurassicLook.FallMat(.45f); }
         }
     }
 

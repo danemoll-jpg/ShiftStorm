@@ -23,6 +23,9 @@ namespace ShiftStorm
         [Range(0, 1)] public float changeSpeedCarry = 1f;
         public float wheelsDownExtraGravity = 7f;     // the car springs onto its wheels: extra pull down while airborne just after a change into Drive
         public float wheelsDownSeconds = 2f;
+        public float wheelsDownAlignMaxDeg = 40f;     // Round 13 item 1: after a plane's wheels-down a car up to this far off the route's way is turned onto it...
+        public float wheelsDownAlignRate = 45f;       //   ... at up to this many deg/s (velocity and nose together), until 0.6 s after the first touch
+        public float wheelsDownMaxFall = 8f;          //   and it touches down at no more than this downward speed (build 14: up to 17 m/s, a bounce off the road)
         [Header("Recovery")]
         public float resetSpeed = 20f;                // a reset resumes at this modest speed
         public float graceSeconds = 1.5f;             // no collisions with obstacles after a reset

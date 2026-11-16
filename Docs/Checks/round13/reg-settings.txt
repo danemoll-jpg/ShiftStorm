@@ -1,0 +1,11 @@
+ShiftStorm check 'settings', 2026-11-16 04:21, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SETTINGS: file local/round13/save\settings.json, invert at start off, chosen before False
+FIRST FLIGHT NOTE PASS: "Invert controls: Menu > Settings" shown on the first flight; nothing asked at start-up
+INVERT FROM THE MENU PASS: Menu opened True, Settings page True, item now "Invert flight / dive controls: On   (View / F2)", menu closed True; stick pulled back for 0.45 s: invert off: Fly pitch +18.9 deg, Dive +16.2 deg (nose up); invert on: Fly -18.9 deg, Dive -16.2 deg (nose down)
+  saved: local/round13/save\settings.json: {   "version": 2,   "invertVertical": true,   "showStats": false,   "invertChosen": true,   "difficulty": 0,   "design": "",   "invertVertical2": false,   "view": 0,   "view2": 0,   "splitLeftRight": false,   "musicVol": 10,   "sfxVol": 10,   "voiceVol": 10,   "engineVol": 6,   "playtestLogs": true,   "buck": 0,   "driver": 0,   "driver2": 1,   "design2": "",   "tourChosen": false,   "tourUnlocked": false,   "paint": 0,   "graphics": -1 }
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.46 ms, 95th pct 3.87 ms, 99th pct 5.71 ms, worst 20.98 ms over 3162 frames; GPU time not available in batch mode
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

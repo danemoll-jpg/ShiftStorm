@@ -62,7 +62,7 @@ namespace ShiftStorm
 
         public static Course Build(Transform parent)
         {
-            mark.Clear();
+            mark.Clear(); bypassLine = null;
             var g = new GameObject("Course Paradise Plunge"); g.transform.SetParent(parent, false); root = g.transform;
             scen = new GameObject("Scenery").transform; scen.SetParent(root, false);
             c = g.AddComponent<Course>(); c.courseName = "Paradise Plunge"; c.timeTrial = true; c.look = "jurassic"; c.music = "race_paradise"; c.shortName = "Paradise Plunge";
@@ -339,9 +339,19 @@ namespace ShiftStorm
             float a = M("lagoonEnd") - 15, b = M("portal");
             Channel("River", a, b, 42, -16);
             var bankTop = Mt(JurassicLook.JungleDark); var mud = Mt(JurassicLook.Mud);
-            MeshKit.Strip(root, "River bank L", Samples(a, M("portal"), -46, -20, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
+            // Round 13 item 3: the left bank is cut back to 38 m from the line for the bypass's dive bay (BypassBay)
+            if (MangroveBypass)
+            {
+                MeshKit.Strip(root, "River bank L", Samples(a, BayFrom, -46, -20, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
+                MeshKit.Strip(root, "River bank L", Samples(BayFrom, BayTo, -46, -BayOuter, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
+                MeshKit.Strip(root, "River bank L", Samples(BayTo, M("portal"), -46, -20, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
+                BypassBay();
+            }
+            else MeshKit.Strip(root, "River bank L", Samples(a, M("portal"), -46, -20, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
             MeshKit.Strip(root, "River bank R", Samples(a, M("portal"), 20, 46, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
-            MeshKit.Strip(root, "River bed", Samples(a, b, -21, 21, (p, pt) => -16f, (p, pt) => -17f, 6f), mud, null, true, 0, 40, false);
+            // Round 13 item 3: two openings in the bed for the submerged bypass (its way down after the lagoon, its way up after bend4)
+            foreach (var (fa, fb, l, r) in RiverBedPieces(a, b))
+                MeshKit.Strip(root, "River bed", Samples(fa, fb, l, r, (p, pt) => -16f, (p, pt) => -17f, 6f), mud, null, true, 0, 40, false);
             // currents at the bends (pushing toward the outside of each bend), shown by foam ribbons drifting with them
             var foam = Mt(Color.white);
             foreach (var (n, side) in new[] { ("bend1", 1f), ("bend2", -1f), ("mangMid", 1f), ("bend3", -1f), ("bend4", 1f) })
@@ -503,7 +513,7 @@ namespace ShiftStorm
                 var q = At(p); var r = Right(p);
                 foreach (float s in new[] { -1f, 1f })
                 {
-                    var bp = new Vector3(q.x, 1.4f, q.z) + r * s * R(25, 40);
+                    var bp = new Vector3(q.x, 1.4f, q.z) + r * s * (s < 0 && MangroveBypass && p > BayFrom - 5 && p < BayTo + 5 ? R(40, 45) : R(25, 40));   // Round 13: not in the dive bay
                     Plant(bp, (int)R(0, 2), R(1f, 1.5f));
                     var root0 = new Vector3(q.x, 0, q.z) + r * s * 21.5f; var b = B(root0);
                     for (int k = 0; k < 3; k++) b.Add(MeshKit.LowCylinder, root0 + new Vector3(0, 1.2f, 0) + Flat(Dir(p)) * (k * 2.5f - 2.5f), Quaternion.AngleAxis(s * 35, Flat(Dir(p))), new Vector3(.3f, 3.2f, .3f), JurassicLook.FernTrunk);
@@ -578,7 +588,7 @@ namespace ShiftStorm
             G(2, "G2 launch", M("lip") - 3, new Vector2(13, 10), Mode.Drive, Mode.Fly);
             G(3, "G3 arch exit", M("arch") + 55, new Vector2(42, 28), Mode.Fly);
             G(4, "G4 lagoon landing", M("splash") + 50, new Vector2(48, 12), Mode.Boat);
-            G(5, "G5 mangrove exit", M("G5"), new Vector2(22, 8), Mode.Boat);
+            G(5, "G5 mangrove exit", M("G5"), new Vector2(22, 8), Mode.Boat, Mode.Dive);   // Round 13 item 3: a submarine still in the river (dived into the bypass lane and stayed up) passes it too
             G(6, "G6 dive portal", M("portal"), new Vector2(CaveHalf, 6), Mode.Dive);
             G(7, "G7 chamber exit", M("G7"), new Vector2(CaveHalf + 4, 10), Mode.Dive);
             G(8, "G8 surfacing pool", M("G8"), new Vector2(22, 10), Mode.Boat, Mode.Dive);
@@ -727,7 +737,9 @@ namespace ShiftStorm
             var sz = Vol<SlipstreamZone>("Slit updraft", q + r * slit + Vector3.up * 52, f, new Vector3(half * 2 - 2, hi - lo - 2, 44)); sz.speed = 108;
             var sk = new List<Vector3> { At(ar - 490), At(ar - 450), q + r * slit + Vector3.up * 52, At(ar + 600), At(ar + 640) };
             MakeShortcut("Sky Arch slit", sk, ar - 490, ar + 640, 3, 3, 30f, new Vector2(half + 3, (hi - lo) * .5f + 3), new Vector2(32, 26), -2, 70f, Mode.Fly).flight = true;   // Round 12: a reset on it goes forward (G3 counted, +3 s)
+            if (MangroveBypass) BypassShortcut();   // Round 13 item 3
             LakeFlight();   // Round 7: the choice jump's flight branch
+            CliffFlight();   // Round 13 item 2: the Cliff Gap's flight branch
 
             // 2 Coral Vault low tunnel: down through an opening in the cave floor just after the first curtain (lo1), under the chamber's
             // wall, a straight run under the island inside the cave's loop, and up through a second opening before G7, the last 75 m
@@ -763,7 +775,9 @@ namespace ShiftStorm
             else if (entryAt < 0) { se = -1; sx = -1; for (float s = 0; s < L; s += 1) { float y = sc.PointAt(s, out _).y; if (se < 0 && y < -21) se = s; if (se > 0 && y < -21) sx = s; } }
             sc.entry = SubGate(sc, label + " entry", se, entryHalf, mode); sc.exit = SubGate(sc, label + " exit", sx, exitHalf, mode);
             c.shortcuts.Add(sc);
-            Debug.Log($"[Course] shortcut {label}: line {L:0} m (main {to - from:0} m), entry at {se:0} m, exit at {sx:0} m along it");
+            // Round 13: the tightest bend of its ground plan (a plane turns at 150-200 m), over 30 m windows
+            float minR = float.MaxValue, minAt = 0; for (float s = 30; s < L - 30; s += 10) { sc.PointAt(s - 30, out var d0); sc.PointAt(s + 30, out var d1); d0.y = 0; d1.y = 0; float ang = Vector3.Angle(d0, d1) * Mathf.Deg2Rad; if (ang > 1e-3f && 60f / ang < minR) { minR = 60f / ang; minAt = s; } }
+            Debug.Log($"[Course] shortcut {label}: line {L:0} m (main {to - from:0} m), entry at {se:0} m, exit at {sx:0} m along it, tightest bend radius {minR:0} m at {minAt:0} m");
             return sc;
         }
         static ProgressGate SubGate(Shortcut sc, string label, float s, Vector2 half, Mode mode)
@@ -780,7 +794,8 @@ namespace ShiftStorm
             return pg;
         }
         // the tunnel's rock: floor, walls and roof along its line wherever it runs below the cave floor, its own water, guide lights
-        static void Tunnel(Shortcut sc)
+        // Round 13: also the Mangrove bypass's root cavern under the river bed (floorY: the bed it runs under, waterTop: its water's top)
+        static void Tunnel(Shortcut sc, float floorY = CaveFloor, float waterTop = Water, bool columns = true, string nm = "Tunnel")
         {
             var rock = Mt(JurassicLook.CaveRock); var sand = Mt(JurassicLook.Sand); float L = sc.Length;
             // the exit narrows over 30 m (build 4 and the first Round 4 build: in one step, a wall face across the way)
@@ -800,33 +815,34 @@ namespace ShiftStorm
             var fl0 = new List<MeshKit.Sample>(); var wl = new List<MeshKit.Sample>(); var wr = new List<MeshKit.Sample>(); var rf = new List<MeshKit.Sample>();
             void Flush()
             {
-                if (fl0.Count > 1) MeshKit.Strip(root, "Tunnel floor", fl0, sand, rock); if (wl.Count > 1) MeshKit.Strip(root, "Tunnel wall L", wl, rock);
-                if (wr.Count > 1) MeshKit.Strip(root, "Tunnel wall R", wr, rock); if (rf.Count > 1) MeshKit.Strip(root, "Tunnel roof", rf, rock);
+                if (fl0.Count > 1) MeshKit.Strip(root, nm + " floor", fl0, sand, rock); if (wl.Count > 1) MeshKit.Strip(root, nm + " wall L", wl, rock);
+                if (wr.Count > 1) MeshKit.Strip(root, nm + " wall R", wr, rock); if (rf.Count > 1) MeshKit.Strip(root, nm + " roof", rf, rock);
                 fl0 = new List<MeshKit.Sample>(); wl = new List<MeshKit.Sample>(); wr = new List<MeshKit.Sample>(); rf = new List<MeshKit.Sample>();
             }
             bool lastRoof = false;
             for (float s = 0; s <= L; s += 3)
             {
                 float hw = HW(s), hh = HH(s);
-                bool below(Vector3 p) => p.y - hh < CaveFloor - .5f;
+                bool below(Vector3 p) => p.y - hh < floorY - .5f;
                 float hwr = HWR(s), hb = HB(s);
                 var f0 = Sec(s, -hw - 1, hwr + 1, p => p.y - hb, p => p.y - hb - 2, below); if (f0.HasValue) fl0.Add(f0.Value);
-                var w0 = Sec(s, -hw - 3, -hw, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hb - 2, below); if (w0.HasValue) wl.Add(w0.Value);
-                var w1 = Sec(s, hwr, hwr + 3, p => Mathf.Min(p.y + hh + 2, CaveFloor), p => p.y - hb - 2, below); if (w1.HasValue) wr.Add(w1.Value);
-                var r0 = Sec(s, -hw - 3, hwr + 3, p => p.y + hh + 2, p => p.y + hh, p => p.y + hh <= CaveFloor - 3.5f);   // starts well below the floor: no lip to catch
-                if (r0.HasValue) rf.Add(r0.Value); else if (lastRoof && rf.Count > 1) { MeshKit.Strip(root, "Tunnel roof", rf, rock); rf = new List<MeshKit.Sample>(); }
+                var w0 = Sec(s, -hw - 3, -hw, p => Mathf.Min(p.y + hh + 2, floorY), p => p.y - hb - 2, below); if (w0.HasValue) wl.Add(w0.Value);
+                var w1 = Sec(s, hwr, hwr + 3, p => Mathf.Min(p.y + hh + 2, floorY), p => p.y - hb - 2, below); if (w1.HasValue) wr.Add(w1.Value);
+                var r0 = Sec(s, -hw - 3, hwr + 3, p => p.y + hh + 2, p => p.y + hh, p => p.y + hh <= floorY - 3.5f);   // starts well below the floor: no lip to catch
+                if (r0.HasValue) rf.Add(r0.Value); else if (lastRoof && rf.Count > 1) { MeshKit.Strip(root, nm + " roof", rf, rock); rf = new List<MeshKit.Sample>(); }
                 lastRoof = r0.HasValue;
                 if (!f0.HasValue && fl0.Count > 0) Flush();
             }
             Flush();
-            for (float s = 0; s < L; s += 20) { var p = sc.PointAt(s, out var d); p.y = (Water - 36) * .5f; var fd = new Vector3(d.x, 0, d.z); Vol<WaterVolume>("Tunnel water", p, Quaternion.LookRotation(fd.sqrMagnitude > 1e-4f ? fd : Vector3.forward), new Vector3(20, 36, 28)); }
+            for (float s = 0; s < L; s += 20) { var p = sc.PointAt(s, out var d); p.y = (waterTop + (waterTop - 36)) * .5f; var fd = new Vector3(d.x, 0, d.z); Vol<WaterVolume>(nm + " water", p, Quaternion.LookRotation(fd.sqrMagnitude > 1e-4f ? fd : Vector3.forward), new Vector3(20, 36, 28)); }
             var lights = new MeshKit.Batch(); int n = 0;
             for (float s = 30; s < L - 20; s += 10, n++)
             {
                 var p = sc.PointAt(s, out var d); var rr = Vector3.Cross(Vector3.up, new Vector3(d.x, 0, d.z).normalized);
                 foreach (float k in new[] { -1f, 1f }) lights.Add(MeshKit.Cube, p + rr * k * (HW(s) - 1.2f), Quaternion.LookRotation(d), Vector3.one * .7f, n % 2 == 0 ? ShortcutColor : new Color(.35f, 1f, .9f));
             }
-            lights.Object(scen, "Tunnel guide lights", GateMarker.Beacon, false, false);
+            lights.Object(scen, nm + " guide lights", GateMarker.Beacon, false, false);
+            if (!columns) return;
             // two rock columns in the chord, off the line (5.5 m each side, alternately): a racer on the line passes between, a wide one glances off
             for (int i = 0; i < 2; i++)
             {

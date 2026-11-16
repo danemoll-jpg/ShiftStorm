@@ -69,7 +69,8 @@ namespace ShiftStorm
             CourseAudio.Instance?.Follow(P2);
             InputSystem.onDeviceChange += DeviceChanged;
             VehicleSound.Mix = .7f;
-            // per-view detail, lowered for the two views only (restored in Teardown)
+            // per-view detail, lowered for the two views only (restored in Teardown); Round 13: first the next lighter Graphics preset
+            GraphicsPreset.Apply(GraphicsPreset.Lighter(GraphicsPreset.Base));
             lodBias = QualitySettings.lodBias; QualitySettings.lodBias = lodBias * LodScale;
             var urp = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
             if (urp) { shadowDistance = urp.shadowDistance; urp.shadowDistance = shadowDistance * ShadowScale; }
@@ -133,6 +134,7 @@ namespace ShiftStorm
             if (P1) { P1.Input.Bind(null); P1.Input.player = 0; }
             QualitySettings.lodBias = lodBias; QualitySettings.globalTextureMipmapLimit = mip1;
             { var urp = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset; if (urp && shadowDistance >= 0) urp.shadowDistance = shadowDistance; shadowDistance = -1; }
+            GraphicsPreset.Apply(GraphicsPreset.Base);   // Round 13: back to the chosen preset (Cam1 too)
             SplitScreen.Views.Clear();
             Hud.Instance?.Relayout();
             Debug.Log("[Split] ended");

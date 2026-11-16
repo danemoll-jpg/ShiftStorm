@@ -145,10 +145,10 @@ namespace ShiftStorm
                     finalCalled = winnerCalled = resultsCalled = false; leader = null; raceStart = Time.time; stayPending = false;
                     poolNext.Clear(); busyUntil = nextAny = 0; usedThisRace.Clear(); ahead.Clear(); lastPlace.Clear(); closeSince.Clear(); gapMax.Clear(); marksDone.Clear();
                     nextFill = -1; Lines.Clear();
-                    Call(game.Race && game.Race.Active ? "start" : "trial", v, true);
+                    if (Challenge.Active == null) Call(game.Race && game.Race.Active ? "start" : "trial", v, true);   // Round 13: a rival challenge has its own line (ChallengeRunner)
                     break;
                 case "go": if (v == game.Player) { Call("go", v, true); nextFill = Time.time + 9f; } break;
-                case "shortcut": if (text.Contains(": in") && !text.Contains("Lake flight")) Call("shortcut", v); break;
+                case "shortcut": if (text.Contains(": in") && !text.Contains(" flight")) Call("shortcut", v); break;   // Round 13: no flight branch of a choice jump (Lake / Cliff / Midway flight): the wings lines cover those
                 case "gate":
                     if (text.Contains("near miss")) Call("miss", v);
                     if (text.Contains("G9") && !finalCalled) { finalCalled = true; Call("final", v); }
@@ -209,7 +209,7 @@ namespace ShiftStorm
                     if (real && first.Human) Call("lead", first);
                 }
                 // the finish: a photo finish (the first two within 0.4 s) or the winner, then the results
-                if (!winnerCalled && race.Finishers.Count > 0)
+                if (!winnerCalled && race.Finishers.Count > 0 && Challenge.Active == null)   // Round 13: a rival challenge has its own result lines
                 {
                     var w = race.Finishers.OrderBy(f => f.time).First();
                     var second = order.Count > 1 ? order[1] : null;

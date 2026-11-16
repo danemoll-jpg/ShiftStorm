@@ -20,7 +20,7 @@ namespace ShiftStorm
         public const int QualifyPlace = 3;
         public static int PointsFor(int place) => place == 1 ? 10 : place == 2 ? 6 : place == 3 ? 4 : place == 4 ? 2 : 1;
 
-        [Serializable] sealed class Data { public int version = 1; public int unlocked = 1; public int[] best = new int[0]; public int[] points = new int[0]; public int[] tries = new int[0]; public bool done; }
+        [Serializable] sealed class Data { public int version = 1; public int unlocked = 1; public int[] best = new int[0]; public int[] points = new int[0]; public int[] tries = new int[0]; public bool done; public bool[] cWon = new bool[0]; public float[] cBest = new float[0]; public int[] cTries = new int[0]; }   // Round 13: rival challenges (won, best margin, tries)
         static Data d;
         public static string FilePath
         {
@@ -43,6 +43,10 @@ namespace ShiftStorm
                 if (d.points == null || d.points.Length < n) Array.Resize(ref d.points, n);
                 if (d.tries == null || d.tries.Length < n) Array.Resize(ref d.tries, n);
                 d.unlocked = Mathf.Clamp(d.unlocked, 1, n);
+                int m = Challenge.All.Length;
+                if (d.cWon == null || d.cWon.Length < m) Array.Resize(ref d.cWon, m);
+                if (d.cBest == null || d.cBest.Length < m) Array.Resize(ref d.cBest, m);
+                if (d.cTries == null || d.cTries.Length < m) Array.Resize(ref d.cTries, m);
                 return d;
             }
         }
@@ -79,6 +83,16 @@ namespace ShiftStorm
             Note = $"THE TOUR - Stop {stop + 1} {Stops[stop].title}: {Race.Ordinal(place)}, {pts} points" + (better ? "" : $" (best {Race.Ordinal(x.best[stop])})") +
                    (unlocked ? $"  -  Stop {stop + 2} unlocked!" : pass ? (stop == Stops.Length - 1 ? "  -  Tour complete!" : "") : $"  -  top {QualifyPlace} to go on: Race again to retry");
             Debug.Log($"[Tour] stop {stop + 1}: {Race.Ordinal(place)}, {pts} points, best {Race.Ordinal(x.best[stop])}, unlocked {x.unlocked}, total {Total}, tries {x.tries[stop]} -> {FilePath}");
+        }
+        // Round 13 item 4: the rival challenges
+        public static bool ChallengeWon(int i) => D.cWon[i];
+        public static float ChallengeBest(int i) => D.cBest[i];
+        public static int ChallengeTries(int i) => D.cTries[i];
+        public static void RecordChallenge(int i, bool won, float margin)
+        {
+            var x = D; x.cTries[i]++;
+            if (won) { if (!x.cWon[i] || margin > x.cBest[i]) x.cBest[i] = margin; x.cWon[i] = true; }
+            Save(); Debug.Log($"[Tour] challenge {Challenge.All[i].key}: {(won ? "won" : "lost")} by {margin:0.0} s, won {x.cWon[i]}, best {x.cBest[i]:0.0} s, tries {x.cTries[i]} -> {FilePath}");
         }
         public static string Row(int stop)
         {

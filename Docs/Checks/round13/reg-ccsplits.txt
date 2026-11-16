@@ -1,0 +1,36 @@
+ShiftStorm check 'ccsplits', 2026-11-16 03:53, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  CC choice car (under it) run 1: 11.97 s to G1, resets 0, wings used 0, shortcuts 
+  CC choice car (under it) run 2: 11.97 s to G1, resets 0, wings used 0, shortcuts 
+  CC choice car (under it) run 3: 11.97 s to G1, resets 0, wings used 0, shortcuts 
+CC CHOICE car: 3 of 3 clean, mean 11.97 s anchor -> G1
+  CC choice fly (through the wheel) run 1: 10.38 s to G1, resets 0, wings used 1, shortcuts Midway flight
+  CC choice fly (through the wheel) run 2: 10.38 s to G1, resets 0, wings used 2, shortcuts Midway flight
+  CC choice fly (through the wheel) run 3: 10.38 s to G1, resets 0, wings used 3, shortcuts Midway flight
+CC CHOICE fly: 3 of 3 clean, mean 10.38 s anchor -> G1
+  CC lighthouse round run 1: 23.97 s to G7, resets 0, wall hits 0, shortcuts 
+  CC lighthouse round run 2: 23.88 s to G7, resets 0, wall hits 0, shortcuts 
+  CC lighthouse round run 3: 23.90 s to G7, resets 0, wall hits 0, shortcuts 
+CC LIGHTHOUSE round: 3 of 3 clean, mean 23.92 s
+  CC lighthouse rocks run 1: 22.60 s to G7, resets 0, wall hits 0, shortcuts Lighthouse rocks
+  CC lighthouse rocks run 2: 22.70 s to G7, resets 0, wall hits 0, shortcuts Lighthouse rocks
+  CC lighthouse rocks run 3: 22.63 s to G7, resets 0, wall hits 0, shortcuts Lighthouse rocks
+CC LIGHTHOUSE rocks: 3 of 3 clean, mean 22.64 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.61 ms, 95th pct 2.98 ms, 99th pct 5.78 ms, worst 565.08 ms over 127680 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  cc-choice-fly-1 Drive->Fly  z   232.8  0.600 s  frames worst 14.84 / mean 1.39 ms
+  cc-choice-fly-1 Fly->Drive  z   703.9  0.601 s  frames worst 11.09 / mean 1.43 ms
+  cc-choice-fly-2 Drive->Fly  z   232.8  0.600 s  frames worst 12.15 / mean 1.54 ms
+  cc-choice-fly-2 Fly->Drive  z   703.9  0.601 s  frames worst 6.97 / mean 1.36 ms
+  cc-choice-fly-3 Drive->Fly  z   232.8  0.601 s  frames worst 10.04 / mean 1.44 ms
+  cc-choice-fly-3 Fly->Drive  z   703.9  0.601 s  frames worst 7.34 / mean 1.49 ms
+  cc-lighthouse-round-1 Boat->Dive  z  -366.5  0.600 s  frames worst 8.09 / mean 1.49 ms
+  cc-lighthouse-round-2 Boat->Dive  z  -366.9  0.600 s  frames worst 3.46 / mean 1.24 ms
+  cc-lighthouse-round-3 Boat->Dive  z  -366.7  0.602 s  frames worst 7.23 / mean 1.37 ms
+  cc-lighthouse-rocks-1 Boat->Dive  z  -366.6  0.600 s  frames worst 7.36 / mean 1.54 ms
+  cc-lighthouse-rocks-2 Boat->Dive  z  -366.4  0.603 s  frames worst 87.71 / mean 2.74 ms
+  cc-lighthouse-rocks-3 Boat->Dive  z  -366.5  0.601 s  frames worst 4.85 / mean 1.24 ms
+sound: music race_coaster playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

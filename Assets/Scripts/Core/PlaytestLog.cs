@@ -49,14 +49,21 @@ namespace ShiftStorm
             // the choice jump: the window closed and the racer is still a car
             foreach (var h in game.Humans)
                 if (h && choicePending.TryGetValue(h, out var p) && p && !h.WingsOpen && Time.time > h.WingsUntil + .05f)
-                { choicePending[h] = false; if (h.Mode == Mode.Drive && open.TryGetValue(h, out var r)) r.choices.Add(E(h, "Lake Jump", "car")); }
+                { choicePending[h] = false; if (h.Mode == Mode.Drive && open.TryGetValue(h, out var r)) r.choices.Add(E(h, ChoiceName(h), "car")); }
         }
 
         void Hook(ShiftVehicle v)
         {
             v.Event += (kind, text) => OnEvent(v, kind, text);
-            v.Stunt += s => { if (s == "wings" && open.TryGetValue(v, out var r)) { choicePending[v] = false; r.choices.Add(E(v, "Lake Jump", "fly")); } if (s == "loopfail" && open.TryGetValue(v, out var r2)) r2.changes.Add(E(v, "loop failed", "")); };
+            v.Stunt += s => { if (s == "wings" && open.TryGetValue(v, out var r)) { choicePending[v] = false; r.choices.Add(E(v, ChoiceName(v), "fly")); } if (s == "loopfail" && open.TryGetValue(v, out var r2)) r2.changes.Add(E(v, "loop failed", "")); };
             v.WallHit += (angle, keep, what) => { if (open.TryGetValue(v, out var r) && !v.Finished && keep < .97f) { r.wallHits++; r.walls.Add(E(v, what, $"{angle:0} deg, {keep * 100:0} % speed kept")); } };
+        }
+        // Round 13: which choice jump (the nearest choice lip behind the racer: Lake Jump, Cliff Gap, Midway Jump)
+        static string ChoiceName(ShiftVehicle v)
+        {
+            string best = "choice jump"; float d = float.MaxValue; var st = v.Course ? v.Course.stunts : null; if (st == null) return best;
+            foreach (var j in st.Jumps) if (j.choice && v.Progress >= j.lip - 30 && v.Progress - j.lip < d) { d = v.Progress - j.lip; best = j.name; }
+            return best;
         }
         Ev E(ShiftVehicle v, string what, string detail) => new Ev { t = Round(v.Holding ? 0 : Time.time - v.StartTime), at = Mathf.Round(v.Progress), segment = SegmentOf(v), what = what, detail = detail };
         static float Round(float x) => Mathf.Round(x * 100) / 100f;

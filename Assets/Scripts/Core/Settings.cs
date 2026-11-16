@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; public int buck; public int driver; public int driver2 = 1; public string design2 = ""; public bool tourChosen, tourUnlocked; }   // Round 12: "Unlock all Tour stops" (tourChosen false: UnlockTourDefault)   // Round 11: Buck's briefings 0 On / 1 Short / 2 Off; player 1's / 2's driver (Lineup.All: 0 Abi, 1 Rae, 2 Chip, 3 Vivi) and player 2's machine   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
+        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; public int buck; public int driver; public int driver2 = 1; public string design2 = ""; public bool tourChosen, tourUnlocked; public int paint; public int graphics = -1; }   // Round 13: the Garage paint (Paints), the Graphics preset (-1 Auto)   // Round 12: "Unlock all Tour stops" (tourChosen false: UnlockTourDefault)   // Round 11: Buck's briefings 0 On / 1 Short / 2 Off; player 1's / 2's driver (Lineup.All: 0 Abi, 1 Rae, 2 Chip, 3 Vivi) and player 2's machine   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -106,6 +106,10 @@ namespace ShiftStorm
         public static int Driver { get => Mathf.Clamp(D.driver, 0, 3); set { D.driver = Mathf.Clamp(value, 0, 3); if (!QuietRun.Check) Save(); } }
         public static int Driver2 { get => Mathf.Clamp(D.driver2, 0, 3); set { D.driver2 = Mathf.Clamp(value, 0, 3); if (!QuietRun.Check) Save(); } }
         public static string Design2 { get => string.IsNullOrEmpty(D.design2) ? "" : D.design2; set { D.design2 = value ?? ""; if (!QuietRun.Check) Save(); } }
+        // Round 13: the Garage paint (Paints.All index; won in rival challenges) and the Graphics preset (-1 Auto, 0 Deck, 1 Low, 2 Medium, 3 High;
+        // "-graphics Deck|Low|Medium|High" for a run only). A check run reads the defaults and saves nothing.
+        public static int Paint { get => Mathf.Max(0, D.paint); set { D.paint = Mathf.Max(0, value); if (!QuietRun.Check) Save(); Debug.Log($"[Settings] paint {value}"); } }
+        public static int Graphics { get => Mathf.Clamp(D.graphics, -1, 3); set { D.graphics = Mathf.Clamp(value, -1, 3); if (!QuietRun.Check) Save(); } }
         static bool overrideSet; static Difficulty overrideLevel;   // the player has set it once: the first-flight note is no longer needed
     }
 }

@@ -1,0 +1,118 @@
+ShiftStorm check 'underpier', 2026-11-16 02:18, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+UNDER THE PIER (Coaster Coast, BUILD 14's: -oldPier): the flume's channel under the boardwalk to the sea, and the dive under the fishing pier to the splash pool
+  Boat from 4578 m, left50 : reset (out of bounds) anchor, restarted -339 m from where it wandered off (BACK)
+  Boat from 4578 m, left90 : reset (out of bounds) anchor, restarted -327 m from where it wandered off (BACK)
+  Boat from 4578 m, right50: reset (out of bounds) anchor, restarted -340 m from where it wandered off (BACK)
+  Boat from 4578 m, right90: reset (out of bounds) anchor, restarted -327 m from where it wandered off (BACK)
+  Boat from 4628 m, left50 : reset (out of bounds) anchor, restarted +62 m from where it wandered off
+  Boat from 4628 m, left90 : reset (out of bounds) anchor, restarted -377 m from where it wandered off (BACK)
+  Boat from 4628 m, right50: reset (out of bounds) anchor, restarted +62 m from where it wandered off
+  Boat from 4628 m, right90: reset (out of bounds) anchor, restarted -377 m from where it wandered off (BACK)
+  Boat from 4678 m, left50 : reset (out of bounds) anchor, restarted +12 m from where it wandered off
+  Boat from 4678 m, left90 : reset (out of bounds) anchor, restarted -427 m from where it wandered off (BACK)
+  Boat from 4678 m, right50: reset (out of bounds) anchor, restarted +11 m from where it wandered off
+  Boat from 4678 m, right90: reset (out of bounds) anchor, restarted -427 m from where it wandered off (BACK)
+  Boat from 4728 m, left50 : reset (out of bounds) anchor, restarted -40 m from where it wandered off
+  Boat from 4728 m, left90 : reset (out of bounds) anchor, restarted -26 m from where it wandered off
+  Boat from 4728 m, right50: reset (out of bounds) anchor, restarted -37 m from where it wandered off
+  Boat from 4728 m, right90: reset (out of bounds) anchor, restarted -26 m from where it wandered off
+  Boat from 4778 m, left50 : reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK)
+  Boat from 4778 m, left90 : reset (out of bounds) anchor, restarted -77 m from where it wandered off
+  Boat from 4778 m, right50: reset (out of bounds) anchor, restarted -85 m from where it wandered off (BACK)
+  Boat from 4778 m, right90: reset (out of bounds) anchor, restarted -76 m from where it wandered off
+  Boat from 4828 m, left50 : reset (missed gate G6 out to sea) anchor, restarted -140 m from where it wandered off (BACK)
+  Boat from 4828 m, left90 : reset (out of bounds) anchor, restarted -126 m from where it wandered off (BACK)
+  Boat from 4828 m, right50: reset (out of bounds) anchor, restarted -134 m from where it wandered off (BACK)
+  Boat from 4828 m, right90: reset (out of bounds) anchor, restarted -126 m from where it wandered off (BACK)
+  Dive from 5599 m, left50 : back on the route after 3.9 s
+  Dive from 5599 m, left90 : reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK)
+  Dive from 5599 m, right50: reset (out of bounds) anchor, restarted +20 m from where it wandered off
+  Dive from 5599 m, right90: reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK)
+  Dive from 5599 m, down   : reset (missed gate G9 boardwalk landing as Dive) anchor, restarted +623 m from where it wandered off
+  Dive from 5599 m, up     : back on the route after 2.5 s
+  Dive from 5654 m, left50 : back on the route after 2.5 s
+  Dive from 5654 m, left90 : back on the route after 4.0 s
+  Dive from 5654 m, right50: reset (out of bounds) anchor, restarted -35 m from where it wandered off
+  Dive from 5654 m, right90: reset (out of bounds) anchor, restarted -29 m from where it wandered off
+  Dive from 5654 m, down   : reset (no progress) anchor, restarted -35 m from where it wandered off
+  Dive from 5654 m, up     : reset (out of bounds) anchor, restarted -35 m from where it wandered off
+  Dive from 5709 m, left50 : back on the route after 4.7 s
+  Dive from 5709 m, left90 : back on the route after 4.7 s
+  Dive from 5709 m, right50: reset (out of bounds) anchor, restarted -88 m from where it wandered off (BACK)
+  Dive from 5709 m, right90: reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK)
+  Dive from 5709 m, down   : reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK)
+  Dive from 5709 m, up     : reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK)
+  Dive from 5764 m, left50 : reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK)
+  Dive from 5764 m, left90 : back on the route after 13.5 s
+  Dive from 5764 m, right50: reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK)
+  Dive from 5764 m, right90: reset (out of bounds) anchor, restarted -139 m from where it wandered off (BACK)
+  Dive from 5764 m, down   : reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK)
+  Dive from 5764 m, up     : back on the route after 2.5 s
+  Dive from 5819 m, left50 : reset (out of bounds) anchor, restarted -44 m from where it wandered off
+  Dive from 5819 m, left90 : reset (out of bounds) anchor, restarted -35 m from where it wandered off
+  Dive from 5819 m, right50: reset (out of bounds) anchor, restarted -44 m from where it wandered off
+  Dive from 5819 m, right90: reset (out of bounds) anchor, restarted -38 m from where it wandered off
+  Dive from 5819 m, down   : reset (out of bounds) anchor, restarted +403 m from where it wandered off
+  Dive from 5819 m, up     : back on the route after 2.5 s
+  Dive from 5874 m, left50 : reset (out of bounds) anchor, restarted +61 m from where it wandered off
+  Dive from 5874 m, left90 : reset (out of bounds) anchor, restarted -93 m from where it wandered off (BACK)
+  Dive from 5874 m, right50: reset (out of bounds) anchor, restarted +61 m from where it wandered off
+  Dive from 5874 m, right90: reset (out of bounds) anchor, restarted -93 m from where it wandered off (BACK)
+  Dive from 5874 m, down   : reset (missed gate G9 boardwalk landing as Dive) anchor, restarted +348 m from where it wandered off
+  Dive from 5874 m, up     : back on the route after 2.5 s
+  Dive from 5929 m, left50 : back on the route after 2.5 s
+  Dive from 5929 m, left90 : reset (out of bounds) anchor, restarted -148 m from where it wandered off (BACK)
+  Dive from 5929 m, right50: reset (out of bounds) anchor, restarted +6 m from where it wandered off
+  Dive from 5929 m, right90: reset (out of bounds) anchor, restarted -148 m from where it wandered off (BACK)
+  Dive from 5929 m, down   : reset (missed gate G9 boardwalk landing as Dive) anchor, restarted +293 m from where it wandered off
+  Dive from 5929 m, up     : back on the route after 2.5 s
+  Dive from 5984 m, left50 : reset (out of bounds) anchor, restarted -49 m from where it wandered off
+  Dive from 5984 m, left90 : reset (out of bounds) anchor, restarted -43 m from where it wandered off
+  Dive from 5984 m, right50: reset (out of bounds) anchor, restarted -49 m from where it wandered off
+  Dive from 5984 m, right90: reset (out of bounds) anchor, restarted -43 m from where it wandered off
+  Dive from 5984 m, down   : reset (missed gate G9 boardwalk landing as Dive) anchor, restarted +238 m from where it wandered off
+  Dive from 5984 m, up     : back on the route after 2.5 s
+  Dive from 6039 m, left50 : reset (G9 boardwalk landing passed as Dive) anchor, restarted +183 m from where it wandered off
+  Dive from 6039 m, left90 : reset (out of bounds) anchor, restarted -97 m from where it wandered off (BACK)
+  Dive from 6039 m, right50: reset (out of bounds) anchor, restarted +28 m from where it wandered off
+  Dive from 6039 m, right90: reset (out of bounds) anchor, restarted -98 m from where it wandered off (BACK)
+  Dive from 6039 m, down   : reset (no progress) anchor, restarted +183 m from where it wandered off
+  Dive from 6039 m, up     : back on the route after 7.7 s
+  Dive from 6094 m, left50 : reset (G9 boardwalk landing passed as Dive) anchor, restarted +128 m from where it wandered off
+  Dive from 6094 m, left90 : reset (out of bounds) anchor, restarted -21 m from where it wandered off
+  Dive from 6094 m, right50: reset (out of bounds) anchor, restarted -27 m from where it wandered off
+  Dive from 6094 m, right90: reset (out of bounds) anchor, restarted -21 m from where it wandered off
+  Dive from 6094 m, down   : reset (no progress) anchor, restarted +128 m from where it wandered off
+  Dive from 6094 m, up     : reset (out of bounds) anchor, restarted -27 m from where it wandered off
+  Dive from 6149 m, left50 : reset (G9 boardwalk landing passed as Dive) anchor, restarted +73 m from where it wandered off
+  Dive from 6149 m, left90 : reset (G9 boardwalk landing passed as Dive) anchor, restarted +73 m from where it wandered off
+  Dive from 6149 m, right50: reset (out of bounds) anchor, restarted -79 m from where it wandered off
+  Dive from 6149 m, right90: reset (out of bounds) anchor, restarted -76 m from where it wandered off
+  Dive from 6149 m, down   : reset (missed gate G9 boardwalk landing as Dive) anchor, restarted +73 m from where it wandered off
+  Dive from 6149 m, up     : back on the route after 3.6 s
+WANDER FAIL: 60 of 90 back on the route by the HUD or recovered no more than 80 m behind where they wandered off (45 recoveries), 0 stuck, 30 reset further back; problems: 4578 left50: reset (out of bounds) anchor, restarted -339 m from where it wandered off (BACK); 4578 left90: reset (out of bounds) anchor, restarted -327 m from where it wandered off (BACK); 4578 right50: reset (out of bounds) anchor, restarted -340 m from where it wandered off (BACK); 4578 right90: reset (out of bounds) anchor, restarted -327 m from where it wandered off (BACK); 4628 left90: reset (out of bounds) anchor, restarted -377 m from where it wandered off (BACK); 4628 right90: reset (out of bounds) anchor, restarted -377 m from where it wandered off (BACK); 4678 left90: reset (out of bounds) anchor, restarted -427 m from where it wandered off (BACK); 4678 right90: reset (out of bounds) anchor, restarted -427 m from where it wandered off (BACK); 4778 left50: reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK); 4778 right50: reset (out of bounds) anchor, restarted -85 m from where it wandered off (BACK); 4828 left50: reset (missed gate G6 out to sea) anchor, restarted -140 m from where it wandered off (BACK); 4828 left90: reset (out of bounds) anchor, restarted -126 m from where it wandered off (BACK); 4828 right50: reset (out of bounds) anchor, restarted -134 m from where it wandered off (BACK); 4828 right90: reset (out of bounds) anchor, restarted -126 m from where it wandered off (BACK); 5599 left90: reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK); 5599 right90: reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK); 5709 right50: reset (out of bounds) anchor, restarted -88 m from where it wandered off (BACK); 5709 right90: reset (out of bounds) anchor, restarted -84 m from where it wandered off (BACK); 5709 down: reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK); 5709 up: reset (out of bounds) anchor, restarted -90 m from where it wandered off (BACK); 5764 left50: reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK); 5764 right50: reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK); 5764 right90: reset (out of bounds) anchor, restarted -139 m from where it wandered off (BACK); 5764 down: reset (out of bounds) anchor, restarted -145 m from where it wandered off (BACK); 5874 left90: reset (out of bounds) anchor, restarted -93 m from where it wandered off (BACK); 5874 right90: reset (out of bounds) anchor, restarted -93 m from where it wandered off (BACK); 5929 left90: reset (out of bounds) anchor, restarted -148 m from where it wandered off (BACK); 5929 right90: reset (out of bounds) anchor, restarted -148 m from where it wandered off (BACK); 6039 left90: reset (out of bounds) anchor, restarted -97 m from where it wandered off (BACK); 6039 right90: reset (out of bounds) anchor, restarted -98 m from where it wandered off (BACK)
+  human-like try 1 THROUGH: keys, late 0.26 s: G8 after 37.8 s, resets 0
+  human-like try 2 THROUGH: stick, late 0.36 s: G8 after 34.3 s, resets 0
+  human-like try 3 THROUGH: keys, late 0.27 s: G8 after 48.2 s, resets 0
+  human-like try 4 THROUGH: keys, late 0.37 s: G8 after 42.1 s, resets 0
+  human-like try 5 THROUGH: stick, late 0.27 s: G8 after 33.8 s, resets 0
+  human-like try 6 NOT THROUGH: keys, late 0.38 s: G8 after 62.4 s, resets 1 (no progress, anchor)
+UNDER THE PIER human-like FAIL: 5 of 6 from the flume's end to the splash pool (G8) by the HUD alone with no reset
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.41 ms, 95th pct 2.57 ms, 99th pct 4.78 ms, worst 358.96 ms over 701593 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  pier-human-1 Boat->Dive  z  -365.5  0.600 s  frames worst 40.19 / mean 1.78 ms
+  pier-human-1 Dive->Boat  z  -473.7  0.600 s  frames worst 8.20 / mean 1.53 ms
+  pier-human-2 Boat->Dive  z  -365.7  0.600 s  frames worst 9.22 / mean 1.72 ms
+  pier-human-2 Dive->Boat  z  -473.9  0.602 s  frames worst 19.84 / mean 1.91 ms
+  pier-human-3 Boat->Dive  z  -364.9  0.600 s  frames worst 15.42 / mean 1.97 ms
+  pier-human-4 Boat->Dive  z  -366.1  0.601 s  frames worst 29.44 / mean 1.85 ms
+  pier-human-4 Dive->Boat  z  -472.0  0.602 s  frames worst 18.95 / mean 1.86 ms
+  pier-human-5 Boat->Dive  z  -365.6  0.601 s  frames worst 6.34 / mean 1.36 ms
+  pier-human-5 Dive->Boat  z  -474.1  0.600 s  frames worst 13.17 / mean 1.61 ms
+  pier-human-6 Boat->Dive  z  -365.1  0.601 s  frames worst 7.58 / mean 1.52 ms
+  pier-human-6 Dive->Boat  z  -474.7  0.601 s  frames worst 10.01 / mean 1.95 ms
+sound: music race_coaster playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: skipped (Barker talking, reset: reset (out of bounds, at 176.9 (x 7978.1, y 0.5), 46 m/s, 75 m off the line) to the anchor at 4236 m in Boat, 442 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at 327.6 (x 7981.9, y 0.6), 46 m/s, 75 m off the line) to the anchor at 4236 m in Boat, 442 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at 329.2 (x 7931.5, y 0.6), 46 m/s, 75 m off the line) to the anchor at 4688 m in Boat, 40 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at 310.5 (x 7807.2, y 0.6), 46 m/s, 75 m off the line) to the anchor at 4688 m in Boat, 140 m behind the best progress); messup: skipped (Barker talking, missed gate); messup: skipped (Barker talking, reset: reset (out of bounds, at -441.9 (x 7688.4, y -10.4), 41 m/s, 76 m off the line) to the anchor at 5509 m in Boat, 91 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -398.9 (x 7543.7, y -10.4), 41 m/s, 76 m off the line) to the anchor at 5509 m in Boat, 91 m behind the best progress); messup: gasp_1; messup: skipped (another driver, wall hit (73 deg)); messup: messup_2; messup: skipped (Barker talking, reset: reset (missed gate G9 boardwalk landing as Dive, at -275.6 (x 8003.8, y -26.2), 44 m/s, 31 m off the line) to the anchor at 6222 m in Boat, 170 m behind the best progress); messup: skipped (Barker talking, missed gate); messup: skipped (Barker talking, reset: reset (out of bounds, at -440.4 (x 7528.0, y -14.2), 41 m/s, 76 m off the line) to the anchor at 5619 m in Dive, 35 m behind the best progress); messup: line_1; messup: gasp_1; messup: messup_3; messup: skipped (Barker talking, reset: reset (out of bounds, at -485.0 (x 7694.0, y -17.1), 44 m/s, 76 m off the line) to the anchor at 5619 m in Dive, 219 m behind the best progress); messup: messup_3; messup: disaster_1; messup: gasp_1; messup: skipped (Barker talking, reset: reset (out of bounds, at -484.7 (x 7676.7, y -17.1), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 44 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -635.6 (x 7673.4, y -17.1), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 44 m behind the best progress); messup: messup_2; messup: skipped (cooldown); messup: skipped (Barker talking, reset: reset (out of bounds, at -484.6 (x 7729.7, y -17.9), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 99 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -635.5 (x 7730.5, y -17.9), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 99 m behind the best progress); messup: line_1; messup: skipped (Barker talking, reset: reset (missed gate G9 boardwalk landing as Dive, at -275.8 (x 7989.5, y -27.7), 44 m/s, 34 m off the line) to the anchor at 6222 m in Boat, 169 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -484.8 (x 7784.8, y -18.9), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 154 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -635.7 (x 7785.4, y -18.9), 41 m/s, 76 m off the line) to the anchor at 5775 m in Dive, 154 m behind the best progress); messup: messup_3; messup: skipped (another driver, missed gate); messup: skipped (another driver, reset: reset (missed gate G9 boardwalk landing as Dive, at -275.8 (x 7973.3, y -27.8), 44 m/s, 42 m off the line) to the anchor at 6222 m in Boat, 169 m behind the best progress); messup: skipped (Barker talking, reset: reset (out of bounds, at -634.0 (x 7844.1, y -19.1), 41 m/s, 76 m off the line) to the anchor at 5935 m in Dive, 49 m behind the best progress); messup: messup_2; messup: skipped (another driver, missed gate); messup: skipped (another driver, reset: reset (missed gate G9 boardwalk landing as Dive, at -275.8 (x 7990.2, y -27.7), 44 m/s, 34 m off the line) to the anchor at 6222 m in Boat, 169 m behind the best progress); messup: disaster_1; messup: skipped (Barker talking, reset: reset (out of bounds, at -627.8 (x 7905.5, y -19.0), 41 m/s, 76 m off the line) to the anchor at 5935 m in Dive, 104 m behind the best progress); messup: disaster_1; messup: gasp_1; messup: skipped (Barker talking, penalty); messup: gasp_1; messup: skipped (Barker talking, reset: reset (out of bounds, at -610.5 (x 7974.6, y -19.2), 41 m/s, 76 m off the line) to the anchor at 6067 m in Dive, 27 m behind the best progress); messup: messup_3; messup: skipped (cooldown); messup: bogey_1; messup: line_1; messup: messup_2; messup: skipped (another driver, reset: reset (G9 boardwalk landing passed as Dive, at -315.9 (x 8001.2, y -17.7), 44 m/s, 23 m off the line) to the anchor at 6222 m in Boat, 130 m behind the best progress); messup: gasp_1; messup: skipped (Barker talking, reset: reset (out of bounds, at -565.8 (x 8047.5, y -17.7), 41 m/s, 76 m off the line) to the anchor at 6067 m in Dive, 82 m behind the best progress); messup: line_1; messup: skipped (Barker talking, reset: reset (missed gate G9 boardwalk landing as Dive, at -275.9 (x 7985.4, y -27.5), 44 m/s, 35 m off the line) to the anchor at 6222 m in Boat, 169 m behind the best progress); messup: line_1; messup: skipped (cooldown); messup: gasp_1; messup: skipped (cooldown); messup: bogey_1; messup: skipped (cooldown); messup: skipped (Barker talking, penalty); messup: gasp_1; messup: messup_2; messup: gasp_1; messup: line_1; messup: gasp_1; messup: skipped (cooldown); messup: messup_3; messup: disaster_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

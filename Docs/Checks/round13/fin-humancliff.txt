@@ -1,0 +1,40 @@
+ShiftStorm check 'humancliff', 2026-11-16 02:57, build 0.11.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+HUMAN-LIKE PILOT (Paradise Plunge, Cliff flight): steers by the HUD arrow only, 0.25-0.45 s late, keys or a noisy stick, no boost, LB 0.2-0.7 s into the window; entry 45-75 m/s, +-5 m, +-5 deg
+  fly try 1 MADE IT: stick, 45 m/s, lane -1.7, heading +3, late 0.44 s, LB 0.45 s in: 12.80 s, flew True, penalty 0 s, resets 0
+  fly try 2 MADE IT: keys, 55 m/s, lane +2.3, heading +5, late 0.34 s, LB 0.39 s in: 12.37 s, flew True, penalty 0 s, resets 0
+  fly try 3 MADE IT: stick, 65 m/s, lane -1.7, heading -4, late 0.45 s, LB 0.33 s in: 12.45 s, flew True, penalty 0 s, resets 0
+  fly try 4 MADE IT: keys, 75 m/s, lane +2.3, heading -3, late 0.35 s, LB 0.26 s in: 12.10 s, flew True, penalty 0 s, resets 0
+  fly try 5 MADE IT: stick, 45 m/s, lane -1.7, heading -2, late 0.26 s, LB 0.20 s in: 12.60 s, flew True, penalty 0 s, resets 0
+  fly try 6 MADE IT: keys, 55 m/s, lane +2.3, heading +0, late 0.36 s, LB 0.64 s in: 12.50 s, flew True, penalty 0 s, resets 0
+  fly try 7 MADE IT: stick, 65 m/s, lane -1.6, heading +1, late 0.26 s, LB 0.58 s in: 12.28 s, flew True, penalty 0 s, resets 0
+  fly try 8 MADE IT: keys, 75 m/s, lane +2.4, heading +2, late 0.37 s, LB 0.51 s in: 12.25 s, flew True, penalty 0 s, resets 0
+  fly try 9 MADE IT: stick, 45 m/s, lane -1.6, heading +3, late 0.27 s, LB 0.45 s in: 12.79 s, flew True, penalty 0 s, resets 0
+  fly try 10 MADE IT: keys, 55 m/s, lane +2.4, heading +4, late 0.38 s, LB 0.39 s in: 12.30 s, flew True, penalty 0 s, resets 0
+  car try 11 MADE IT: stick, 65 m/s, lane +1.1, heading +3, late 0.38 s, LB -: 14.12 s, flew False, penalty 0 s, resets 0
+  car try 12 MADE IT: keys, 75 m/s, lane -2.9, heading +4, late 0.28 s, LB -: 12.19 s, flew False, penalty 0 s, resets 0
+  car try 13 MADE IT: stick, 45 m/s, lane +1.1, heading -4, late 0.39 s, LB -: 15.30 s, flew False, penalty 0 s, resets 0
+  car try 14 MISSED: keys, 55 m/s, lane -2.9, heading -3, late 0.29 s, LB -: 16.20 s, flew False, penalty 0 s, resets 1: fell off the climb -> anchor at +85 m from the lip
+  car try 15 MISSED: stick, 65 m/s, lane +1.2, heading -2, late 0.40 s, LB -: 16.85 s, flew False, penalty 0 s, resets 1: fell off the climb -> anchor at +80 m from the lip
+HUMAN-LIKE CLIFF PASS: fly line made 10 of 10 (10 with no penalty), car line 3 of 5; lip -> past the rejoin: fly 12.44 s, car 13.87 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.44 ms, 95th pct 4.32 ms, 99th pct 8.48 ms, worst 899.07 ms over 107904 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  human-cliff-fly Drive->Fly  z  1187.3  0.601 s  frames worst 10.63 / mean 2.24 ms
+  human-cliff-fly Drive->Fly  z  1175.1  0.601 s  frames worst 28.59 / mean 2.55 ms
+  human-cliff-fly Drive->Fly  z  1178.6  0.601 s  frames worst 256.48 / mean 3.25 ms
+  human-cliff-fly Drive->Fly  z  1188.2  0.601 s  frames worst 31.26 / mean 2.57 ms
+  human-cliff-fly Drive->Fly  z  1184.9  0.600 s  frames worst 5.44 / mean 2.08 ms
+  human-cliff-fly Drive->Fly  z  1185.6  0.602 s  frames worst 8.66 / mean 2.48 ms
+  human-cliff-fly Drive->Fly  z  1184.1  0.601 s  frames worst 15.66 / mean 2.62 ms
+  human-cliff-fly Drive->Fly  z  1180.3  0.600 s  frames worst 10.54 / mean 2.44 ms
+  human-cliff-fly Drive->Fly  z  1176.3  0.602 s  frames worst 9.31 / mean 2.54 ms
+  human-cliff-fly Drive->Fly  z  1175.2  0.600 s  frames worst 49.99 / mean 4.06 ms
+  human-cliff-car Drive->Fly  z   944.7  0.603 s  frames worst 34.20 / mean 2.93 ms
+  human-cliff-car Drive->Fly  z   944.7  0.600 s  frames worst 27.25 / mean 3.06 ms
+  human-cliff-car Drive->Fly  z   944.9  0.601 s  frames worst 20.86 / mean 3.27 ms
+  human-cliff-car Drive->Fly  z   945.5  0.602 s  frames worst 8.56 / mean 2.46 ms
+  human-cliff-car Drive->Fly  z   945.2  0.603 s  frames worst 16.93 / mean 2.95 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: mishit_1; messup: gasp_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Disapproval, Sitting Thumbs Up, Honking Horn, Sitting Disapproval, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

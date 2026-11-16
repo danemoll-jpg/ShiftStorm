@@ -34,7 +34,7 @@ namespace ShiftStorm
             // as the arrow says), so only a racer going nowhere is reset (Round 2b)
             bool returning = RouteAlign > .7f && Speed > 10f && !OffRoute;
             if (BestProgress > lastBest + .5f) { lastBest = BestProgress; noProgressFor = 0; } else if (!returning) noProgressFor += dt;
-            if (noProgressFor > shared.noProgressSeconds) { Recover("no progress"); return; }
+            if (noProgressFor > shared.noProgressSeconds || (noProgressFor > Course.LostSeconds && Course.InLost(BestProgress))) { Recover(Course.InLost(BestProgress) ? "lost (no progress)" : "no progress"); return; }   // Round 13: lost under the pier: sooner
             bool wrongWater = (Mode == Mode.Drive || Mode == Mode.Fly) && WaterVolume.SurfaceAt(p, out float s, 0f) && p.y < s - .2f && !TransformZone.InCorridor(p);
             wrongWaterFor = wrongWater ? wrongWaterFor + dt : 0;
             if (wrongWaterFor > shared.wrongWaterSeconds) { Recover("into the water outside the landing corridor"); return; }
@@ -60,7 +60,37 @@ namespace ShiftStorm
         public void Recover(string reason)
         {
             float best0 = BestProgress; string how = "anchor";
+            // Round 13 item 3: in the Mangrove bypass a reset restarts in it (its own anchors, a submarine on its line)
+            var own = OnShortcut; RecoveryAnchor ownPick = null; float ownS = 0;
+            if (own && own.ownAnchors.Count > 0) foreach (var (s, a) in own.ownAnchors) if (s <= scS - 5f) { ownPick = a; ownS = s; }
+            if (ownPick)
+            {
+                bool wc = Changing; var at0 = Body.position; float sp0 = Speed;
+                Resets++; LastResetReason = reason; LastResetHow = $"in the {own.label}"; LastResetBack = scS - ownS; leftBranch = null;
+                Place(ownPick, ownPick.mode, ownPick.speed >= 0 ? ownPick.speed : shared.resetSpeed);
+                EnterShortcut(own, Body.position);
+                GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer);
+                Note("reset", $"reset ({reason}{(wc ? ", during a change" : "")}, at {p3(at0)}, {sp0:0} m/s) to the {own.label}'s own anchor {ownS:0} m along it in {ownPick.mode}, {LastResetBack:0} m back along it");
+                return;
+            }
             var anchor = BranchAnchor(out var br);
+            // Round 13 item 5c: lost / stuck / out of bounds under Coaster Coast's decks and pier: forward to the next anchor on the route that is
+            // not past an unearned gate (never back, never a loop); no time added
+            if (!anchor && Course.InLost(BestProgress) && (reason.StartsWith("lost") || reason == "stuck" || reason == "out of bounds" || reason == "reset button" || reason.StartsWith("missed gate")))
+            {
+                float lim = GatesPassed < Course.gates.Count ? Course.gates[GatesPassed].progress : Course.Length; RecoveryAnchor fwd = null;
+                foreach (var a in Course.anchors) if (a.progress > BestProgress + 5f && a.progress <= lim + .5f) { fwd = a; break; }
+                if (fwd)
+                {
+                    bool wc = Changing; var at0 = Body.position; float sp0 = Speed;
+                    Resets++; LastResetReason = reason; LastResetHow = "forward (lost)"; LastResetBack = best0 - fwd.progress; leftBranch = null;
+                    Place(fwd, fwd.mode, fwd.speed >= 0 ? fwd.speed : shared.resetSpeed);
+                    if (fwd.progress > BestProgress) { BestProgress = fwd.progress; lastBest = BestProgress; }
+                    GraceUntil = Time.time + shared.graceSeconds; SetLayer(GhostLayer); ShowCue("BACK ON COURSE", CueKind.Guide, 2.5f);
+                    Note("reset", $"reset ({reason}{(wc ? ", during a change" : "")}, at {p3(at0)}, {sp0:0} m/s, {OffLine:0} m off the line) forward to the anchor at {fwd.progress:0} m in {fwd.mode}, {fwd.progress - best0:0} m ahead of the best progress");
+                    return;
+                }
+            }
             if (anchor)
             {
                 how = $"forward from the {br.label}";

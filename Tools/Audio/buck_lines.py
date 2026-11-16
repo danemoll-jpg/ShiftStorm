@@ -100,6 +100,10 @@ LINES = {
     "tour_s2_retry_1": "[kindly] Opening nights are tricky. The crowd's still here, the coaster's still running. Let's go again.",
     "tour_s2_retry_2": "[cheerfully] Ride the coaster all the way and take the wheel's middle if you dare. You've got this.",
     "tour_done_1": "[warmly] Two stops, two shows, and a tour that's really happening. Thank you, partner. [pause] Now, about that volcano...",
+    # ---- Round 13: rival challenges (one on one, after a stop is cleared) ----
+    "ch_c1_intro_1": "[amused] Rae says nobody beats her from the Coral Vault up the waterfall. [chuckles] She says it a lot. Let's find out.",
+    "ch_c2_intro_1": "[cheerfully] Chip wants a one-on-one over both coasters, all the way to the top hat. He's already booked a camera crew.",
+    "ch_reward_1": "[delighted] Now that's a show! Head to the Garage, partner. I had them mix you a new paint, on the house.",
 }
 
 

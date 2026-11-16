@@ -295,7 +295,7 @@ namespace ShiftStorm
         {
             int laps = ArgInt("-laps", 100); float scale = ArgFloat("-timeScale", 3f), limit = 2f * 150f;
             Line($"SOAK ({game.Courses[ArgInt("-course", 0)].courseName}): {laps} AI laps, four AI cars per race (Abi's car driven by an AI too), time scale {scale:0.0} (physics still at 60 Hz steps), a lap counts when finished within {limit:0} s (twice the 150 s target)");
-            var abi = new Rival { name = "Abi (AI)", lane = 0, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Sky Arch slit|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .25f, seed = 51 };
+            var abi = new Rival { name = "Abi (AI)", lane = 0, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Sky Arch slit|Mangrove bypass|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .25f, seed = 51 };
             int done = 0, counted = 0, bad = 0, race = 0; var times = new List<float>(); var resetsAt = new List<(string who, string why, Vector3 at, float prog)>(); var dnfs = new List<string>();
             var takenBy = new Dictionary<string, int>();
             while (done < laps)
