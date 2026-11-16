@@ -379,6 +379,6 @@ Round 11 delivered as build 13 (0.10.0), 2026-11-15.
     The coaster rail's entry catches a car up to 9 m over the track (`CoasterRail.Entered`; build 13: 4.5 m: Round 10-11's reset after the
     Midway flight). Dan's playtest logs live on the Deck (Proton prefix), not on this PC.
 
-Current objective: **waiting for Dan's review of build 14.** Previous objective: **Round 12** — every track open in Race / Time Trial / 2 Players (the Tour alone is gated), the Lake Jump's
-fly line given room to make its exit, flight branches never resetting you back to repeat them (read Dan's playtest logs first).
-Release build 14 (0.10.1). See `TODO.md`.
+Current objective: **Round 13** (no testing from Dan needed): fix the three known reset / AI spots, a second split-path choice
+jump on Paradise Plunge, the Mangrove submerged bypass, rival challenges in the Tour, Graphics presets for the Deck. Release build 15
+(0.11.0). See `TODO.md`.

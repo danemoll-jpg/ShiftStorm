@@ -443,47 +443,49 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 12: Coaster Coast unlocked, flight-branch fixes (delivered as build 14; waiting for Dan's review)
+## Current Objective — Round 13: known bugs, more route choices, rival challenges
 
-**Dan's notes on build 13 (0.10.0), 2026-11-15, quoted:** "I wanted to try the new track but it was locked behind the tour.
-Let's unlock that as I am building as I don't want to keep racing through the first track. Also there seems to be a couple of
-bugs with the first track. The first time you get an option to fly there is not enough space to direct your plane into the
-end of that sequence so I always miss it. For some reason the flying shortcut kept screwing up and resetting me back too far
-and kept making me repeat the same sequence over and over the one time I am trying to get through it to try out the new
-course. Fix all these things."
-Run unattended; don't stop to ask; no visible window. Same testing rules. Read-only references as before.
+**Dan, 2026-11-16:** "I am busy and can't test — what can we queue up now." So this round needs **no testing or choices
+from Dan**: no new tracks (Dan picks those), no new characters / voices (Dan designs those), no Tripo. Run unattended;
+don't stop to ask; no visible window. Same testing rules. Read-only references as before. Round 12's "For Dan to check"
+list stays open for when he has time.
 
-1. **Every track open outside the Tour.** Race, Time Trial and 2 Players always offer **every** track — no locks. Only the
-   Tour's own story progress is gated (a stop unlocks the next stop *in the Tour*). Add a Settings / debug option "Unlock all
-   Tour stops" (default **On while we're building**; say how to turn it off for release).
-   *Check:* a fresh `settings.json` / `tour.json`: Coaster Coast selectable in Race, Time Trial and 2 Players straight away.
-2. **First fly choice (the Lake Jump's fly line): room to make the exit.** Dan always misses the end of the flight sequence:
-   there isn't enough space to steer the plane into it. **First, read Dan's own playtest logs** (the game's data folder, his
-   recent sessions) to see exactly where he missed / reset, and say what they show. Then give the fly line room: longer
-   flight, gentler turns, rings and the exit sub-gate **bigger and lined up with the natural flight path** from the lip, the
-   wheels-down zone wide and far enough after the last ring, and a light steering assist toward the next ring if needed. A
-   normal player (not the check pilot) must make it on the first try.
-   *Check:* a "human-like" pilot (late, imprecise inputs, no boost; varied entry speeds and angles) makes the fly line
-   ≥ 9 of 10 tries; both lines still about equal in time.
-3. **Flight branches must never send you back to repeat them.** Dan was "reset back too far" and made to "repeat the same
-   sequence over and over" on a flying shortcut (the Lake flight and/or the Sky Arch slit — check both, plus Coaster Coast's
-   fly branch). Find the real cause in his logs and in a reproduction, and fix it:
-   - Missing a ring or the branch's exit is a **near miss with a time penalty** or a **forward recovery**: put the racer back
-     **on the route ahead** (at the branch's rejoin / next anchor), never behind the jump they already made.
-   - Recovery anchors inside every branch; no reset loop (a reset must never put you somewhere that triggers the same reset).
-   - General rule for every track: a reset never costs more than a few seconds of progress.
-   *Check:* scripted failures on every flight branch (miss each ring, miss the exit, fly off the corridor, too low / too
-   high): each ends ahead or at most one anchor back, 0 loops, lap continues; Dan's logged spots reproduced and fixed.
-4. **Tidy-up:** Round 11's move of the queued round mangled `TODO.md`'s characters (UTF-8 read as Windows-1252: "â€”" for
-   "—"); the planning chat repaired it. Read and write `TODO.md` / `CLAUDE.md` / `Docs/*.md` as UTF-8 (no BOM) from now on.
-5. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 14 (0.10.1).** Per-item status,
-   "For Dan to check", update `CLAUDE.md`, commit, push, publish, clean the disk.
+1. **Fix the known reset / AI bugs from Round 12's report:**
+   - Coaster Coast: the AI in Abi's car is reset at the station after the Midway flight (8 in 50 laps).
+   - Paradise Plunge: the AI falls off the climb about 1 lap in 8 (x 80, z 1120).
+   - Coaster Coast: a car on the car line reset just after the Midway Jump's landing (x 7924, z 408).
+   Find each real cause (record, don't guess), fix, and make sure a player can't hit the same thing.
+   *Check:* 50-lap soak on each track with **0** resets at those three spots; the player-side reproduction passes.
+2. **A second choice jump with split paths on Paradise Plunge** (Dan, 2026-11-14: "Sometimes the jump where you choose
+   jump or fly should be different paths"; deferred in Round 8). Where there's room (the Waterfall Return or the mangrove
+   bank, or the Cliffside Climb): LB / E in the first second off the lip flies a short branch; staying a car takes its own
+   different road. Both about equal in time, with the Round 12 rules from the start (room to make the exit, forward
+   recovery, no repeat loops, near misses). Route strip / arrow follow the line taken. AI picks before the lip.
+   *Check:* both lines timed, the human-like pilot makes the fly line ≥ 9 of 10, branch failure checks, AI 25 laps, 0 stuck.
+3. **The Mangrove submerged bypass** (the concept's "later experiment"): an optional underwater route in Mangrove Run —
+   dive before the S-bend, resurface before the Sunken Gateway — as a real choice (boat on the surface vs. sub
+   underneath), about equal in time, with its own dive / surface zones, anchors and gates, and some underwater sights
+   (roots, glowing fish, a sunken log arch). AI takes it on some laps.
+   *Check:* both lines timed, transitions clean (no boat ↔ sub flicker), branch failure checks, AI 25 laps.
+4. **Rival challenges in the Tour** (STORY.md: "optional rival challenges and practice events reuse the tracks to develop
+   relationships"). After each Tour stop is cleared, unlock a short optional challenge on that track with one rival
+   (e.g. "Beat Rae from the waterfall to the finish", "Stay ahead of Chip through the coaster"), with a few lines from the
+   rival (their existing voices / ElevenLabs in their own voices, as before) and Buck / Barker. A small reward (a paint
+   colour or a Garage badge). Saved in `tour.json`.
+   *Check:* each challenge plays start to finish (win and lose), saves, and its lines fit (transcribed like Round 9).
+5. **Steam Deck performance presets** (measured on the PC, Dan checks the Deck later): a **Graphics** setting
+   (Deck / Low / Medium / High), auto **Deck** on a Steam Deck: render scale, shadows, draw distance, crowd and set-piece
+   density, texture quality. Split screen picks a lighter preset automatically. Report frame times per preset on both
+   tracks, single and split screen.
+6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 15 (0.11.0).** Per-item status,
+   "For Dan to check" (add to Round 12's open list, don't replace it), update `CLAUDE.md`, commit, push, publish, clean the
+   disk. Keep the .md files UTF-8.
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check
-- See "For Dan to check (Round 12)" above.
+### For Dan to check (fill in at end of round)
+- …
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),
@@ -492,8 +494,6 @@ Run unattended; don't stop to ask; no visible window. Same testing rules. Read-o
 - **Playtest itself** (concept's evaluation plan): a few players of mixed
   skill, first attempt + three practice runs, per-mode questions, using the
   Round 8 logs. Dan runs it when he's ready.
-- **Later experiment:** optional submerged bypass in Mangrove Run — only after
-  the base lap works (concept doc).
 
 ## Technical Notes / Blockers
 - Unity batch runs need the sandbox off (UPM named pipe). The world is built in code at start-up; there is no hand-made scene content.

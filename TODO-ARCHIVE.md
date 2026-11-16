@@ -1535,3 +1535,45 @@ house: run unattended, don't stop to ask, no visible window; same testing rules 
 ### For Dan to check
 See "For Dan to check (Round 11)" under Completed Tasks.
 
+## Current Objective — Round 12: Coaster Coast unlocked, flight-branch fixes (delivered as build 14; waiting for Dan's review)
+
+**Dan's notes on build 13 (0.10.0), 2026-11-15, quoted:** "I wanted to try the new track but it was locked behind the tour.
+Let's unlock that as I am building as I don't want to keep racing through the first track. Also there seems to be a couple of
+bugs with the first track. The first time you get an option to fly there is not enough space to direct your plane into the
+end of that sequence so I always miss it. For some reason the flying shortcut kept screwing up and resetting me back too far
+and kept making me repeat the same sequence over and over the one time I am trying to get through it to try out the new
+course. Fix all these things."
+Run unattended; don't stop to ask; no visible window. Same testing rules. Read-only references as before.
+
+1. **Every track open outside the Tour.** Race, Time Trial and 2 Players always offer **every** track — no locks. Only the
+   Tour's own story progress is gated (a stop unlocks the next stop *in the Tour*). Add a Settings / debug option "Unlock all
+   Tour stops" (default **On while we're building**; say how to turn it off for release).
+   *Check:* a fresh `settings.json` / `tour.json`: Coaster Coast selectable in Race, Time Trial and 2 Players straight away.
+2. **First fly choice (the Lake Jump's fly line): room to make the exit.** Dan always misses the end of the flight sequence:
+   there isn't enough space to steer the plane into it. **First, read Dan's own playtest logs** (the game's data folder, his
+   recent sessions) to see exactly where he missed / reset, and say what they show. Then give the fly line room: longer
+   flight, gentler turns, rings and the exit sub-gate **bigger and lined up with the natural flight path** from the lip, the
+   wheels-down zone wide and far enough after the last ring, and a light steering assist toward the next ring if needed. A
+   normal player (not the check pilot) must make it on the first try.
+   *Check:* a "human-like" pilot (late, imprecise inputs, no boost; varied entry speeds and angles) makes the fly line
+   ≥ 9 of 10 tries; both lines still about equal in time.
+3. **Flight branches must never send you back to repeat them.** Dan was "reset back too far" and made to "repeat the same
+   sequence over and over" on a flying shortcut (the Lake flight and/or the Sky Arch slit — check both, plus Coaster Coast's
+   fly branch). Find the real cause in his logs and in a reproduction, and fix it:
+   - Missing a ring or the branch's exit is a **near miss with a time penalty** or a **forward recovery**: put the racer back
+     **on the route ahead** (at the branch's rejoin / next anchor), never behind the jump they already made.
+   - Recovery anchors inside every branch; no reset loop (a reset must never put you somewhere that triggers the same reset).
+   - General rule for every track: a reset never costs more than a few seconds of progress.
+   *Check:* scripted failures on every flight branch (miss each ring, miss the exit, fly off the corridor, too low / too
+   high): each ends ahead or at most one anchor back, 0 loops, lap continues; Dan's logged spots reproduced and fixed.
+4. **Tidy-up:** Round 11's move of the queued round mangled `TODO.md`'s characters (UTF-8 read as Windows-1252: "â€”" for
+   "—"); the planning chat repaired it. Read and write `TODO.md` / `CLAUDE.md` / `Docs/*.md` as UTF-8 (no BOM) from now on.
+5. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 14 (0.10.1).** Per-item status,
+   "For Dan to check", update `CLAUDE.md`, commit, push, publish, clean the disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check
+- See "For Dan to check (Round 12)" above.
+
