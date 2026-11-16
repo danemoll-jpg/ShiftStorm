@@ -1,0 +1,28 @@
+ShiftStorm check 'mix', 2026-11-16 12:29, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+MIX (item 2): default volumes: Music 100 %, Voices 100 %, Engines 60 %, Effects 100 %, Crowd 100 % (x0.11 = -19.2 dB under build 15's crowd); the run is muted (would-be levels: each clip's signal x its source volume x the 3D roll-off at the camera)
+MIX Paradise Plunge CHECK: music -26.9 dBFS, player's engine -32.9, Barker -19.4 (322 samples while he talks); crowd: the stands' murmur on the grid -39.9 (build 15: -20.7), loudest passing a stand -32.6 (build 15: -13.4), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 1.0 dB under the engine, 14.5 dB under Barker, 7.0 dB under the music
+  crowd sounds this race (5): Start W gg_crowd_cheer_big_1 -33.9, to_crowd_ooh -38.3, Waterfall landing gg_crowd_cheer_small_3 -37.2, Waterfall landing gg_crowd_cheer_small_2 -36.2, to_cheer_big -35.3
+MIX Coaster Coast CHECK: music -27.1 dBFS, player's engine -31.5, Barker -19.6 (245 samples while he talks); crowd: the stands' murmur on the grid -40.5 (build 15: -21.4), loudest passing a stand -35.0 (build 15: -15.8), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 2.4 dB under the engine, 14.3 dB under Barker, 6.8 dB under the music
+  crowd sounds this race (3): CC start W gg_crowd_cheer_big_1 -33.9, CC splash landing gg_crowd_cheer_small_1 -38.8, to_crowd_clap_small -53.6
+  the Crowd row: Settings > Audio > Crowd, 100 % (left / right in steps of 10 %, saved in settings.json "crowdVol")
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.26 ms, 95th pct 4.00 ms, 99th pct 4.98 ms, worst 44.07 ms over 40416 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  mix          Drive->Fly  z   652.0  0.601 s  frames worst 10.26 / mean 4.08 ms
+  mix          Fly->Drive  z   929.2  0.600 s  frames worst 12.77 / mean 4.82 ms
+  mix          Drive->Fly  z   944.6  0.601 s  frames worst 10.25 / mean 3.37 ms
+  mix          Fly->Boat   z  -607.3  0.602 s  frames worst 9.76 / mean 3.50 ms
+  mix          Boat->Dive  z  -202.6  0.603 s  frames worst 6.38 / mean 3.33 ms
+  mix          Dive->Boat  z  -466.9  0.604 s  frames worst 9.74 / mean 3.44 ms
+  mix          Boat->Drive z  -304.9  0.602 s  frames worst 6.96 / mean 3.25 ms
+  mix          Drive->Fly  z   230.4  0.600 s  frames worst 4.98 / mean 1.78 ms
+  mix          Fly->Drive  z   703.8  0.601 s  frames worst 4.80 / mean 1.86 ms
+  mix          Drive->Fly  z   572.0  0.604 s  frames worst 3.33 / mean 1.78 ms
+  mix          Fly->Boat   z   908.6  0.601 s  frames worst 8.21 / mean 1.94 ms
+  mix          Boat->Dive  z  -368.0  0.601 s  frames worst 4.26 / mean 1.85 ms
+  mix          Dive->Boat  z  -473.3  0.601 s  frames worst 4.07 / mean 1.92 ms
+  mix          Boat->Drive z  -370.7  0.601 s  frames worst 9.04 / mean 2.10 ms
+sound: music results playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: laugh_1; waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

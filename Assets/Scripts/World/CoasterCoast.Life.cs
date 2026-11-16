@@ -14,7 +14,7 @@ namespace ShiftStorm
     {
         static void SetPieces()
         {
-            FerrisWheel(); HelterSkelter(); Fireworks(); Balloon(); Whale(); Dolphins(); Carnival(); Octopus();
+            FerrisWheel(); HelterSkelter(); Fireworks(); if (!OldWheel) WheelFireworks(); Balloon(); Whale(); Dolphins(); Carnival(); Octopus();
         }
 
         static void FerrisWheel()
@@ -86,6 +86,27 @@ namespace ShiftStorm
                 var sp = SetPiece.Make(g, "Fireworks at " + n, "Sky Midway", "ccfireworks", new Vector3(0, 26, 30), new Vector3(120, 70, 50)); sp.showing = () => fws.Exists(f => f.Bursting);
             }
             rings.Object(scen, "Firework rings", GateMarker.Beacon, false, false);
+        }
+
+        // Round 14 item 5: after the Ferris wheel, three firework rings on the way down to the coaster station (bursts either side as you come)
+        static void WheelFireworks()
+        {
+            var rings = new MeshKit.Batch(); var gold = new Color(1f, .85f, .35f, .8f);
+            var cols = new[] { CoasterLook.Neon, CoasterLook.Lemon, CoasterLook.NeonB, new Color(.6f, 1f, .4f), new Color(1f, .5f, .2f) }; int k = 0;
+            foreach (var n in new[] { "mw1", "mw2", "mw3" })
+            {
+                float p = M(n); var q = At(p); var frame = Quaternion.LookRotation(Dir(p), Vector3.up); const float R = 15f;
+                for (int i = 0; i < 18; i++) { float a = i * 360f / 18; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(a * Mathf.Deg2Rad), Mathf.Sin(a * Mathf.Deg2Rad), 0) * R), frame * Quaternion.Euler(0, 0, a), new Vector3(1f, R * .38f, 1f), gold); }
+                var g = new GameObject("Fireworks " + n); g.transform.SetParent(scen, false); g.transform.position = q;
+                var fws = new List<Firework>();
+                foreach (var (off, dl) in new[] { (new Vector3(-34, 16, 30), 0f), (new Vector3(36, 20, 45), .5f), (new Vector3(0, 40, 60), 1.1f) })
+                {
+                    var fg = new GameObject("burst"); fg.transform.SetParent(g.transform, false); fg.transform.position = q + frame * off;
+                    var fw = fg.AddComponent<Firework>(); fw.colour = cols[k++ % cols.Length]; fw.radius = 18; fw.every = 1.8f; fw.delay = dl; fws.Add(fw);
+                }
+                var sp = SetPiece.Make(g, "Fireworks at " + n, "Boardwalk", "ccfireworks", new Vector3(0, 26, 30), new Vector3(110, 70, 50)); sp.showing = () => fws.Exists(f => f.Bursting);
+            }
+            rings.Object(scen, "Wheel flight firework rings", GateMarker.Beacon, false, false);
         }
 
         // the mascot balloon: a giant inflatable gull in a sailor's cap (stand-in; Tripo prompt in Docs/MODELS-NEEDED.md)

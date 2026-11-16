@@ -1,0 +1,13 @@
+ShiftStorm check 'finishcam', 2026-11-16 12:39, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+FINISH CAMERA (item 4) BUILD 15's (-oldFinish): each course raced to the line from the last anchors (the AI behind), the camera logged for 20 s after the finish (frames next to a hitch, over twice the median frame time, left out); jitter = how far each frame's position / aim is from where the frames either side put it at that frame's time (a shake shows as jitter; a smooth move, at any frame rate, does not)
+  Paradise Plunge  Chase        STEADY: 12272 frames, jitter max 1.27 cm (at 0.08 s) / 0.000 deg, 99th pct 0.400 cm / 0.000 deg, 9 frames over 1 cm (522 next to a hitch left out); camera speed at most 79.4 m/s; car 0.1 m/s 20 s after the line; finish camera off
+  Paradise Plunge  First person STEADY: 12818 frames, jitter max 0.43 cm (at 0.02 s) / 0.000 deg, 99th pct 0.017 cm / 0.000 deg, 0 frames over 1 cm (473 next to a hitch left out); camera speed at most 80.0 m/s; car 0.1 m/s 20 s after the line; finish camera off
+  Coaster Coast    Chase        STEADY: 13112 frames, jitter max 1.25 cm (at 0.15 s) / 0.000 deg, 99th pct 0.430 cm / 0.000 deg, 17 frames over 1 cm (523 next to a hitch left out); camera speed at most 79.2 m/s; car 0.0 m/s 20 s after the line; finish camera off
+  Coaster Coast    First person STEADY: 12355 frames, jitter max 0.24 cm (at 0.07 s) / 0.000 deg, 99th pct 0.052 cm / 0.000 deg, 0 frames over 1 cm (570 next to a hitch left out); camera speed at most 78.4 m/s; car 0.0 m/s 20 s after the line; finish camera off
+FINISH CAMERA PASS: no shake after the finish on both courses, chase and first person
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.60 ms, 95th pct 2.72 ms, 99th pct 3.76 ms, worst 307.10 ms over 68112 frames; GPU time not available in batch mode
+sound: music results playing (its own signal peak 0.000), splashes played 0, Abi lines: win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

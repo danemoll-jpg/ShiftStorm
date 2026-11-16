@@ -246,7 +246,7 @@ namespace ShiftStorm
             if (j.choice)
             {
                 // the wings window: crossing the lip as a car opens it (ShiftVehicle.Stunts); a winged sign beside the kicker
-                var lipVol = Vol<ChoiceLip>(j.name + " lip", new Vector3(lq.x, RoadTop(lip) + 3, lq.z), f, new Vector3(30, 8, 6)); lipVol.window = 1f;
+                var lipVol = Vol<ChoiceLip>(j.name + " lip", new Vector3(lq.x, RoadTop(lip) + 3, lq.z), f, new Vector3(30, 8, 6)); lipVol.window = 1.5f; lipVol.ramp = j.kicker;   // Round 14: open on the ramp, 1.5 s into the air
                 var q = At(lip - 70); var h = new GameObject("Sign wings optional"); h.transform.SetParent(scen, false);
                 h.transform.SetPositionAndRotation(new Vector3(q.x, RoadTop(lip - 70), q.z) + Right(lip - 70) * 15.5f, Facing(lip - 70)); WorldBuilder.Sign(h.transform, Vector3.zero, Mode.Fly, 5);
             }
@@ -413,6 +413,13 @@ namespace ShiftStorm
         void OnEnable() => All.Add(this);
         void OnDisable() => All.Remove(this);
         public float window = 1f;
+        // Round 14 item 5: the ramp before the lip (its length back from this volume's centre, the kicker's 45 m): the window is open there
+        public float ramp = 0;
+        public bool OnRamp(Vector3 p)
+        {
+            if (ramp <= 0) return false; var l = transform.InverseTransformPoint(p);
+            return l.z < 0 && l.z > -ramp && Mathf.Abs(l.x) < size.x * .5f && l.y > -size.y * .5f - 4f && l.y < size.y * .5f + 4f;
+        }
         protected override Color GizmoColor => Color.magenta;
     }
 }

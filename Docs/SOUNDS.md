@@ -102,3 +102,13 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   his briefing / scene starts by stopping Barker and any driver line (`Buck.Hold`). Music and engines duck under him as under Barker.
 - Barker: 4 new lines for Abi as an AI rival (passabi_1-2, byabi_1-2, his voice, 101 credits); overtakes and the winner's line now go
   by the racer's name (any driver can be player 1 or the AI).
+
+## Round 14 (2026-11-16): the crowd's own volume, much quieter
+- Dan: "The crowd noise is far too loud." Every crowd sound now plays at the new **Crowd** volume (Menu > Settings > Audio > Crowd,
+  default 100 %, up to 200 %, saved as `settings.json` "crowdVol") and 19 dB under build 15 (`Settings.CrowdGain` 0.11; -11 dB first,
+  but the mix check still had the GO roar and the finish cheer over the engine): the grandstands' murmur
+  beds (`gg_crowd_bed_engaged`), their cheers and the GO roar (`gg_crowd_cheer_*`, `gg_crowd_roar_1`), and GameSounds' crowd kind
+  (the finish's `to_cheer_big` / `to_crowd_clap_small` / `to_crowd_aww`, the near miss's "aww", the loop's `to_crowd_ooh`).
+  These no longer follow the Effects volume.
+- Music: the title screen and the main menu play the theme (`theme`); the other menu pages `menu`. Engines, wind and the jungle are
+  silent behind the front menus (the race there is frozen). Left / right on a menu value plays the move click (a little higher).

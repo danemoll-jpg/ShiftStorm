@@ -16,8 +16,9 @@ namespace ShiftStorm
         AudioSource src; readonly Dictionary<string, AudioClip[]> set = new Dictionary<string, AudioClip[]>();
         public readonly Dictionary<string, int> Played = new Dictionary<string, int>();
         public readonly List<string> Missing = new List<string>();
+        public readonly Dictionary<string, float> LastVolume = new Dictionary<string, float>();   // Round 14: the mix check (per kind)
         readonly HashSet<ShiftVehicle> watched = new HashSet<ShiftVehicle>();
-        int lastCount = -1; Game game; bool wasMenu; int menuIndex = -1;
+        int lastCount = -1; Game game; bool wasMenu; int menuIndex = -1, sideMoved;
         public static float LastFinishSound = -99;   // the grandstand crowd (Crowd) stays quiet over the finish's own crowd sound
 
         // name -> clips (Resources/Audio/Sfx); several: one at random
@@ -60,7 +61,9 @@ namespace ShiftStorm
             if (!set.TryGetValue(name, out var cs) || cs.Length == 0) return;
             if (SoundLog.Busy(KindOf(name))) { SoundLog.Merged++; return; }   // Round 9 item 3: never two of a kind at once (a change's whoosh on a jump's)
             var c = cs[Random.Range(0, cs.Length)];
-            src.pitch = pitch; src.PlayOneShot(c, vol * Settings.Effects);
+            // Round 14 item 2: the crowd's sounds (the finish cheer / clap / "aww", the loop's "ooh") at the Crowd volume, -11 dB
+            float bus = KindOf(name) == "crowd" ? Settings.CrowdLevel : Settings.Effects;
+            src.pitch = pitch; src.PlayOneShot(c, vol * bus); LastVolume[KindOf(name)] = vol * bus;
             Played[name] = (Played.TryGetValue(name, out var k) ? k : 0) + 1;
             SoundLog.Add(KindOf(name), c.name);
         }
@@ -141,6 +144,7 @@ namespace ShiftStorm
             {
                 if (!wasMenu) { menuIndex = game.MenuIndex; Play("ui_select", .5f); }
                 else if (game.MenuIndex != menuIndex) { menuIndex = game.MenuIndex; Play("ui_move", .4f); }
+                else if (game.SideMoved != sideMoved) { sideMoved = game.SideMoved; Play("ui_move", .35f, 1.12f); }   // Round 14: a value changed with left / right
             }
             else if (wasMenu) Play("ui_back", .4f);
             wasMenu = game && game.MenuOpen;

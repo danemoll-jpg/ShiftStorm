@@ -46,6 +46,7 @@ namespace ShiftStorm
         public static bool Unlocked(int i) => All[i].challenge < 0 || Tour.ChallengeWon(All[i].challenge);
         public static int Current => Unlocked(Mathf.Clamp(Settings.Paint, 0, All.Length - 1)) ? Mathf.Clamp(Settings.Paint, 0, All.Length - 1) : 0;
         public static Color Color => All[Current].color;
+        public static int Prev() { int i = Current; for (int k = 0; k < All.Length; k++) { i = (i - 1 + All.Length) % All.Length; if (Unlocked(i)) return i; } return 0; }   // Round 14: left
         public static int Next() { int i = Current; for (int k = 0; k < All.Length; k++) { i = (i + 1) % All.Length; if (Unlocked(i)) return i; } return 0; }
         public static string Row { get { int won = All.Count(p => p.challenge >= 0 && Tour.ChallengeWon(p.challenge)), n = All.Count(p => p.challenge >= 0); return $"Paint: {All[Current].name}   ({won} of {n} challenge paints won{(won < n ? "; win rival challenges in The Tour" : "")}, A: next)"; } }
     }

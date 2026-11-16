@@ -108,10 +108,12 @@ namespace ShiftStorm
             if (!on) return;
             var g = Game.Instance;
             // which track: the results once, the menu (the theme on its main page), else the race underneath
-            string want = g && g.Trial && g.Trial.HasResults && g.Player.Finished ? "results" : g && g.MenuOpen ? (g.MenuPage == Game.Page.Main ? "theme" : "menu") : "";
+            string want = g && g.MenuOpen && g.InFront && (g.MenuPage == Game.Page.Title || g.MenuPage == Game.Page.Main) ? "theme"   // Round 14: the title screen and the main menu: the theme
+                : g && g.Trial && g.Trial.HasResults && g.Player.Finished && !(g.MenuOpen && g.InFront) ? "results" : g && g.MenuOpen ? "menu" : "";
             if (want != altNow && !(want == "results" && altNow == "results")) PlayAlt(want);
             bool under = ChaseCam.Underwater; float k = 1 - Mathf.Exp(-4f * Time.unscaledDeltaTime);
-            jungle.volume = Mathf.Lerp(jungle.volume, (under || !jungle.isPlaying ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
+            bool front = g && g.MenuOpen && g.InFront;   // Round 14: no jungle under the front menus
+            jungle.volume = Mathf.Lerp(jungle.volume, (under || front || !jungle.isPlaying ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
             // the mix by form (the player's own racer): louder and open in flight, muffled underwater, a lift at the waterfall exit
             var m = v ? v.Mode : Mode.Drive; bool bright = Time.time < brightUntil;
             // Round 8 item 6: music louder than build 8 (x1.3, +2.3 dB: road .65, flight .78, underwater .39) and ducked 8 dB under TeedOff Barker

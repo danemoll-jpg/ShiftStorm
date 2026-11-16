@@ -39,6 +39,8 @@ namespace ShiftStorm
         public static int Lighter(int l) => l == 3 ? 2 : l == 2 ? 1 : 1;
         public static int Effective => SplitScreen.Active ? Lighter(Base) : Base;
         public static string MenuRow => $"Graphics: {(Chosen < 0 ? $"Auto ({Names[Base]}{(IsSteamDeck ? ", Steam Deck" : "")})" : Names[Chosen])}   (Auto / Deck / Low / Medium / High; 2 players: one lighter)";
+        public static string Value => Chosen < 0 ? $"Auto ({Names[Base]}{(IsSteamDeck ? ", Steam Deck" : "")})" : Names[Chosen];   // Round 14: the Video settings row
+        public static void Step(int dir) { int i = (Chosen + 1 + dir + 5) % 5; Settings.Graphics = i - 1; Override = -2; Apply(); }   // Round 14: left / right
         public static void Cycle() { int c = Chosen; Settings.Graphics = c >= 3 ? -1 : c + 1; Override = -2; Apply(); }
         public static string Applied { get; private set; } = "";
 

@@ -230,6 +230,8 @@ namespace ShiftStorm
             if (which == "round12" || which == "unlock" || which == "resetaudit" || which == "humanfly" || which == "branches") yield return Round12(which);   // Round 12
             if (which == "trace") yield return Trace();   // Round 13 item 1
             if (which == "round13" || which == "choice13" || which == "humancliff" || which == "branches13" || which == "challenges" || which == "presets" || which == "underpier") yield return Round13(which);   // Round 13 items 2-3
+            if (which == "round14" || which == "menus14" || which == "mix" || which == "bubble" || which == "finishcam" || which == "wheel") yield return Round14(which);   // Round 14
+            if (which == "menuwalk") { yield return MenuWalk(); yield break; }
             bool r9 = which == "round9";
             if (r9) yield return SteeringCheck();
             if (r9 || which == "sounds") yield return SoundsCheck();

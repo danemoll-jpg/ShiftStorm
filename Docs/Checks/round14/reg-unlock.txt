@@ -1,0 +1,13 @@
+ShiftStorm check 'unlock', 2026-11-16 13:05, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+UNLOCK: fresh tour.json True (local/round14/save-unlock\tour.json), fresh settings.json True; Unlock all Tour stops On (default On); Tour stops playable 2 of 2, earned 1
+UNLOCK Race PASS: main menu "Course: Coaster Coast"; pick page "Go: Race Coaster Coast"; started course Coaster Coast, race True
+UNLOCK Time Trial PASS: "Course: Coaster Coast"; started Coaster Coast, race False
+UNLOCK 2 Players PASS: page "Course: Coaster Coast"; split active True, course Coaster Coast
+UNLOCK Tour PASS: setting On: "Stop 2: Opening Night (Coaster Coast)   not raced yet   (open: Unlock all Tour stops)"; Off: "Stop 2: Opening Night (Coaster Coast)   - locked: top 3 at Stop 1 -"
+UNLOCK PASS: Coaster Coast open in Race, Time Trial and 2 Players on a fresh save; only the Tour's own order can lock (and not while "Unlock all Tour stops" is On)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.31 ms, 95th pct 1.94 ms, 99th pct 3.85 ms, worst 58.30 ms over 881 frames; GPU time not available in batch mode
+sound: music menu playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

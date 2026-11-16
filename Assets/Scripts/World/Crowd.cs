@@ -106,7 +106,7 @@ namespace ShiftStorm
             if (bedClip)
             {
                 bed = gameObject.AddComponent<AudioSource>(); bed.clip = bedClip; bed.loop = true; bed.spatialBlend = 1; bed.rolloffMode = AudioRolloffMode.Linear; bed.minDistance = 20; bed.maxDistance = 170; bed.dopplerLevel = 0;
-                bed.volume = .5f * Settings.Effects; bed.timeSamples = rng.Next(0, Mathf.Max(1, bedClip.samples - 1)); bed.Play();
+                bed.volume = .5f * Settings.CrowdLevel; bed.timeSamples = rng.Next(0, Mathf.Max(1, bedClip.samples - 1)); bed.Play();
                 cheer = gameObject.AddComponent<AudioSource>(); cheer.playOnAwake = false; cheer.spatialBlend = 1; cheer.rolloffMode = AudioRolloffMode.Linear; cheer.minDistance = 25; cheer.maxDistance = 200; cheer.dopplerLevel = 0;
             }
             Debug.Log($"[Crowd] {StandName}: {Fans} fans in {batches.Count} batch(es), {(a1 - a0).magnitude:0} m long, cheers heard: {(passSound ? "when a person passes" : "")}{(goSound ? " at GO" : "")}{(!passSound && !goSound ? "none (murmur only)" : "")}");
@@ -123,7 +123,7 @@ namespace ShiftStorm
             if (sound && cheer && Time.time - GameSounds.LastFinishSound > 3f && !SoundLog.Busy("crowd", 1.5f))   // one crowd sound at a time (both start stands at GO: one roar)
             {
                 var set = roar ? big : small; var c = set[Random.Range(0, set.Length)];
-                if (c) { cheer.PlayOneShot(c, (roar ? .9f : .75f) * Settings.Effects); SoundLog.Add("crowd", $"{StandName} {c.name}"); }
+                if (c) { cheer.PlayOneShot(c, (roar ? .9f : .75f) * Settings.CrowdLevel); LastCheerVolume = (roar ? .9f : .75f) * Settings.CrowdLevel; SoundLog.Add("crowd", $"{StandName} {c.name}"); }
             }
         }
         // the closest point of the stand's long axis to p
@@ -147,7 +147,7 @@ namespace ShiftStorm
                     if (r.Holding) continue;   // the grid: the GO cheer (below) does it
                     Cheer(r.transform.position, r.Speed, r.Human ? 1f : .65f, 2.6f, r.Human && passSound);
                 }
-            if (bed) bed.volume = .5f * Settings.Effects;
+            if (bed) bed.volume = .5f * Settings.CrowdLevel;   // Round 14 item 2: the Crowd volume, -11 dB (Settings.CrowdGain)
             sw.Stop(); CpuMs += sw.Elapsed.TotalMilliseconds;
         }
         // the start: every stand within reach of the grid cheers at GO; the finish: a person's racer finishing in front of a stand (a roar for 1st)
@@ -188,6 +188,8 @@ namespace ShiftStorm
             DrawnLastFrame = drawn; sw.Stop(); CpuMs += sw.Elapsed.TotalMilliseconds;
         }
         public int DrawnLastFrame { get; private set; }
+        public static float LastCheerVolume { get; private set; }   // Round 14: the mix check
+        public float BedVolume => bed ? bed.volume : 0; public AudioSource Bed => bed;
         public static int Total { get { int n = 0; foreach (var c in All) n += c.Fans; return n; } }
 
         // one fan: a quad from x -0.5..0.5, y 0..1 (the shader sizes it, turns it to the camera and picks the atlas cell)

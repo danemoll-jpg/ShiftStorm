@@ -65,7 +65,9 @@ namespace ShiftStorm
             else pitch = Mathf.Lerp(.7f, 2.0f, Mathf.Clamp01(frac)) * k + Mathf.Max(0, frac - 1) * 1.2f + (v.Boosting ? .12f : 0);
             float load = Mathf.Clamp01(.55f + .45f * v.Input.Throttle + (v.Boosting ? .2f : 0));
             // Round 8 item 6: the engines (and the wind) have their own volume (Settings.Engines, default 60 %) and duck under TeedOff Barker
-            float fx = (spatial ? 1 : Mix) * Settings.Engines * Caller.Duck * (spatial ? 1.3f : 1f), step = Time.deltaTime / .35f;
+            // Round 14: silent behind the front menus (the title, the main menu): the race there is frozen
+            var gm = Game.Instance; bool front = gm && gm.MenuOpen && gm.InFront;
+            float fx = front ? 0 : (spatial ? 1 : Mix) * Settings.Engines * Caller.Duck * (spatial ? 1.3f : 1f), step = (front ? Time.unscaledDeltaTime : Time.deltaTime) / .35f;
             for (int i = 0; i < 4; i++)
             {
                 float want = (i == m ? formVol[i] * load : 0) * fx;
@@ -75,7 +77,7 @@ namespace ShiftStorm
             if (wind)
             {
                 float f = Mathf.Clamp01(frac * .9f), want = (v.Mode == Mode.Dive ? .12f : .55f) * f * f + (v.Boosting ? .08f : 0);
-                wind.volume = Mathf.MoveTowards(wind.volume, want * Mix * Settings.Engines * Caller.Duck, Time.deltaTime * 1.5f);
+                wind.volume = Mathf.MoveTowards(wind.volume, front ? 0 : want * Mix * Settings.Engines * Caller.Duck, (front ? Time.unscaledDeltaTime : Time.deltaTime) * 1.5f);
                 wind.pitch = (v.Mode == Mode.Dive ? .55f : .8f) + .5f * f;
             }
         }

@@ -252,7 +252,7 @@ namespace ShiftStorm
             Line($"  under a Barker line: music {au.MusicVolume:0.00}, engine {snd.EngineVolume:0.00}, duck {Caller.Duck:0.00} ({20 * Mathf.Log10(Mathf.Max(1e-4f, Caller.Duck)):0.0} dB)");
             Clear(); Save();
         }
-        IEnumerable<string> MenuRows() { game.OpenMenu(); game.Choose(game.MenuItems.FindIndex(x => x.StartsWith("Settings"))); var l = game.MenuItems.ToList(); game.CloseMenu(); return l; }
+        IEnumerable<string> MenuRows() { game.OpenFrontMenu(); game.Choose(game.MenuItems.FindIndex(x => x.StartsWith("Settings"))); game.Choose(game.MenuItems.FindIndex(x => x.StartsWith("Audio"))); var l = game.MenuItems.ToList(); game.CloseMenu(); return l; }   // Round 14: Settings > Audio
 
         IEnumerator Choice8()
         {

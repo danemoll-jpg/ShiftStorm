@@ -25,12 +25,15 @@ namespace ShiftStorm
         // Round 6: per player (player 2 has their own invert setting, settings.json "invertVertical2")
         public bool MyInvert { get => player == 2 ? Settings.InvertVertical2 : Invert; set { if (player == 2) Settings.InvertVertical2 = value; else Invert = value; } }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, confirm, back, stats, enter, view, look;
+        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look;
         bool viewRequested, wingsRequested;
         public Vector2 Look { get; private set; }   // Round 6: the right stick looks around (CameraViews)
-        bool resetRequested;
+        bool resetRequested; ShiftVehicle owner;
         public bool MenuPressed { get; private set; }
         public int MenuMove { get; private set; }
+        // Round 14 item 1: left / right in the menus (D-pad, left stick, arrows, A / D): -1 / +1, repeating while held
+        public int MenuSide { get; private set; }
+        public bool AnyPressed { get; private set; }   // the title screen: any button
         public bool ConfirmPressed { get; private set; }
         public bool BackPressed { get; private set; }
         public bool StatsPressed { get; private set; }
@@ -40,7 +43,7 @@ namespace ShiftStorm
         // position (pushed forward = +, as the pad gives it) and goes through the invert setting like a real stick (the invert check).
         // The one-shot menu presses (sMenu, sMove, sConfirm, sBack) let a check work the menu as a player would.
         [System.NonSerialized] public bool Scripted, sRawStick, sMenu, sConfirm, sBack;
-        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView, sWings; [System.NonSerialized] public int sMove; [System.NonSerialized] public Vector2 sLook;
+        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView, sWings; [System.NonSerialized] public int sMove, sSide; [System.NonSerialized] public Vector2 sLook;
 
         void Awake() => Create(null);
 
@@ -86,13 +89,17 @@ namespace ShiftStorm
             menu = A("Menu"); Add(menu, "<Gamepad>/start"); Add(menu, "<Keyboard>/escape");
             menuUp = A("Menu up"); Add(menuUp, "<Gamepad>/dpad/up"); Add(menuUp, "<Keyboard>/upArrow"); Add(menuUp, "<Keyboard>/w");
             menuDown = A("Menu down"); Add(menuDown, "<Gamepad>/dpad/down"); Add(menuDown, "<Keyboard>/downArrow"); Add(menuDown, "<Keyboard>/s");
+            // Round 14: the left stick works the menus too; left / right change a value
+            Add(menuUp, "<Gamepad>/leftStick/up"); Add(menuDown, "<Gamepad>/leftStick/down");
+            menuLeft = A("Menu left"); Add(menuLeft, "<Gamepad>/dpad/left"); Add(menuLeft, "<Gamepad>/leftStick/left"); Add(menuLeft, "<Keyboard>/leftArrow"); Add(menuLeft, "<Keyboard>/a");
+            menuRight = A("Menu right"); Add(menuRight, "<Gamepad>/dpad/right"); Add(menuRight, "<Gamepad>/leftStick/right"); Add(menuRight, "<Keyboard>/rightArrow"); Add(menuRight, "<Keyboard>/d");
             confirm = A("Confirm"); Add(confirm, "<Gamepad>/buttonSouth"); Add(confirm, "<Keyboard>/enter"); Add(confirm, "<Keyboard>/space");
             back = A("Back"); Add(back, "<Gamepad>/buttonEast"); Add(back, "<Keyboard>/backspace");
             stats = A("FPS readout"); Add(stats, "<Gamepad>/rightStickPress"); Add(stats, "<Keyboard>/f1");
             enter = A("Enter"); Add(enter, "<Keyboard>/enter"); Add(enter, "<Keyboard>/numpadEnter");
-            foreach (var x in new[] { confirm, menu, back, menuUp, menuDown }) x.performed += c => LastDevice = c.control.device;
+            foreach (var x in new[] { confirm, menu, back, menuUp, menuDown, menuLeft, menuRight }) x.performed += c => LastDevice = c.control.device;
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, confirm, back, stats, enter, view, look };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look };
         void OnEnable() { foreach (var a in All) a.Enable(); }
         void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; viewRequested = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
@@ -100,20 +107,25 @@ namespace ShiftStorm
         void Update()
         {
             MenuPressed = menu.WasPressedThisFrame() && !Scripted; ConfirmPressed = confirm.WasPressedThisFrame(); BackPressed = back.WasPressedThisFrame();
-            MenuMove = (menuDown.WasPressedThisFrame() ? 1 : 0) - (menuUp.WasPressedThisFrame() ? 1 : 0);
+            MenuMove = Repeat(menuDown, ref downHeld) - Repeat(menuUp, ref upHeld);
+            MenuSide = Repeat(menuRight, ref rightHeld) - Repeat(menuLeft, ref leftHeld);
+            AnyPressed = ConfirmPressed || menu.WasPressedThisFrame() || boost.WasPressedThisFrame();
             StatsPressed = stats.WasPressedThisFrame() && !Scripted;
             var kb = Keyboard.current; bool alt = kb != null && (kb.leftAltKey.isPressed || kb.rightAltKey.isPressed);
             FullscreenPressed = alt && enter.WasPressedThisFrame() && !Scripted;
             if (FullscreenPressed) ConfirmPressed = false;   // Alt+Enter is never a menu "choose"
             if (Scripted)
             {
-                if (sMenu) MenuPressed = true; if (sConfirm) ConfirmPressed = true; if (sBack) BackPressed = true; if (sMove != 0) MenuMove = sMove;
-                sMenu = sConfirm = sBack = false; sMove = 0;
+                if (sMenu) MenuPressed = true; if (sConfirm) ConfirmPressed = true; if (sBack) BackPressed = true; if (sMove != 0) MenuMove = sMove; if (sSide != 0) MenuSide = sSide;
+                AnyPressed = sMenu || sConfirm; sMenu = sConfirm = sBack = false; sMove = 0; sSide = 0;
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Boost = sBoost; Secondary = sSecondary;
                 Vertical = sRawStick ? (MyInvert ? sVertical : -sVertical) : sVertical;
                 Look = sLook; viewRequested |= sView; sView = false; wingsRequested |= sWings; sWings = false;
                 return;
             }
+            // Round 14 item 4: after the finish a person's racer rolls to a stop by itself (the results menu's A / D-pad / stick drive nothing)
+            if (!owner) owner = GetComponent<ShiftVehicle>();
+            if (owner && owner.Finished && !ChaseCam.OldFinish) { Throttle = 0; Brake = owner.Speed > 2f ? .35f : 0; Steer = 0; Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; resetRequested |= reset.WasPressedThisFrame(); return; }
             Throttle = throttle.ReadValue<float>(); Brake = brake.ReadValue<float>(); Steer = Mathf.Clamp(steer.ReadValue<float>(), -1, 1);
             // The pad's stick and the keys give "stick pushed up" as +; pulled back (up for the vehicle) is the default, so the sign flips here.
             float v = -Mathf.Clamp(vertical.ReadValue<float>(), -1, 1);
@@ -122,6 +134,16 @@ namespace ShiftStorm
             resetRequested |= reset.WasPressedThisFrame();
             if (invert.WasPressedThisFrame()) MyInvert = !MyInvert;
             Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame(); wingsRequested |= wings.WasPressedThisFrame();
+        }
+        // a menu direction: once on the press, then again after 0.4 s held, every 0.11 s (unscaled: the menu pauses the game)
+        float upHeld = -1, downHeld = -1, leftHeld = -1, rightHeld = -1;
+        static int Repeat(InputAction a, ref float since)
+        {
+            if (a.WasPressedThisFrame()) { since = Time.unscaledTime; return 1; }
+            if (!a.IsPressed()) { since = -1; return 0; }
+            if (since < 0) return 0;
+            if (Time.unscaledTime - since > .4f) { since = Time.unscaledTime - .4f + .11f; return 1; }
+            return 0;
         }
         public bool ConsumeReset() { bool r = resetRequested; resetRequested = false; return r; }
         public void RequestReset() => resetRequested = true;

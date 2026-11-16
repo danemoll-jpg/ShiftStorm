@@ -9,7 +9,7 @@ namespace ShiftStorm
     // no file, the Round 1-2b PlayerPrefs values (invertVertical, showStats) are taken over once.
     public static class Settings
     {
-        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; public int buck; public int driver; public int driver2 = 1; public string design2 = ""; public bool tourChosen, tourUnlocked; public int paint; public int graphics = -1; }   // Round 13: the Garage paint (Paints), the Graphics preset (-1 Auto)   // Round 12: "Unlock all Tour stops" (tourChosen false: UnlockTourDefault)   // Round 11: Buck's briefings 0 On / 1 Short / 2 Off; player 1's / 2's driver (Lineup.All: 0 Abi, 1 Rae, 2 Chip, 3 Vivi) and player 2's machine   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
+        [Serializable] sealed class Data { public int version = 2; public bool invertVertical; public bool showStats; public bool invertChosen; public int difficulty; public string design = ""; public bool invertVertical2; public int view, view2; public bool splitLeftRight; public int musicVol = 10, sfxVol = 10, voiceVol = 10; public int engineVol = EngineDefault; public bool playtestLogs = true; public int buck; public int driver; public int driver2 = 1; public string design2 = ""; public bool tourChosen, tourUnlocked; public int paint; public int graphics = -1; public int crowdVol = 10; }   // Round 14: the Crowd volume (its own slider)   // Round 13: the Garage paint (Paints), the Graphics preset (-1 Auto)   // Round 12: "Unlock all Tour stops" (tourChosen false: UnlockTourDefault)   // Round 11: Buck's briefings 0 On / 1 Short / 2 Off; player 1's / 2's driver (Lineup.All: 0 Abi, 1 Rae, 2 Chip, 3 Vivi) and player 2's machine   // Round 8 item 6: Engines split out of Effects (default 60 %); item 10: playtest logs (default on)   // Round 7: Music / Effects / Voices, 0..10   // Round 6: player 2's invert, each player's camera view (CameraViews), the split-screen layout   // Round 4: difficulty 0 Easy (default), 1 Normal, 2 Hard; Round 5: the vehicle design raced with ("" = the default: the first imported design, Dan's pick)
         static Data d;
 
         public static string FilePath
@@ -26,7 +26,8 @@ namespace ShiftStorm
             get
             {
                 if (d != null) return d;
-                try { if (File.Exists(FilePath)) d = JsonUtility.FromJson<Data>(File.ReadAllText(FilePath)); } catch (Exception e) { Debug.LogWarning("[Settings] could not read " + FilePath + ": " + e.Message); }
+                // Round 14: a build 15 file has no Crowd volume: 100 %
+                try { if (File.Exists(FilePath)) { var text = File.ReadAllText(FilePath); d = JsonUtility.FromJson<Data>(text); if (d != null && !text.Contains("\"crowdVol\"")) d.crowdVol = 10; } } catch (Exception e) { Debug.LogWarning("[Settings] could not read " + FilePath + ": " + e.Message); }
                 if (d != null && d.version < 2)
                 {
                     // Round 8 item 6: a build 1-8 file had one Effects volume for engines and effects: engines now have their own, quieter
@@ -64,15 +65,28 @@ namespace ShiftStorm
         public static float Effects => Mathf.Clamp(D.sfxVol, 0, 10) / 10f;
         public static float Voices => Mathf.Clamp(D.voiceVol, 0, 10) / 10f;
         public static float Engines => Mathf.Clamp(D.engineVol, 0, 10) / 10f;
+        // Round 14 item 2 (Dan: "the crowd noise is far too loud"): the crowd (murmur, cheers, the GO roar, the finish's crowd sound, the
+        // near-miss "aww", the loop's "ooh") has its own volume (default 100 %, up to 200 %), and sits CrowdGain (-19 dB) under where build 15
+        // had it: the mix check measured -11 dB still leaving the GO roar and the finish cheer over the engine and level with the music
+        public static float Crowd => Mathf.Clamp(D.crowdVol, 0, 20) / 10f;
+        public const float CrowdGain = .11f;
+        public static int MaxVolume(string which) => which == "crowd" ? 20 : 10;
+        public static float CrowdLevel => Crowd * CrowdGain;
+        // the volume rows: "music", "voice", "engine", "sfx", "crowd" (0..10 steps of 10 %)
+        public static int Volume(string which) => which == "music" ? D.musicVol : which == "sfx" ? D.sfxVol : which == "engine" ? D.engineVol : which == "crowd" ? D.crowdVol : D.voiceVol;
+        public static void SetVolume(string which, int v)
+        {
+            v = Mathf.Clamp(v, 0, MaxVolume(which));
+            if (which == "music") D.musicVol = v; else if (which == "sfx") D.sfxVol = v; else if (which == "engine") D.engineVol = v; else if (which == "crowd") D.crowdVol = v; else D.voiceVol = v;
+            if (!QuietRun.Check) Save(); Debug.Log($"[Settings] {which} volume {v * 10} %");
+        }
         public const int EngineDefault = 6;
         // Round 8 item 10: playtest logs (Menu > Settings), on by default; a check run reads the default and saves nothing
         public static bool PlaytestLogs { get => D.playtestLogs; set { D.playtestLogs = value; if (!QuietRun.Check) Save(); Debug.Log($"[Settings] playtest logs {(value ? "on" : "off")}"); } }
         public static int Step(string which)
         {
             int Next(int x) => x <= 0 ? 10 : Mathf.Max(0, x - 2);
-            if (which == "music") D.musicVol = Next(D.musicVol); else if (which == "sfx") D.sfxVol = Next(D.sfxVol); else if (which == "engine") D.engineVol = Next(D.engineVol); else D.voiceVol = Next(D.voiceVol);
-            if (!QuietRun.Check) Save();
-            int v = which == "music" ? D.musicVol : which == "sfx" ? D.sfxVol : which == "engine" ? D.engineVol : D.voiceVol; Debug.Log($"[Settings] {which} volume {v * 10} %"); return v;
+            SetVolume(which, Next(Volume(which))); return Volume(which);
         }
         // Round 4: the AI's difficulty (how the rivals drive, never their vehicle). A check may set it for its run only ("-difficulty
         // Easy|Normal|Hard"), without saving.

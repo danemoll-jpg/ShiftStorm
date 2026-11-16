@@ -1,0 +1,13 @@
+ShiftStorm check 'finishcam', 2026-11-16 12:37, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+FINISH CAMERA (item 4): each course raced to the line from the last anchors (the AI behind), the camera logged for 20 s after the finish (frames next to a hitch, over twice the median frame time, left out); jitter = how far each frame's position / aim is from where the frames either side put it at that frame's time (a shake shows as jitter; a smooth move, at any frame rate, does not)
+  Paradise Plunge  Chase        STEADY: 11069 frames, jitter max 0.02 cm (at 1.01 s) / 0.028 deg, 99th pct 0.010 cm / 0.000 deg, 0 frames over 1 cm (705 next to a hitch left out); camera speed at most 54.7 m/s; car 0.6 m/s 20 s after the line; finish camera on
+  Paradise Plunge  First person STEADY: 11114 frames, jitter max 0.03 cm (at 0.02 s) / 0.028 deg, 99th pct 0.014 cm / 0.000 deg, 0 frames over 1 cm (626 next to a hitch left out); camera speed at most 54.3 m/s; car 0.5 m/s 20 s after the line; finish camera on
+  Coaster Coast    Chase        STEADY: 13173 frames, jitter max 0.04 cm (at 2.20 s) / 0.028 deg, 99th pct 0.024 cm / 0.000 deg, 0 frames over 1 cm (335 next to a hitch left out); camera speed at most 55.0 m/s; car 0.1 m/s 20 s after the line; finish camera on
+  Coaster Coast    First person STEADY: 13479 frames, jitter max 0.04 cm (at 2.31 s) / 0.028 deg, 99th pct 0.024 cm / 0.000 deg, 0 frames over 1 cm (347 next to a hitch left out); camera speed at most 54.9 m/s; car 0.1 m/s 20 s after the line; finish camera on
+FINISH CAMERA PASS: no shake after the finish on both courses, chase and first person
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.67 ms, 95th pct 2.84 ms, 99th pct 4.07 ms, worst 57.11 ms over 65474 frames; GPU time not available in batch mode
+sound: music results playing (its own signal peak 0.000), splashes played 0, Abi lines: win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

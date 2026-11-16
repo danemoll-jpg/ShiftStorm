@@ -260,7 +260,7 @@ namespace ShiftStorm
                 {
                     total++; var ch = Challenge.All[i]; scenario = $"challenge-{ch.key}-{(win ? "win" : "lose")}"; Clear();
                     Settings.Difficulty = win ? Difficulty.Easy : Difficulty.Normal;
-                    int tries0 = Tour.ChallengeTries(i); bool won0 = Tour.ChallengeWon(i); int bl = Buck.Instance.Events.Count, cl = Caller.Instance.Lines.Count;
+                    int tries0 = Tour.ChallengeTries(i); bool won0 = Tour.ChallengeWon(i); int bl = Buck.Instance.Events.Count, cl = Caller.Instance.Lines.Count; float clT = Time.time;   // Round 14: the caller clears its list at each start: lines by time
                     var spoken0 = Driver.AllSpoken.Count;
                     game.ChallengeRun.Play(i); yield return null; yield return null;
                     yield return Until(() => !v.Holding || !game.ChallengeRun.Running, 60f);
@@ -273,7 +273,7 @@ namespace ShiftStorm
                     Tour.Reload(); bool reloaded = Tour.ChallengeTries(i) == tries0 + 1 && Tour.ChallengeWon(i) == (won0 || game.ChallengeRun.LastWon);
                     bool okResult = game.ChallengeRun.LastWon == win;
                     var buckSaid = Buck.Instance.Events.Skip(bl).Where(e => e.Contains(" said ") || e.Contains("scene")).ToList();
-                    var barker = Caller.Instance.Lines.Skip(cl).Select(l => $"{l.pool}/{l.clip}").ToList();
+                    var barker = Caller.Instance.Lines.Where(l => l.t >= clT).Select(l => $"{l.pool}/{l.clip}").ToList();
                     var drivers = Driver.AllSpoken.Skip(spoken0).Where(s => s.Contains(" chintro ") || s.Contains(" chwin ") || s.Contains(" chlose ")).ToList();
                     bool lines = barker.Any(x => x.StartsWith("ch")) && drivers.Count >= 2 && buckSaid.Count > 0;
                     bool ok = okResult && saved && reloaded && lines; if (ok) pass++;

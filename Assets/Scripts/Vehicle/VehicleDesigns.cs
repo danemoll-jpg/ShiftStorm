@@ -62,6 +62,7 @@ namespace ShiftStorm
         // Round 9: a hidden design (a placeholder, "_Scrambler") with its designs.json entry as it is (canopy, astride, lean...)
         public static bool AddHiddenForCheck(string name) { var _ = Imported; var d = hidden.Find(x => x.name == name); if (d == null) return false; AddForCheck(d); return true; }
 
+        public static readonly bool OldBubble = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldBubble") >= 0;   // checks: build 15's ball over the seat
         static Vector3 Inv(Vector3 v) => new Vector3(1 / Mathf.Max(1e-4f, v.x), 1 / Mathf.Max(1e-4f, v.y), 1 / Mathf.Max(1e-4f, v.z));
         static Mesh smooth; static Material glass;
         static Mesh SmoothSphere { get { if (!smooth) { var g = GameObject.CreatePrimitive(PrimitiveType.Sphere); smooth = g.GetComponent<MeshFilter>().sharedMesh; Object.Destroy(g); } return smooth; } }
@@ -92,7 +93,8 @@ namespace ShiftStorm
             // Round 9: per form (designs.json "canopy"): "none" (the Scrambler's bike, jet ski and flying bike), "sphere" (its sub: a clear
             // glass sphere round the rider and the bars, on the model's chrome ring: Dan's design)
             string kind = d.CanopyOf(m);
-            if (kind == "sphere")
+            if (kind == "sphere" && !OldBubble) BubbleSphere.Make(go, parent, seat, d.riderScale);   // Round 14 item 3: a whole ball round the bike and rider
+            else if (kind == "sphere")
             {
                 var ball = new GameObject("Glass sphere (game)"); ball.transform.SetParent(go.transform, false);
                 ball.transform.position = parent.TransformPoint(seat + new Vector3(0, d.sphereY, .08f));

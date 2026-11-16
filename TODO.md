@@ -21,7 +21,67 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 14 — title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race, the Ferris wheel on the main route** (2026-11-16, release `build-16` / 0.12.0). Status below.
 - **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 14 delivery (2026-11-16) — status per item
+Evidence: `Docs/Checks/round14/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy job at
+a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+1. **Title screen + clean menus — DONE.** The game starts on a title screen (logo `Resources/UI/Logo.png` from `Tools/make_logo.py`, the
+   theme song, "Press A / Start", the course flying by behind it: `UI/MenuCam.cs`). Main menu: The Tour, Race, Time Trial, 2 Players,
+   Garage, Settings, Quit game. Race / Time Trial -> course cards (picture rendered at start-up, name, forms, best lap: `CourseCards`) ->
+   choose your racer -> Go. Settings in four groups (Gameplay / Audio / Video / Controls), one setting per row, left / right change it
+   (sliders for volumes), A steps it, B back. Pause in a race: Resume, Restart, Settings, Quit to menu. Results: Race again, Next, Menu.
+   D-pad, left stick (held = repeat) and keyboard everywhere; either player in split screen. Drawn by `UI/Hud.Menu.cs` (rows 33 px, the
+   description 27 px on the Deck's 1280 x 800). *Checks:* `menus14` (18 pictures, every screen's text), `menuwalk` PASS 13 of 13 steps
+   (title -> menu -> course -> racer -> race -> pause -> quit to menu -> Music left / left / right 100 -> 90 -> 80 -> 90 %, AI difficulty
+   right / left -> quit game, exit code 0). Old menu checks updated (`settings`, `quit`, `quitresults`, `unlock`, `bind`): all PASS.
+2. **Crowd much quieter — DONE.** Its own **Crowd** slider (Audio, default 100 %, up to 200 %), and 19 dB under build 15
+   (`Settings.CrowdGain` 0.11): murmur beds, cheers, the GO roar, the finish's crowd sound, the near-miss "aww", the loop's "ooh". The
+   first try (-11 dB) still left the GO roar / finish cheer over the engine. *Check `mix`* (would-be levels, defaults): Paradise Plunge
+   music -26.9 dBFS, engine -32.9, Barker -19.4; crowd murmur on the grid -39.9 (build 15 -20.7), passing a stand -32.6 (-13.4), loudest
+   cheer / finish -33.9 (-14.7): 1 dB under the engine, 14.5 under Barker, 7 under the music. Coaster Coast the same within 2 dB.
+3. **The Scrambler's sub in a whole glass sphere — DONE.** `Vehicle/BubbleSphere.cs`: a complete ball round the bike and rider (radius
+   1.72 m from the bike's mesh extents and the rider's seated box), a chrome ring at its equator, `Resources/Shaders/BubbleGlass.shader`
+   (rim, sun and window highlights, sky reflection, a little refraction from the camera's opaque copy, switched on per camera only while
+   a bubble is within 80 m). On the change into the sub the ring appears, then the glass grows and closes over the bike (0.45 s). Hull
+   collider unchanged. *Check `bubble`* PASS: 49 points (every rider bone, the grips, the bike's mesh extents) all inside, the furthest at
+   81 % of the radius (33 cm clear); pictures side / front / three-quarter / back (Garage), chase / side / front / first person underwater,
+   five frames of the change.
+4. **No shaking after the race — DONE (cause not reproduced by the check).** After the finish no shake of any kind (boost, wall bump, the
+   T. rex), a person's car rolls to a stop by itself (results buttons drive nothing), and the camera eases out and slowly circles the car
+   looking at a smoothed point, in every view (first person / front included). *Check `finishcam`* (20 s after the line, both courses,
+   chase + first person): STEADY in all four, at most 0.04 cm off a smooth path. Build 15's camera (`-oldFinish`) measured nearly steady
+   too in the scripted finish (only the boost shake, 1.3 cm, in the first 0.2 s), so the exact shake Dan saw was not reproduced; the
+   likely sources (boost shake while A is held, wall / rival bumps, the car still driven by the stick / keys behind the results, a head
+   view following Abi's cheering head) are all gone now.
+5. **The Ferris wheel on the main route — DONE.** The Midway Jump launches every car into the plane at its lip; the hubless wheel stands
+   over the boardwalk dead ahead (70 m tall), the line goes through it 6 m under its centre, on through three firework rings (bursting),
+   down to the wheels-down zone before the coaster station. The Midway choice and its shortcut are gone (Coaster Coast's choice is the
+   Lighthouse rocks). Choice jumps (Lake Jump, Cliff Gap): "LB: FLY" appears on the ramp, LB there arms the wings ("WINGS READY", out at
+   the lip), and the window runs 1.5 s into the air. *Check `wheel`:* human-like pilot through the wheel 10 of 10 (5-17 m from its centre),
+   clean to G1 10 of 10; the AI 6 of 6; LB on the ramp and LB 1.2 s into the air work on both choice jumps (4 of 4). `-oldWheel`,
+   `-oldChoice` keep build 15's.
+6. **Regression + soaks + release — DONE.** Regression (built exe): `round2` (lap 124.6 s, results, restart, skips, Abi) PASS; `round3`
+   settings / invert / races PASS (its per-shortcut legs start from the wrong anchor for the Lake / Cliff flights and the bypass: "not
+   taken", as before; the full-lap run takes all four); `quit`, `quitresults` exit 0; `cclap` PASS 106.4 s, 0 resets, Drive->Fly at the
+   jump and Fly->Drive before the station; `ccrails` 6 of 6; `unlock` PASS; `humanfly` Lake flight 10 of 10, car line 5 of 5; `round6`
+   (split, binding, views) PASS; `round11` (Buck, The Tour, racers 16 of 16) PASS; `choice13` PASS; `challenges` 4 of 4 (its Barker-line count fixed: the caller
+   clears its list at each start); `steering` PASS. **Soaks (Normal, 50 AI laps each):** Paradise Plunge 50 of 50, median 134.3 s, 5
+   resets in 50 laps (water outside the landing corridor 2, fell off the climb 2, out of bounds 1); Coaster Coast 50 of 50, median
+   116.6 s, 1 reset (water outside a landing corridor).
+   Release build 16 (0.12.0) published; disk cleaned.
+
+### For Dan to check (build 16)
+1. Start the game: a title screen (logo, theme song) -> A -> the main menu. Is it readable on the Deck, and the layout clean?
+2. Settings: left / right change values (volumes as sliders, options cycle); B goes back. Try Audio > Crowd.
+3. Race / Time Trial: the course cards -> choose your racer -> Go. Pause (Start): Resume / Restart / Settings / Quit to menu.
+4. The crowd: much quieter (19 dB down). If it is now too quiet, Audio > Crowd goes up to 200 %.
+5. The Scrambler in the sub: a whole glass ball round the bike and Abi (chase and first person), and it closing over the bike on the change.
+6. After a race: is the screen steady now (chase and first person)? If it still shakes, say what you were pressing and which view.
+7. Coaster Coast: everyone flies through the Ferris wheel straight off the Midway Jump, then the firework rings. Does it feel like the
+   headline moment?
+8. Paradise Plunge's choice jumps: "LB: FLY" now shows on the ramp; pressing LB there should fly you off the lip.
 
 ### Round 13 delivery (2026-11-16) — status per item
 Evidence: `Docs/Checks/round13/` (reports, pictures, `challenge_lines.md`). Every run: built exe, `-batchmode -mute`, no window, Below Normal,
@@ -509,66 +569,11 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 14: menus, crowd volume, the Scrambler bubble, the Ferris wheel
-
-**Dan's review of build 15 (0.11.0), 2026-11-16, quoted:**
-0. (About Round 13's report) "It should list [what I need to check] to begin with." → **standing rule below.**
-1. "The crowd noise is far too loud."
-2. "Left and right should increase / decrease values."
-3. "I don't like the menu in general. Needs clean up to be more readable."
-4. "For the cycle sub version, I wanted a bubble that enveloped the whole bike, not just a dome. Pretty sure I mentioned this
-   multiple times."
-5. "Screen is shaky after race."
-6. "The flying through the Ferris wheel was sold as a major thing on the track but the Ferris wheel is out of the main path
-   and if you don't hit the fly button quick enough you miss it altogether."
-Also from 2026-11-16 (asked for during Round 13 but never built): **the game must start on a title screen, not in a race.**
-Run unattended; don't stop to ask; no visible window. Same testing rules. Read-only references as before.
-
-**Standing rule (Dan, 2026-11-16): every round's final report in chat must end with the "For Dan to check" list** — the
-actual items, in plain words, not just a pointer to `TODO.md`.
-
-1. **Title screen and a clean main menu** (items 0, 2, 3 above).
-   - Start-up (direct or from the launcher) lands on a **title screen**: ShiftStorm logo, the theme song, "Press A / Start".
-   - Then a **main menu**: The Tour, Race, Time Trial, 2 Players, Garage, Settings, Quit. Big, readable text with plenty of
-     space; one highlighted choice; a short description line for the highlighted item; consistent layout on every screen.
-   - **Course select:** a card per track (name, picture, the forms it uses, best time) → **choose your racer** → race.
-   - **Settings** grouped (Gameplay / Audio / Video / Controls), one setting per row; **left / right changes the value**
-     (sliders for volumes, cycling for options), A also toggles, B goes back; the new value shows immediately.
-   - **Pause menu** in a race, short: Resume, Restart, Settings, Quit to menu. Results screen: Race again, Next / Menu.
-   - D-pad / stick / keyboard everywhere; readable on the Deck's 1280×800 (check text sizes there); split screen: either
-     player can drive the menus.
-   - Your checks still start races directly with their command-line flags.
-   *Check:* pictures of every menu screen at 1280×800 (look at them for readability); a scripted walk title → menu →
-   course → racer → race → pause → quit to menu → settings (left / right changes a volume and an option) → quit game.
-2. **Crowd much quieter.** Cut the crowd (murmur, cheers, GO roar, finish) well below the engines and far below Barker and
-   music — about −10 to −12 dB from now as a start — and give it its own **Crowd** volume slider in Audio settings.
-   *Check:* measured levels per bus in a race and at the finish with defaults (runs stay muted; log the would-be levels).
-3. **The Scrambler's sub: a full bubble around the whole bike.** Dan asked for the sub version "surrounded in a glass
-   sphere" — a **complete clear sphere enveloping the entire bike and rider** (like a hamster ball / diving bell), with
-   the chrome ring as its equator — **not a dome** over the seat. Bubble big enough that nothing pokes through, subtle
-   highlights and a little refraction, readable from the chase camera, collider unchanged (or matching the sphere if
-   that's better for the water). The change into the sub forms the bubble around the bike (grows / closes over it).
-   *Check:* pictures of the Scrambler sub from the side, front and first person; nothing through the glass.
-4. **No shaking after the race.** Find what shakes the camera after the finish (boost shake, wall bump, crowd roar shake,
-   the T. rex roar, landing bump…), and stop all camera shake at the finish: the results camera is steady.
-   *Check:* camera motion logged for 10 s after the finish on both tracks — no shake.
-5. **The Ferris wheel is the star, on the main route.** Flying through the Ferris wheel is Coaster Coast's headline
-   moment, so **everyone** does it: put a flight through the Ferris wheel **on the main route** (an automatic launch into
-   the plane, like Paradise Plunge's cliff launch), with the wheel lined up dead ahead and big; fly through its spokes /
-   the centre, then on through the fireworks. Keep a choice elsewhere if it still makes sense (say what you did).
-   - **All choice jumps, both tracks:** easier to choose — the "LB: FLY" prompt appears on the **ramp** before the lip, and
-     LB can be pressed **any time on the ramp or in the first ~1.5 s** of air (pre-arm counts).
-   *Check:* pictures of the approach and the pass through the wheel; the human-like pilot goes through the wheel 10 of 10;
-   LB pressed on the ramp works on every choice jump.
-6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 16 (0.12.0).** Per-item status,
-   "For Dan to check" in `TODO.md` **and at the end of the chat report**, update `CLAUDE.md`, commit, push, publish, clean
-   the disk. Keep the .md files UTF-8.
+## Current Objective — Round 15 (not planned yet)
+Dan picks the next round after playing build 16 (0.12.0). Open for him: "For Dan to check" for Round 14 (above).
 
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

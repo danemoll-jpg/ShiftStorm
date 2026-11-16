@@ -1,0 +1,10 @@
+ShiftStorm check 'bubble', 2026-11-16 12:19, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BUBBLE PASS (Scrambler): a whole sphere, radius 1.72 m, centre 0.58 m over the vehicle's origin; 49 points (the rider's bones, the grips, the bike's mesh extents): 0 outside; the furthest "LOD1 (0.00, 0.00, 1.00)" at 81 % of the radius (33 cm clear); chrome ring at its equator yes; refraction cameras 1
+  glass renderer: enabled True, active True, world size 3.45 x 3.45 x 3.45 m, grown 1.00, sphere lossy 1.000, glass lossy 3.450, material ShiftStorm/BubbleGlass
+  bubble grows: 20 times this run (each change into the sub: the ring first, then the glass closes over the bike in 0.45 s)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.62 ms, 95th pct 2.45 ms, 99th pct 3.22 ms, worst 13.47 ms over 2633 frames; GPU time not available in batch mode
+sound: music menu playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

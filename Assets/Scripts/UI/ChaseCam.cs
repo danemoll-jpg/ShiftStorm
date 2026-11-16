@@ -51,9 +51,31 @@ namespace ShiftStorm
         public float Kick { get; private set; }
         bool wasBoosting; float kickAt = -1;
 
+        // Round 14 item 4 (Dan: "screen is shaky after race"): after the finish no shake of any kind (boost, wall bump, the T. rex's roar),
+        // and the camera leaves the car: it eases out to the side and slowly turns round it, looking at a smoothed point (bumps from the
+        // AI going by, the car rolling to a stop on the boards and a head view's bobbing head no longer reach the picture)
+        bool finishCam; float finishAt, orbitDeg; Vector3 finishFocus, finishFocusVel, finishPosVel;
+        public bool FinishCamOn => finishCam;
+        public static readonly bool OldFinish = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldFinish") >= 0;   // checks: build 15's camera after the finish
+        void FinishCam()
+        {
+            var t = target.transform; var want = t.position + Vector3.up * 1.2f;
+            if (!finishCam) { finishCam = true; finishAt = Time.time; finishFocus = want; finishFocusVel = finishPosVel = Vector3.zero; var back = transform.position - want; back.y = 0; orbitDeg = back.sqrMagnitude > .01f ? Mathf.Atan2(back.x, back.z) * Mathf.Rad2Deg : target.HeadingDeg + 180; }
+            float dt = Time.deltaTime; if (dt <= 0) return;
+            finishFocus = Vector3.SmoothDamp(finishFocus, want, ref finishFocusVel, .7f, 60f, dt);
+            float since = Time.time - finishAt; orbitDeg += Mathf.Lerp(0, 7f, Mathf.Clamp01(since / 3f)) * dt;   // a slow turn round the car
+            float dist = Mathf.Lerp(8f, 11f, Mathf.Clamp01(since / 4f)), h = Mathf.Lerp(2.6f, 3.6f, Mathf.Clamp01(since / 4f));
+            var pos = finishFocus + Quaternion.Euler(0, orbitDeg, 0) * Vector3.forward * dist + Vector3.up * h;
+            transform.position = Vector3.SmoothDamp(transform.position, pos, ref finishPosVel, .5f, 80f, dt);
+            transform.rotation = Quaternion.LookRotation(finishFocus - transform.position, Vector3.up);
+            fov = Mathf.Lerp(fov, 62f, 1 - Mathf.Exp(-2f * dt)); if (cam) cam.fieldOfView = fov;
+        }
+
         void LateUpdate()
         {
             if (!target || Garage.Active) return;
+            if (target.Finished && !OldFinish) { FinishCam(); Fog(); return; }
+            if (finishCam) { finishCam = false; snapped = false; }   // a new race: snap back behind the car
             var m = target.Mode;
             float wantD = m == Mode.Fly ? 11f : m == Mode.Dive ? 8.5f : m == Mode.Boat ? 8.5f : 7.5f;
             float wantH = m == Mode.Fly ? 3.4f : m == Mode.Dive ? 2.4f : m == Mode.Boat ? 3f : 2.6f;

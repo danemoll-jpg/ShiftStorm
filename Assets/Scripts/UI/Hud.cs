@@ -15,7 +15,7 @@ namespace ShiftStorm
     {
         public static Hud Instance { get; private set; }
         public ShiftVehicle v; public Game game;
-        Text mode, info, last, help, timer, segment, center, results, menu, place, note, sub; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
+        Text mode, info, last, help, timer, segment, center, results, place, note, sub; RectTransform boostFill; Image boostImage; GameObject resultsPanel, menuPanel;
         float lastSplitShown = -1; string splitLine = "";
 
         // Round 6 (split screen): one HUD per half, each on its player's camera (a Screen Space - Camera canvas fills that camera's half).
@@ -39,7 +39,7 @@ namespace ShiftStorm
             scaler.referenceResolution = !split ? new Vector2(1280, 720) : lr ? new Vector2(960, 720) : new Vector2(1280, 600);
             scaler.matchWidthOrHeight = lr ? 0 : 1;
             if (resultsPanel) resultsPanel.transform.localScale = Vector3.one * (split && !lr ? .82f : 1f);
-            if (menuPanel) menuPanel.transform.localScale = Vector3.one * (split && !lr ? .92f : 1f);
+            if (menuPanel) menuPanel.transform.localScale = Vector3.one;
             if (help) help.enabled = !split;
         }
         Text Label(Transform p, Vector2 anchor, Vector2 pos, int size, TextAnchor align, Vector2 box)
@@ -65,7 +65,7 @@ namespace ShiftStorm
             center = Label(p, new Vector2(.5f, .5f), new Vector2(0, 120), 90, TextAnchor.MiddleCenter, new Vector2(1200, 120));
             help = Label(p, new Vector2(.5f, 0), new Vector2(0, 8), 16, TextAnchor.LowerCenter, new Vector2(1250, 26));
             help.color = new Color(1, 1, 1, .75f);
-            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  X/V view  stick Y / I-K climb-dive  Y/R reset  Menu/Esc menu (Settings, Quit)  R3/F1 FPS";
+            help.text = "RT/W go  LT/S brake  A/Space boost  RB/Shift drift-carve  X/V view  stick Y / I-K climb-dive  Y/R reset  Start/Esc pause  R3/F1 FPS";
             // Round 3: race position (big, top left under the stats) and the one-time note on the first flight
             place = Label(p, new Vector2(0, 1), new Vector2(24, -70), 54, TextAnchor.UpperLeft, new Vector2(400, 120)); place.supportRichText = true;
             note = Label(p, new Vector2(.5f, .5f), new Vector2(0, -150), 30, TextAnchor.MiddleCenter, new Vector2(900, 40)); note.color = new Color(.75f, .95f, 1f);
@@ -79,9 +79,7 @@ namespace ShiftStorm
             resultsPanel = Panel(p, new Vector2(680, 640), new Color(.05f, .07f, .06f, .82f));
             results = Label(resultsPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 21, TextAnchor.MiddleCenter, new Vector2(660, 620)); results.supportRichText = true;
             resultsPanel.SetActive(false);
-            menuPanel = Panel(p, new Vector2(700, 560), new Color(.05f, .07f, .06f, .9f));
-            menu = Label(menuPanel.transform, new Vector2(.5f, .5f), Vector2.zero, 26, TextAnchor.MiddleCenter, new Vector2(680, 540)); menu.supportRichText = true;
-            menuPanel.SetActive(false);
+            BuildMenu(p); menuPanel = menuRoot;   // Round 14 item 1: the menus (Hud.Menu)
             // Round 11 item 2: Buck's card (a briefing, a Tour scene): portrait placeholder, his name, the subtitle, the skip hint
             buckCard = Panel(p, new Vector2(860, 170), new Color(.08f, .05f, .03f, .88f));
             var bkr = buckCard.GetComponent<RectTransform>(); bkr.anchorMin = bkr.anchorMax = bkr.pivot = new Vector2(.5f, 0); bkr.anchoredPosition = new Vector2(0, 150);
@@ -137,8 +135,8 @@ namespace ShiftStorm
             else if (game && game.ChallengeRun && game.ChallengeRun.Frozen && player != 2) { center.fontSize = 34; center.color = Challenge.Note.StartsWith("CHALLENGE WON") ? new Color(.5f, 1, .5f) : new Color(1, .6f, .25f); center.text = Challenge.Note.Replace(": ", "\n").Replace("  -  ", "\n"); }   // Round 13: a rival challenge's result
             else if (v.Holding) { float left = v.HoldUntil - Time.time; center.fontSize = 110; center.color = new Color(1, .85f, .3f); center.text = left > 5 ? "" : left > 0 ? Mathf.CeilToInt(left).ToString() : "GO!"; }   // Round 13: a long hold (a challenge's lines) shows no number
             else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
-            else if (v.WingsOpen && v.GroundedWheels == 0)   // Round 7: the choice jump's wings window
-            { center.fontSize = 64; center.color = new Color(.55f, .95f, 1f); center.text = v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }
+            else if (v.WingsOpen && (v.GroundedWheels == 0 || !ShiftVehicle.OldChoice))   // Round 7: the choice jump's wings window; Round 14: from the ramp on
+            { center.fontSize = 64; center.color = v.WingsArmed ? new Color(.5f, 1f, .55f) : new Color(.55f, .95f, 1f); center.text = v.WingsArmed ? "WINGS READY" : v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }
             else if (Time.time < v.CueUntil && !v.Finished)
             {
                 center.fontSize = v.CueType == ShiftVehicle.CueKind.Guide ? 44 : 52;
@@ -162,15 +160,13 @@ namespace ShiftStorm
             bool showResults = tt && tt.HasResults && v.Finished && !menuPanel.activeSelf;
             if (showResults != resultsPanel.activeSelf) resultsPanel.SetActive(showResults);
             if (showResults) results.text = ResultsText(tt, c);
-            // menu
+            sub.rectTransform.anchoredPosition = new Vector2(0, showResults ? 6 : 118); if (help) help.enabled = !SplitScreen.Active && !showResults;   // Round 14: Barker's words under the results panel, not over its buttons
+            // menu (Round 14: Hud.Menu)
             bool open = game && game.MenuOpen && player != 2;
-            if (open != menuPanel.activeSelf) menuPanel.SetActive(open);
-            // Round 5: the Garage hides the race HUD (everything but the menu) while it is open
-            bool gar = Garage.Active;
+            // Round 5: the Garage hides the race HUD (everything but the menu) while it is open; Round 14: so do the front menus (title, main menu)
+            bool gar = Garage.Active || (game && game.MenuOpen && game.InFront);
             if (gar != garageHidden) { garageHidden = gar; foreach (Transform ch in transform) if (ch.gameObject != menuPanel) ch.gameObject.SetActive(!gar); }
-            // Round 5: in the Garage the menu sits low and narrow, the vehicle above it
-            if (open) { var mr = (RectTransform)menuPanel.transform; mr.anchoredPosition = gar ? new Vector2(0, -250) : Vector2.zero; mr.sizeDelta = gar ? new Vector2(900, 270) : new Vector2(700, 560); menu.rectTransform.sizeDelta = gar ? new Vector2(880, 260) : new Vector2(680, 540); menu.fontSize = gar ? 22 : 26; }
-            if (open) menu.text = MenuText();
+            UpdateMenu(open);
         }
 
         string ViewName { get { var cv = cam ? cam.GetComponent<CameraViews>() : null; return cv ? cv.CurrentName : "-"; } }
@@ -211,20 +207,11 @@ namespace ShiftStorm
             }
             sb.AppendLine($"<size=17><color=#c8c8b4>Race called by {Caller.Name}</color></size>");   // Round 7
             if (SplitScreen.Active && !game.AllHumansFinished) { sb.Append("<color=#ffd34d>Waiting for the other player to finish...</color>"); return sb.ToString(); }
-            for (int i = 0; i < Game.ResultsItems.Length; i++) { var it = Game.ResultsItems[i]; sb.Append(i == game.ResultsIndex ? $"<color=#ffd34d><b>> {it} <</b></color>   " : $"{it}   "); }
-            sb.AppendLine(); sb.Append("<size=17>D-pad / arrows: choose   A / Enter: go   Y / R: race again</size>");
+            var items = game.ResultsItems;
+            for (int i = 0; i < items.Length; i++) { var it = items[i]; sb.Append(i == game.ResultsIndex ? $"<size=26><color=#ffd34d><b>► {it}</b></color></size>     " : $"<size=24>{it}</size>     "); }
+            sb.AppendLine(); sb.Append("<size=18>D-pad / stick: choose    A / Enter: go    Y / R: race again</size>");
             return sb.ToString();
         }
         static string Missed(ShiftVehicle r) => string.Join(", ", r.NearMisses.ConvertAll(x => x.Split(' ')[0]));
-        string MenuText()
-        {
-            var sb = new StringBuilder(); sb.AppendLine($"<b>{game.MenuTitle}</b>\n");
-            var miss = SplitScreen.Session ? SplitScreen.Session.MissingText : null; if (miss != null) sb.AppendLine($"<color=#ff7060><b>{miss}</b></color>\n");
-            if (!string.IsNullOrEmpty(game.MenuNote)) sb.AppendLine($"<size=20><color=#9fe8ff>{game.MenuNote}</color></size>\n");
-            var items = game.MenuItems;
-            for (int i = 0; i < items.Count; i++) sb.AppendLine(i == game.MenuIndex ? $"<color=#ffd34d><b>> {items[i]} <</b></color>" : items[i]);
-            sb.AppendLine("\n<size=18>D-pad / arrows: choose   A / Enter: go   B / Esc: back</size>");
-            return sb.ToString();
-        }
     }
 }

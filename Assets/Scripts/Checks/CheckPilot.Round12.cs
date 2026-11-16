@@ -86,6 +86,7 @@ namespace ShiftStorm
             foreach (int course in new[] { 0, 1 })
             {
                 game.StartCourse(course, false); var c = game.Courses[course]; var sc = c.shortcuts.Find(x => x.choice); float lip = course == 0 ? Mk("jC") : CoasterCoast.Marks["jM"];
+                if (sc == null) { Line($"HUMAN-LIKE {c.courseName}: no choice jump (Round 14: the Ferris wheel flight is on the main route; see the wheel check)"); continue; }
                 Line($"HUMAN-LIKE PILOT ({c.courseName}, {sc.label}{(ShiftVehicle.OldFlight ? ", BUILD 13's flight (-oldFlight)" : "")}): line {sc.Length:0} m, main {sc.mainTo - sc.mainFrom:0} m; steers by the HUD arrow's target only, 0.25-0.45 s late, keys or a noisy stick, no boost, LB 0.2-0.7 s into the 1 s window; entry 45 / 55 / 65 / 75 m/s, +-5 m, +-5 deg");
                 int okF = 0, okC = 0, clean = 0; var tf = new List<float>(); var tc = new List<float>();
                 for (int k = 0; k < tries; k++)
@@ -158,6 +159,7 @@ namespace ShiftStorm
             foreach (int course in new[] { 0, 1 })
             {
                 var c = game.Courses[course]; var sc = c.shortcuts.Find(x => x.choice);
+                if (sc == null) { Line($"  {c.courseName}: no choice flight (Round 14: the Ferris wheel flight is on the main route; the wheel check covers it)"); continue; }
                 foreach (var (n, f, s) in faults)
                 {
                     string r = ""; bool ok = false; total++;
@@ -226,28 +228,29 @@ namespace ShiftStorm
             scenario = "unlock"; Clear(); coast = true; game.StartCourse(0, false); yield return Wait(.3f);
             bool fresh = !System.IO.File.Exists(Tour.FilePath);
             Line($"UNLOCK: fresh tour.json {fresh} ({Tour.FilePath}), fresh settings.json {!System.IO.File.Exists(Settings.FilePath)}; Unlock all Tour stops {(Settings.UnlockAllTour ? "On" : "Off")} (default {(Settings.UnlockTourDefault ? "On" : "Off")}); Tour stops playable {Tour.Unlocked} of {Tour.Stops.Length}, earned {Tour.Earned}");
-            game.OpenMenu(); yield return null;
+            game.OpenFrontMenu(); yield return null;
             int Row(string start) => game.MenuItems.FindIndex(x => x.StartsWith(start));
-            // the main menu's Course row -> Coaster Coast; Race and Time Trial then say it, the pick page starts it
-            while (!game.MenuItems[Row("Course:")].Contains("Coaster Coast")) { game.Choose(Row("Course:")); yield return null; }
-            string raceRow = game.MenuItems[Row("Race:")], trialRow = game.MenuItems[Row("Time Trial:")];
-            game.Choose(Row("Race:")); yield return null; string pickCourse = game.MenuItems[Row("Course:")]; Capture("pick-race-coaster");
+            // Round 14: main menu > Race > the course page (right: Coaster Coast) > choose your racer > Go
+            game.Choose(Row("Race")); yield return null;
+            while (!game.MenuItems[Row("Course")].Contains("Coaster Coast")) { input.sSide = 1; yield return null; yield return null; }
+            string raceRow = game.MenuItems[Row("Course")]; Capture("course-race-coaster");
+            game.Choose(Row("Course")); yield return null; string pickCourse = game.MenuItems[Row("Go:")]; Capture("pick-race-coaster");
             game.Choose(Row("Go:")); yield return Wait(.5f);
             bool race = game.CourseIndex == 1 && game.RaceMode && !game.MenuOpen;
             Line($"UNLOCK Race {(race ? "PASS" : "FAIL")}: main menu \"{raceRow}\"; pick page \"{pickCourse}\"; started course {game.Courses[game.CourseIndex].courseName}, race {game.RaceMode}");
-            game.OpenMenu(); yield return null; game.Choose(Row("Time Trial:")); yield return null; game.Choose(Row("Go:")); yield return Wait(.5f);
+            game.OpenFrontMenu(); yield return null; game.Choose(Row("Time Trial")); yield return null; string trialRow = game.MenuItems[Row("Course")]; game.Choose(Row("Course")); yield return null; game.Choose(Row("Go:")); yield return Wait(.5f);
             bool trial = game.CourseIndex == 1 && !game.RaceMode;
             Line($"UNLOCK Time Trial {(trial ? "PASS" : "FAIL")}: \"{trialRow}\"; started {game.Courses[game.CourseIndex].courseName}, race {game.RaceMode}");
             // 2 Players: a second (virtual) pad joins, the page's Course row says Coaster Coast, its Time Trial starts it
-            Pads(); game.OpenMenu(); yield return null; game.Choose(Row("2 Players")); yield return null;
+            Pads(); game.OpenFrontMenu(); yield return null; game.Choose(Row("2 Players")); yield return null;
             SplitScreen.P1Device = pad1; game.Join(pad2); yield return null;
             string splitCourse = game.MenuItems[Row("Course:")]; Capture("split-page-coaster");
-            game.Choose(Row("Time Trial ")); yield return Wait(.8f);
+            game.Choose(Row("Time Trial")); yield return Wait(.8f);
             bool split = SplitScreen.Active && game.CourseIndex == 1;
             Line($"UNLOCK 2 Players {(split ? "PASS" : "FAIL")}: page \"{splitCourse}\"; split active {SplitScreen.Active}, course {game.Courses[game.CourseIndex].courseName}");
             game.EndSplit(false); yield return null;
             // the Tour page: both stops open while the setting is On; Off: stop 2 locked again (top 3 at stop 1 opens it)
-            game.OpenMenu(); yield return null; game.Choose(Row("The Tour")); yield return null;
+            game.OpenFrontMenu(); yield return null; game.Choose(Row("The Tour")); yield return null;
             string on2 = game.MenuItems[1]; bool on2ok = !on2.Contains("locked");
             bool keep = Settings.UnlockAllTour; Settings.UnlockAllTour = false; game.Choose(game.MenuItems.Count - 1); yield return null; game.Choose(Row("The Tour")); yield return null;
             string off2 = game.MenuItems[1]; bool off2ok = off2.Contains("locked") && Tour.Unlocked == 1;

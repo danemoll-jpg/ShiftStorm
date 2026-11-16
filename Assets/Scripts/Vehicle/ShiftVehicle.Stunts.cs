@@ -21,6 +21,12 @@ namespace ShiftStorm
         public int LoopFails { get; private set; }
         public float WingsUntil { get; private set; } = -1;
         public bool WingsOpen => Mode == Mode.Drive && Time.time < WingsUntil && !Finished;
+        // Round 14 item 5: the window opens on the ramp (the 45 m kicker before the lip: the HUD's "LB: FLY" is up there) and runs 1.5 s
+        // into the air; LB pressed on the ramp is kept (armed) and opens the wings the moment the car leaves the lip
+        public bool WingsArmed { get; private set; }
+        public bool OnChoiceRamp { get; private set; }
+        public int WingsArmedPresses { get; private set; }
+        public static readonly bool OldChoice = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldChoice") >= 0;   // checks: build 15's window (from the lip, 1 s, in the air only)
         public int WingsUsed { get; private set; }
         public int WingsIgnored { get; private set; }
         public int Jumps { get; private set; }
@@ -35,10 +41,12 @@ namespace ShiftStorm
         BoostPad lastPad; Vector3 stuntPrev; bool stuntPrevSet;
         float airFor, airFlat, landHoldUntil = -1, landHold; Vector3 airDir;
 
+        void WingsOut(Vector3 p, string why) { WingsUsed++; WingsUntil = -1; WingsArmed = false; Change(Mode.Fly, why); Stunt?.Invoke("wings"); EnterChoiceBranch(p); }
+
         void ClearStunts()
         {
             if (loop || rail) { loop = null; rail = null; Body.useGravity = Mode == Mode.Drive || Mode == Mode.Boat; }
-            loopSlip = false; lastPad = null; stuntPrevSet = false; WingsUntil = -1; airFor = 0; landHoldUntil = -1;
+            loopSlip = false; lastPad = null; stuntPrevSet = false; WingsUntil = -1; WingsArmed = false; OnChoiceRamp = false; airFor = 0; landHoldUntil = -1;
         }
 
         // before the mode's own step; true: the loop rail moved the car this step (the mode's step is skipped)
@@ -50,13 +58,22 @@ namespace ShiftStorm
             // the wings button
             if (Input.ConsumeWings())
             {
-                if (WingsOpen && GroundedWheels == 0 && !Changing) { WingsUsed++; WingsUntil = -1; Change(Mode.Fly, "wings out (choice jump)"); Stunt?.Invoke("wings"); EnterChoiceBranch(p); }
+                if (WingsOpen && GroundedWheels == 0 && !Changing) { WingsOut(p, "wings out (choice jump)"); }
+                else if (!OldChoice && WingsOpen && !Changing) { if (!WingsArmed) { WingsArmed = true; WingsArmedPresses++; Note("wings", "wings armed on the ramp: out at the lip"); } }
                 else { WingsIgnored++; Note("wings", $"wings pressed: nothing here ({(Mode != Mode.Drive ? Mode.ToString() : WingsUntil > 0 && Time.time >= WingsUntil ? "after the window" : GroundedWheels > 0 && WingsOpen ? "still on the lip" : "not a choice jump")})"); }
             }
             if (rail) { StepRail(dt); return true; }
             if (loop) { StepLoop(dt); return true; }
             if (Mode != Mode.Drive) { airFor = 0; return false; }
-            foreach (var l in ChoiceLip.All) if (l.Contains(p)) { if (WingsUntil < Time.time) Note("wings", "choice jump: wings window open"); WingsUntil = Time.time + l.window; }
+            bool ramp = false;
+            foreach (var l in ChoiceLip.All)
+            {
+                if (l.Contains(p)) { if (WingsUntil < Time.time) Note("wings", "choice jump: wings window open"); WingsUntil = Time.time + (OldChoice ? 1f : l.window); }
+                else if (!OldChoice && l.OnRamp(p)) { ramp = true; if (WingsUntil < Time.time) Note("wings", "choice jump: wings window open (on the ramp)"); WingsUntil = Mathf.Max(WingsUntil, Time.time + .25f); }
+            }
+            OnChoiceRamp = ramp;
+            if (WingsArmed && !WingsOpen) WingsArmed = false;   // the window closed (stopped on the ramp, a reset)
+            if (WingsArmed && WingsOpen && GroundedWheels == 0 && !Changing) WingsOut(p, "wings out (choice jump, pressed on the ramp)");
             // the loop's entry plane
             foreach (var r in LoopRail.All)
                 if (r.Entered(prev, p, out float lat) && Vector3.Dot(Body.linearVelocity, r.F) > 0) { EnterLoop(r, lat); StepLoop(dt); return true; }

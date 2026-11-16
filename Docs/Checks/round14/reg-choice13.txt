@@ -1,0 +1,30 @@
+ShiftStorm check 'choice13', 2026-11-16 13:30, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CLIFF GAP CHOICE: car line 874 m of climb road + ramp from the gap's lip to the rejoin in the air; fly line 1084 m (three rings over the hillside, entry / exit sub-gates; stands in for G2)
+  run 1: car line 13.95 s, resets 0, changes 1 (Drive->Fly), shortcut none, penalty 0 s, gates 2; fly line 12.45 s, resets 0, changes 1 (Drive->Fly), shortcut Cliff flight, penalty 0 s, gates 2
+  run 2: car line 13.95 s, resets 0, changes 1 (Drive->Fly), shortcut none, penalty 0 s, gates 2; fly line 12.45 s, resets 0, changes 1 (Drive->Fly), shortcut Cliff flight, penalty 0 s, gates 2
+  run 3: car line 13.95 s, resets 0, changes 1 (Drive->Fly), shortcut none, penalty 0 s, gates 2; fly line 12.45 s, resets 0, changes 1 (Drive->Fly), shortcut Cliff flight, penalty 0 s, gates 2
+CLIFF GAP PASS: lip -> 934 m on (past the rejoin, G2 counted): car 13.95 s, fly 12.45 s (fly +1.50 s, +11 %; aim: about equal)
+MANGROVE BYPASS: boat line 813 m of river (the S-bend), sub line 849 m (dive lane, root cavern under the bed, surfacing zone); both pass G5
+  run 1: boat line 18.88 s, resets 0, changes 0 (), shortcut none, penalty 0 s, gates 5; sub line 18.10 s, resets 0, changes 2 (Boat->Dive Dive->Boat), shortcut Mangrove bypass, penalty 0 s, gates 5 (Boat->Dive 1, Dive->Boat 1)
+  run 2: boat line 18.87 s, resets 0, changes 0 (), shortcut none, penalty 0 s, gates 5; sub line 18.11 s, resets 0, changes 2 (Boat->Dive Dive->Boat), shortcut Mangrove bypass, penalty 0 s, gates 5 (Boat->Dive 1, Dive->Boat 1)
+  run 3: boat line 18.90 s, resets 0, changes 0 (), shortcut none, penalty 0 s, gates 5; sub line 18.10 s, resets 0, changes 2 (Boat->Dive Dive->Boat), shortcut Mangrove bypass, penalty 0 s, gates 5 (Boat->Dive 1, Dive->Boat 1)
+MANGROVE BYPASS PASS: from the lane (4651 m) to G5: boat 18.88 s, sub 18.10 s (sub +0.78 s, +4 %; aim: about equal); transitions clean in 3 of 3
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.40 ms, 95th pct 3.77 ms, 99th pct 5.94 ms, worst 2435.58 ms over 140010 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  cliff-car    Drive->Fly  z   945.0  0.601 s  frames worst 25.21 / mean 2.52 ms
+  cliff-fly    Drive->Fly  z  1182.6  0.600 s  frames worst 7.36 / mean 2.29 ms
+  cliff-car    Drive->Fly  z   945.0  0.602 s  frames worst 6.81 / mean 2.31 ms
+  cliff-fly    Drive->Fly  z  1182.6  0.768 s  frames worst 365.50 / mean 3.45 ms
+  cliff-car    Drive->Fly  z   945.0  0.602 s  frames worst 9.67 / mean 2.30 ms
+  cliff-fly    Drive->Fly  z  1182.6  0.601 s  frames worst 21.63 / mean 2.77 ms
+  bypass-sub   Boat->Dive  z  -963.2  0.601 s  frames worst 5.76 / mean 2.31 ms
+  bypass-sub   Dive->Boat  z  -312.6  0.601 s  frames worst 5.89 / mean 2.95 ms
+  bypass-sub   Boat->Dive  z  -963.2  0.601 s  frames worst 5.50 / mean 2.25 ms
+  bypass-sub   Dive->Boat  z  -312.6  0.601 s  frames worst 27.24 / mean 3.10 ms
+  bypass-sub   Boat->Dive  z  -963.3  0.601 s  frames worst 6.07 / mean 2.42 ms
+  bypass-sub   Dive->Boat  z  -312.7  0.601 s  frames worst 32.52 / mean 3.88 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

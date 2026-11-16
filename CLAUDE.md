@@ -93,22 +93,32 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
 | Boost (one shared meter) | A | Space |
 | Secondary: drift (car) / tighter carve (boat) | RB | Left Shift |
-| Wings: only in the first 1 s off the Lake Jump's lip (HUD "LB: FLY"); nothing anywhere else | LB | E |
+| Wings: only on a choice jump (Paradise Plunge's Lake Jump and Cliff Gap): from the ramp (HUD "LB: FLY"; pressed there = "WINGS READY", out at the lip) to 1.5 s into the air; nothing anywhere else | LB | E |
 | Camera view: Chase / Far chase / First person / Front (per player, saved) | X | V |
 | Look around (pulled back = look behind) | Right stick | - |
 | Reset to last safe anchor | Y | R |
 | Invert climb / dive (per player, saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
-| Menu: Resume, Restart, Course (Paradise Plunge / Coaster Coast), Race, Time Trial, The Tour, 2 Players (its own Course row), Garage, Settings, Quit game; Race / Time Trial / a Tour stop go through Choose your racer (driver, machine) | Menu (Start), either player | Esc |
+| Title screen (Round 14): any button | A / Start | Enter / Space / Esc |
+| Main menu: The Tour, Race, Time Trial, 2 Players, Garage, Settings, Quit game (B: the title); Race / Time Trial -> the course cards -> Choose your racer (driver, machine, form) -> Go | - | - |
+| Pause in a race: Resume, Restart, Settings, Quit to menu (+ 2 Players setup / End 2 players while split) | Menu (Start), either player | Esc |
 | Skip Buck (a briefing or a Tour scene) | A (or Menu / B) | Enter / Space (or Esc / Backspace) |
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
-| Menu move / choose / back | D-pad up-down / A / B | Up-Down (W-S) / Enter or Space / Backspace |
+| Menu move / change a value / choose / back (held = repeat) | D-pad or left stick up-down / left-right / A / B | Up-Down (W-S) / Left-Right (A-D) / Enter or Space / Backspace |
 
-Menu > Settings: AI difficulty Easy / Normal / Hard (default Easy, saved in `settings.json`), Invert flight / dive controls On / Off, Screen, FPS readout, Music / Voices (Barker, Buck, drivers) / Engines / Effects volume (A steps 100 -> 80 ... 0 -> 100 %, saved; defaults 100 / 100 / 60 / 100), Save playtest logs On / Off, Buck's briefings On / Short / Off (Round 11, default On), Unlock all Tour stops On / Off (Round 12, default On while building: `Settings.UnlockTourDefault`), Graphics Auto / Deck / Low / Medium / High (Round 13, saved; Auto = Deck on a Steam Deck, High elsewhere; 2 players one lighter), Open log folder. The Tour page also lists the rival challenges (Round 13); Garage has a Paint row (paints won in them). Quit game asks "No / Yes" (No is preselected) and exits
-with code 0 (the launcher then closes too). The results screen offers Race again / Menu / Quit game. After the finish, Reset (Y / R)
-starts the same course again the same way (race or time trial). Race = Paradise Plunge against 3 AI rivals from a 2 x 2 grid (Abi at the
-back); Time Trial = alone, the only mode that saves a best lap. The game starts in Race; `-trial` starts a time trial (checks always do).
+Menu > Settings (Round 14: four groups, one setting per row, left / right change the value, A also steps it, B back):
+- Gameplay: AI difficulty Easy / Normal / Hard (default Easy), Buck's briefings On / Short / Off, Unlock all Tour stops On / Off (default On
+  while building: `Settings.UnlockTourDefault`), Save playtest logs, Open log folder.
+- Audio (sliders, 10 % steps): Music, Voices (Barker, Buck, drivers), Engines, Effects, Crowd (Round 14; defaults 100 / 100 / 60 / 100 / 100).
+- Video: Graphics Auto / Deck / Low / Medium / High (Auto = Deck on a Steam Deck, High elsewhere; 2 players one lighter), Screen, FPS readout,
+  2-player screen. Controls: Invert flight / dive (per player), Camera view, the controls list.
+All saved in `settings.json`. The Tour page also lists the rival challenges; Garage: Design / Form / Race with this design / Paint. Quit game
+asks "No / Yes" (No is preselected) and exits with code 0 (the launcher then closes too). The results screen offers Race again / Next (the
+next course, or the next Tour stop once open) / Menu. After the finish, Reset (Y / R) starts the same course again the same way, the car
+rolls to a stop by itself and the camera eases out and slowly circles it (no shake). Race = against 3 AI rivals from a 2 x 2 grid (Abi at
+the back); Time Trial = alone, the only mode that saves a best lap. The game starts on the title screen (Round 14); `-race`, `-trial` or
+`-course N` start a course straight away (checks always do).
 
 ## Commands
 Unity 6000.6.1f1 at `C:\Program Files\Unity\Hub\Editor\6000.6.1f1\Editor\Unity.exe`; Blender at `F:\blender\blender.exe`.
@@ -160,6 +170,12 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   and lost: result, tour.json, the lines) + `presets` (frame times per Graphics preset, both courses, 1 / 2 players, `-seconds N`);
   `underpier` (Coaster Coast under the boardwalk / pier: pictures, 90 wander-offs, the human-like pilot through). Before switches:
   `-oldLanding` (build 14's landings), `-noCliffFlight`, `-noBypass`, `-oldPier`; `-graphics Deck|Low|Medium|High` for a run.
+  Round 14: `round14` = `menus14` (a picture + the text of every menu screen at 1280 x 800) + `mix` (would-be levels per bus, both courses:
+  music, engine, Barker, the crowd against build 15's gains) + `bubble` (the Scrambler's sub: side / front / first person / chase / the
+  change, every rider bone, grip and mesh extent inside the glass) + `finishcam` (10 s of camera after the finish, both courses, chase and
+  first person: jitter) + `wheel` (the human-like pilot through the Ferris wheel, `-tries N`; AI runs; LB on the ramp and late on every
+  choice jump); `menuwalk` (title -> menu -> course -> racer -> race -> pause -> quit to menu -> settings left / right -> quit game, exit 0).
+  Before switches: `-oldFinish`, `-oldWheel` (build 15's Midway choice and wheel), `-oldChoice` (the 1 s air-only window), `-oldBubble`.
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -413,6 +429,28 @@ Round 11 delivered as build 13 (0.10.0), 2026-11-15.
 
 Round 13 delivered as build 15 (0.11.0), 2026-11-16.
 
-Current objective: **Round 14** — title screen + clean main menu (left / right changes values), crowd much quieter (own slider),
-the Scrambler's sub in a full glass bubble around the whole bike, no camera shake after the race, the Ferris wheel flight on the main
-route + easier LB on choice jumps. **Every round's chat report ends with the 'For Dan to check' list.** Release build 16 (0.12.0).
+- **Round 14 (build 16, 0.12.0): title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race,
+  the Ferris wheel on the main route:**
+  - **Menus** (`Game.cs` rows + `UI/Hud.Menu.cs` drawing): title screen (logo `Resources/UI/Logo.png` from `Tools/make_logo.py`, theme
+    song, any button) -> main menu -> course cards (`CourseCards` in `UI/MenuCam.cs`: a picture per course rendered at start-up) -> choose
+    your racer -> Go; Settings in Gameplay / Audio / Video / Controls (`Game.MenuRow`: label, value, A action, left / right action, slider,
+    description); pause = Resume / Restart / Settings / Quit to menu; results = Race again / Next / Menu. `Game.InFront` = the front menus
+    (race behind frozen and hidden, engines / jungle silent, `MenuCam` flies along the course). `ShiftInput.MenuSide` (D-pad / stick / arrows /
+    A-D, held = repeat). Checks open the front menus with `game.OpenFrontMenu()`; `game.CloseMenu()` still closes them for a check.
+  - **Crowd:** `Settings.Crowd` (Audio > Crowd, 0-200 %, "crowdVol") x `Settings.CrowdGain` 0.11 (-19 dB): the stands (`World/Crowd.cs`) and
+    GameSounds' crowd kind.
+  - **Scrambler bubble** (`Vehicle/BubbleSphere.cs`, `Resources/Shaders/BubbleGlass.shader`): designs.json canopy "sphere" = a whole ball round
+    the bike and rider from their bounds, chrome equator ring, grows over the bike on the change; refraction via the camera's opaque copy,
+    switched on per camera only near a bubble. Placed from the FormSet pivot every frame (the model's own scale is not reliable).
+    `-oldBubble` = build 15's ball over the seat.
+  - **After the finish** (`ChaseCam.FinishCam`): no shake terms, the camera eases out and circles a smoothed point, every view; a person's
+    car rolls to a stop (`ShiftInput` ignores its driving inputs once Finished). `-oldFinish`.
+  - **Ferris wheel** (`CoasterCoast.LinePoints`, `OldWheel`): the Midway Jump's lip turns every car into the plane ("Wings out (Midway Jump)"),
+    the wheel centred over the line (`WheelCentre` (0, 35, 430) from O), the line through it, three firework rings (`WheelFireworks`), the
+    wheels-down zone before G1; no Midway choice / shortcut. **Choice jumps:** `ChoiceLip.ramp` (the 45 m kicker): the window opens on the
+    ramp, LB there arms the wings (`ShiftVehicle.WingsArmed`), 1.5 s window into the air. `-oldWheel`, `-oldChoice`.
+
+Round 14 delivered as build 16 (0.12.0), 2026-11-16.
+
+Current objective: **Round 15** — not planned yet; Dan reviews build 16 first ("For Dan to check" in `TODO.md`). **Every round's chat report
+ends with the 'For Dan to check' list.**

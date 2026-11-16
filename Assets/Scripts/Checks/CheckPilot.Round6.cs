@@ -35,9 +35,9 @@ namespace ShiftStorm
             scenario = "bind"; Clear(); coast = true; BeginAt(0, 0); yield return Wait(.3f);
             Pads();
             input.Scripted = false;   // the real input path for this check
-            game.OpenMenu(); yield return null;
+            game.OpenFrontMenu(); yield return null;   // Round 14: 2 Players is on the main menu
             yield return Press(pad1, GamepadButton.South);   // pad 1 works the menu (A on "Resume" would close it: choose the 2 Players row first)
-            if (!game.MenuOpen) game.OpenMenu();
+            game.OpenFrontMenu(); yield return null;
             int row = game.MenuItems.FindIndex(x => x.StartsWith("2 Players")); game.Choose(row); yield return null;
             // pad 1 was the last to press: player 1
             Line($"BIND: menu page {game.MenuPage}, player 1 = {SplitScreen.DeviceName(SplitScreen.P1Device)} (last menu press {SplitScreen.DeviceName(input.LastDevice)}), items: {string.Join(" | ", game.MenuItems)}");

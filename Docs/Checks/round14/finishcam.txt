@@ -1,0 +1,13 @@
+ShiftStorm check 'finishcam', 2026-11-16 12:28, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+FINISH CAMERA (item 4): each course raced to the line from the last anchors (the AI behind), the camera logged for 10 s after the finish; jitter = how far each frame's position / aim is from where the frames either side put it at that frame's time (a shake shows as jitter; a smooth move, at any frame rate, does not)
+  Paradise Plunge  Chase        SHAKY: 3253 frames, jitter max 96.53 cm (at 1.12 s) / 0.201 deg, 99th pct 0.165 cm / 0.000 deg; camera speed at most 56.4 m/s; car 1.5 m/s 10 s after the line; finish camera on
+  Paradise Plunge  First person STEADY: 5432 frames, jitter max 0.62 cm (at 0.30 s) / 0.095 deg, 99th pct 0.022 cm / 0.000 deg; camera speed at most 54.6 m/s; car 0.7 m/s 10 s after the line; finish camera on
+  Coaster Coast    Chase        SHAKY: 5267 frames, jitter max 11.42 cm (at 2.58 s) / 0.020 deg, 99th pct 0.017 cm / 0.000 deg; camera speed at most 56.2 m/s; car 0.0 m/s 10 s after the line; finish camera on
+  Coaster Coast    First person SHAKY: 3900 frames, jitter max 2.00 cm (at 0.64 s) / 0.176 deg, 99th pct 0.066 cm / 0.000 deg; camera speed at most 54.6 m/s; car 0.0 m/s 10 s after the line; finish camera on
+FINISH CAMERA FAIL: no shake after the finish on both courses, chase and first person
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.22 ms, 95th pct 3.93 ms, 99th pct 7.25 ms, worst 1327.23 ms over 31707 frames; GPU time not available in batch mode
+sound: music results playing (its own signal peak 0.000), splashes played 0, Abi lines: win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking); win: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap, Honking Horn, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

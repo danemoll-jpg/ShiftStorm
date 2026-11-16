@@ -1,0 +1,81 @@
+ShiftStorm check 'round6', 2026-11-16 13:08, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BIND: menu page Split, player 1 = Controller 1 (Gamepad) (last menu press Controller 1 (Gamepad)), items: Player 1: Controller 1 (Gamepad) | Player 1 driver: Abi | Player 1 machine: Jetstream | Player 2: press A on another controller | Player 2 driver: Rocket Rae | Player 2 machine: Grand Prix | AI racers: 2 | Screen: Top / bottom (player 1 on top) | Course: Paradise Plunge | Race: 2 players + 2 AI | Time Trial: 2 players | Back
+BIND join PASS: A on pad 2 -> player 2 = Controller 2 (Gamepad); note "Player 2 joined: Controller 2 (Gamepad)"; page still Split, row 1
+BIND split started: True, player 1 input bound to Controller 1 (Gamepad), player 2 (Rocket Rae) bound to Controller 2 (Gamepad)
+BIND throttle PASS: pad 2 RT -> player 1 0.00, player 2 1.00; pad 1 RT -> player 1 1.00, player 2 0.00
+BIND view (X) PASS: start P1 Chase / P2 Chase; X on pad 2 -> P1 Chase / P2 Far chase; X x2 on pad 1 -> P1 First person / P2 Far chase
+BIND invert PASS: View on pad 2 -> player 1 False -> False, player 2 False -> True (settings: player 1 False, player 2 True)
+BIND pause from player 2 PASS: menu open True, time scale 0, menu items: Resume | Restart | 2 Players setup | End 2 players | Settings | Quit to menu
+BIND resume from player 1: menu open False, time scale 1
+BIND pad removed PASS: paused True ("PLAYER 2'S CONTROLLER IS DISCONNECTED - reconnect it (or any controller) to go on, or end 2 players"); after it came back: missing 0, player 2 bound to Controller 2 (Gamepad)
+BIND layout: player 1 camera (x:0.00, y:0.50, width:1.00, height:0.50), player 2 camera (x:0.00, y:0.00, width:1.00, height:0.50); quality while split: LOD bias 0.85 -> 0.51, shadow distance 95 -> 57 m, far clip 2000 -> 1150 m, Detail layer cull 650 -> 500 m, texture mip limit 0 -> 1; engine mix 0.7
+BIND end: split False, player 1 input bound to every device, camera (x:0.00, y:0.00, width:1.00, height:1.00), LOD bias 1.00, mip limit 0
+SPLIT: top / bottom, player 1 Abi (camera (x:0.00, y:0.50, width:1.00, height:0.50)), player 2 Rocket Rae (camera (x:0.00, y:0.00, width:1.00, height:0.50)), racers Abi, Rocket Rae, Chip "Showtime" Sterling, Vivi
+  quality while split: LOD bias 0.85 -> 0.51, shadow distance 95 -> 57 m, far clip 2000 -> 1150 m, Detail layer cull 650 -> 500 m, texture mip limit 0 -> 1
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 1.1 m, P2 1.5 m (pause frame included)
+  closed again from player 2's Menu: menu open False, time scale 1
+  Abi [P1]: 126.41 s, place 2, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Rocket Rae [P2]: 123.27 s, place 1, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Chip "Showtime" Sterling: DNF, place 3, gates 7/11 (0 1 2 3 4 5 6) BAD SEQUENCE, resets 0
+  Vivi: DNF, place 4, gates 7/11 (0 1 2 3 4 5 6) BAD SEQUENCE, resets 0
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 121 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 2:03.27
+SPLIT pictures: 32 so far, player 2 changes pictured 7; sound: engine mix 0.7, P1 engine non-spatial, P2 engine non-spatial (0), listener on player 1's camera only (1 listener)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 12.10 ms, 95th pct 18.38 ms, 99th pct 26.11 ms, worst 719.83 ms over 7338 frames (699 over 16.7 ms); peak draw calls 0, batches 0, triangles 8265k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Beach Promenade     17.68 /  28.88 / 719.83 ms       0 draws    5337k tris
+  Cliffside Climb      9.62 /  13.92 /  41.93 ms       0 draws    4946k tris
+  Sky Arch            11.40 /  16.13 /  28.58 ms       0 draws    8260k tris
+  Lagoon Landing      11.93 /  17.87 /  41.26 ms       0 draws    4614k tris
+  Mangrove Run        14.23 /  18.83 /  33.03 ms       0 draws    4642k tris
+  Sunken Gateway      11.40 /  16.16 /  22.71 ms       0 draws    6728k tris
+  Coral Vault          9.30 /  14.24 /  20.42 ms       0 draws    4562k tris
+  Waterfall Return    14.89 /  19.35 / 247.06 ms       0 draws    8265k tris
+  (both views rendered every frame: the cost of a split-screen frame at 1280 x 800 on this PC)
+VIEW Chase: right stick pulled back -> looking 180 deg round; let go -> 1 deg 0.8 s later
+VIEW Chase (X pressed 0x): lap 124.59 s, resets 0; Car 0/12806 frames inside rock / walls, 0 on the water surface; Plane 0/6114 frames inside rock / walls, 0 on the water surface; Boat 0/12950 frames inside rock / walls, 0 on the water surface; Sub 0/11813 frames inside rock / walls, 0 on the water surface; pulled clear 623x
+VIEW Far chase: right stick pulled back -> looking 180 deg round; let go -> 1 deg 0.8 s later
+VIEW Far chase (X pressed 1x): lap 124.63 s, resets 0; Car 0/13081 frames inside rock / walls, 0 on the water surface; Plane 0/6155 frames inside rock / walls, 0 on the water surface; Boat 0/11403 frames inside rock / walls, 0 on the water surface; Sub 0/11490 frames inside rock / walls, 0 on the water surface; pulled clear 902x
+VIEW First person: right stick pulled back -> looking 180 deg round; let go -> 1 deg 0.8 s later
+VIEW First person (X pressed 1x): lap 124.62 s, resets 0; Car 0/12839 frames inside rock / walls, 0 on the water surface; Plane 0/6403 frames inside rock / walls, 0 on the water surface; Boat 0/13755 frames inside rock / walls, 0 on the water surface; Sub 0/14031 frames inside rock / walls, 0 on the water surface; pulled clear 87x
+VIEW Front: right stick pulled back -> looking 180 deg round; let go -> 1 deg 0.8 s later
+VIEW Front (X pressed 1x): lap 124.58 s, resets 0; Car 0/14435 frames inside rock / walls, 0 on the water surface; Plane 0/5088 frames inside rock / walls, 0 on the water surface; Boat 0/13774 frames inside rock / walls, 0 on the water surface; Sub 0/13823 frames inside rock / walls, 0 on the water surface; pulled clear 54x
+VIEWS summary: Chase 0.0 % inside, 0 surface frames; Far chase 0.0 % inside, 0 surface frames; First person 0.0 % inside, 0 surface frames; Front 0.0 % inside, 0 surface frames
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.19  FOV 90.0  particles 80  speed 101 % of top
+  Fly   pitch 2.31  wind 0.19  FOV 90.0  particles 104  speed 100 % of top
+  Boat  pitch 2.01  wind 0.19  FOV 90.0  particles 146  speed 100 % of top
+  Dive  pitch 1.64  wind 0.07  FOV 90.0  particles 112  speed 112 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.18 ms, 95th pct 5.40 ms, 99th pct 18.84 ms, worst 764.45 ms over 202409 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  split        Drive->Fly  z   945.2  0.618 s  frames worst 27.17 / mean 19.13 ms
+  split        Fly->Boat   z  -606.2  0.603 s  frames worst 36.89 / mean 14.74 ms
+  split        Boat->Dive  z  -202.2  0.608 s  frames worst 25.38 / mean 19.02 ms
+  split        Dive->Boat  z  -466.8  0.605 s  frames worst 26.41 / mean 19.24 ms
+  split        Boat->Drive z  -304.5  0.618 s  frames worst 25.72 / mean 19.74 ms
+  view-chase   Drive->Fly  z   944.6  0.601 s  frames worst 9.50 / mean 2.82 ms
+  view-chase   Fly->Boat   z  -606.3  0.602 s  frames worst 9.14 / mean 3.02 ms
+  view-chase   Boat->Dive  z  -202.4  0.602 s  frames worst 11.84 / mean 2.95 ms
+  view-chase   Dive->Boat  z  -466.4  0.608 s  frames worst 16.99 / mean 3.68 ms
+  view-chase   Boat->Drive z  -305.1  0.601 s  frames worst 9.68 / mean 3.08 ms
+  view-far-chase Drive->Fly  z   944.6  0.602 s  frames worst 5.39 / mean 2.68 ms
+  view-far-chase Fly->Boat   z  -606.3  0.601 s  frames worst 6.98 / mean 3.13 ms
+  view-far-chase Boat->Dive  z  -202.0  0.602 s  frames worst 27.90 / mean 3.61 ms
+  view-far-chase Dive->Boat  z  -466.4  0.601 s  frames worst 7.85 / mean 3.16 ms
+  view-far-chase Boat->Drive z  -305.0  0.600 s  frames worst 5.36 / mean 2.87 ms
+  view-first-person Drive->Fly  z   944.6  0.601 s  frames worst 5.03 / mean 2.26 ms
+  view-first-person Fly->Boat   z  -606.3  0.603 s  frames worst 12.51 / mean 3.82 ms
+  view-first-person Boat->Dive  z  -202.0  0.602 s  frames worst 39.07 / mean 2.47 ms
+  view-first-person Dive->Boat  z  -466.4  0.600 s  frames worst 4.41 / mean 2.46 ms
+  view-first-person Boat->Drive z  -305.0  0.600 s  frames worst 4.29 / mean 2.59 ms
+  view-front   Drive->Fly  z   944.6  0.602 s  frames worst 4.79 / mean 2.37 ms
+  view-front   Fly->Boat   z  -606.4  0.600 s  frames worst 9.50 / mean 3.16 ms
+  view-front   Boat->Dive  z  -202.4  0.602 s  frames worst 7.17 / mean 2.46 ms
+  view-front   Dive->Boat  z  -466.7  0.602 s  frames worst 5.19 / mean 2.35 ms
+  view-front   Boat->Drive z  -304.4  0.601 s  frames worst 6.32 / mean 2.67 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 6, Abi lines: waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

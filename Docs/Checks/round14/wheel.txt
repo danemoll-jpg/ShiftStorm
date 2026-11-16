@@ -1,0 +1,62 @@
+ShiftStorm check 'wheel', 2026-11-16 12:21, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+WHEEL (item 5): the Midway Jump launches every car into the plane; the wheel's centre 0 m from the boardwalk's line, 35 m up; the line through it 29 m up; the open hole 28.7 m radius
+  try 1 THROUGH: stick, 45 m/s, lane -2.2 m, heading +3 deg, late 0.44 s: passed the wheel's plane 8.3 m from its centre, G1 in 9.1 s, resets 0, mode at G1 Drive
+  try 2 THROUGH: keys, 55 m/s, lane +2.9 m, heading +5 deg, late 0.34 s: passed the wheel's plane 16.5 m from its centre, G1 in 8.6 s, resets 0, mode at G1 Drive
+  try 3 THROUGH: stick, 65 m/s, lane -2.1 m, heading -4 deg, late 0.45 s: passed the wheel's plane 10.7 m from its centre, G1 in 8.4 s, resets 0, mode at G1 Drive
+  try 4 THROUGH: keys, 75 m/s, lane +2.9 m, heading -3 deg, late 0.35 s: passed the wheel's plane 15.5 m from its centre, G1 in 8.0 s, resets 0, mode at G1 Drive
+  try 5 THROUGH: stick, 45 m/s, lane -2.1 m, heading -2 deg, late 0.26 s: passed the wheel's plane 15.5 m from its centre, G1 in 8.9 s, resets 0, mode at G1 Drive
+  try 6 THROUGH: keys, 55 m/s, lane +2.9 m, heading +0 deg, late 0.36 s: passed the wheel's plane 6.4 m from its centre, G1 in 8.5 s, resets 0, mode at G1 Drive
+  try 7 THROUGH: stick, 65 m/s, lane -2.1 m, heading +1 deg, late 0.26 s: passed the wheel's plane 12.0 m from its centre, G1 in 8.2 s, resets 0, mode at G1 Drive
+  try 8 THROUGH: keys, 75 m/s, lane +3.0 m, heading +2 deg, late 0.37 s: passed the wheel's plane 15.9 m from its centre, G1 in 8.0 s, resets 0, mode at G1 Drive
+  try 9 THROUGH: stick, 45 m/s, lane -2.0 m, heading +3 deg, late 0.27 s: passed the wheel's plane 12.6 m from its centre, G1 in 8.9 s, resets 0, mode at G1 Drive
+  try 10 THROUGH: keys, 55 m/s, lane +3.0 m, heading +4 deg, late 0.38 s: passed the wheel's plane 5.1 m from its centre, G1 in 8.7 s, resets 0, mode at G1 Drive
+WHEEL HUMAN-LIKE PASS: through the wheel 10 of 10, clean to G1 10 of 10; mean 8.5 s from 140 m before the lip to G1
+WHEEL AI: through the wheel and on to G1 with no reset 6 of 6
+  Lake Jump, LB on the ramp (30 m before the lip): WINGS; prompt on the ramp True; armed 1; wings 0.01 s after leaving the lip; on 
+  Lake Jump, LB 1.2 s into the air: WINGS; prompt on the ramp True; armed 0; wings 1.23 s after leaving the lip; on 
+  Cliff Gap, LB on the ramp (30 m before the lip): WINGS; prompt on the ramp True; armed 1; wings 0.02 s after leaving the lip; on 
+  Cliff Gap, LB 1.2 s into the air: WINGS; prompt on the ramp True; armed 0; wings 1.21 s after leaving the lip; on 
+CHOICE LB PASS: 4 of 4 (every choice jump: pressed on the ramp, and late in the 1.5 s air window)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.50 ms, 95th pct 2.49 ms, 99th pct 3.92 ms, worst 422.81 ms over 142234 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  wheel        Drive->Fly  z   230.7  0.601 s  frames worst 14.93 / mean 1.59 ms
+  wheel        Fly->Drive  z   703.7  0.618 s  frames worst 35.73 / mean 1.83 ms
+  wheel        Drive->Fly  z   230.6  0.600 s  frames worst 14.02 / mean 1.51 ms
+  wheel        Fly->Drive  z   703.7  0.601 s  frames worst 20.60 / mean 1.69 ms
+  wheel        Drive->Fly  z   230.7  0.601 s  frames worst 14.24 / mean 1.67 ms
+  wheel        Fly->Drive  z   703.4  0.601 s  frames worst 20.67 / mean 1.53 ms
+  wheel        Drive->Fly  z   230.9  0.601 s  frames worst 16.29 / mean 1.67 ms
+  wheel        Fly->Drive  z   704.3  0.601 s  frames worst 22.83 / mean 1.52 ms
+  wheel        Drive->Fly  z   230.7  0.601 s  frames worst 12.65 / mean 1.62 ms
+  wheel        Fly->Drive  z   703.4  0.600 s  frames worst 26.18 / mean 1.65 ms
+  wheel        Drive->Fly  z   230.1  0.601 s  frames worst 19.47 / mean 1.62 ms
+  wheel        Fly->Drive  z   703.2  0.601 s  frames worst 22.20 / mean 1.52 ms
+  wheel        Drive->Fly  z   230.8  0.603 s  frames worst 13.61 / mean 1.62 ms
+  wheel        Fly->Drive  z   704.2  0.600 s  frames worst 20.23 / mean 1.56 ms
+  wheel        Drive->Fly  z   231.0  0.601 s  frames worst 18.23 / mean 1.78 ms
+  wheel        Fly->Drive  z   703.8  0.601 s  frames worst 14.40 / mean 1.69 ms
+  wheel        Drive->Fly  z   230.4  0.601 s  frames worst 128.05 / mean 2.40 ms
+  wheel        Fly->Drive  z   703.2  0.601 s  frames worst 10.14 / mean 1.62 ms
+  wheel        Drive->Fly  z   230.6  0.602 s  frames worst 5.23 / mean 1.44 ms
+  wheel        Fly->Drive  z   703.3  0.600 s  frames worst 36.93 / mean 1.95 ms
+  wheel        Drive->Fly  z   230.9  0.601 s  frames worst 4.71 / mean 1.55 ms
+  wheel        Fly->Drive  z   704.2  0.604 s  frames worst 420.62 / mean 3.55 ms
+  wheel        Drive->Fly  z   230.9  0.601 s  frames worst 3.96 / mean 1.51 ms
+  wheel        Fly->Drive  z   704.2  0.601 s  frames worst 4.72 / mean 1.47 ms
+  wheel        Drive->Fly  z   230.9  0.601 s  frames worst 3.38 / mean 1.49 ms
+  wheel        Fly->Drive  z   704.2  0.601 s  frames worst 4.63 / mean 1.54 ms
+  wheel        Drive->Fly  z   230.9  0.601 s  frames worst 5.59 / mean 1.54 ms
+  wheel        Fly->Drive  z   704.2  0.600 s  frames worst 5.45 / mean 1.45 ms
+  wheel        Drive->Fly  z   230.9  0.600 s  frames worst 5.23 / mean 1.61 ms
+  wheel        Fly->Drive  z   704.2  0.601 s  frames worst 6.60 / mean 1.53 ms
+  wheel        Drive->Fly  z   230.9  0.602 s  frames worst 10.50 / mean 1.43 ms
+  wheel        Fly->Drive  z   704.2  0.600 s  frames worst 12.43 / mean 1.54 ms
+  wheel        Drive->Fly  z   652.6  not finished  frames worst 7.02 / mean 1.38 ms
+  wheel        Drive->Fly  z   732.1  not finished  frames worst 13.81 / mean 1.48 ms
+  wheel        Drive->Fly  z  1181.9  not finished  frames worst 7.81 / mean 1.37 ms
+  wheel        Drive->Fly  z  1185.4  not finished  frames worst 4.74 / mean 2.54 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: skipped (Barker talking, penalty); messup: skipped (Barker talking, penalty)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

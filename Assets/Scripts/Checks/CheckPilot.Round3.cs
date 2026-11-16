@@ -58,10 +58,11 @@ namespace ShiftStorm
             yield return Press(() => input.sMenu = true); bool opened = game.MenuOpen; Capture("menu");
             yield return MenuTo("Settings"); yield return Press(() => input.sConfirm = true);
             bool onSettings = game.MenuPage == Game.Page.Settings;
+            yield return MenuTo("Controls"); yield return Press(() => input.sConfirm = true);   // Round 14: Settings > Controls
             yield return MenuTo("Invert"); yield return Press(() => input.sConfirm = true); Capture("settings-invert-on");
             string item = game.MenuItems.Find(x => x.StartsWith("Invert"));
             yield return MenuTo("Back"); yield return Press(() => input.sConfirm = true);
-            yield return Press(() => input.sBack = true); bool closed = !game.MenuOpen;
+            yield return Press(() => input.sBack = true); yield return Press(() => input.sBack = true); bool closed = !game.MenuOpen;
             yield return Pitch(4, Mode.Fly, "on", x => fOn = x); yield return Pitch(5, Mode.Dive, "on", x => dOn = x);
             bool pass = opened && onSettings && closed && ShiftInput.Invert && fOff > 1 && dOff > 1 && fOn < -1 && dOn < -1;
             Line($"INVERT FROM THE MENU {(pass ? "PASS" : "FAIL")}: Menu opened {opened}, Settings page {onSettings}, item now \"{item}\", menu closed {closed}; stick pulled back for 0.45 s: " +
@@ -87,14 +88,16 @@ namespace ShiftStorm
                 smart = true; BeginAt(0, AnchorNear(Mk("G9") + 20)); yield return Until(() => game.Trial.HasResults, 40f); yield return Wait(1f);
                 Capture("results"); bool shown = game.Trial.HasResults;
                 yield return Press(() => input.sMove = 1); yield return Press(() => input.sMove = 1);
-                Capture("results-quit-selected"); string sel = Game.ResultsItems[game.ResultsIndex];
-                yield return Press(() => input.sConfirm = true);
-                Line($"QUIT FROM RESULTS: results shown {shown} (finished {v.Finished} in {v.FinishTime:0.00} s), selected \"{sel}\", then the Quit page: {game.MenuOpen && game.MenuPage == Game.Page.Quit}");
+                Capture("results-menu-selected"); string sel = game.ResultsItems[game.ResultsIndex];
+                yield return Press(() => input.sConfirm = true); bool toMain = game.MenuOpen && game.MenuPage == Game.Page.Main;   // Round 14: Menu, then Quit game there
+                yield return MenuTo("Quit game"); yield return Press(() => input.sConfirm = true);
+                Line($"QUIT FROM RESULTS: results shown {shown} (finished {v.Finished} in {v.FinishTime:0.00} s), selected \"{sel}\" -> main menu {toMain}, then the Quit page: {game.MenuOpen && game.MenuPage == Game.Page.Quit}");
             }
             else
             {
                 BeginAt(0, 0); yield return Wait(1.5f);
                 yield return Press(() => input.sMenu = true); Capture("menu");
+                yield return MenuTo("Quit to menu"); yield return Press(() => input.sConfirm = true);   // Round 14: pause > Quit to menu > Quit game
                 yield return MenuTo("Quit game"); yield return Press(() => input.sConfirm = true); Capture("quit-page");
                 bool page = game.MenuPage == Game.Page.Quit, defaultNo = game.MenuItems[game.MenuIndex].StartsWith("No");
                 yield return Press(() => input.sConfirm = true); bool backToMain = game.MenuOpen && game.MenuPage == Game.Page.Main && !game.QuitChosen;

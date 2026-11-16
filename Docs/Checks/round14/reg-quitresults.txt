@@ -1,0 +1,6 @@
+ShiftStorm check 'quitresults', 2026-11-16 13:00, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+QUIT FROM RESULTS: results shown True (finished True in 5.08 s), selected "Menu" -> main menu True, then the Quit page: True
+  choosing "Yes, quit" now; the process must end with exit code 0 (Run-Check / the launcher report it)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, AudioListener.volume 0

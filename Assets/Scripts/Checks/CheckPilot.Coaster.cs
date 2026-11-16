@@ -145,7 +145,7 @@ namespace ShiftStorm
         {
             var c = CC;
             // the Midway Jump: car line vs fly line, from the anchor before the jump to G1 (3 runs each, the AI pilot on the player's car)
-            foreach (int choice in new[] { -1, 1 })
+            foreach (int choice in CoasterCoast.OldWheel ? new[] { -1, 1 } : new[] { 0 })   // Round 14: no choice at the Midway Jump (everyone flies through the wheel)
             {
                 var times = new List<float>();
                 for (int k = 0; k < 3; k++)

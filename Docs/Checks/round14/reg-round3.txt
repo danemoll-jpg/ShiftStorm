@@ -1,0 +1,74 @@
+ShiftStorm check 'round3', 2026-11-16 12:45, build 0.12.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SETTINGS: file local/round14/save3\settings.json, invert at start off, chosen before False
+FIRST FLIGHT NOTE PASS: "Invert controls: Menu > Settings" shown on the first flight; nothing asked at start-up
+INVERT FROM THE MENU PASS: Menu opened True, Settings page True, item now "Invert flight / dive: On", menu closed True; stick pulled back for 0.45 s: invert off: Fly pitch +18.9 deg, Dive +16.2 deg (nose up); invert on: Fly -18.9 deg, Dive -16.2 deg (nose down)
+  saved: local/round14/save3\settings.json: {   "version": 2,   "invertVertical": true,   "showStats": false,   "invertChosen": true,   "difficulty": 0,   "design": "",   "invertVertical2": false,   "view": 0,   "view2": 0,   "splitLeftRight": false,   "musicVol": 10,   "sfxVol": 10,   "voiceVol": 10,   "engineVol": 6,   "playtestLogs": true,   "buck": 0,   "driver": 0,   "driver2": 1,   "design2": "",   "tourChosen": false,   "tourUnlocked": false,   "paint": 0,   "graphics": -1,   "crowdVol": 10 }
+RACE 1: 1. Abi 2:08.79, 2. Rocket Rae 2:26.88, 3. Chip "Showtime" Sterling 2:28.99, 4. Vivi 2:30.08
+  player (check pilot, no boost) place every 10 s: 4 4 4 4 3 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 146.88 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan Lake flight, taken Lake flight
+  Chip "Showtime" Sterling: 148.99 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  Vivi: 150.08 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan none, taken none
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 1 PASS: AI never stuck True, no pass-through True
+RACE 2: 1. Abi 2:04.99, 2. Rocket Rae 2:25.99, 3. Vivi 2:28.29, 4. Chip "Showtime" Sterling 2:29.69
+  player (check pilot, no boost) place every 10 s: 4 4 2 1 1 1 1 1 1 1 1 1 1 1 1; finished 1st
+  Rocket Rae: 145.99 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan Lake flight, taken Lake flight
+  Chip "Showtime" Sterling: 149.69 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan Cliff flight, taken Cliff flight
+  Vivi: 148.29 s, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10), resets 0, backed out 0x, scrapes 0, shortcut plan Lake flight, taken Lake flight
+  player: resets 0, scrapes 0; pass-throughs (hulls overlapping more than 0.4 m): 0
+RACE 2 PASS: AI never stuck True, no pass-through True
+SHORTCUT Sky Arch slit: its line 1073 m from main progress 2361 to 3491 m (the main line there: 1130 m); entry / exit sub-gates; stands in for G3 arch exit; rejoins before G4 lagoon landing
+  from the anchor at 2327 m to G4 lagoon landing, the same start speed, no boost: safe line 20.44 s, resets 0, scrapes 0, shortcut not taken; shortcut 19.43 s, resets 0, scrapes 0, shortcut Sky Arch slit; deliberate miss (aimed 9 m beside its entry) 34.48 s, resets 0, scrapes 6, shortcut not taken
+  SHORTCUT Sky Arch slit PASS: saves 1.01 s (target 1-2 s); the miss costs +14.04 s against the safe line, +15.05 s against the shortcut, not trapped
+SHORTCUT Mangrove bypass: its line 849 m from main progress 4651 to 5464 m (the main line there: 813 m); entry / exit sub-gates; stands in for no main gate; rejoins before G5 mangrove exit
+  from the anchor at 5749 m to G7 chamber exit, the same start speed, no boost: safe line 21.39 s, resets 0, scrapes 0, shortcut not taken; shortcut 21.40 s, resets 0, scrapes 0, shortcut not taken; deliberate miss (aimed 6 m beside its entry) 21.39 s, resets 0, scrapes 0, shortcut not taken
+  SHORTCUT Mangrove bypass FAIL: saves 0.00 s (target 2-3 s); the miss costs +0.00 s against the safe line, +0.00 s against the shortcut, not trapped
+SHORTCUT Lake flight: its line 319 m from main progress 903 to 1211 m (the main line there: 308 m); entry / exit sub-gates; stands in for no main gate; rejoins before G1 promenade exit
+  from the anchor at 5749 m to G7 chamber exit, the same start speed, no boost: safe line 21.39 s, resets 0, scrapes 0, shortcut not taken; shortcut 21.40 s, resets 0, scrapes 0, shortcut not taken; deliberate miss (aimed 6 m beside its entry) 21.40 s, resets 0, scrapes 0, shortcut not taken
+  SHORTCUT Lake flight FAIL: saves 0.00 s (target 2-3 s); the miss costs +0.00 s against the safe line, +0.00 s against the shortcut, not trapped
+SHORTCUT Cliff flight: its line 1084 m from main progress 1593 to 2467 m (the main line there: 874 m); entry / exit sub-gates; stands in for G2 launch; rejoins before G3 arch exit
+  from the anchor at 2327 m to G4 lagoon landing, the same start speed, no boost: safe line 20.44 s, resets 0, scrapes 0, shortcut not taken; shortcut 20.44 s, resets 0, scrapes 0, shortcut not taken; deliberate miss (aimed 9 m beside its entry) 20.44 s, resets 0, scrapes 0, shortcut not taken
+  SHORTCUT Cliff flight PASS: saves 0.00 s (target 1-2 s); the miss costs +0.00 s against the safe line, +0.00 s against the shortcut, not trapped
+SHORTCUT Coral Vault tunnel: its line 457 m from main progress 6185 to 6674 m (the main line there: 489 m); entry / exit sub-gates; stands in for no main gate; rejoins before G7 chamber exit
+  from the anchor at 5749 m to G7 chamber exit, the same start speed, no boost: safe line 21.39 s, resets 0, scrapes 0, shortcut not taken; shortcut 19.48 s, resets 0, scrapes 2, shortcut Coral Vault tunnel; deliberate miss (aimed 6 m beside its entry) 20.35 s, resets 0, scrapes 3, shortcut Coral Vault tunnel
+  SHORTCUT Coral Vault tunnel PASS: saves 1.91 s (target 2-3 s); the miss costs -1.05 s against the safe line, +0.87 s against the shortcut, not trapped
+SHORTCUT FULL LAP: the AI driver without boost, safe line 122.58 s, resets 0, scrapes 0, shortcuts Lake flight, Cliff flight, gates 0 1 2 3 4 5 6 7 8 9 10; both shortcuts 119.95 s, resets 0, scrapes 2, shortcuts Lake flight, Cliff flight, Mangrove bypass, Coral Vault tunnel, gates 0 1 2 3 4 5 6 7 8 9 10; difference +2.63 s
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.40 ms, 95th pct 3.47 ms, 99th pct 4.25 ms, worst 7629.38 ms over 376373 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  race1        Drive->Fly  z   944.7  0.602 s  frames worst 5.39 / mean 2.55 ms
+  race1        Fly->Boat   z  -606.2  0.600 s  frames worst 12.75 / mean 3.13 ms
+  race1        Boat->Dive  z  -201.8  0.601 s  frames worst 7.38 / mean 3.60 ms
+  race1        Dive->Boat  z  -466.7  0.602 s  frames worst 4.86 / mean 2.86 ms
+  race1        Boat->Drive z  -304.4  0.602 s  frames worst 5.14 / mean 2.88 ms
+  race2        Drive->Fly  z   944.7  0.601 s  frames worst 8.75 / mean 2.47 ms
+  race2        Fly->Boat   z  -606.1  0.604 s  frames worst 9.33 / mean 2.90 ms
+  race2        Boat->Dive  z  -202.4  0.602 s  frames worst 5.90 / mean 2.92 ms
+  race2        Dive->Boat  z  -466.3  0.601 s  frames worst 7.04 / mean 3.34 ms
+  race2        Boat->Drive z  -304.9  0.601 s  frames worst 6.14 / mean 3.08 ms
+  sc-safe      Fly->Boat   z  -606.2  0.601 s  frames worst 3.67 / mean 2.47 ms
+  sc-take      Fly->Boat   z  -606.0  0.602 s  frames worst 3.95 / mean 2.49 ms
+  sc-miss      Fly->Boat   z  -607.2  0.601 s  frames worst 4.05 / mean 2.52 ms
+  sc-safe      Fly->Boat   z  -606.2  0.600 s  frames worst 4.75 / mean 2.47 ms
+  sc-take      Fly->Boat   z  -606.2  0.601 s  frames worst 4.91 / mean 2.53 ms
+  sc-miss      Fly->Boat   z  -606.2  0.602 s  frames worst 4.82 / mean 2.64 ms
+  sc-lap-safe  Drive->Fly  z   652.1  0.600 s  frames worst 10.74 / mean 3.17 ms
+  sc-lap-safe  Fly->Drive  z   930.0  0.602 s  frames worst 6.97 / mean 2.89 ms
+  sc-lap-safe  Drive->Fly  z  1182.3  0.602 s  frames worst 4.07 / mean 2.26 ms
+  sc-lap-safe  Fly->Boat   z  -606.1  0.601 s  frames worst 8.35 / mean 2.47 ms
+  sc-lap-safe  Boat->Dive  z  -202.2  0.602 s  frames worst 9.04 / mean 2.52 ms
+  sc-lap-safe  Dive->Boat  z  -466.4  0.602 s  frames worst 4.98 / mean 2.81 ms
+  sc-lap-safe  Boat->Drive z  -305.0  0.600 s  frames worst 5.77 / mean 2.54 ms
+  sc-lap-shortcuts Drive->Fly  z   652.1  0.602 s  frames worst 7.25 / mean 2.95 ms
+  sc-lap-shortcuts Fly->Drive  z   930.0  0.601 s  frames worst 6.55 / mean 2.79 ms
+  sc-lap-shortcuts Drive->Fly  z  1182.3  0.600 s  frames worst 4.05 / mean 2.19 ms
+  sc-lap-shortcuts Fly->Boat   z  -606.1  0.600 s  frames worst 8.47 / mean 2.63 ms
+  sc-lap-shortcuts Boat->Dive  z  -963.2  0.601 s  frames worst 4.69 / mean 2.13 ms
+  sc-lap-shortcuts Dive->Boat  z  -312.5  0.601 s  frames worst 2891.85 / mean 29.75 ms
+  sc-lap-shortcuts Boat->Dive  z  -203.0  0.601 s  frames worst 8.31 / mean 2.86 ms
+  sc-lap-shortcuts Dive->Boat  z  -466.3  0.602 s  frames worst 5.41 / mean 2.71 ms
+  sc-lap-shortcuts Boat->Drive z  -305.2  0.602 s  frames worst 7.98 / mean 2.66 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 4, Abi lines: waterfall: skipped (Barker talking); win: skipped (Barker talking); waterfall: skipped (Barker talking); win: skipped (Barker talking); messup: gasp_1; waterfall: skipped (Barker talking); waterfall: skipped (Barker talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

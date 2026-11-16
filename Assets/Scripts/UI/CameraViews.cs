@@ -45,6 +45,7 @@ namespace ShiftStorm
         {
             var v = chase ? chase.target : null;
             if (!cam || !v || Garage.Active || !chase.enabled) { Release(); return; }
+            if (chase.FinishCamOn) { Release(); return; }   // Round 14 item 4: after the finish the steady finish camera, in every view
             if (hidHead && Current != View.FirstPerson) HideHead(null, false);
             bool far = Current == View.FarChase;
             chase.distanceScale = far ? 1.5f : 1f; chase.heightScale = far ? 1.55f : 1f;

@@ -52,6 +52,31 @@ namespace ShiftStorm
             ("octo", -30, -12, -530), ("", 0, -10, -506), ("poolEdge", 6, -6, -484), ("surface", 4, .6f, -458), ("G8", 2, .6f, -432), ("rampFoot", 0, .6f, -410),
             ("rampLip", 0, DeckY + 4.6f, -370), ("landing", 0, DeckY + 3.4f, -346), ("G9", 0, Road, -316), ("", 0, Road, -200), ("", 0, Road, -60), ("finish", 0, Road, 0), ("lineEnd", 0, Road, 20),
         };
+        // Round 14 item 5 (Dan: "The flying through the Ferris wheel was sold as a major thing on the track but the Ferris wheel is out of the
+        // main path and if you don't hit the fly button quick enough you miss it altogether"): everyone flies through it now. The Midway Jump
+        // launches every car into the plane at its lip (like Paradise Plunge's ramp lip and the top hat), the hubless wheel stands on the
+        // boardwalk dead ahead (centre over the line, 70 m tall), the line climbs through it 6 m under its centre, on through three
+        // firework rings, and down to a wheels-down zone before the coaster station (G1). No choice there any more (the Lighthouse rocks
+        // stay Coaster Coast's route choice). "-oldWheel": build 15's choice jump and wheel (before pictures and numbers).
+        public static readonly bool OldWheel = Array.IndexOf(Environment.GetCommandLineArgs(), "-oldWheel") >= 0;
+        static (string n, float x, float y, float z)[] LinePoints()
+        {
+            if (OldWheel) return Points;
+            var l = new List<(string n, float x, float y, float z)>(); bool skip = false;
+            foreach (var pt in Points)
+            {
+                if (pt.n == "G1") skip = false;
+                if (skip) continue;
+                l.Add(pt);
+                if (pt.n == "jM")
+                {
+                    skip = true;
+                    l.AddRange(new (string, float, float, float)[] { ("", 0, 11, 275), ("", 0, 19.5f, 325), ("wheelIn", 0, 26, 380), ("wheel", 0, 29, 430), ("", 0, 29, 470),
+                        ("mw1", 0, 27, 520), ("mw2", 0, 23, 575), ("mw3", 0, 17.5f, 630), ("", 0, 11, 680), ("wd", 0, Road + .4f, 732) });
+                }
+            }
+            return l.ToArray();
+        }
         public static float M(string n) => mark[n];
         static Vector3 At(float prog) => c.PointAt(prog, out _);
         static Vector3 Dir(float prog) { c.PointAt(prog, out var d); return d; }
@@ -82,7 +107,7 @@ namespace ShiftStorm
         {
             railA = RailA(L(0, Road, 860)); railB = RailB(L(126, Road, 798));
             var ctl = new List<(string n, Vector3 p)>();
-            foreach (var pt in Points)
+            foreach (var pt in LinePoints())
             {
                 ctl.Add((pt.n, L(pt.x, pt.y, pt.z)));
                 var rp = pt.n == "railA" ? railA : pt.n == "railB" ? railB : null;
@@ -112,7 +137,7 @@ namespace ShiftStorm
             at.Add(pts.Count); pts.Add(P(n - 1));
             c.line = pts; c.Finish();
             for (int i = 0; i < n; i++) if (ctl[i].n != "") mark[ctl[i].n] = c.CumulativeAt(at[i]);
-            Jumps.Add(new CourseStunts.Jump { name = "Midway Jump", lip = M("jM"), gap = 45, choice = true });
+            Jumps.Add(new CourseStunts.Jump { name = "Midway Jump", lip = M("jM"), gap = 45, choice = OldWheel });   // Round 14: a launch into the plane, no choice
             Jumps.Add(new CourseStunts.Jump { name = "Coaster Gap", lip = M("lipA"), gap = 45 });
         }
 
@@ -250,6 +275,8 @@ namespace ShiftStorm
             Z("Surface (splash pool)", spp, Facing(su), new Vector3(40, 14, 16), Mode.Boat);
             float rl = M("rampLip"); var rp = At(rl); rp.y = DeckY + 6;
             Z("Wheels down (splash pool ramp)", rp + Flat(Dir(rl)) * 5, Facing(rl), new Vector3(34, 12, 12), Mode.Drive);
+            // Round 14 item 5: the Midway Jump's lip puts every car into the plane (the flight through the Ferris wheel)
+            if (!OldWheel) { float jl = M("jM"); var jp = At(jl); jp.y = DeckY + KickerH + 4; Z("Wings out (Midway Jump)", jp + Flat(Dir(jl)) * 7, Facing(jl), new Vector3(30, 16, 14), Mode.Fly); }
             // a fall off the top hat (it can only happen to a car that left the crest sideways): straight back
             var fz = Vol<ResetZone>("Top hat fall", new Vector3(cp.x, 20, cp.z) + Flat(Dir(cr)) * 60, Facing(cr), new Vector3(140, 30, 120)); fz.label = "fell off the top hat";
         }
@@ -260,7 +287,7 @@ namespace ShiftStorm
                 var q = At(p); var g = new GameObject($"Anchor {mode} {p:0}"); g.transform.SetParent(root, false);
                 g.transform.SetPositionAndRotation(q, Facing(p)); var a = g.AddComponent<RecoveryAnchor>(); a.mode = mode; a.progress = p; a.speed = speed; c.anchors.Add(a);
             }
-            A(M("start"), Mode.Drive); A(M("jM") - 150, Mode.Drive, 45); A(M("jM") + 120, Mode.Drive, 40); if (!ShiftVehicle.OldFlight) A(M("G1") - 22, Mode.Drive, 40);   /* Round 12: the Midway flight's rejoin */ A(M("G1") + 5, Mode.Drive, 40);
+            A(M("start"), Mode.Drive); A(M("jM") - 150, Mode.Drive, 45); if (OldWheel) A(M("jM") + 120, Mode.Drive, 40); else { A(M("wheel") + 30, Mode.Fly); A(M("mw2"), Mode.Fly); }   /* Round 14: the flight through the wheel */ if (!ShiftVehicle.OldFlight) A(M("G1") - 22, Mode.Drive, 40);   /* Round 12: the Midway flight's rejoin */ A(M("G1") + 5, Mode.Drive, 40);
             A(M("landA") + 6, Mode.Drive, 35);
             A(M("crest") + 120, Mode.Fly); A(M("helter") + 60, Mode.Fly); A(M("fw1"), Mode.Fly); A(M("fw3"), Mode.Fly);
             A(M("splash") + 80, Mode.Boat); A(M("fl2"), Mode.Boat); A(M("underLift"), Mode.Boat); A(M("cross") + 30, Mode.Boat);
@@ -287,7 +314,7 @@ namespace ShiftStorm
         static void Segments()
         {
             void Sg(string name, string form, float target, float end, int gates) => c.segments.Add(new Course.Segment { name = name, form = form, target = target, endProgress = end, gatesNeeded = gates });
-            Sg("Boardwalk", "Driving", 15, M("G1"), 2);
+            Sg("Boardwalk", OldWheel ? "Driving" : "Drive-fly-drive", 15, M("G1"), 2);
             Sg("Coaster Run", "Driving", 16, M("G2"), 3);
             Sg("Top Hat", "Driving", 10, M("crest") - 3, 4);
             Sg("Sky Midway", "Flying", 16, M("splash"), 5);
@@ -299,13 +326,14 @@ namespace ShiftStorm
 
         // ---------------- shortcuts: the choice flight through the Ferris wheel, the lighthouse rocks ----------------
         static readonly Color ShortcutColor = new Color(.75f, .4f, 1f, .9f);
-        public static Vector3 WheelCentre => L(-28, 36, 430);
+        public static Vector3 WheelCentre => OldWheel ? L(-28, 36, 430) : L(0, 35, 430);   // Round 14: over the line, its rim's foot just over the boards
         public const float WheelR = 30f;
         static void Shortcuts()
         {
             // 1 Midway flight: off the Midway Jump's lip with the wings out, up through the middle of the hubless Ferris wheel and back down to
             // the boardwalk's wheels-down zone before the coaster station (G1)
             float lip = M("jM"), rejoin = M("G1") - 45; var a = At(lip); var b = At(rejoin); var w = WheelCentre;
+            if (!OldWheel) { WheelsDown(rejoin); LighthouseRocks(); return; }
             // Round 10: back over the boardwalk's line 75 m before the wheels-down zone (the first shape swung the AI 76 m east of it)
             var ctrl = new List<Vector3> { a + Vector3.up * 1.5f, Vector3.Lerp(a, w, .35f) + Vector3.up * 4f, w + Vector3.back * 60 + Vector3.up * -2, w, w + Vector3.forward * 55 + Vector3.down * 6,
                                            new Vector3(-16, 22, 560) + O, new Vector3(-4, 14, b.z - O.z - 75) + O, b + Vector3.up * 6f, At(rejoin + 12) + Vector3.up * 5f };
@@ -316,12 +344,27 @@ namespace ShiftStorm
             var sc = old ? MakeShortcut("Midway flight", ctrl, lip, rejoin + 12, 1, -1, 40f, new Vector2(14, 12), new Vector2(18, 12), 60f, 30f, Mode.Fly)
                          : MakeShortcut("Midway flight", ctrl, lip, rejoin + 12, 1, -1, 48f, new Vector2(26, 18), new Vector2(28, 18), 12f, 30f, Mode.Fly);
             sc.choice = true; sc.flight = true; if (!old) sc.exit.modes = new[] { Mode.Fly, Mode.Drive };
-            var z = old ? Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 13, Facing(rejoin), new Vector3(40, 30, 16)) : Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 16, Facing(rejoin), new Vector3(60, 40, 24)); z.target = Mode.Drive; z.label = "Wheels down (midway flight)";
-            var chev = new MeshKit.Batch();
+            if (old) { var z = Vol<TransformZone>("Wheels down (midway flight)", b + Vector3.up * 13, Facing(rejoin), new Vector3(40, 30, 16)); z.target = Mode.Drive; z.label = "Wheels down (midway flight)"; Chevrons(rejoin); }
+            else WheelsDown(rejoin);
+            // the choice jump's lip: crossing it as a car opens the wings window
+            var lq = At(lip); var lipVol = Vol<ChoiceLip>("Midway Jump lip", new Vector3(lq.x, DeckY + Lift(lip) + 3, lq.z), Facing(lip), new Vector3(30, 8, 6)); lipVol.window = 1.5f; lipVol.ramp = KickerLen;
+            LighthouseRocks();
+        }
+        static void Chevrons(float rejoin)
+        {
+            var b = At(rejoin); var chev = new MeshKit.Batch();
             for (int i = 0; i < 4; i++) chev.Add(MeshKit.Cube, new Vector3(b.x, DeckY + .05f, b.z) + Flat(Dir(rejoin)) * (-10 + i * 6), Facing(rejoin) * Quaternion.Euler(0, i % 2 == 0 ? 20 : -20, 0), new Vector3(10, .05f, 1.2f), new Color(.95f, .5f, .1f));
             chev.Object(scen, "wheels-down chevrons", CoasterLook.Vc(false), false, false);
-            // the choice jump's lip: crossing it as a car opens the wings window
-            var lq = At(lip); var lipVol = Vol<ChoiceLip>("Midway Jump lip", new Vector3(lq.x, DeckY + Lift(lip) + 3, lq.z), Facing(lip), new Vector3(30, 8, 6)); lipVol.window = 1f;
+        }
+        // the wheels-down zone before the coaster station (Round 12's size); Round 14: the main route's, after the Ferris wheel flight
+        static void WheelsDown(float rejoin)
+        {
+            var b = At(rejoin); b.y = Road;
+            var z = Vol<TransformZone>(OldWheel ? "Wheels down (midway flight)" : "Wheels down (Ferris wheel flight)", b + Vector3.up * 16, Facing(rejoin), new Vector3(60, 40, 24)); z.target = Mode.Drive; z.label = z.name;
+            Chevrons(rejoin);
+        }
+        static void LighthouseRocks()
+        {
 
             // 2 Lighthouse rocks: the main line goes round the lighthouse's west side; the shortcut threads the rocks on its east side (a 26 m
             // channel between the islet and three sea stacks, a current through it)
@@ -375,6 +418,7 @@ namespace ShiftStorm
             {
                 if (OnRailLine(p) || (p > M("railA") - 120 && p < M("railA")) || (p > M("lipA") - 10 && p < M("railB") + 5)) return true;
                 if (p > M("jM") - KickerLen - 25 && p < M("jM") + 70) return true;
+                if (!OldWheel && p > M("jM") && p < M("G1") + 10) return true;   // Round 14: the flight through the Ferris wheel
                 foreach (var k in new[] { "splash", "seaOut", "cross", "diveZone", "portal", "surface", "rampFoot", "rampLip", "landing", "G1", "G8", "G9", "finish", "fl1", "fl2", "fl3", "fl4", "underLift" })
                     if (Mathf.Abs(p - M(k)) < 40) return true;
                 return false;
