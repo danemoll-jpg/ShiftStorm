@@ -1470,3 +1470,68 @@ chastain_rush, Hostile-Horizon read-only.
    set-piece visibility per segment, split-screen lap, frame time (PC) and
    a Deck check list; player-view pictures of every segment — look at them
    before calling it done.
+
+## Current Objective — Round 11: Buck arrives, and the start of story mode
+
+Queued by the planning chat on 2026-11-15 (was `Docs/NEXT-ROUND.md`); started after Round 10 was published. Dan is out of the
+house: run unattended, don't stop to ask, no visible window; same testing rules as always.
+
+**Read `Docs/STORY.md` first** — Dan's story direction for the whole game (Dan, 2026-11-15). Key points:
+- **Buck "Big Finish" Barlow** (working name) is the tour's organiser: a warm, unhurried, endlessly confident former stunt
+  performer whose "perfectly safe" plans terrify everyone. **TeedOff Barker stays the race caller** (during races); Buck
+  talks **before and after** races and in story scenes. They never talk over each other.
+- His ElevenLabs voice is **"ShiftStorm Buck"** (Dan made it). Use it for every Buck line.
+- **Paradise Plunge = the private trial** ("a gentle introductory outing"; he underestimated the wildlife).
+  **Coaster Coast = the tour's public opening night** (his comeback; he once did stunt shows at this park).
+- The track list in STORY.md is an idea pool, not a plan.
+
+1. **Buck's lines (ElevenLabs, voice "ShiftStorm Buck").** Write and generate in his style — calm about outrageous
+   things, exaggerated anecdotes, funny emphasis (see STORY.md's examples; reuse those lines too). At least:
+   - a **pre-race briefing** per track, 3–4 variations each (Paradise Plunge: the private trial; Coaster Coast: opening
+     night), 10–20 s each;
+   - **results remarks** by the player's place (1st / podium / back of the pack), per track, several each;
+   - **anecdotes and safety-briefing jokes** to sprinkle in (not every race);
+   - the **story-mode scene lines** for item 3.
+   Family-friendly, Tee'd Off humour. Keep a transcript (`Docs/Checks/round11/buck_lines.md`, transcribed back with the
+   local speech-to-text like Round 9) and check each line makes sense in a race.
+   *Check:* every line generated, transcribed, and fits.
+2. **Where Buck appears (before the model exists).** A short **pre-race briefing card**: a portrait placeholder (a
+   silhouette with his mustache and scarf, or a simple 2D card), his name, subtitles, his voice; **skippable with A /
+   Enter**, and shown once per session per track unless story mode needs it. A **results remark** after the race (after
+   Barker's results line, never overlapping). Settings: "Buck's briefings: On / Short / Off". Split screen: one Buck for
+   both.
+   *Check:* a race on each track logs the briefing → Barker during the race → Buck at results, 0 overlaps; skipping works.
+3. **Story mode skeleton: "The Tour".** Menu > The Tour (alongside Race, Time Trial, 2 Players):
+   - **Stop 1 — The Trial (Paradise Plunge)** and **Stop 2 — Opening Night (Coaster Coast)**, in order; more stops get
+     added later as tracks are built.
+   - Before each stop a short **scene** (Buck's voice + subtitles over a still or a slow camera fly-through of the track;
+     30–60 s, skippable); after it a short reaction based on the result.
+   - **Progress by qualifying / championship points, not winning every race** (STORY.md): points for each place; reach a
+     set total (or a top-3 finish) to unlock the next stop; you can retry.
+   - Progress saved (`tour.json`); a "Tour" screen shows the stops, your best place and points.
+   - Difficulty from Settings applies. Accessible to people who never played Tee'd Off.
+   *Check:* a scripted run plays both stops start to finish (scene → race → reaction → unlock), saves and reloads
+   progress, and a 4th-place finish lets you retry without losing progress.
+4. **Choose your racer.** Before Race, Time Trial, 2 Players and each Tour stop: pick a **driver** (Abi, Rae, Chip, Vivi)
+   and a **machine** (Jetstream, Grand Prix, Hot Rod, Scrambler), with the Garage's turntable view; each player in split
+   screen picks their own; the remaining drivers become the AI rivals with their own machines. Default: Abi + Jetstream.
+   Remember the last pick.
+   *Check:* every driver × machine combination starts a race (driver seated / astride correctly, steering mechanism,
+   colours); split-screen picks; AI fill.
+5. **Buck's look — prompts for Dan, don't wait.** STORY.md: barrel-chested older showman, impressive mustache, faded
+   stunt jacket, bright scarf, big smile; human, broad bear or stocky dog. In `Docs/MODELS-NEEDED.md` write **3 image
+   prompts** (one human, one bear, one dog), full body, A-pose, front view, plain light background, Tee'd Off toon style
+   (look at Tee'd Off's character concepts, read-only), for Dan to pick one; then he makes it in Tripo and rigs it in
+   Mixamo. List the Mixamo clips Buck will need (talking / gesturing, showman flourish, thumbs up, nervous laugh, clap).
+   Until then the placeholder card stays.
+   *Check:* the 3 prompts and the clip list are in the doc.
+6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 13 (0.10.0).** Per-item status,
+   "For Dan to check", update `CLAUDE.md` (Buck, The Tour, choose your racer, Settings), commit, push, publish, clean the
+   disk.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check
+See "For Dan to check (Round 11)" under Completed Tasks.
+

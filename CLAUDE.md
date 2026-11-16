@@ -353,4 +353,6 @@ Round 10 delivered as build 12 (0.9.0), 2026-11-15.
     (`Driver.Swap`, `FormSet.SetBody` / `SetOwnDesign`), so everything holding a vehicle keeps it. Barker's overtake / winner lines go
     by name (4 new "Abi" lines).
   - Buck's look: 3 image prompts (human / bear / dog) and his Mixamo clip list in `Docs/MODELS-NEEDED.md`; the placeholder card stays.
-
+Current objective: **Round 12** — every track open in Race / Time Trial / 2 Players (the Tour alone is gated), the Lake Jump's
+fly line given room to make its exit, flight branches never resetting you back to repeat them (read Dan's playtest logs first).
+Release build 14 (0.10.1). See `TODO.md`.
