@@ -1687,3 +1687,10 @@ actual items, in plain words, not just a pointer to `TODO.md`.
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 (For Dan to check: in TODO.md under Round 14's status.)
+
+## Current Objective — Round 15 (not planned yet)
+Dan picks the next round after playing build 16 (0.12.0). Open for him: "For Dan to check" for Round 14 (above).
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+

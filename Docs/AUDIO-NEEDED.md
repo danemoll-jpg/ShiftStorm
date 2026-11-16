@@ -107,7 +107,18 @@ Whoa-oh! Hey!
   take (or add `no lyrics, vocal chants only` to the Style).
 - Save as `Art/Incoming/Music/race_coaster.mp3`.
 
-## Race caller: TeedOff Barker (Barnaby) — lower priority
+### 5. Third track race song — `race_bigtop.mp3` (Dan, 2026-11-16; Big Top Breakdown, a travelling circus)
+A new song for the circus track (wagons, the big top, a human-cannonball flight through aerial hoops, a river and a water
+tank). Not a Tee'd Off song, and **clearly different from Coaster Coast's** (that one is surf guitar + calliope + vocal
+chants): this is a zany, slightly ramshackle circus band. Mouth instrument: a cheeky **kazoo** (fits the clowns; not used
+in any other song). **Instrumental: on.** Don't imitate any famous circus march.
+- **Title:** `Big Top Breakdown`
+- **Style:**
+  `upbeat cartoon racing game theme, zany travelling circus band, oom-pah tuba and big bass drum, snappy snare rolls, slide trombone smears, honky-tonk piano and accordion, banjo strums, cheeky kazoo lead melody, xylophone runs, cymbal crashes, playful mischievous chaos, a little ramshackle, steady drive all the way, major key, 150 bpm, seamless loop, no vocals`
+- **Length:** 2-3 min. **Loop:** pick a take with no fade-out and no slow breakdown.
+- Save as `Art/Incoming/Music/race_bigtop.mp3`.
+
+## Race caller: Barnaby — lower priority
 
 Not needed from Dan: an ElevenLabs key is set, so Code makes his new racing lines in his own Tee'd Off voice
-(the "TeedOff Barker" voice) and uses his existing clips too. Nothing to do here unless a line sounds wrong.
+(the "Barnaby" voice) and uses his existing clips too. Nothing to do here unless a line sounds wrong.

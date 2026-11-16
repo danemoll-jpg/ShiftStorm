@@ -37,7 +37,8 @@ doesn't need to keep topping the last stunt — the racers, friendships and plac
   Preview text: *"Welcome, welcome, one and all! Now, I want to assure everybody this event is perfectly safe. Oh, no.
   We're not jumping over the Ferris wheel. That'd be irresponsible. We're going through it. I used to jump six buses right
   over there. Seven, according to the posters. We counted the snack wagon."*
-- Note: **TeedOff Barker** stays the race caller (narrates races); Buck is the organiser (story, briefings, cutscenes).
+- Note: **Barnaby** (always called by his name, Dan 2026-11-16) stays the race caller (narrates races); Buck is the
+  organiser (story, briefings, cutscenes).
 
 ## The tracks so far
 - **Paradise Plunge — the private demonstration** (built). Buck's "gentle introductory outing": a private trial of the

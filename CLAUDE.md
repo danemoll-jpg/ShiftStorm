@@ -452,5 +452,6 @@ Round 13 delivered as build 15 (0.11.0), 2026-11-16.
 
 Round 14 delivered as build 16 (0.12.0), 2026-11-16.
 
-Current objective: **Round 15** — not planned yet; Dan reviews build 16 first ("For Dan to check" in `TODO.md`). **Every round's chat report
-ends with the 'For Dan to check' list.**
+Current objective: **Round 15** — Coaster Coast's shimmer before / after the race, the race caller called **Barnaby** everywhere
+(not "Barker"), and a third track: **Big Top Breakdown** (a travelling circus; the Tour's third stop). Release build 17 (0.13.0).
+See `TODO.md`.
