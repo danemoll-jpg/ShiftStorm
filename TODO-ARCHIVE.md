@@ -1627,3 +1627,7 @@ list stays open for when he has time.
 
 ### For Dan to check (fill in at end of round)
 - …
+
+## Current Objective — Round 14 (not planned yet)
+Dan picks the next round. Open for him: "For Dan to check" for Round 13 (above) and Round 12 (still open).
+

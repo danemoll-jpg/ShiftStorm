@@ -413,4 +413,6 @@ Round 11 delivered as build 13 (0.10.0), 2026-11-15.
 
 Round 13 delivered as build 15 (0.11.0), 2026-11-16.
 
-Current objective: **Round 14** - not planned yet (Dan picks). Round 12's and Round 13's "For Dan to check" lists in `TODO.md` are open.
+Current objective: **Round 14** — title screen + clean main menu (left / right changes values), crowd much quieter (own slider),
+the Scrambler's sub in a full glass bubble around the whole bike, no camera shake after the race, the Ferris wheel flight on the main
+route + easier LB on choice jumps. **Every round's chat report ends with the 'For Dan to check' list.** Release build 16 (0.12.0).

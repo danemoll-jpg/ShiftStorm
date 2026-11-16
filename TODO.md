@@ -16,7 +16,8 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   and `C:\Users\danmo\Tee-dOff` (art, characters, voices, music). Copy from
   them; never edit them.
 - Results: ~20 lines, one line per item with its one check, plus a
-  "For Dan to check" list. Per-item status is required: done / not done /
+  "For Dan to check" list — **in the chat report itself, at the end**, not
+  only in `TODO.md` (Dan, 2026-11-16). Per-item status is required: done / not done /
   deferred, and why.
 
 ## Completed Tasks
@@ -508,8 +509,66 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 14 (not planned yet)
-Dan picks the next round. Open for him: "For Dan to check" for Round 13 (above) and Round 12 (still open).
+## Current Objective — Round 14: menus, crowd volume, the Scrambler bubble, the Ferris wheel
+
+**Dan's review of build 15 (0.11.0), 2026-11-16, quoted:**
+0. (About Round 13's report) "It should list [what I need to check] to begin with." → **standing rule below.**
+1. "The crowd noise is far too loud."
+2. "Left and right should increase / decrease values."
+3. "I don't like the menu in general. Needs clean up to be more readable."
+4. "For the cycle sub version, I wanted a bubble that enveloped the whole bike, not just a dome. Pretty sure I mentioned this
+   multiple times."
+5. "Screen is shaky after race."
+6. "The flying through the Ferris wheel was sold as a major thing on the track but the Ferris wheel is out of the main path
+   and if you don't hit the fly button quick enough you miss it altogether."
+Also from 2026-11-16 (asked for during Round 13 but never built): **the game must start on a title screen, not in a race.**
+Run unattended; don't stop to ask; no visible window. Same testing rules. Read-only references as before.
+
+**Standing rule (Dan, 2026-11-16): every round's final report in chat must end with the "For Dan to check" list** — the
+actual items, in plain words, not just a pointer to `TODO.md`.
+
+1. **Title screen and a clean main menu** (items 0, 2, 3 above).
+   - Start-up (direct or from the launcher) lands on a **title screen**: ShiftStorm logo, the theme song, "Press A / Start".
+   - Then a **main menu**: The Tour, Race, Time Trial, 2 Players, Garage, Settings, Quit. Big, readable text with plenty of
+     space; one highlighted choice; a short description line for the highlighted item; consistent layout on every screen.
+   - **Course select:** a card per track (name, picture, the forms it uses, best time) → **choose your racer** → race.
+   - **Settings** grouped (Gameplay / Audio / Video / Controls), one setting per row; **left / right changes the value**
+     (sliders for volumes, cycling for options), A also toggles, B goes back; the new value shows immediately.
+   - **Pause menu** in a race, short: Resume, Restart, Settings, Quit to menu. Results screen: Race again, Next / Menu.
+   - D-pad / stick / keyboard everywhere; readable on the Deck's 1280×800 (check text sizes there); split screen: either
+     player can drive the menus.
+   - Your checks still start races directly with their command-line flags.
+   *Check:* pictures of every menu screen at 1280×800 (look at them for readability); a scripted walk title → menu →
+   course → racer → race → pause → quit to menu → settings (left / right changes a volume and an option) → quit game.
+2. **Crowd much quieter.** Cut the crowd (murmur, cheers, GO roar, finish) well below the engines and far below Barker and
+   music — about −10 to −12 dB from now as a start — and give it its own **Crowd** volume slider in Audio settings.
+   *Check:* measured levels per bus in a race and at the finish with defaults (runs stay muted; log the would-be levels).
+3. **The Scrambler's sub: a full bubble around the whole bike.** Dan asked for the sub version "surrounded in a glass
+   sphere" — a **complete clear sphere enveloping the entire bike and rider** (like a hamster ball / diving bell), with
+   the chrome ring as its equator — **not a dome** over the seat. Bubble big enough that nothing pokes through, subtle
+   highlights and a little refraction, readable from the chase camera, collider unchanged (or matching the sphere if
+   that's better for the water). The change into the sub forms the bubble around the bike (grows / closes over it).
+   *Check:* pictures of the Scrambler sub from the side, front and first person; nothing through the glass.
+4. **No shaking after the race.** Find what shakes the camera after the finish (boost shake, wall bump, crowd roar shake,
+   the T. rex roar, landing bump…), and stop all camera shake at the finish: the results camera is steady.
+   *Check:* camera motion logged for 10 s after the finish on both tracks — no shake.
+5. **The Ferris wheel is the star, on the main route.** Flying through the Ferris wheel is Coaster Coast's headline
+   moment, so **everyone** does it: put a flight through the Ferris wheel **on the main route** (an automatic launch into
+   the plane, like Paradise Plunge's cliff launch), with the wheel lined up dead ahead and big; fly through its spokes /
+   the centre, then on through the fireworks. Keep a choice elsewhere if it still makes sense (say what you did).
+   - **All choice jumps, both tracks:** easier to choose — the "LB: FLY" prompt appears on the **ramp** before the lip, and
+     LB can be pressed **any time on the ramp or in the first ~1.5 s** of air (pre-arm counts).
+   *Check:* pictures of the approach and the pass through the wheel; the human-like pilot goes through the wheel 10 of 10;
+   LB pressed on the ramp works on every choice jump.
+6. **Regression (both tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 16 (0.12.0).** Per-item status,
+   "For Dan to check" in `TODO.md` **and at the end of the chat report**, update `CLAUDE.md`, commit, push, publish, clean
+   the disk. Keep the .md files UTF-8.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (fill in at end of round)
+- …
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),
