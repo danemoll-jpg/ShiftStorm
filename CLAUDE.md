@@ -481,6 +481,20 @@ Round 14 delivered as build 16 (0.12.0), 2026-11-16.
 
 Round 15 delivered as build 17 (0.13.0), 2026-11-16.
 
-Current objective: **Round 15b (hotfix)** — the screen shakes on the Deck in the menu preview for Coaster Coast / Big Top, stays
-shaking after a Coaster Coast race (even on Paradise Plunge), and Big Top shakes the whole race; reproduce on the Deck preset and the
-real menu path, fix the cause. Release build 18 (0.13.1). See `TODO.md`.
+- **Round 15b (build 18, 0.13.1): the screen shake on Coaster Coast / Big Top fixed at its cause:** the HUD / menu canvas was Screen
+  Space - Camera 0.22 m in front of the race camera (1 px ~ 0.3 mm), and Unity builds and draws UI vertices through world positions;
+  8-10.5 km from the origin a float holds ~1 mm = ~4 px on the Deck's 800 lines, so the whole menu / HUD snapped by pixels as the camera
+  moved (Paradise Plunge is near the origin). Now (`UI/Hud.cs`) the canvas stands `Hud.CanvasDistance` (100 m) ahead (1 mm ~ 0.01 px),
+  sorting order 32000, and every HUD graphic uses `Resources/Shaders/HudUI.shader` (Unity's UI/Default in URP HLSL): canvas units ->
+  the camera's view directly (`_HudLocalToView`, set per HUD material in `beginCameraRendering`), drawn at near clip + 2 cm as before
+  (same depth against the cockpit). `Hud.UseMaterial` puts graphics made later on it. Keep UI off world positions far from the origin.
+  Tried and dropped: a UI overlay camera at the origin (URP drew no UI in its stacked pass in the checks' renders: unverifiable), a world
+  canvas parked at the origin (culled 8 km away).
+  Check `shake` (Deck preset unless `-graphics`): the real menu path (title -> Race -> cards Paradise / Coaster / Big Top and back), a
+  Coaster Coast race -> results -> Menu -> Paradise, a Paradise race, a Big Top race; the camera every frame (CSV, 60 Hz residuals) and
+  the picture's flicker at 60 Hz steps (A -> B -> A pixels, heat maps; shadows off / native variants); `MenuCam.Hold` / `MenuCam.Step`
+  for checks. `-oldHud` = build 17's canvas.
+
+Round 15b delivered as build 18 (0.13.1), 2026-11-16.
+
+Current objective: none set. Waiting for Dan's notes on build 18 (Round 15b).

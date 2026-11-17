@@ -10,6 +10,7 @@ namespace ShiftStorm
     public sealed class MenuCam : MonoBehaviour
     {
         public static bool On { get; private set; }
+        public static bool Hold; public static float Step = -1;   // checks: held still; a fixed time step per frame (1/60: the Deck's frames)
         Camera cam; float s = -1; int course = -1; Vector3 pos; Quaternion rot; bool fresh = true;
         void Awake() => cam = GetComponent<Camera>();
         void LateUpdate()
@@ -20,7 +21,8 @@ namespace ShiftStorm
             var c = g.Courses[Mathf.Clamp(g.MenuCourse, 0, g.Courses.Count - 1)];
             if (CourseLook.Shown != c) CourseLook.Apply(c);
             if (course != g.MenuCourse) { course = g.MenuCourse; s = Mathf.Min(120f, c.Length * .05f); fresh = true; }
-            float dt = Mathf.Min(Time.unscaledDeltaTime, .1f);
+            float dt = Step > 0 ? Step : Mathf.Min(Time.unscaledDeltaTime, .1f);
+            if (Hold) { transform.SetPositionAndRotation(pos, rot); return; }
             s += 22f * dt; if (s > c.Length - 260f) { s = 60f; fresh = true; }
             var p = c.PointAt(s, out var d); var flat = new Vector3(d.x, 0, d.z); flat = flat.sqrMagnitude > 1e-4f ? flat.normalized : Vector3.forward; var right = Vector3.Cross(Vector3.up, flat);
             var want = p + Vector3.up * 34f + right * 26f - flat * 30f; want.y = Mathf.Max(want.y, Mathf.Max(p.y, 0f) + 24f);

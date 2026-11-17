@@ -21,9 +21,48 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 15b (hotfix) — the screen shake on Coaster Coast and Big Top** (2026-11-16, release `build-18` / 0.13.1). Status below.
 - **Round 15 — the shimmer's cause fixed, Barnaby by name, Big Top Breakdown** (2026-11-16, release `build-17` / 0.13.0). Status below.
 - **Round 14 — title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race, the Ferris wheel on the main route** (2026-11-16, release `build-16` / 0.12.0). Status below.
 - **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 15b delivery (2026-11-16) — status per item
+Evidence: `Docs/Checks/round15b/` (before / after reports and heat maps). Every run: built exe, `-batchmode -mute`, no window, Below Normal,
+one heavy job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+1. **Reproduced — DONE.** New `shake` check on the Deck graphics preset, the real menu path with the player's buttons (title -> Race -> the
+   course cards Paradise -> Coaster -> Big Top -> back), a Coaster Coast race -> results -> Menu -> Paradise selected, a Paradise race and a
+   Big Top race; every frame the camera's final position / aim / FOV / projection (CSV), and the picture's flicker on 60 Hz frames (a pixel
+   that jumps and jumps back: A -> B -> A) with heat maps, plus pinned-camera windows. Findings: the camera itself is perfectly smooth in
+   every menu (0.000 deg off its path at 60 Hz), the projection never changes, and with the camera held still nothing in the world moves,
+   so it was not a camera shake, not the shadows (shadows off: the same), not the Deck's render scale (full resolution: the same). The
+   flicker was **the menu / HUD itself**: Paradise Plunge 0.002 % of the pixels a frame, Coaster Coast 0.85 % (95th pct 2.9 %), Big Top
+   0.26 % (95th pct 3.0 %), and the heat maps light up every letter, card frame and bar.
+2. **The cause, fixed — DONE.** The HUD / menu canvas sat 0.22 m in front of the race camera, so it was tiny (1 pixel ~ 0.3 mm) and had world
+   positions right next to the camera. Coaster Coast is built 8 km east of the world's origin and Big Top 9 km west, where the computer's
+   numbers only hold a position to about 1 mm, which is ~4 pixels on the Deck's screen at 0.22 m: every time the camera moved, the whole
+   menu and HUD snapped back and forth by pixels. Paradise Plunge sits near the origin, so it was steady. (Dan's "even Paradise after a
+   Coaster Coast race": in the check, Paradise's menu is steady after a Coaster Coast race too, 0.002 %; the menus right after that race
+   still show Coaster Coast behind them, which shook.) Fix (`UI/Hud.cs`, `Resources/Shaders/HudUI.shader`): the canvas now stands 100 m
+   ahead (1 mm there is ~0.01 pixel) and a HUD shader draws it straight in front of the camera at the old distance, never through a world
+   position. Looks the same (same layout, same depth against the cockpit); the text is cleaner far from the origin. Two first tries were
+   dropped: a separate UI camera (URP drew no UI in it in the checks, so it could not be verified) and a canvas parked at the origin (not
+   drawn 8 km away).
+   *Check (`shake`, Deck preset) before (`-oldHud`) -> after:* menu flicker Coaster Coast 0.848 % -> **0.006 %**, Big Top 0.255 % ->
+   **0.014 %** (95th pct 2.9 / 3.0 % -> 0.016 / 0.040 %), Paradise 0.002 % -> 0.002 %, Paradise after a Coaster Coast race 0.002 % ->
+   0.002 %: **SHAKE PASS**. Big Top race 0.81 % -> 0.44 %: the HUD no longer flickers at all (only the changing digits); what is left is the
+   scenery's own edges (the striped tent and road dashes) as the camera moves, the same kind as on every course. The race cameras were
+   already smooth against the car. Not verified on the Deck's own screen.
+3. **Regression + release — DONE.** `round2` PASS (Paradise lap 124.58 s), `cclap` PASS 106.30 s, `btlap` PASS 94.83 s, `shimmer` PASS,
+   `split` PASS (both halves' HUDs right in 122 of 122 samples), `menuwalk` 13 / 13 + exit 0, `menus14` pictures. Release build 18 (0.13.1)
+   published; disk cleaned.
+
+### For Dan to check (build 18)
+1. Race > the course cards: step to Coaster Coast and Big Top Breakdown. Is the screen steady now?
+2. Race Coaster Coast to the end, then the results and the menu. Steady? Then Paradise Plunge: steady?
+3. Race Big Top Breakdown. Is the race steady now (the timer, place and speed in the corners should be rock still)?
+4. If anything still moves, film it like last time and say which screen. Edges on the striped big top tent and road lines flicker a
+   little as you drive (no anti-aliasing on the Deck preset). That is a different thing; say if it bothers you.
+5. Still open from build 17: everything in Round 15's list below (Big Top's route, the rapids, its length, the stand-ins, Stop 3's scene).
 
 ### Round 15 delivery (2026-11-16) — status per item
 Evidence: `Docs/Checks/round15/` (reports, pictures, heat maps). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy
@@ -631,37 +670,8 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 15b (hotfix): the screen shakes on Coaster Coast and Big Top
-
-**Dan, 2026-11-16, on the Steam Deck (build 17, 0.13.0), with a phone video:** "Even from this menu the first track the
-menu stays normal but the second I switch to either the 2nd or 3rd race the screen shakes. If I finish the 2nd race the menu
-starts shaking at the end even if I try to start the [first] race." And: "The new race does it the entire time, even during
-the race."
-
-What the video shows (planning chat): on Race > Choose a course, the live course preview behind the cards is steady with
-Paradise Plunge selected and **the whole picture shakes as soon as Coaster Coast or Big Top Breakdown is selected**. After a
-Coaster Coast race, the shaking **stays** — even with Paradise Plunge selected again. Big Top shakes the whole race.
-
-**Round 15's shimmer check did not reproduce this** (it measured a perfectly still camera on the PC in batch mode; the sun
-fix was real but a different problem). Run unattended; don't stop to ask; no visible window — but **reproduce Dan's real
-setup** this time.
-
-1. **Reproduce it the way Dan sees it:** the **Deck graphics preset** (force it with the Deck override flag), the real
-   **menu path** (title → Race → course cards moving Paradise → Coaster → Big Top → back; race Coaster Coast → results → back
-   to the menu → Paradise selected), and a full Big Top race. Log every frame: the camera's **final** position / rotation
-   **and its projection** (FOV, any jitter / offset), every component that moves the camera or the preview rig, anything
-   static / global that persists across scenes (camera shake, wind / gust sway, a sway or bob amount, time scale, a
-   "boosting" or "launch" state, the Ferris-wheel / cannon / Globe shake), and the picture frame-to-frame. A camera that
-   "measures still" while the picture moves means the motion is elsewhere (projection jitter, anti-aliasing / upscaling on
-   the Deck preset, the preview rig, a parent object, the world moving) — find which.
-2. **Fix the real cause** (likely something switched on by Coaster Coast / Big Top — gusty-wind camera sway, a shake or
-   bob that never resets — and leaking into the menu preview and later courses). Every per-course effect must be reset
-   when leaving a course, the menu preview must never shake, and in a race only deliberate, brief shakes are allowed (the
-   T. rex roar, a hard hit, a boost kick) — never a constant one.
-   *Check:* the same menu path and races on the Deck preset (and the PC preset): camera position and picture motion ≈0
-   in the menus and on the grid, no constant shake during any race on all three courses; before / after numbers.
-3. **Release build 18 (0.13.1)** as a hotfix (regression: the three courses' laps, menus walk, shimmer check). Commit, push,
-   publish, clean the disk. **End the chat report with the "For Dan to check" list itself** (and keep Round 15's open list).
+## Current Objective
+None set: waiting for Dan's notes on build 18 (Round 15b).
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

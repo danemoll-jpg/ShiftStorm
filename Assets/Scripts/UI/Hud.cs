@@ -22,14 +22,44 @@ namespace ShiftStorm
         // player: 0 the one player, 1 / 2 in split screen. Player 2's HUD has no menu of its own (the menu is on player 1's half; either
         // player works it) and shows PAUSED while it is open. Hud.Instance is player 1's.
         public int player; CanvasScaler scaler; Canvas canvasRef;
+        // Round 15b (Dan on the Deck: "the second I switch to either the 2nd or 3rd race the screen shakes"): the cause. Build 17's canvas
+        // (Screen Space - Camera) sat 0.22 m in front of the race camera, so it was a tiny thing (1 pixel ~ 0.3 mm) with world positions next
+        // to the camera, and Unity builds and draws the UI's vertices through those world positions. Coaster Coast is 8 km east and Big Top
+        // 9 km west of the origin, where a float holds a position to ~1 mm, ~4 pixels on the Deck's 800 lines at 0.22 m: as the camera
+        // moved, the whole menu / HUD snapped back and forth by pixels (Paradise Plunge, near the origin, by a fraction of one). Now the
+        // canvas stands 100 m ahead (1 mm there is ~0.01 pixel), sorted last, and ShiftStorm/HudUI draws each vertex from the canvas's own
+        // coordinates straight into the camera's view at the old 0.22 m (the same depth against the cockpit and the scenery), never through
+        // a world position. Unity's canvas scaler sizes it as before. "-oldHud": build 17's canvas (before numbers).
+        public static readonly bool OldHud = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldHud") >= 0;
+        public const float CanvasDistance = 100f;
+        static readonly int IdLocalToView = Shader.PropertyToID("_HudLocalToView");
+        Material uiMat; float planeDistance = .5f;
+        public Material UiMaterial => uiMat;
         public static Hud Make(Camera cam, ShiftVehicle v, Game game, int player = 0)
         {
             var go = new GameObject("HUD"); var canvas = go.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = cam; canvas.planeDistance = .5f;
             var scaler = go.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1280, 720); scaler.matchWidthOrHeight = 1;
             var h = go.AddComponent<Hud>(); h.v = v; h.game = game; h.cam = cam; h.player = player; h.scaler = scaler; h.canvasRef = canvas; if (player != 2) Instance = h;
-            h.Build(go.transform); h.BuildGuide(go.transform); h.Relayout(); return h;
+            var sh = OldHud ? null : Resources.Load<Shader>("Shaders/HudUI");
+            if (sh) { h.uiMat = new Material(sh) { name = $"HUD {(player == 2 ? 2 : 1)}" }; canvas.planeDistance = CanvasDistance; canvas.sortingOrder = 32000; }
+            else if (!OldHud) Debug.LogWarning("[HUD] Shaders/HudUI missing: build 17's canvas");
+            h.Build(go.transform); h.BuildGuide(go.transform); h.Relayout(); h.UseMaterial(); return h;
         }
+        // every graphic on the HUD's shader (rows, cards and markers made later too: checked every half second)
+        void UseMaterial() { if (!uiMat) return; foreach (var g in GetComponentsInChildren<Graphic>(true)) if (g.material != uiMat) g.material = uiMat; }
+        void OnEnable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += BeforeRender;
+        void OnDisable() => UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= BeforeRender;
+        void BeforeRender(UnityEngine.Rendering.ScriptableRenderContext ctx, Camera c)
+        {
+            if (!uiMat || c != cam || !canvasRef) return;
+            // canvas units -> the camera's view: the canvas faces the camera, centred on its view; drawn at planeDistance (not where it
+            // stands), scaled to match (Unity's view space looks down -z)
+            float d = planeDistance, k = transform.lossyScale.x * d / Mathf.Max(.01f, canvasRef.planeDistance);
+            var m = Matrix4x4.identity; m.m00 = k; m.m11 = k; m.m22 = -k; m.m23 = -d;
+            uiMat.SetMatrix(IdLocalToView, m);
+        }
+        void OnDestroy() { if (uiMat) Destroy(uiMat); }
         // the canvas for the camera's share of the screen: whole (1280 x 720 reference, as before); top / bottom halves (1280 x 600: a
         // little smaller); left / right halves (960 wide, by width)
         public void Relayout()
@@ -103,7 +133,8 @@ namespace ShiftStorm
             if (!v) return;
             if (player == 2 && menuPanel.activeSelf) menuPanel.SetActive(false);
             // Round 6: the HUD's plane just past the camera's near clip, so the cockpit in first person (near clip 5 cm) never covers it
-            if (canvasRef && cam) canvasRef.planeDistance = Mathf.Min(.5f, cam.nearClipPlane + .02f);
+            if (canvasRef && cam) { planeDistance = Mathf.Min(.5f, cam.nearClipPlane + .02f); if (!uiMat) canvasRef.planeDistance = planeDistance; }
+            if (uiMat && Time.frameCount % 30 == 0) UseMaterial();   // Round 15b: rows / cards made later on the HUD's shader too
             string extra = v.Drifting ? "  DRIFT" : v.Carving ? "  CARVE" : "";
             mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}{extra}";
             UpdateGuide();
