@@ -481,4 +481,6 @@ Round 14 delivered as build 16 (0.12.0), 2026-11-16.
 
 Round 15 delivered as build 17 (0.13.0), 2026-11-16.
 
-Current objective: **Round 16** — not planned yet (Dan reviews build 17). See `TODO.md`.
+Current objective: **Round 15b (hotfix)** — the screen shakes on the Deck in the menu preview for Coaster Coast / Big Top, stays
+shaking after a Coaster Coast race (even on Paradise Plunge), and Big Top shakes the whole race; reproduce on the Deck preset and the
+real menu path, fix the cause. Release build 18 (0.13.1). See `TODO.md`.

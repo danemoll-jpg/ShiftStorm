@@ -1694,3 +1694,77 @@ Dan picks the next round after playing build 16 (0.12.0). Open for him: "For Dan
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
+## Current Objective — Round 16: not planned yet
+
+Dan reviews build 17 (0.13.0); his notes become Round 16. Round 15's spec stays below for reference.
+
+## Round 15 spec (delivered as build 17, 2026-11-16): the shimmer, Barnaby by name, and Big Top Breakdown
+
+**Dan's review of build 16 (0.12.0), 2026-11-16, quoted:** "Tested new things. The shimmering only happens on the 2nd track
+and it is before and after the race. No other issues, so go ahead and fold this into the next round." (Round 14's other
+items: no issues.) Then Dan picked the rest (2026-11-16): **"Big Top Breakdown. Also Barnaby should be referred to by name instead of as
+Barker."** Run unattended; don't stop to ask; no visible window. Same testing rules. Read-only references as before.
+
+1. **Coaster Coast shimmers before and after the race** (Round 14 item 4 calmed the camera shake after the finish, but on
+   Coaster Coast the picture still shimmers on the grid before GO and at the results). Only on Coaster Coast, only while
+   stopped. Find the real cause before fixing — record it (camera transform and the car's body every frame while parked,
+   the render settings, a sequence of still frames compared pixel by pixel). Likely suspects: the car / camera jittering
+   at rest on the pier deck (physics at rest, the rail or the deck colliders), the camera fighting the grandstand / pier,
+   temporal anti-aliasing or dynamic resolution, z-fighting on the boardwalk / pier planks / neon signs / water, or the
+   night lights / fireworks flickering. Fix the cause, not the symptom.
+   *Check:* 10 s parked on the grid and 10 s at the results on Coaster Coast: camera and car motion logged (≈0), frame-to-
+   frame image difference near zero apart from things that are meant to move; same on Paradise Plunge (unchanged).
+
+2. **Barnaby by name.** The race caller is **Barnaby** everywhere the player sees or hears it — subtitles ("Barnaby: …"),
+   the booth sign, the results ("Race called by Barnaby"), credits, settings labels, the Tour, other characters' lines —
+   not "TeedOff Barker" / "Barker". Regenerate any voice line that says "TeedOff Barker" / "Barker" about him (his own
+   voice or others') so it uses "Barnaby". Code names / ids can stay. Update `CLAUDE.md`, `Docs/STORY.md`,
+   `Docs/AUDIO-NEEDED.md`, `Docs/SOUNDS.md`, `Docs/REUSE-AUDIT.md` to say Barnaby (old check reports can stay as they are).
+   *Check:* a search of the built game's text and the voice transcripts finds no "Barker" shown or spoken to the player.
+3. **A third track: Big Top Breakdown — a travelling circus** (Dan's pick from `Docs/STORY.md`'s idea pool). STORY.md:
+   *"Circus midway roads, aerial hoops, a log flume, and moving wagons. An old show-business acquaintance challenges Buck to
+   prove he still has it."* Before building, answer STORY.md's four questions in `Docs/STORY.md` (fun / why Buck is here /
+   who cares about this place / what changes). Same rules as Coaster Coast: same universe and reused models / systems, a
+   **new environment** (not Tee'd Off's), and **clearly different from Coaster Coast** (that's a seaside fair at night; this
+   is a big-top circus camp in **bright, gusty daylight** with striped tents flapping — "Breakdown": the show is a bit
+   ramshackle and things keep going wrong).
+   - **Route (~2 min safe line, all four forms), suggestions to build on:**
+     - **Car:** through the midway between **moving circus wagons** (a wagon train you weave through, timed and readable,
+       never a dead stop); **into the big top** and around the ring; a daredevil **Globe of Death** — a steel-mesh sphere
+       you loop inside (like the Round 7 loop, on a rail); one plain big jump over the clowns' car pile-up.
+     - **Plane:** a **human-cannonball launch** out of a giant circus cannon into flight **through aerial hoops** high under
+       the tent, along the trapeze rigging, out through the tent's top flap and over the circus camp.
+     - **Boat:** splash into the river beside the camp — past a paddle-steamer show boat — **not a log flume** (Coaster
+       Coast has one; if a flume is used, make it clearly different).
+     - **Sub:** under the river / into the escape artist's giant water tank or a sunken circus wagon; surface and drive back
+       to the ring for the finish.
+     - At least one choice with split paths (Round 14's LB rules: prompt on the ramp, LB on the ramp or first ~1.5 s), and
+       one in the water. Round 12's rules: room to make every exit, forward recovery only, no loops.
+   - **Life and set-pieces** (Round 8b's rule: big, close, in front; 8 % of screen height for 1 s): elephants spraying
+     water, seals balancing balls, a tightrope walker overhead, trapeze artists swinging past the hoops, a strongman, clowns
+     tumbling out of a tiny car, the crowd under the big top (Gridiron Glory crowd). Family-friendly, no fire hazards on the
+     route. Models: reuse first; anything essential missing → **at most 2–3** Tripo prompts in `Docs/MODELS-NEEDED.md` for
+     Dan, stand-ins meanwhile, don't wait.
+   - **Story:** the Tour's **third stop** ("Growing success" in STORY.md's table). The old show-business acquaintance — a
+     **ringmaster** who once shared a bill with Buck — challenges him to prove he still has it. Buck briefing / results
+     lines for this stop (voice "ShiftStorm Buck"); Barnaby's lines for this track. The ringmaster's voice and look are
+     Dan's call: write a short voice-design prompt and an image prompt for the ringmaster in `Docs/STORY.md` /
+     `Docs/MODELS-NEEDED.md` for Dan, and use text-only subtitles (or Buck reading the challenge aloud) until then.
+   - **Everything the other tracks have:** gates, near misses, route guides / arrow / strip, AI on all difficulties (they
+     handle the wagons, the Globe and the splits), split screen, camera views, recovery, crowd, driver reactions, steering
+     mechanisms, playtest logs, time trial / best times, course card in the menu, Tour stop + a rival challenge.
+   - **Music:** no Tee'd Off music; Dan's new song `race_bigtop.mp3` (prompt in `Docs/AUDIO-NEEDED.md`, song 5 — added by
+     the planning chat); a ShiftStorm song stands in until it arrives.
+   *Check:* check-pilot lap with segment times, every split timed, the Globe at full / slow / very slow speed, the wagons
+   (0 unavoidable hits), AI 25 laps per split with 0 stuck, a 50-lap AI soak, set-piece visibility per segment, a
+   split-screen lap, frame time (PC) + Deck check list; player-view pictures of every segment — look at them.
+4. **Regression (all three tracks) + 50-lap AI soak (Normal) on each, wrap-up, release build 17 (0.13.0).** Per-item
+   status, update `CLAUDE.md`, commit, push, publish, clean the disk. **End the chat report with the "For Dan to check"
+   list itself.** Keep the .md files UTF-8.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check
+- See "For Dan to check (build 17)" under Completed Tasks.
+
