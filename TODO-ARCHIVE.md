@@ -1831,3 +1831,7 @@ Read-only references as before.
 
 ### For Dan to check (fill in at end of round)
 - …
+
+## Current Objective
+None set: waiting for Dan's notes on build 19 (Round 16).
+

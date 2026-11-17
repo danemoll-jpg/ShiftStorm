@@ -532,4 +532,6 @@ Round 15b delivered as build 18 (0.13.1), 2026-11-16.
 
 Round 16 delivered as build 19 (0.14.0), 2026-11-17.
 
-Current objective: **next round (see TODO.md)**
+Current objective: **Round 17 — the fun round**: creative power-ups (B), stunts with stunt points (right stick in the air;
+Stunt Show mode), 1–5 laps on every course (default 3), and Paradise Plunge's big route splits. Release build 20 (0.15.0). See
+`TODO.md`.

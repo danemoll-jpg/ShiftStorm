@@ -732,10 +732,85 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective
-None set: waiting for Dan's notes on build 19 (Round 16).
+## Current Objective — Round 17: the fun round (power-ups, stunts, big route splits, laps) — Paradise Plunge first
+
+**Why (Dan, 2026-11-17):** the game wasn't clicking — "a great idea on paper" but something missing. Agreed with the planning
+chat: the racing needs things to *play with*, and the choices need to matter. Dan's words:
+- Power-ups: "I wouldn't mind power ups / weapons Mario Kart style but I don't want them to be golf based ... I would like to be
+  a little more creative with them."
+- Choices: "when we have the options they seem to be over in a couple of seconds so kind of pointless. I would want them to be
+  a complete different experience. This will make the tracks more challenging and varied to keep you wanting to try again."
+- Laps: "the laps being one lap doesn't really give you a chance to savor the courses."
+- Stunts, not drifting: "I would want to lean more towards tricks. Maybe this can give us the opportunity to build up points so
+  a track isn't just about being first but also who can build up stunt points."
+- The auto transforms stay.
+**Order:** the systems (items, stunts, laps) for every course, but the **full treatment (big route splits, retuned lap) on
+Paradise Plunge first** so Dan can feel it; the other three courses' big splits come next round. Run unattended; don't stop to
+ask; no visible window. Same testing rules. Read-only references as before.
+
+1. **Power-ups (item boxes), creative, not golf.** Rows of item boxes on every course (in every form: floating on water,
+   in the air on flight lines, in the cave). **B** uses the item (free during races; update Controls). One item held at a time
+   (Bubble Shield / Slick can be held behind you). Every item works in **all four forms**, adapting to each. The set (Dan
+   approved; names can change):
+   - **Wrong Form** — zaps the racer ahead into the wrong form for ~2 s (a plane becomes a boat mid-air and belly-flops; a
+     car lands on water and bobs). Never strands or resets them; it's comic and costs time.
+   - **Rainbow Bridge** — throws a glowing temporary bridge ahead: stay a car across water / a gap, or open a short shortcut
+     only you can take (only where the course allows; never skips required gates).
+   - **Bubble Trap** — wraps a rival in a giant bubble that floats them up off their line until it pops.
+   - **Swap Spot** — trade places with the racer just ahead (confetti puff); never into a wall / wrong form.
+   - **Mirage** — three fake copies of you behind you that soak up attacks and confuse the AI.
+   - **Rewind** — undo your last 3 s (after a crash or a missed ring).
+   - **Pocket Storm** — your own rain cloud drifts ahead and soaks the racers in front: they slip on the road, the water
+     chops, the air buffets.
+   - **Hype Horn** — the crowd goes wild: your stunts score double for 10 s.
+   - **One themed item per course:** Paradise Plunge — a **dino egg** that hatches a baby raptor to chase the racer ahead;
+     Coaster Coast — a **firework rocket**; Big Top Breakdown — a **human cannonball**; Dam Shame — a **mini flood wave**.
+   - **Buck's Big Finish** (very rare, only for the back of the pack) — Buck's stunt cannon blasts you up the field; the crowd
+     roars.
+   Fair and fun: items by position (better ones further back), no item stun-locks (a short grace after a hit), clear warnings
+   for incoming items, readable effects. The AI picks up and uses items sensibly. Barnaby calls hits; drivers react (their
+   mess-up yells). Settings: **Items On / Off** (default On); Time Trial and the Tour's time challenges: off. Simple 2D icons
+   for the HUD (no Tripo).
+   *Check:* every item used in every form (pictures), hits / blocks / misses logged; AI races with items: 0 stuck, no resets
+   caused by items; item odds by position logged over 50 races.
+2. **Stunts and stunt points.** In the air in any form, the **right stick** does tricks (it still looks around on the ground):
+   car — flips and spins; plane — barrel rolls and loops; boat — wave hops and spins; sub — breaching jumps out of the water
+   (new: a sub at speed near the surface can breach). Land clean = **boost + stunt points**; land badly = a wobble and the
+   points lost. **Combos** chain tricks; a trick **during a transformation** is a big "Shift Trick" bonus. Score shown on the
+   HUD (combo meter, points popping up), Barnaby calls combos, the crowd cheers, **Buck judges** (his lines: he was a stunt
+   performer — he loves a good landing).
+   - **Every race shows place and stunt score** on the results.
+   - **Stunt Show mode** (menu, alongside Race / Time Trial): same courses, won on **stunt points** (position gives a small
+     bonus); items On.
+   - The AI does tricks too (by difficulty).
+   *Check:* every trick in every form lands and fails correctly (pictures); a Shift Trick scored; a Stunt Show race won on
+   points; the human-like pilot can land basic tricks.
+3. **Multiple laps on every course.** Race lap count chosen per race (**1–5, default 3**) on the course / racer screen; the
+   Tour and Stunt Show use 3. Trim **Paradise Plunge's** lap so a 3-lap race is about **4–5 minutes** (now ~2 min a lap); the
+   other courses keep their length this round (say their 3-lap times). Dam Shame stays at 3 laps (its water). Lap counter,
+   final lap flash, best lap — as Dam Shame already has.
+4. **Paradise Plunge: big route splits that are completely different experiences.** One or two **major splits**, each
+   lasting a **large part of the lap (roughly a quarter to a third)**, where the other way is a different form, different
+   scenery and different hazards, about equal in time, different risk — so you want to try the other way next lap. E.g. the
+   Lake Jump's fly line becomes a **long valley flight past the dinosaur herds**, while the car line becomes a **jungle canyon
+   run**; a long **underwater** alternative through the cave system vs. a surface river route. Fold the short choices
+   (Lake flight, Cliff flight, Mangrove bypass) into these or make them meaningful. Items and stunt spots on both sides
+   (big airtime on the jumps, breaching spots for subs). Round 12 / 14 rules (room for every exit, forward recovery, LB on
+   the ramp). AI uses both sides.
+   *Check:* each split timed both ways, pictures along both, human-like pilot both ways, AI 25 laps, 0 stuck.
+5. **Regression (all four courses, items On and Off) + AI soaks, wrap-up, release build 20 (0.15.0).** Per-item status, update
+   `CLAUDE.md` (Controls: B item, right stick tricks in the air; modes; settings), commit, push, publish, clean the disk.
+   **End the chat report with the "For Dan to check" list itself.** UTF-8 docs.
+
+### Defaults (unchanged)
+- Publish a release every round. Target hardware: Steam Deck, 60 fps.
+
+### For Dan to check (fill in at end of round)
+- …
 
 ## Next Steps (Do Not Start Yet)
+- **Round 18 (planned): the big route splits on Coaster Coast, Big Top Breakdown and Dam Shame**, like Round 17 did for
+  Paradise Plunge, plus each course's lap length tuned for 3 laps. After Dan's feedback on Round 17.
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),
   Clockwork Cascade (car + boat), Cloud Orchard (car + plane). Dan picks;
   new environments, not Tee'd Off's (Dan, 2026-11-15).
