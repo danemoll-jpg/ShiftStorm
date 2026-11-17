@@ -497,4 +497,5 @@ Round 15 delivered as build 17 (0.13.0), 2026-11-16.
 
 Round 15b delivered as build 18 (0.13.1), 2026-11-16.
 
-Current objective: none set. Waiting for Dan's notes on build 18 (Round 15b).
+Current objective: **Round 16** — make Big Top's Clown flight obvious, and a fourth track: **Dam Shame**, the first multi-lap
+race (3 laps; the water rises each lap: car → boat / flights → diving). Release build 19 (0.14.0). See `TODO.md`.

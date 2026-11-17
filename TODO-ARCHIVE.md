@@ -1768,3 +1768,6 @@ Barker."** Run unattended; don't stop to ask; no visible window. Same testing ru
 ### For Dan to check
 - See "For Dan to check (build 17)" under Completed Tasks.
 
+## Current Objective
+None set: waiting for Dan's notes on build 18 (Round 15b).
+

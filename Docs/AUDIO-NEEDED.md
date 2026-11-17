@@ -119,6 +119,17 @@ in any other song). **Instrumental: on.** Don't imitate any famous circus march.
 - **Length:** 2-3 min. **Loop:** pick a take with no fade-out and no slow breakdown.
 - Save as `Art/Incoming/Music/race_bigtop.mp3`.
 
+### 6. Fourth track race song — `race_dam.mp3` (Dan, 2026-11-17; Dam Shame, a three-lap race as the water rises)
+A huge dam in a mountain canyon; each lap the water rises (car → boat and flights → diving). New song, not Tee'd Off, and
+different from the others (jungle didgeridoo, seaside surf + chants, circus kazoo): a rowdy **jug band meets big band**.
+Mouth instrument: the **blown jug** (not used anywhere else). **Instrumental: on.** The game adds a little more energy each
+lap with filters, so one steady song is all that's needed.
+- **Title:** `Dam Shame`
+- **Style:**
+  `upbeat cartoon racing game theme, rowdy jug band meets big band, blown jug bass, washboard and spoons, banjo and fiddle, honking baritone sax, punchy trumpet stabs, rolling timpani and toms like rushing water, playful frantic energy, steady drive all the way, major key, 145 bpm, seamless loop, no vocals`
+- **Length:** 2-3 min. **Loop:** pick a take with no fade-out and no slow breakdown.
+- Save as `Art/Incoming/Music/ShiftStorm - Dam Shame.mp3` (the folder's naming).
+
 ## Race caller: Barnaby — lower priority
 
 Not needed from Dan: an ElevenLabs key is set, so Code makes his new racing lines in his own Tee'd Off voice
