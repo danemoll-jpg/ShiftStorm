@@ -71,6 +71,28 @@ doesn't need to keep topping the last stunt — the racers, friendships and plac
     little vain, warmly mischievous rather than villainous, perfect clear diction, speaking as if to a packed big top." Name it
     "ShiftStorm Lionel". His look: `Docs/MODELS-NEEDED.md` (Round 15).
 
+- **Dam Shame — going too far** (Round 16, the Tour's fourth stop, "The Controlled Demonstration"; the game's first three-lap race).
+  STORY.md's escalation beat: Buck's promises get bigger than the venue can safely hold. Answers to the four questions:
+  - *Fun and distinctive to race:* the same place three times, but the water rises each lap so the course and the forms change: a
+    huge concrete dam across a mountain canyon in fresh morning light (pine forests, granite cliffs, the reservoir, the spillway, the
+    turbine hall). Lap 1 "dry run": the crest road, down the dry spillway chute as a car, off the flip bucket (a choice: LB opens the
+    wings for the Canyon flight over the river and the beavers' dam), the valley road, the bridge, the turbine hall, the dam road back
+    up. Lap 2 "a smidge": the spillway runs (a boat down the torrent), the flip bucket throws you into the air, the valley floor is
+    awash (boat over the drowned roads and through the hall). Lap 3 "the full demonstration": the valley floods 16 m deep: dive along
+    the drowned road and through the flooded turbine hall, surface at the dam road. No other track changes under you.
+  - *Why Buck brings the tour here:* the tour is a hit and Buck needs a bigger show. He books the **Lockhart Dam** for a "controlled
+    water demonstration": one spillway gate, opened "a smidge", once a lap. He badly misunderstands the scale (the first gate sticks;
+    lap 3 is the whole valley).
+  - *Who cares about this place:* **Hattie Sluice, the dam keeper** (forty-one years at the Lockhart Dam): practical, dry, fiercely
+    protective of "her" dam, unimpressed by Buck, quietly decent to the racers. She talks in The Tour's Stop 4 scene (subtitles only
+    until her voice exists). And a colony of beavers downstream with their own little dam (a joke beside the real one: "DAM GOOD").
+  - *What changes:* the first time Buck admits he went too far ("maybe that was a bit much. Just a bit. Next time, a smaller
+    smidge"), which sets up the campaign's later beats (the stakes rise, then Buck has to choose between spectacle and people). The
+    player's challenge here is **Rae's** second (Rae's Flood Run: down the running spillway, through the turbine hall).
+  - *Hattie's voice (ElevenLabs Voice Design prompt, for Dan):* "A dry, no-nonsense woman in her sixties from a mountain town, a low,
+    slightly gravelly alto, clipped and practical, unimpressed, with a deadpan sense of humour and a hidden warmth, clear diction,
+    speaking plainly as if over a site radio." Name it "ShiftStorm Hattie". Her look: `Docs/MODELS-NEEDED.md` (Round 16).
+
 ## Choosing tracks
 **Pick tracks because they'd be fun to race.** The tour connects them — no real geography, shared theme or open world.
 Each stop needs only a small purpose: introduce a host, develop a rivalry, expose an extravagant promise, or let someone

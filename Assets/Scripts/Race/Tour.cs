@@ -16,7 +16,7 @@ namespace ShiftStorm
     public static class Tour
     {
         public sealed class Stop { public int course; public string title, key; }
-        public static readonly Stop[] Stops = { new Stop { course = 0, title = "The Trial", key = "s1" }, new Stop { course = 1, title = "Opening Night", key = "s2" }, new Stop { course = 2, title = "The Big Top Dare", key = "s3" } };   // Round 15: Stop 3
+        public static readonly Stop[] Stops = { new Stop { course = 0, title = "The Trial", key = "s1" }, new Stop { course = 1, title = "Opening Night", key = "s2" }, new Stop { course = 2, title = "The Big Top Dare", key = "s3" }, new Stop { course = 3, title = "The Controlled Demonstration", key = "s4" } };   // Round 15: Stop 3; Round 16: Stop 4
         public const int QualifyPlace = 3;
         public static int PointsFor(int place) => place == 1 ? 10 : place == 2 ? 6 : place == 3 ? 4 : place == 4 ? 2 : 1;
 
@@ -100,6 +100,14 @@ namespace ShiftStorm
             if (stop + 1 > Unlocked) return $"Stop {stop + 1}: {s.title} ({course})   - locked: top {QualifyPlace} at Stop {stop} -";
             return $"Stop {stop + 1}: {s.title} ({course})   " + (Best(stop) > 0 ? $"best {Race.Ordinal(Best(stop))}, {Points(stop)} pts" : "not raced yet");   // Round 15: shorter (the rows ran off the Deck's screen)
         }
+        // Round 16: lines from someone with no voice yet, between Buck's (after his line number `after`): Hattie Sluice, Dam Shame's keeper
+        public const string Hattie = "HATTIE SLUICE, DAM KEEPER";
+        public static IList<(int after, string speaker, string text)> SceneTexts(string key) => key != "s4" ? null : new List<(int, string, string)>
+        {
+            (1, Hattie, "Mister Barlow. Forty-one years I've kept this dam. It holds a lake the size of a small county. It is not a water slide."),
+            (2, Hattie, "One gate. A smidge. And when I say stop, you STOP. ...Why is he writing 'smidge' on his hand?"),
+            (3, Hattie, "Racers: the siren means the water's coming up. Go with it. The valley will look different every lap. Good luck. You'll need it."),
+        };
         public static string Describe(int stop) => $"Points so far: {Total} (1st 10, 2nd 6, 3rd 4, 4th 2; top {QualifyPlace} unlocks the next stop)." + (stop + 1 > Earned && stop + 1 <= Unlocked ? " Open now because of Settings > Unlock all Tour stops." : "");
     }
 
@@ -129,7 +137,7 @@ namespace ShiftStorm
                 Time.timeScale = 0;
                 var ids = buck.Pool($"tour_{st.key}_intro");
                 var fly = StartCoroutine(FlyThrough(game.Courses[st.course], ids.Sum(id => Length(id)) + .4f * ids.Count));
-                yield return buck.Scene(ids, $"tour stop {stop + 1} scene");
+                yield return buck.Scene(ids, $"tour stop {stop + 1} scene", Tour.SceneTexts(st.key));
                 StopCoroutine(fly); EndFlyThrough();
                 Step(buck.Skipped ? "scene skipped" : "scene done");
                 if (!game.MenuOpen) Time.timeScale = 1;
@@ -145,7 +153,7 @@ namespace ShiftStorm
             {
                 // after Barnaby's results line, when nobody is talking (as Buck's results remark)
                 float t0 = Time.realtimeSinceStartup;
-                while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "podium" || l.pool == "last"))) yield return null;
+                while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "btres" || l.pool == "dmres" || l.pool == "podium" || l.pool == "last"))) yield return null;
                 float t1 = Time.realtimeSinceStartup;
                 while (Time.realtimeSinceStartup - t1 < 8f && ((Caller.Instance && (Caller.Instance.BarkerTalking || (Caller.Instance.Voice && Caller.Instance.Voice.isPlaying))) || Time.time < Driver.AnySpeakingUntil)) yield return null;
                 var retry = buck.Pool($"tour_{st.key}_retry");
@@ -164,7 +172,7 @@ namespace ShiftStorm
         {
             var cam = game.Cam; chase = cam.GetComponent<ChaseCam>(); views = cam.GetComponent<CameraViews>();
             chaseWas = chase && chase.enabled; viewsWas = views && views.enabled; if (chase) chase.enabled = false; if (views) views.enabled = false;
-            float t0 = Time.realtimeSinceStartup, len = c.Length * .92f;
+            float t0 = Time.realtimeSinceStartup, len = (c.laps > 1 && c.lapStarts.Count > 1 ? c.lapStarts[1] : c.Length) * .92f;   // Round 16: one lap of a multi-lap course
             while (true)
             {
                 float k = Mathf.Clamp01((Time.realtimeSinceStartup - t0) / Mathf.Max(1f, seconds));

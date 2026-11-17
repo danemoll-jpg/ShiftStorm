@@ -126,16 +126,19 @@ namespace ShiftStorm
         {
             var cs = game.Courses; EnsureCards(cs.Count);
             float w = 470, gap = 30, x0 = -(cs.Count * w + (cs.Count - 1) * gap) * .5f + w * .5f;
+            bool carousel = cs.Count > 3;   // Round 16: four courses: the chosen card in the middle, its neighbours either side (left / right scrolls)
             for (int i = 0; i < cards.Count; i++)
             {
                 var cd = cards[i]; bool on = i < cs.Count; cd.root.gameObject.SetActive(on); if (!on) continue;
                 bool chosen = i == game.MenuCourse; var c = cs[i];
-                cd.root.anchoredPosition = new Vector2(x0 + i * (w + gap), -110); cd.root.localScale = Vector3.one * (chosen ? 1.04f : .94f);
+                cd.root.anchoredPosition = carousel ? new Vector2((i - game.MenuCourse) * (w * .86f + gap), -110) : new Vector2(x0 + i * (w + gap), -110);
+                cd.root.localScale = Vector3.one * (chosen ? 1.04f : carousel ? .82f : .94f); if (carousel && Mathf.Abs(i - game.MenuCourse) > 1) cd.root.gameObject.SetActive(false);
                 cd.frame.color = chosen ? new Color(.95f, .72f, .2f, .95f) : new Color(.06f, .09f, .1f, .85f);
                 cd.pic.texture = CourseCards.Get(i); cd.pic.color = chosen ? Color.white : new Color(.6f, .6f, .6f);
                 cd.name.text = c.courseName; cd.name.color = chosen ? new Color(.1f, .06f, .02f) : Ink;
                 var best = BestTimes.Get(c.courseName);
-                cd.info.text = $"{CourseCards.Forms(c)}\nBest lap: {(best != null ? TimeTrial.Clock(best.lap) : "none yet")}";
+                cd.info.text = c.laps > 1 ? $"{CourseCards.Forms(c)}  ({c.laps} laps)\nBest race: {(best != null ? TimeTrial.Clock(best.lap) : "none yet")}{(best != null && best.single > 0 ? $"   lap {TimeTrial.Clock(best.single)}" : "")}"
+                                          : $"{CourseCards.Forms(c)}\nBest lap: {(best != null ? TimeTrial.Clock(best.lap) : "none yet")}";   // Round 16: a multi-lap course's card
                 cd.info.color = chosen ? new Color(.15f, .1f, .04f) : new Color(.85f, .9f, .86f);
             }
         }

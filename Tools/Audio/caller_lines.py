@@ -291,6 +291,49 @@ ROUND15 = {
     "btpool_1": "[excited] Up out of the water and back to the midway! Here comes the finish!",
 }
 LINES.update(ROUND15)
+# Round 16: Big Top's Clown flight called by its hoops; Dam Shame (Race/Caller.cs: dm* pools; the set-piece ones only while that thing is
+# big on the screen; dmrise1 / dmrise2 when the water rises, after Buck's tannoy line; dmlap2 / dmlap3 at the lap lines)
+ROUND16 = {
+    "btwings_3": "[showman] Wings out! Through the hoops and on to the big top!",
+    "bthoops_1": "[excited] Through the hoops, folks! One, two, three, four!",
+    "dmstart_1": "[excited] Welcome to Dam Shame, folks! Three laps, one dam, and a whole lot of water!",
+    "dmstart_2": "[showman] Good morning from the mountains! Buck promises a controlled water demonstration. I promise nothing!",
+    "dmstart_3": "[chuckles] Three laps today, folks, and the course changes every one of them. Hold on to your snorkels!",
+    "dmfill_1": "[showman] What a morning for it, folks! Not a cloud in the sky. Plenty of water, though.",
+    "dmfill_2": "[chuckles] Somebody tell the fish we're coming through!",
+    "dmfill_3": "[excited] Concrete, pine trees, and four racers who can't stay in one shape!",
+    "dmfill_4": "[sly] I've seen the dam keeper's face, folks. She is not enjoying this.",
+    "dmwings_1": "[excited] Wings out off the flip bucket! Over the plunge pool!",
+    "dmwings_2": "[showman] Off the lip and into the canyon air, folks!",
+    "dmsplash_1": "[chuckles] Splashdown in the valley! That's new!",
+    "dmres_1": "[showman] And that's the demonstration, folks! The dam is still standing! Mostly!",
+    "dmres_2": "[delighted] Three laps, three courses, one very wet valley! What a race!",
+    "dmjump_1": "[excited] Off the flip bucket and over the plunge pool!",
+    "dmrise1_1": "[gasps] The spillway's running! Boats down the chute, folks!",
+    "dmrise1_2": "[excited] Here comes the water! The valley's going under, just a little!",
+    "dmrise2_1": "[shouting] That is NOT a smidge! The whole valley's flooding, folks!",
+    "dmrise2_2": "[gasps] It's a lake! The valley is a lake! Subs at the ready!",
+    "dmlap2_1": "[excited] Lap two, folks, and the water's up!",
+    "dmlap2_2": "[showman] Into lap two! Same dam, different river!",
+    "dmlap3_1": "[shouting] Final lap! Under the water we go!",
+    "dmlap3_2": "[excited] Last lap, folks! Hope everyone packed a periscope!",
+    "dmspill_1": "[excited] Look at that spillway roar! Down the torrent they go!",
+    "dmspill_2": "[showman] White water all the way down the chute, folks!",
+    "dmgates_1": "[gasps] The spillway gates are open! Buck, what did you do?",
+    "dmturbine_1": "[excited] Through the turbine hall! Mind the giant spinning things!",
+    "dmturbine_2": "[chuckles] Those turbines are making power, folks. Mostly from the racers.",
+    "dmbuck_1": "[chuckles] There's Buck up in the control room, waving! Hands off the buttons, Buck!",
+    "dmbeaver_1": "[delighted] Look, folks, the beavers have built their own dam! And theirs isn't leaking!",
+    "dmbeaver_2": "[laughs] Beavers! The real engineers on this course!",
+    "dmheron_1": "[whispers] Shh, a heron! Fishing, of course. Aren't we all?",
+    "dmtrout_1": "[excited] Trout jumping out of the water! They want a look at the race too!",
+    "dmlogs_1": "[gasps] Logs in the flood! And a picnic table! And a duck!",
+    "dmdam_1": "[showman] Look at the size of that dam, folks! Seven hundred metres of concrete!",
+    "dmhall_1": "[excited] Into the turbine hall! Keep it straight in there!",
+    "dmflood_1": "[chuckles] The valley road's under water, folks! Boats only!",
+    "dmdive_1": "[excited] Canopies sealed! Diving down the drowned valley!",
+}
+LINES.update(ROUND16)
 # his Tee'd Off clips that fit a race (copied as they are): id here -> Tee'd Off file
 EXISTING = {
     "win_any_1": "winner_1", "win_any_2": "winner_3", "win_any_3": "winner_5", "win_any_4": "finale_1",

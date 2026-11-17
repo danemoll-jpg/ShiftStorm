@@ -89,12 +89,13 @@ namespace ShiftStorm
             if (!planned || scDone)
                 foreach (var sc in c.shortcuts)
                 {
-                    if (!sc.choice || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
+                    if (!sc.choice || !sc.entry.Allows(Mode.Fly) || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
                     decided.Add(sc.label);
                     if (forceChoice != 0 ? forceChoice > 0 : rnd.NextDouble() < Skill.fly) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} will fly at the {sc.label}"); }
                     else v.Note("plan", $"{v.RacerName} stays a car at the {sc.label}");
                     break;
                 }
+            if (planned && planned.choice && !scDone && v.OnShortcut != planned && !planned.entry.Allows(Mode.Fly)) { scDone = true; v.Note("plan", $"{v.RacerName} drops the {planned.label} (closed)"); }   // Round 16: the branch closed after it was planned
             if (planned && planned.choice && !scDone && v.WingsOpen && v.GroundedWheels == 0 && !v.Changing) input.RequestWings();
             if (planned && !scDone)
             {
@@ -142,12 +143,13 @@ namespace ShiftStorm
             if (!planned || scDone)
                 foreach (var sc in c.shortcuts)
                 {
-                    if (!sc.choice || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
+                    if (!sc.choice || !sc.entry.Allows(Mode.Fly) || decided.Contains(sc.label) || !(v.Progress > sc.mainFrom - 300 && v.Progress < sc.mainFrom - 3 && v.GatesPassed <= sc.nextGate)) continue;
                     decided.Add(sc.label);
                     if (forceChoice != 0 ? forceChoice > 0 : rnd.NextDouble() < Skill.fly) { planned = sc; scDone = false; Plan = sc.label; ShortcutsTried++; scS = 0; lastTaken = v.ShortcutsTaken.Count; v.Note("plan", $"{v.RacerName} will fly at the {sc.label}"); }
                     else v.Note("plan", $"{v.RacerName} stays a car at the {sc.label}");
                     break;
                 }
+            if (planned && planned.choice && !scDone && v.OnShortcut != planned && !planned.entry.Allows(Mode.Fly)) { scDone = true; v.Note("plan", $"{v.RacerName} drops the {planned.label} (closed)"); }   // Round 16: the branch closed after it was planned
             if (planned && planned.choice && !scDone && v.WingsOpen && v.GroundedWheels == 0 && !v.Changing) input.RequestWings();
             if (planned && !scDone)
             {

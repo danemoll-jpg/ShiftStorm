@@ -246,6 +246,15 @@ namespace ShiftStorm
                 case Mode.Fly: EnterFly(speedIn, false); break;
                 case Mode.Dive: EnterDive(speedIn); break;
             }
+            // Round 16 item 1: wheels down high up (a pilot still climbing over a wheels-down zone, 20-35 m up: Big Top's Clown flight) came
+            // down as a car still going up and sailed past the big top's door onto its roof; now the car stops climbing and comes down within
+            // about a second (at most 30 m/s; the wheels-down touch then eases it to 8 m/s)
+            if (to == Mode.Drive && from == Mode.Fly && !OldFlight && !ChaseCam.OldFlightLook)
+            {
+                var lv = Body.linearVelocity; float h = Physics.Raycast(Body.position, Vector3.down, out var gh, 80f, GroundMask, QueryTriggerInteraction.Ignore) ? gh.distance : 0f;
+                float vy = h > 5f ? -Mathf.Min(30f, h / 1.1f) : Mathf.Min(lv.y, 0f);
+                if (lv.y > vy) Body.linearVelocity = new Vector3(lv.x, vy, lv.z);
+            }
             CarryTarget = -1; if (to == Mode.Drive) EnteredDriveAt = Time.time;
             if (animate && shared.changeSpeedCarry > 0 && TopOf(to) > TopOf(from) && speedIn > 1f)
             {

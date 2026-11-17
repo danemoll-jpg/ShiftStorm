@@ -320,3 +320,9 @@ Docs/SOUNDS.md lists every sound and where it is used.
 
 ## Round 15 (2026-11-16)
 Nothing new copied from chastain_rush. Big Top Breakdown reuses this project's own Coaster Coast code (`CoasterCoast.RailPath`, now shared, with a new `Ramp` piece; the grandstand, label and shortcut helpers were duplicated into `World/BigTop*.cs`). `Tools/Music/make_loops.py` (from Tee'd Off, Round 7) got the `race_bigtop` track.
+
+## Round 16 (2026-11-17)
+Nothing new copied from chastain_rush. Dam Shame (`World/DamShame*.cs`, `World/DamLook.cs`) reuses this project's own Big Top code
+(the grandstand, lettering and shortcut helpers duplicated with the dam's palette; the lettering font gained M, F, V, Y and !) and
+Big Top's `Arcs`, `Pace`, `Swing` and Coaster Coast's `Spin` components. `Tools/Music/make_loops.py` (from Tee'd Off, Round 7) got the
+`race_dam` track (alias "ShiftStorm - Dam Shame").

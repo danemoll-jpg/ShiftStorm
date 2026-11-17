@@ -68,10 +68,10 @@ namespace ShiftStorm
             if (past)
             {
                 if (MissedGate != g) { MissedGate = g; missedFor = 0; Note("missed", $"missed gate {g.label} ({over:0} m past it, {Mode}): turn back"); }
-                if (!OldFlight && !g.Allows(Mode) && shared.missedGateResetMeters < 9000) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label} as {Mode}"); return; }   // Round 12: in the wrong form turning back cannot earn it
+                if (!OldFlight && !g.Allows(Mode) && shared.missedGateResetMeters < 9000) { MissedGate = null; missedFor = 0; MissedRecover(g, $"missed gate {g.label} as {Mode}"); return; }   // Round 12: in the wrong form turning back cannot earn it
                 var toGate = g.transform.position - p; returning = Vector3.Dot(travel, toGate.normalized) > .5f;
                 if (!returning) missedFor += dt;
-                if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; Recover($"missed gate {g.label}"); return; }
+                if (over > shared.missedGateResetMeters || missedFor > shared.missedGateResetSeconds) { MissedGate = null; missedFor = 0; MissedRecover(g, $"missed gate {g.label}"); return; }
             }
             else if (MissedGate == g && over < 0) { MissedGate = null; missedFor = 0; }
 
@@ -82,7 +82,7 @@ namespace ShiftStorm
             // Round 12 item 3: the arrow follows a shortcut only once it is entered. Build 13 followed any shortcut whose line was within its width
             // before its entry: the Sky Arch slit's line starts on the route 490 m before the arch, so the arrow led every plane to a 22 m slit
             // 190 m off the line; a miss there was reset to the anchor before the flight (lip + 90) and the arrow led it back in: a loop.
-            GuideTarget = MissedGate ? MissedGate.transform.position : sc ? sc.PointAt(scS + ahead, out _) : OldFlight && near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
+            GuideTarget = MissedGate ? MissedGate.transform.position : sc ? (OldFlight || ChaseCam.OldFlightLook ? sc.PointAt(scS + ahead, out _) : sc.GuideAt(scS, ahead)) : OldFlight && near ? near.PointAt(nearS + ahead, out _) : Course.PointAt(Mathf.Min(aim, Course.Length), out _);
 
             // the cue, most important first
             if (Holding || Finished || Time.time < MissCueUntil) return;
@@ -90,5 +90,22 @@ namespace ShiftStorm
             else if (WrongWay) ShowCue("WRONG WAY - TURN AROUND", CueKind.Wrong, .3f);
             else if (OffRoute || OutOfBoundsFor > 0) ShowCue("THIS WAY", CueKind.Guide, .3f);
         }
-    }
+    
+        // Round 16 (the Dam Shame soaks: an AI straggler reset 136-205 times at one gate, the water risen round it): the third reset in a row
+        // for the same missed gate puts the racer past it instead, the gate counted with ShiftTuning.branchRecoveryPenalty seconds added
+        int loopGate = -1, loopResets;
+        void MissedRecover(ProgressGate g, string reason)
+        {
+            if (loopGate != GatesPassed) { loopGate = GatesPassed; loopResets = 0; }
+            loopResets++;
+            if (!OldFlight && loopResets >= 3 && GatesPassed < Course.gates.Count - 1)   // never the finish line
+            {
+                GatesPassed++; GateLog.Add(g.index); loopGate = -1; loopResets = 0;
+                Penalty += shared.branchRecoveryPenalty; NearMisses.Add(g.label.Replace(" ", "-") + "-reset"); MissCueUntil = Time.time + 2.5f;
+                Note("gate", $"gate {g.label} counted after 3 resets for it in a row (+{shared.branchRecoveryPenalty:0} s) ({GatesPassed}/{Course.gates.Count})");
+                if (BestProgress < g.progress + 5f) { BestProgress = g.progress + 5f; lastBest = BestProgress; }
+            }
+            Recover(reason);
+        }
+}
 }

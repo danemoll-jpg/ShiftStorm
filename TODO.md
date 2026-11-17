@@ -21,10 +21,72 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 16 — Big Top's first flight made obvious, Dam Shame (the first three-lap race, the water rises every lap)** (2026-11-17, release `build-19` / 0.14.0). Status below.
 - **Round 15b (hotfix) — the screen shake on Coaster Coast and Big Top** (2026-11-16, release `build-18` / 0.13.1). Status below.
 - **Round 15 — the shimmer's cause fixed, Barnaby by name, Big Top Breakdown** (2026-11-16, release `build-17` / 0.13.0). Status below.
 - **Round 14 — title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race, the Ferris wheel on the main route** (2026-11-16, release `build-16` / 0.12.0). Status below.
 - **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 16 delivery (2026-11-17) — status per item
+Evidence: `Docs/Checks/round16/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal; measured audio
+output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted. One slip: for about 20 minutes two check queues
+ran at once (a stopped queue's shell kept going); everything that overlapped was run again on its own afterwards.
+1. **Big Top's Clown flight made obvious — DONE (human-like pilot 9 of 10, not 10 of 10).** Four striped circus hoops along the flight
+   (the HUD arrow points at the next hoop, then the exit), the Globe of Death moved 12 m east to give them room, a lit arch over the road
+   at the wheels-down zone ("TO THE BIG TOP", bulbs, two spotlights on the chevrons), a gentler last bend and a wider, deeper wheels-down
+   zone; a plane that gets its wheels high up now comes down within about a second instead of sailing on (all courses). In flight the
+   chase camera turns up to 25 deg toward where the route goes (flight branches, and 3 s after any change into the plane). The route strip
+   shows every choice jump's flight branch in violet. Cannonball flight: rings bigger and brighter, a "SPLASHDOWN" arch on the river, the
+   cannon's wings zone deeper. Barnaby: "Wings out! Through the hoops and on to the big top!" (+ a hoops line).
+   *Checks (`bt16`):* pictures every 0.5 s: the next hoop / exit on the screen in **7 of 7** (Clown flight; this round's first try had 5 of 11) and the next hoop / ring / arch in **30 of 30** (cannonball). Human-like pilot (HUD arrow only, late, keys or a noisy
+   stick): Clown flight **9 of 10** (first try of the round: 0 of 10, then 3 of 10; the one miss came down 37 m west of the road 30 m up,
+   landed beside the door and was put forward, +3 s); cannonball flight **9 of 10** (the miss never got into the cannon's mouth, Round 15's
+   entry, and was put forward into the flight). AI: Clown Jump fly 10 / 10, car 10 / 10, river both ways 10 / 10.
+2. **Dam Shame — DONE (stand-ins for the beavers, heron and Hattie; Dan's song not in yet).** STORY.md's four questions answered (Buck's
+   "controlled water demonstration" at the Lockhart Dam; Hattie Sluice, the dam keeper; the Tour's Stop 4 "The Controlled Demonstration";
+   Buck admits it was "a bit much"). A dam across a mountain canyon in morning light (pine forests, cliffs, snowy peaks, the reservoir,
+   the spillway, the turbine hall), 9 km south of Paradise Plunge. **The game's first multi-lap race (3 laps of 2.97 km).** Lap 1: crest
+   road, the dry spillway chute, the flip bucket (a choice jump: LB = the Canyon flight over the river and the beavers), the valley road,
+   the bridge, the turbine hall, the dam road back up. Lap 2 (siren, Buck "a smidge", the valley awash): boat down the torrent, the lip
+   throws you into the air, boat over the drowned roads and through the hall, wheels down at the dam road. Lap 3 (the full
+   demonstration, 16 m of water): boat down the chute into the flood, sub along the drowned road and through the flooded turbine hall,
+   surface and wheels down where the dam road leaves the water. The water rises when the leader starts lap 2 / 3 (time trial: your own lap
+   line); every zone and reset decides the form from the water, and a racer the water reaches is changed (car -> boat, boat held under ->
+   sub, boat on a dry road -> car). Multi-lap: LAP n / 3 on the HUD (+ a flash, FINAL LAP), gates per lap, positions across laps, one split
+   per lap (the lap times), best lap on the results and on file, the course card says "3 laps / Best race / lap". Set-pieces: the dam,
+   the spillway gates and torrent, the turbines, Buck waving from the control room, the beaver colony ("DAM GOOD"), a heron, trout, logs
+   (and a duck) riding the flood. Crowd on the crest, near misses, AI, split screen, views, reactions, playtest logs, Tour Stop 4 and
+   Rae's Flood Run challenge (paint "Spillway Teal"). Voices: Barnaby 38 lines, Buck 24, Rae 3 (ElevenLabs); Hattie speaks in subtitles
+   (voice prompt in STORY.md). Music: `race_dam` once Dan's "ShiftStorm - Dam Shame.mp3" arrives (`make_loops.py race_dam`); the
+   ShiftStorm theme plays meanwhile. Tripo prompts: beaver, heron, Hattie (`Docs/MODELS-NEEDED.md`).
+   *Checks:* `damlap` PASS: 147.3 s (laps 45.8 / 44.6 / 56.9), 16 / 16 gates in order, 0 resets; the water rose at 50 s (-2.5 -> 1.4 m)
+   and 94 s (1.4 -> 16 m); forms per lap: car / boat, plane, boat, car / boat, sub, boat, car; a set-piece >= 8 % of the screen for >= 1 s
+   in 3 of 3 laps; PC render + GPU mean 3.9 ms, 95th pct 5.3 ms; form changes at most 16 ms. `damrise` (stragglers while the water rises
+   round them) **7 of 7** (a car in the valley, a car in the hall, a car through both rises, a boat in the hall, a boat on the drowned
+   road, a car at the dam road's foot, a car on the chute): each reached its lap line, no reset. Fixed on the way: the crest's valley-side
+   parapet blocked the bend into the spillway (the first lap check looped there), an AI that had planned the Canyon flight kept flying it
+   after the water closed it, the Canyon flight's wheels-down turned lap 3's subs into boats. Split screen (Dam Shame, 2 players + 2 AI)
+   PASS, both HUDs right 144 / 144. AI soaks (Dam Shame, 4 AI per race, 3 laps each): Normal 199 of 200, Easy 32 of 32, Hard 31 of 32, 0 bad gate sequences;
+   the two unfinished were AI stragglers caught in a reset loop at one gate (205 and 136 resets) after the water rose round them.
+   Fix: the third reset in a row for the same missed gate now puts the racer past it (+3 s, all courses). Run again: Normal 80 of 80
+   (6 resets), Hard 32 of 32 (4 resets); the loop did not come back, so the new rule is in place but was not needed in those runs.
+3. **Regression + release — DONE.** `round2` PASS (Paradise lap 124.65 s), `cclap` PASS 106.33 s, `btlap` PASS 94.97 s, `btglobe` 6 / 6,
+   `btsplits` 40 / 40, `round11` PASS (Buck on every course, The Tour's four stops, 16 / 16 racers), `challenges` 8 of 8 (each of the four won and lost; Rae's Flood Run included), `menuwalk`
+   13 / 13 + exit 0, `unlock` PASS, `menus14` (the course cards as a carousel of four). Release build 19 (0.14.0) published; disk cleaned.
+
+### For Dan to check (build 19)
+1. Big Top Breakdown: LB on the Clown Jump's ramp. Can you see where to go now (the four striped hoops, then the lit "TO THE BIG TOP"
+   arch over the road)? Did you land on the road before the big top's door?
+2. The cannon: the rings over the camp and the "SPLASHDOWN" arch on the river. Clear enough?
+3. Dam Shame (Race, Time Trial, or The Tour's Stop 4): three laps. Lap 1 dry, lap 2 the spillway runs (boat down the chute, thrown into
+   the air off the flip bucket), lap 3 the valley floods (dive through the turbine hall). Does each lap feel different enough?
+4. When the water rises (siren, Buck on the tannoy): does it read well? Was your machine ever caught in the wrong form?
+5. Lap 1's flip bucket: LB on the ramp for the Canyon flight over the river and the beavers' little dam. Worth it?
+6. The HUD's LAP 2 / 3, the FINAL LAP flash, and the lap times on the results screen.
+7. The stand-ins: the beavers, the heron, Buck in the control room window. Make the beaver / heron / Hattie models when you have time
+   (prompts in Docs/MODELS-NEEDED.md), and Hattie's voice if you like (prompt in Docs/STORY.md).
+8. Your song: save it as `Art/Incoming/Music/ShiftStorm - Dam Shame.mp3`; until then Dam Shame plays the ShiftStorm theme.
+9. Rae's Flood Run on The Tour page.
 
 ### Round 15b delivery (2026-11-16) — status per item
 Evidence: `Docs/Checks/round15b/` (before / after reports and heat maps). Every run: built exe, `-batchmode -mute`, no window, Below Normal,
@@ -670,66 +732,8 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 16: Big Top's first flight, and Dam Shame (a three-lap race where the water rises)
-
-**Dan's review of build 18 (0.13.1), 2026-11-17:** "No more shake. It is a little confusing to me where the first flight
-is supposed to go in the circus." Then Dan picked **Dam Shame** (2026-11-17), as a multi-lap race where the course changes each lap (the planning chat's
-proposal, Dan: "I meant how you described it"). Run unattended; don't stop to ask; no visible window. Same testing rules.
-Read-only references as before.
-
-1. **Big Top's Clown flight (the first flight, LB at the Clown Jump): make it obvious where to go.** Dan couldn't tell
-   where it leads. From the moment the wings open, the player must see the destination: a clear chain of big rings / a lit
-   path from the lip to the exit, the **exit itself visible and framed** (a banner, a bright arch, a spotlight on the
-   wheels-down zone), the HUD arrow pointing at the next ring, the route strip showing the branch, and a camera that looks
-   where the flight goes (not at the Globe). Barnaby can call it ("Through the hoops and back to the midway!"). Round 12's
-   rules hold (room to make the exit, forward recovery). Check the cannonball flight the same way.
-   *Check:* player-view pictures every half-second along the Clown flight and the cannon flight — is the next target always
-   in view? the human-like pilot (no prior knowledge of the line, follows only what's on screen) makes it 10 of 10.
-
-2. **A fourth track: Dam Shame — three laps, the water rises every lap.** STORY.md: *"Roads across a dam become spillway
-   runs, submerged tunnels, and aerial launches. Buck books a 'controlled water demonstration' and misunderstands its
-   scale."* Answer STORY.md's four questions in `Docs/STORY.md` before building. A **new environment**, clearly different
-   from the jungle, the pier and the circus: a huge concrete dam across a **mountain canyon** — pine forests, cliffs, a
-   reservoir, spillways, the turbine hall — in fresh **morning light** with spray and mist.
-   - **The idea:** the **first multi-lap race** (3 laps). The route stays the same place, but **the water rises each lap**,
-     so the course and the forms change:
-     - **Lap 1, "dry run":** gates shut, mostly **car** — roads across the dam crest and down through dry spillway channels,
-       a jump or two.
-     - **Lap 2, Buck "opens one gate a smidge":** the spillways run — the same channels become **boat** runs down rushing
-       water, with **flights** off the overflow lips.
-     - **Lap 3, "the full demonstration":** the valley floods — low roads are under water and you **dive** through flooded
-       tunnels and the turbine hall.
-   - **How the water works:** one water level for the whole course, raised **when the leader starts lap 2 and lap 3**
-     (warning siren, Buck and Barnaby lines, a ~10 s rise you can see). Every change zone decides the form from the **actual
-     water at that spot**, so racers on different laps are always right; a car on a road that floods under it changes to
-     the boat smoothly — never stranded, never drowned. Time Trial: the water rises at your own lap line.
-   - **Multi-lap support** (new for the game): lap counter, gates per lap, positions across laps, lap times + best lap,
-     results with each lap, the route strip / arrow / minimap per lap state, the race end after lap 3. Other tracks stay
-     single-lap.
-   - **Set-pieces** (8 % of screen height for 1 s): the spillway torrents and spray, the gates opening, the turbine hall's
-     giant turbines, Buck waving from the control room window, trout leaping, logs and debris riding the flood, a cartoon
-     beaver colony with its own little dam (a joke beside the real one), a heron. Models: reuse first; anything essential
-     missing → **at most 2–3** Tripo prompts for Dan, stand-ins meanwhile.
-   - **Story:** the Tour's **fourth stop** — STORY.md's "Growing success / Going too far": Buck's promises get bigger than
-     the venue can safely hold. A local host who cares about the dam (e.g. the dam keeper) — text / subtitles until Dan
-     makes a voice; write a short voice-design and image prompt for Dan. Buck briefing / results lines and Barnaby's lines
-     for this track and for each rise.
-   - **Everything the other tracks have:** near misses, choices with split paths (LB rules from Round 14), forward recovery
-     (Round 12), AI on all difficulties (they handle every water state), split screen, camera views, crowd (on the dam
-     crest), driver reactions, steering, playtest logs, time trial / best times, course card, Tour stop + a rival challenge.
-   - **Music:** Dan's new song (`race_dam.mp3`, prompt in `Docs/AUDIO-NEEDED.md` song 6 — added by the planning chat); a
-     ShiftStorm song stands in until it arrives. Optional: a little more energy each lap (filters / mix), not new songs.
-   *Check:* check-pilot race (3 laps) with lap and segment times; every water state's route; a straggler a lap down while the
-   water rises (no stranding, right forms); AI 25 races with 0 stuck; a 50-race AI soak; set-piece visibility per lap;
-   split-screen race; frame time (PC) + Deck check list; player-view pictures of each lap state — look at them.
-3. **Regression (all four tracks) + AI soaks, wrap-up, release build 19 (0.14.0).** Per-item status, update `CLAUDE.md`,
-   commit, push, publish, clean the disk. **End the chat report with the "For Dan to check" list itself.** UTF-8 docs.
-
-### Defaults (unchanged)
-- Publish a release every round. Target hardware: Steam Deck, 60 fps.
-
-### For Dan to check (fill in at end of round)
-- …
+## Current Objective
+None set: waiting for Dan's notes on build 19 (Round 16).
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

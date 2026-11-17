@@ -78,6 +78,10 @@
    "text": "The Globe of Death, folks! Don't try this at home. Or anywhere!"
   },
   {
+   "id": "bthoops_1",
+   "text": "Through the hoops, folks! One, two, three, four!"
+  },
+  {
    "id": "btjump_1",
    "text": "Over the clown cars! Honk honk, folks!"
   },
@@ -156,6 +160,10 @@
   {
    "id": "btwings_2",
    "text": "Look, no loop! Flying the long way round, folks!"
+  },
+  {
+   "id": "btwings_3",
+   "text": "Wings out! Through the hoops and on to the big top!"
   },
   {
    "id": "byabi_1",
@@ -456,6 +464,150 @@
   {
    "id": "creek_2",
    "text": "Creek Jump! Splash-free, folks!"
+  },
+  {
+   "id": "dmbeaver_1",
+   "text": "Look, folks, the beavers have built their own dam! And theirs isn't leaking!"
+  },
+  {
+   "id": "dmbeaver_2",
+   "text": "Beavers! The real engineers on this course!"
+  },
+  {
+   "id": "dmbuck_1",
+   "text": "There's Buck up in the control room, waving! Hands off the buttons, Buck!"
+  },
+  {
+   "id": "dmdam_1",
+   "text": "Look at the size of that dam, folks! Seven hundred metres of concrete!"
+  },
+  {
+   "id": "dmdive_1",
+   "text": "Canopies sealed! Diving down the drowned valley!"
+  },
+  {
+   "id": "dmfill_1",
+   "text": "What a morning for it, folks! Not a cloud in the sky. Plenty of water, though."
+  },
+  {
+   "id": "dmfill_2",
+   "text": "Somebody tell the fish we're coming through!"
+  },
+  {
+   "id": "dmfill_3",
+   "text": "Concrete, pine trees, and four racers who can't stay in one shape!"
+  },
+  {
+   "id": "dmfill_4",
+   "text": "I've seen the dam keeper's face, folks. She is not enjoying this."
+  },
+  {
+   "id": "dmflood_1",
+   "text": "The valley road's under water, folks! Boats only!"
+  },
+  {
+   "id": "dmgates_1",
+   "text": "The spillway gates are open! Buck, what did you do?"
+  },
+  {
+   "id": "dmhall_1",
+   "text": "Into the turbine hall! Keep it straight in there!"
+  },
+  {
+   "id": "dmheron_1",
+   "text": "Shh, a heron! Fishing, of course. Aren't we all?"
+  },
+  {
+   "id": "dmjump_1",
+   "text": "Off the flip bucket and over the plunge pool!"
+  },
+  {
+   "id": "dmlap2_1",
+   "text": "Lap two, folks, and the water's up!"
+  },
+  {
+   "id": "dmlap2_2",
+   "text": "Into lap two! Same dam, different river!"
+  },
+  {
+   "id": "dmlap3_1",
+   "text": "Final lap! Under the water we go!"
+  },
+  {
+   "id": "dmlap3_2",
+   "text": "Last lap, folks! Hope everyone packed a periscope!"
+  },
+  {
+   "id": "dmlogs_1",
+   "text": "Logs in the flood! And a picnic table! And a duck!"
+  },
+  {
+   "id": "dmres_1",
+   "text": "And that's the demonstration, folks! The dam is still standing! Mostly!"
+  },
+  {
+   "id": "dmres_2",
+   "text": "Three laps, three courses, one very wet valley! What a race!"
+  },
+  {
+   "id": "dmrise1_1",
+   "text": "The spillway's running! Boats down the chute, folks!"
+  },
+  {
+   "id": "dmrise1_2",
+   "text": "Here comes the water! The valley's going under, just a little!"
+  },
+  {
+   "id": "dmrise2_1",
+   "text": "That is NOT a smidge! The whole valley's flooding, folks!"
+  },
+  {
+   "id": "dmrise2_2",
+   "text": "It's a lake! The valley is a lake! Subs at the ready!"
+  },
+  {
+   "id": "dmspill_1",
+   "text": "Look at that spillway roar! Down the torrent they go!"
+  },
+  {
+   "id": "dmspill_2",
+   "text": "White water all the way down the chute, folks!"
+  },
+  {
+   "id": "dmsplash_1",
+   "text": "Splashdown in the valley! That's new!"
+  },
+  {
+   "id": "dmstart_1",
+   "text": "Welcome to Dam Shame, folks! Three laps, one dam, and a whole lot of water!"
+  },
+  {
+   "id": "dmstart_2",
+   "text": "Good morning from the mountains! Buck promises a controlled water demonstration. I promise nothing!"
+  },
+  {
+   "id": "dmstart_3",
+   "text": "Three laps today, folks, and the course changes every one of them. Hold on to your snorkels!"
+  },
+  {
+   "id": "dmtrout_1",
+   "text": "Trout jumping out of the water! They want a look at the race too!"
+  },
+  {
+   "id": "dmturbine_1",
+   "text": "Through the turbine hall! Mind the giant spinning things!"
+  },
+  {
+   "id": "dmturbine_2",
+   "text": "Those turbines are making power, folks. Mostly from the racers."
+  },
+  {
+   "id": "dmwings_1",
+   "text": "Wings out off the flip bucket! Over the plunge pool!"
+  },
+  {
+   "id": "dmwings_2",
+   "text": "Off the lip and into the canyon air, folks!"
   },
   {
    "id": "down_1",

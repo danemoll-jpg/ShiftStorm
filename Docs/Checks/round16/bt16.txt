@@ -1,0 +1,77 @@
+ShiftStorm check 'bt16', 2026-11-17 10:19, build 0.14.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BT CLOWN FLIGHT VIEW PASS: flew it True, reached the door True, resets 0; the next target (hoop / exit / door) on the screen in 7 of 7 pictures (every 0.5 s from the lip)
+  the flight: line 239 m, hoops at 43 m, 91 m, 138 m, 181 m, 209 m along it; Globe centre x 15.0 m
+BT CANNON FLIGHT VIEW PASS: reached the river's G5 True, resets 0; the next target (hoop, top flap, ring, splashdown arch) on the screen in 30 of 30 pictures
+HUMAN-LIKE PILOT (Big Top Breakdown, Clown flight): steers by the HUD arrow's target only, 0.25-0.45 s late, keys or a noisy stick, no boost, LB 0.2-0.7 s into the window; entry 45 / 55 / 65 / 75 m/s, +-5 m, +-5 deg
+  Clown flight try 1 MADE IT: stick, 45 m/s, lane -2.2 m, heading +3 deg, late 0.44 s, LB 0.45 s into the window: 3.23 s lip -> G1, flew True, penalty 0 s, resets 0
+  Clown flight try 2 MADE IT: keys, 55 m/s, lane +2.9 m, heading +5 deg, late 0.34 s, LB 0.39 s into the window: 3.25 s lip -> G1, flew True, penalty 3 s (G1 big top door), resets 0
+  Clown flight try 3 MADE IT: stick, 65 m/s, lane -2.1 m, heading -4 deg, late 0.45 s, LB 0.33 s into the window: 3.30 s lip -> G1, flew True, penalty 3 s (Clown flight exit), resets 0
+  Clown flight try 4 MADE IT: keys, 75 m/s, lane +2.9 m, heading -3 deg, late 0.35 s, LB 0.26 s into the window: 3.10 s lip -> G1, flew True, penalty 0 s, resets 0
+  Clown flight try 5 MADE IT: stick, 45 m/s, lane -2.1 m, heading -2 deg, late 0.26 s, LB 0.20 s into the window: 3.42 s lip -> G1, flew True, penalty 3 s (G1 big top door), resets 0
+  Clown flight try 6 MADE IT: keys, 55 m/s, lane +2.9 m, heading +0 deg, late 0.36 s, LB 0.64 s into the window: 3.25 s lip -> G1, flew True, penalty 0 s, resets 0
+  Clown flight try 7 MADE IT: stick, 65 m/s, lane -2.1 m, heading +1 deg, late 0.26 s, LB 0.58 s into the window: 3.17 s lip -> G1, flew True, penalty 0 s, resets 0
+  Clown flight try 8 MISSED: keys, 75 m/s, lane +3.0 m, heading +2 deg, late 0.37 s, LB 0.51 s into the window: 7.87 s lip -> G1, flew False, penalty 3 s (Clown-flight-reset), resets 1: out of bounds -> forward from the Clown flight at +322 m from the lip (-6 m back)
+  Clown flight try 9 MADE IT: stick, 45 m/s, lane -2.0 m, heading +3 deg, late 0.27 s, LB 0.45 s into the window: 3.28 s lip -> G1, flew True, penalty 3 s (G1 big top door), resets 0
+  Clown flight try 10 MADE IT: keys, 55 m/s, lane +3.0 m, heading +4 deg, late 0.38 s, LB 0.39 s into the window: 3.25 s lip -> G1, flew True, penalty 0 s, resets 0
+HUMAN-LIKE CLOWN FLIGHT FAIL: made it 9 of 10 (lip -> the door mean 3.25 s)
+  cannon flight try 1 MADE IT: keys, 18 m/s, lane +1.0 m, late 0.33 s: 18.8 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 2 MADE IT: stick, 22 m/s, lane -3.0 m, late 0.44 s: 19.3 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 3 MADE IT: keys, 26 m/s, lane +1.0 m, late 0.34 s: 19.0 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 4 MISSED: stick, 30 m/s, lane -3.0 m, late 0.45 s: 21.0 s to the river's G5, penalty 0 s, resets 1: G4 top flap passed as Drive at +40 m from the muzzle
+  cannon flight try 5 MADE IT: keys, 18 m/s, lane +1.0 m, late 0.35 s: 18.8 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 6 MADE IT: stick, 22 m/s, lane -3.0 m, late 0.26 s: 18.7 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 7 MADE IT: stick, 26 m/s, lane +1.1 m, late 0.36 s: 19.2 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 8 MADE IT: keys, 30 m/s, lane -2.9 m, late 0.27 s: 18.2 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 9 MADE IT: stick, 18 m/s, lane +1.1 m, late 0.37 s: 19.3 s to the river's G5, penalty 0 s, resets 0
+  cannon flight try 10 MADE IT: keys, 22 m/s, lane -2.9 m, late 0.28 s: 18.6 s to the river's G5, penalty 0 s, resets 0
+HUMAN-LIKE CANNON FLIGHT FAIL: made it 9 of 10
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.70 ms, 95th pct 2.53 ms, 99th pct 4.04 ms, worst 114.90 ms over 197542 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  bt-clown-flight Drive->Fly  z   642.9  0.600 s  frames worst 13.41 / mean 1.79 ms
+  bt-clown-flight Fly->Drive  z   807.3  0.601 s  frames worst 12.58 / mean 1.84 ms
+  bt-cannon-flight Drive->Fly  z   960.0  0.602 s  frames worst 14.26 / mean 2.16 ms
+  bt-cannon-flight Fly->Boat   z   793.1  0.601 s  frames worst 13.64 / mean 2.10 ms
+  human-clown  Drive->Fly  z   642.8  0.601 s  frames worst 11.69 / mean 1.77 ms
+  human-clown  Fly->Drive  z   811.3  0.607 s  frames worst 9.24 / mean 1.89 ms
+  human-clown  Drive->Fly  z   643.2  0.601 s  frames worst 8.73 / mean 1.96 ms
+  human-clown  Fly->Drive  z   809.6  0.600 s  frames worst 8.54 / mean 1.83 ms
+  human-clown  Drive->Fly  z   643.2  0.601 s  frames worst 6.52 / mean 1.94 ms
+  human-clown  Fly->Drive  z   804.1  0.601 s  frames worst 11.29 / mean 1.93 ms
+  human-clown  Drive->Fly  z   643.3  0.601 s  frames worst 18.07 / mean 1.99 ms
+  human-clown  Fly->Drive  z   809.3  0.600 s  frames worst 3.16 / mean 1.71 ms
+  human-clown  Drive->Fly  z   642.6  0.600 s  frames worst 4.65 / mean 1.83 ms
+  human-clown  Fly->Drive  z   808.2  0.601 s  frames worst 26.05 / mean 1.97 ms
+  human-clown  Drive->Fly  z   643.4  0.602 s  frames worst 4.74 / mean 1.68 ms
+  human-clown  Fly->Drive  z   805.6  0.601 s  frames worst 6.94 / mean 1.81 ms
+  human-clown  Drive->Fly  z   643.5  0.601 s  frames worst 4.62 / mean 1.66 ms
+  human-clown  Fly->Drive  z   809.8  0.601 s  frames worst 4.11 / mean 1.64 ms
+  human-clown  Drive->Fly  z   643.4  0.601 s  frames worst 7.69 / mean 1.71 ms
+  human-clown  Fly->Drive  z   804.5  0.600 s  frames worst 4.77 / mean 1.71 ms
+  human-clown  Drive->Fly  z   643.2  0.602 s  frames worst 12.36 / mean 1.85 ms
+  human-clown  Fly->Drive  z   810.3  0.601 s  frames worst 8.39 / mean 1.80 ms
+  human-clown  Drive->Fly  z   643.0  0.601 s  frames worst 4.90 / mean 1.83 ms
+  human-clown  Fly->Drive  z   815.5  0.602 s  frames worst 3.58 / mean 1.72 ms
+  human-cannon Drive->Fly  z   960.0  0.601 s  frames worst 20.66 / mean 1.95 ms
+  human-cannon Fly->Boat   z   811.7  0.600 s  frames worst 4.85 / mean 1.72 ms
+  human-cannon Drive->Fly  z   960.0  0.608 s  frames worst 39.26 / mean 2.61 ms
+  human-cannon Fly->Boat   z   819.1  0.600 s  frames worst 16.53 / mean 1.84 ms
+  human-cannon Drive->Fly  z   960.0  0.601 s  frames worst 24.24 / mean 1.89 ms
+  human-cannon Fly->Boat   z   818.8  0.604 s  frames worst 23.43 / mean 2.15 ms
+  human-cannon Fly->Boat   z   770.6  0.601 s  frames worst 8.29 / mean 1.73 ms
+  human-cannon Drive->Fly  z   960.0  0.600 s  frames worst 6.97 / mean 1.88 ms
+  human-cannon Fly->Boat   z   805.4  0.601 s  frames worst 7.87 / mean 1.87 ms
+  human-cannon Drive->Fly  z   960.0  0.600 s  frames worst 49.05 / mean 2.15 ms
+  human-cannon Fly->Boat   z   775.1  0.600 s  frames worst 11.55 / mean 1.95 ms
+  human-cannon Drive->Fly  z   960.0  0.607 s  frames worst 17.35 / mean 2.20 ms
+  human-cannon Fly->Boat   z   776.7  0.600 s  frames worst 5.11 / mean 1.81 ms
+  human-cannon Drive->Fly  z   960.0  0.601 s  frames worst 8.29 / mean 1.92 ms
+  human-cannon Fly->Boat   z   776.1  0.601 s  frames worst 10.18 / mean 1.96 ms
+  human-cannon Drive->Fly  z   960.0  0.600 s  frames worst 7.92 / mean 1.75 ms
+  human-cannon Fly->Boat   z   812.9  0.601 s  frames worst 4.29 / mean 1.63 ms
+  human-cannon Drive->Fly  z   960.0  0.601 s  frames worst 5.22 / mean 1.85 ms
+  human-cannon Fly->Boat   z   783.0  0.601 s  frames worst 8.03 / mean 1.78 ms
+sound: music race_bigtop playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: disaster_1; messup: bogey_1; messup: skipped (Barnaby talking, reset: reset (out of bounds, at 899.6 (x -9100.0, y 4.8), 40 m/s, 163 m off the line) to the anchor (forward from the Clown flight, +3 s) at 1022 m in Drive, -6 m behind the best progress); messup: messup_2; messup: bogey_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Disapproval, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

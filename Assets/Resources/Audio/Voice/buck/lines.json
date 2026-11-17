@@ -30,6 +30,18 @@
    "text": "A real crowd tonight, folks. Fireworks, string lights, the whole pier lit up. I haven't seen this park this full since my last show. Let's give them something to remember."
   },
   {
+   "id": "brief_dm_1",
+   "text": "Welcome to the Lockhart Dam! Today, a controlled water demonstration. Three laps, and I may open a gate. A smidge."
+  },
+  {
+   "id": "brief_dm_2",
+   "text": "Down the spillway, round the valley, through the turbine hall and back up the dam road. Three times! It gets wetter."
+  },
+  {
+   "id": "brief_dm_3",
+   "text": "The dam keeper says I'm not to touch anything. She's very protective. I've only touched the big lever. Once."
+  },
+  {
    "id": "brief_pp_1",
    "text": "Welcome, welcome, one and all! Now, this is just a gentle introductory outing. A little drive, a little float, a little flight, a little dip. I checked every ramp myself. Twice. Mostly."
   },
@@ -56,6 +68,10 @@
   {
    "id": "ch_c3_intro_1",
    "text": "Vivi says the cannon is her stage. From the big top's door to the top flap, one on one. She's already practising her bow."
+  },
+  {
+   "id": "ch_c4_intro_1",
+   "text": "Rae wants a rematch, on the water this time. Down the running spillway, through the turbine hall. Try to keep up!"
   },
   {
    "id": "ch_reward_1",
@@ -122,6 +138,30 @@
    "text": "A podium! The fireworks were for you, by the way. And partly for me."
   },
   {
+   "id": "res_dm_back_1",
+   "text": "Not this time. That last lap's a deep one. Shall we go again, once the fish are out of the turbine hall?"
+  },
+  {
+   "id": "res_dm_back_2",
+   "text": "Don't fret. Most folks don't expect the valley to turn into a lake. To be fair, neither did I."
+  },
+  {
+   "id": "res_dm_first_1",
+   "text": "First place! On land, on water and under it! Hattie almost smiled. I saw it."
+  },
+  {
+   "id": "res_dm_first_2",
+   "text": "A winner! Three laps, three rivers, one champion. And the dam's still there. Bonus!"
+  },
+  {
+   "id": "res_dm_podium_1",
+   "text": "On the podium! Lovely racing, and only slightly flooded."
+  },
+  {
+   "id": "res_dm_podium_2",
+   "text": "Well done, partner! I'll have the valley drained by lunchtime. Probably."
+  },
+  {
    "id": "res_pp_back_1",
    "text": "Back of the pack, but you finished, and you finished in one piece. That counts for a lot around here."
   },
@@ -158,6 +198,22 @@
    "text": "On the podium! See? Gentle introductory outing. Nothing to worry about."
   },
   {
+   "id": "rise1_1",
+   "text": "Attention, racers! I am opening one gate. A smidge. A very controlled smidge!"
+  },
+  {
+   "id": "rise1_2",
+   "text": "Ladies and gentlemen, the controlled demonstration begins! Just one gate. Hattie, put the phone down."
+  },
+  {
+   "id": "rise2_1",
+   "text": "Ah. Racers, the gate appears to be stuck open. Please proceed by submarine."
+  },
+  {
+   "id": "rise2_2",
+   "text": "Change of plan, folks! It's the full demonstration! Hattie, I can hear you from up here!"
+  },
+  {
    "id": "short_bt_1",
    "text": "Midway, big top, cannon, river. Have a ball, partner!"
   },
@@ -172,6 +228,14 @@
   {
    "id": "short_cc_2",
    "text": "Coaster, flume, sea and pier. Have fun out there!"
+  },
+  {
+   "id": "short_dm_1",
+   "text": "Three laps, and listen for the siren, partner!"
+  },
+  {
+   "id": "short_dm_2",
+   "text": "Car, then boat, then sub. The water does the rest!"
   },
   {
    "id": "short_pp_1",
@@ -280,6 +344,38 @@
   {
    "id": "tour_s3_retry_2",
    "text": "Keep to the middle of the midway, the wagons keep to the sides. And trust the cannon. I mostly do."
+  },
+  {
+   "id": "tour_s4_intro_1",
+   "text": "Stop four, partner! The Lockhart Dam. The biggest thing I've ever booked. Taller than a cathedral."
+  },
+  {
+   "id": "tour_s4_intro_2",
+   "text": "I promised the folks a controlled water demonstration. Every lap, a little more water. It'll be magnificent."
+  },
+  {
+   "id": "tour_s4_intro_3",
+   "text": "Hattie, the dam keeper, has some concerns. Several concerns. She wrote them down."
+  },
+  {
+   "id": "tour_s4_intro_4",
+   "text": "Top three, partner, and we've conquered land, sea and air. Well. Land, water, and the bottom of the water."
+  },
+  {
+   "id": "tour_s4_pass_1",
+   "text": "We did it! And the dam held! Hattie says she needs to sit down for a week. I've sent flowers."
+  },
+  {
+   "id": "tour_s4_pass_2",
+   "text": "You know, partner, maybe that was a bit much. Just a bit. Next time, a smaller smidge."
+  },
+  {
+   "id": "tour_s4_retry_1",
+   "text": "Not quite the top three. The flood takes some getting used to. Ride the water, don't fight it."
+  },
+  {
+   "id": "tour_s4_retry_2",
+   "text": "Listen for the siren, then think boat, then think sub. Hattie's draining the valley as we speak."
   },
   {
    "id": "yarn_1",

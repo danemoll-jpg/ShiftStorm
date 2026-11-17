@@ -53,6 +53,7 @@ namespace ShiftStorm
                 float L = c.Length, s; Vector3 target;
                 var m = c.marks;
                 if (m != null && m.ContainsKey("wheel") && m.ContainsKey("jM")) { s = m["jM"] - 150; target = CoasterCoast.WheelCentre; }
+                else if (m != null && m.ContainsKey("chuteTop")) { s = m["chuteTop"] - 90; target = c.PointAt(m["chuteMid"], out _) + Vector3.down * 6; }   // Round 16: Dam Shame's dam and spillway
                 else if (m != null && m.ContainsKey("loopIn")) { s = m["loopIn"] - 170; target = c.PointAt(m["loopIn"], out _) + Vector3.up * 14; }
                 else { s = L * .1f; target = c.PointAt(s + 200, out _); }
                 var p = c.PointAt(s, out var d); var flat = new Vector3(d.x, 0, d.z).normalized; var right = Vector3.Cross(Vector3.up, flat);

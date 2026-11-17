@@ -68,7 +68,12 @@ namespace ShiftStorm
             ["btstart"] = (30, 2), ["btfill"] = (7, 0), ["btwings"] = (25, 2), ["btsplash"] = (20, 1), ["btres"] = (60, 2), ["btjump"] = (40, 1),
             ["btglobe"] = (60, 1), ["btcannon"] = (60, 2), ["btwagons"] = (60, 1), ["btstrongman"] = (60, 1), ["bttightrope"] = (60, 1), ["btclowns"] = (60, 1),
             ["bttent"] = (60, 1), ["bttrapeze"] = (60, 1), ["btelephants"] = (60, 1), ["btsteamer"] = (60, 1), ["btseals"] = (60, 1), ["btrapids"] = (60, 1),
-            ["bttank"] = (60, 1), ["btsunken"] = (60, 1), ["btpool"] = (60, 1),
+            ["bttank"] = (60, 1), ["btsunken"] = (60, 1), ["btpool"] = (60, 1), ["bthoops"] = (60, 1),
+            // Round 16: Dam Shame's own pools (three laps: the landmarks once a lap, the set-pieces once a race)
+            ["dmstart"] = (30, 2), ["dmfill"] = (7, 0), ["dmwings"] = (25, 2), ["dmsplash"] = (20, 1), ["dmres"] = (60, 2), ["dmjump"] = (30, 1),
+            ["dmrise1"] = (30, 3), ["dmrise2"] = (30, 3), ["dmlap2"] = (30, 2), ["dmlap3"] = (30, 2),
+            ["dmspill"] = (60, 1), ["dmgates"] = (60, 1), ["dmturbine"] = (60, 1), ["dmbuck"] = (60, 1), ["dmbeaver"] = (60, 1), ["dmheron"] = (60, 1),
+            ["dmtrout"] = (60, 1), ["dmlogs"] = (60, 1), ["dmdam"] = (60, 1), ["dmhall"] = (40, 1), ["dmflood"] = (40, 1), ["dmdive"] = (40, 1),
         };
         // Round 10: Coaster Coast's landmarks (places on its lap) and its set-pieces (said only while big on screen, SetPiece)
         static readonly (string pool, string mark, float at)[] CoasterLandmarks =
@@ -81,13 +86,33 @@ namespace ShiftStorm
             ("bttent", "door", -90), ("btrapids", "islandN", -60), ("btpool", "G8", -25),
         };
         static readonly string[] SetPiecePools = { "ccwheel", "ccballoon", "ccfireworks", "ccwhale", "ccoctopus", "cccarousel",
-            "btwagons", "btstrongman", "bttightrope", "btclowns", "btglobe", "btcannon", "bttrapeze", "btelephants", "btsteamer", "btseals", "bttank", "btsunken" };
+            "btwagons", "btstrongman", "bttightrope", "btclowns", "btglobe", "btcannon", "bttrapeze", "btelephants", "btsteamer", "btseals", "bttank", "btsunken",
+            "bthoops", "dmgates", "dmspill", "dmturbine", "dmbuck", "dmbeaver", "dmheron", "dmtrout", "dmlogs", "dmdam" };
+        // Round 16: Dam Shame's landmarks: once a lap each (the line is the lap three times over); the stage: the water they are for (-1: any)
+        static readonly (string pool, string mark, float at, int stage)[] DamLandmarks =
+        {
+            ("dmhall", "hallIn", -70, 0), ("dmflood", "landing", -30, 1), ("dmdive", "bend1", -60, 2), ("dmhall", "hallIn", -70, 2),
+        };
         string Look(ShiftVehicle who) { var c = who ? who.Course : game && game.Player ? game.Player.Course : null; return c ? c.look : ""; }
         bool Coaster(ShiftVehicle who) => Look(who) == "coaster";
         bool BigTopCourse(ShiftVehicle who) => Look(who) == "bigtop";
+        bool DamCourse(ShiftVehicle who) => Look(who) == "dam";
         // the Paradise Plunge pools that name the jungle, the lake or the dinosaurs, swapped on Coaster Coast for its own
         string ForCourse(string pool, ShiftVehicle who)
         {
+            if (DamCourse(who))   // Round 16: Dam Shame's own lines; no jungle, lake, dinosaur, Coaster Coast or circus line
+            {
+                switch (pool)
+                {
+                    case "results": return pools.ContainsKey("dmres") ? "dmres" : pool;
+                    case "start": return pools.ContainsKey("dmstart") ? "dmstart" : pool;
+                    case "fill": return pools.ContainsKey("dmfill") ? "dmfill" : "";
+                    case "wings": return pools.ContainsKey("dmwings") ? "dmwings" : pool;
+                    case "splash": return pools.ContainsKey("dmsplash") ? "dmsplash" : pool;
+                    case "creek": case "cliff": case "canyon": case "final": return "";   // "final": the lap calls say it (G9 is a gate on lap 2 here)
+                }
+                return pool.StartsWith("cc") || pool.StartsWith("bt") ? "" : pool;
+            }
             if (BigTopCourse(who))   // Round 15: no jungle, lake, dinosaur or Coaster Coast line on Big Top Breakdown
             {
                 switch (pool)
@@ -99,7 +124,7 @@ namespace ShiftStorm
                     case "splash": return pools.ContainsKey("btsplash") ? "btsplash" : pool;
                     case "creek": case "cliff": case "canyon": return "";
                 }
-                return pool.StartsWith("cc") ? "" : pool;
+                return pool.StartsWith("cc") || pool.StartsWith("dm") ? "" : pool;
             }
             bool cc = Coaster(who);
             if (pool == "results") return cc ? (pools.ContainsKey("ccres") ? "ccres" : pool) : (pools.ContainsKey("ppres") && Random.value < .6f ? "ppres" : pool);
@@ -178,6 +203,7 @@ namespace ShiftStorm
                 case "gate":
                     if (text.Contains("near miss")) Call("miss", v);
                     if (text.Contains("G9") && !finalCalled) { finalCalled = true; Call("final", v); }
+                    if (v.Course.laps > 1 && v == game.Player && (text.Contains(" lap 2 ") || text.Contains(" lap 3 "))) Call(text.Contains(" lap 3 ") ? "dmlap3" : "dmlap2", v, true);   // Round 16: lap 2 / the final lap
                     break;
                 case "reset": if (text.Contains("water") && v.Mode == Mode.Drive && v.Course.marks != null && v.Progress < v.Course.marks.GetValueOrDefault("G1", 0)) Call("splash", v); break;
                 case "wings":
@@ -203,6 +229,7 @@ namespace ShiftStorm
                     if (v.Course && v.Course.stunts != null) foreach (var j in v.Course.stunts.Jumps) { float d = v.Progress - j.lip; if (d > 0 && d < best) { best = d; which = j.name; } }
                     if (which == "Coaster Gap" && Call("ccgap", v)) break;
                     if (which == "Clown Jump" && Call("btjump", v)) break;
+                    if (which == "Flip Bucket" && Call("dmjump", v)) break;
                     if (which == "Creek Jump" && Call("creek", v)) break;
                     if (which == "Cliff Gap" && Call("cliff", v)) break;
                     if (v.LastAirTime > 1.3f) Call("jump", v);
@@ -310,6 +337,28 @@ namespace ShiftStorm
         void LandmarkPass(ShiftVehicle h)
         {
             if (!h.Course || h.Holding) return;
+            if (DamCourse(h))   // Round 16: the set-pieces once a race, the landmarks once a lap for the water they are for
+            {
+                if (h == game.Player && game.Cam)
+                {
+                    SetPiece.Track(game.Cam);
+                    foreach (var pool in SetPiecePools)
+                    {
+                        if (!pool.StartsWith("dm")) continue; string key = "1" + pool; if (marksDone.Contains(key) || !pools.ContainsKey(pool)) continue;
+                        if (SetPiece.BigOnScreen(pool, DinoHeld)) { marksDone.Add(key); pendingMark = pool; pendingUntil = Time.time + 4f; break; }
+                    }
+                }
+                int lap = h.Course.LapAt(h.Progress);
+                foreach (var lm in DamLandmarks)
+                {
+                    if (lm.stage >= 0 && lm.stage != DamWater.Stage) continue;
+                    string mk = lap <= 1 ? lm.mark : lm.mark + "@" + lap;
+                    if (h.Course.marks == null || !h.Course.marks.TryGetValue(mk, out var cm)) continue;
+                    float at = cm + lm.at; string key = (h == game.Player ? "1" : "2") + lm.pool + lap;
+                    if (!marksDone.Contains(key) && h.Progress > at && h.Progress < at + 120f) { marksDone.Add(key); pendingMark = lm.pool; pendingUntil = Time.time + 5f; }
+                }
+                return;
+            }
             if (Coaster(h) || BigTopCourse(h))
             {
                 if (h == game.Player && game.Cam)

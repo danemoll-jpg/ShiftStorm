@@ -14,7 +14,7 @@ namespace ShiftStorm
         public static List<Course> Build()
         {
             root = new GameObject("World").transform;
-            var list = new List<Course> { ParadisePlunge.Build(root), CoasterCoast.Build(root), BigTop.Build(root) };   // Round 15: Big Top Breakdown
+            var list = new List<Course> { ParadisePlunge.Build(root), CoasterCoast.Build(root), BigTop.Build(root), DamShame.Build(root) };   // Round 15: Big Top Breakdown; Round 16: Dam Shame
             foreach (var c in list) c.Finish();
             return list;
         }

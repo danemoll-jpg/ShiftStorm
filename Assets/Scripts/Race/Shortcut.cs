@@ -22,6 +22,9 @@ namespace ShiftStorm
         public readonly List<(float s, RecoveryAnchor a)> ownAnchors = new List<(float, RecoveryAnchor)>();   // Round 13: anchors on its own line (the Mangrove bypass: a reset in it restarts in it)
         public bool flight;             // Round 12: a flight branch (a reset on it, or just off it, goes forward to its rejoin: ShiftVehicle.Recover)
         float[] cum;
+        // Round 16 item 1: the rings / hoops along it and its exit (distance along its line): the HUD arrow points at the next one ahead
+        public readonly List<float> rings = new List<float>();
+        public Vector3 GuideAt(float s, float ahead) { foreach (var r in rings) if (r > s + 6f) return PointAt(r, out _); return PointAt(s + ahead, out _); }
 
         public float Length { get { Prep(); return cum[cum.Length - 1]; } }
         void Prep()

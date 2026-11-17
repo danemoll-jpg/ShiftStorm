@@ -93,7 +93,7 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
 | Boost (one shared meter) | A | Space |
 | Secondary: drift (car) / tighter carve (boat) | RB | Left Shift |
-| Wings: only on a choice jump (Paradise Plunge's Lake Jump and Cliff Gap, Big Top Breakdown's Clown Jump): from the ramp (HUD "LB: FLY"; pressed there = "WINGS READY", out at the lip) to 1.5 s into the air; nothing anywhere else | LB | E |
+| Wings: only on a choice jump (Paradise Plunge's Lake Jump and Cliff Gap, Big Top Breakdown's Clown Jump, Dam Shame's flip bucket on lap 1's water): from the ramp (HUD "LB: FLY"; pressed there = "WINGS READY", out at the lip) to 1.5 s into the air; nothing anywhere else | LB | E |
 | Camera view: Chase / Far chase / First person / Front (per player, saved) | X | V |
 | Look around (pulled back = look behind) | Right stick | - |
 | Reset to last safe anchor | Y | R |
@@ -183,10 +183,15 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   fly and the river's main channel / Island rapids, AI runs, `-runs N`). `soak`, `split` take `-course 2`. `buck`, `mix`, `finishcam`,
   `presets` cover all three courses. Barnaby's name: `python Tools/Audio/barnaby_audit.py` (the built game's text + every voice clip
   transcribed locally) -> `Docs/Checks/round15/barnaby.md`.
+  Round 16: `round16` = `bt16` (`btflight`: Big Top's Clown flight and cannonball flight, a picture every 0.5 s, is the next hoop / ring /
+  exit on the screen; `humanclown`: the human-like pilot on both flights, `-tries N`) + `dam` (`damlap`: the check pilot's 3-lap time
+  trial: lap times, the water's stages, every form change, set-pieces per lap, pictures of each lap's water; `damrise`: seven stragglers
+  while the water rises round them (a rival put on the next lap); `damviews`: fixed viewpoints at every water stage). `soak` and `split`
+  take `-course 3` (a 3-lap race: the soak's limit is 720 s). `-oldBtFlight` = build 18's Clown flight, flight camera and HUD arrow.
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
-- Game start options: `-course 0..2` (0 Paradise Plunge, 1 Coaster Coast, 2 Big Top Breakdown);
+- Game start options: `-course 0..3` (0 Paradise Plunge, 1 Coaster Coast, 2 Big Top Breakdown, 3 Dam Shame);
   `-race` / `-trial`; `-saveDir <dir>` puts the best-times and settings files elsewhere (checks never touch Dan's own files).
 - In game: Menu (Start) / Esc opens the menu (see Controls). D-pad left / right no longer steps courses (Round 10).
 - Vehicle import (Round 5, one command, Tripo models Dan saved in `Art/Incoming/Vehicles/<Design>/<Design>_<Form>.fbx`):
@@ -497,5 +502,34 @@ Round 15 delivered as build 17 (0.13.0), 2026-11-16.
 
 Round 15b delivered as build 18 (0.13.1), 2026-11-16.
 
-Current objective: **Round 16** — make Big Top's Clown flight obvious, and a fourth track: **Dam Shame**, the first multi-lap
-race (3 laps; the water rises each lap: car → boat / flights → diving). Release build 19 (0.14.0). See `TODO.md`.
+- **Round 16 (build 19, 0.14.0): Big Top's first flight made obvious, Dam Shame (the first three-lap race):**
+  - **Clown flight** (`BigTop.ClownHoops`): four striped circus hoops along it (`Shortcut.rings`: the HUD arrow points at the next hoop,
+    then the exit: `Shortcut.GuideAt`), the Globe of Death 12 m east (`BigTop.GlobeX`) to give them room, a lit exit arch "TO THE BIG TOP"
+    with two spotlights on the wheels-down chevrons, a later rejoin (door - 32), a wider / deeper wheels-down zone; the cannonball flight's
+    rings bigger and brighter, a "SPLASHDOWN" arch on the river, the cannon's wings zone 40 m deep (from 8.5 m up). In flight the chase
+    camera turns up to 25 deg toward the arrow's target (on a flight branch, and 3 s after any change into the plane: `ChaseCam`); the route
+    strip shows each choice jump's flight branch in violet. `-oldBtFlight` = build 18's.
+  - **Dam Shame** (course 3, `World/DamShame*.cs`, `DamLook`; Docs/STORY.md: Buck's "controlled water demonstration" at the Lockhart Dam,
+    Hattie Sluice the dam keeper; the Tour's Stop 4 "The Controlled Demonstration"; Rae's Flood Run, paint "Spillway Teal"): 9 km south of
+    Paradise Plunge, a dam across a mountain canyon in morning light; the ground is one heightfield with the roads pressed in
+    (`DamShame.GroundAt`). **Multi-lap:** the line is the lap three times end to end (`Course.laps`, `lapStarts`, `LapAt`), one segment
+    per lap (the splits are the lap times), gates G1-G5 per lap (spillway, bridge, turbine hall, dam road, lap line) + G0 = 16; the HUD
+    shows LAP n / 3 and flashes LAP 2 / FINAL LAP; results show the best lap; `besttimes.json` "single" = the best one lap.
+    **Water** (`DamWater`): stage 0 / 1 / 2 = the valley at -2.5 / 1.4 / 16 m, raised when the leader (most gates of any racer; a time
+    trial's one racer) starts lap 2 / 3: siren (made in code), Buck on the tannoy (`Buck.PA`, `rise1_*` / `rise2_*`), Barnaby (`dmrise1/2`),
+    a 10 s rise; a new race puts it back at once. Every zone (`DamShame.dynZones`: its form per stage, or off) and anchor (`dynAnchors`,
+    `AnchorFor`) follows the stage, not the racer's lap; the chute's floor is a `WetRamp` (only `enabled` ones count now) with a torrent;
+    every physics step a car the water rose over becomes a boat, a boat held under (2.6 m for 0.4 s) a sub, a boat left on a dry road a
+    car. Lap 1: car down the dry chute, the flip bucket a choice jump (LB: the "Canyon flight" over the river and the beavers, stands in
+    for the bridge gate). Lap 2: boat down the torrent, the lip throws you up (Fly), "Hull down (the valley)", boat through the hall,
+    wheels down at the dam road. Lap 3: boat down the chute into the flood, held under / "Canopy seals" -> sub along the drowned road and
+    through the flooded turbine hall, "Surface", "Wheels down (the flood line)". Set-pieces: the dam, the spillway gates and torrent, the
+    turbines, Buck at the control room window, the beaver colony, a heron, trout, the flood's logs (stand-ins; Tripo prompts for the
+    beaver, heron and Hattie in Docs/MODELS-NEEDED.md). Music `race_dam` (Dan's song; the theme until it arrives). Course cards: a
+    carousel once there are four.
+  - **Reset loops:** the third reset in a row for the same missed gate puts the racer past it, +3 s (`ShiftVehicle.MissedRecover`;
+    the Dam Shame soaks had an AI straggler reset 136-205 times at one gate after the water rose round it).
+
+Round 16 delivered as build 19 (0.14.0), 2026-11-17.
+
+Current objective: **next round (see TODO.md)**

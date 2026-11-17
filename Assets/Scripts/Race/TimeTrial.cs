@@ -9,7 +9,7 @@ namespace ShiftStorm
     // "-saveDir <dir>", so Dan's real best time is never touched by a test).
     public static class BestTimes
     {
-        [Serializable] public sealed class Entry { public string course; public float lap; public float[] splits; public string date; }
+        [Serializable] public sealed class Entry { public string course; public float lap; public float[] splits; public string date; public float single; }   // Round 16: single = the best one lap of a multi-lap course
         [Serializable] sealed class Store { public List<Entry> entries = new List<Entry>(); }
 
         public static string FilePath
@@ -28,16 +28,20 @@ namespace ShiftStorm
         }
         public static Entry Get(string course) { foreach (var e in Load().entries) if (e.course == course) return e; return null; }
         // Saves the lap when it is the course's best; returns true when it is.
-        public static bool Submit(string course, float lap, List<float> splits)
+        public static bool Submit(string course, float lap, List<float> splits) => Submit(course, lap, splits, -1, out _);
+        // single: the best one lap of this run on a multi-lap course (-1: none); newSingle: it beat the best lap on file
+        public static bool Submit(string course, float lap, List<float> splits, float single, out bool newSingle)
         {
-            var s = Load(); var e = s.entries.Find(x => x.course == course);
-            if (e != null && e.lap <= lap) return false;
-            if (e == null) { e = new Entry { course = course }; s.entries.Add(e); }
-            e.lap = lap; e.splits = splits.ToArray(); e.date = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            var s = Load(); var e = s.entries.Find(x => x.course == course); newSingle = false; bool best = false;
+            if (e == null) { e = new Entry { course = course }; s.entries.Add(e); best = true; }
+            else if (e.lap <= 0 || lap < e.lap) best = true;
+            if (best) { e.lap = lap; e.splits = splits.ToArray(); e.date = DateTime.Now.ToString("yyyy-MM-dd HH:mm"); }
+            if (single > 0 && (e.single <= 0 || single < e.single)) { e.single = single; newSingle = true; }
+            if (!best && !newSingle) return false;
             try { Directory.CreateDirectory(Path.GetDirectoryName(FilePath)); File.WriteAllText(FilePath, JsonUtility.ToJson(s, true)); }
             catch (Exception ex) { Debug.LogWarning("[Best] could not save " + FilePath + ": " + ex.Message); return false; }
-            Debug.Log($"[Best] new best on {course}: {lap:0.00} s -> {FilePath}");
-            return true;
+            Debug.Log($"[Best] {(best ? $"new best on {course}: {lap:0.00} s" : $"{course}: best time kept")}{(newSingle ? $", best single lap {single:0.00} s" : "")} -> {FilePath}");
+            return best;
         }
     }
 
@@ -53,6 +57,7 @@ namespace ShiftStorm
         public BestTimes.Entry BestBefore { get; private set; }
         public BestTimes.Entry Best { get; private set; }
         public bool NewBest { get; private set; }
+        public bool NewBestLap { get; private set; }   // Round 16: a multi-lap course's best single lap
         public event Action Results;
         float finishedAt = -1;
 
@@ -67,7 +72,9 @@ namespace ShiftStorm
             foreach (var s in v.Splits) { SegmentTimes.Add(s - prev); prev = s; }
             BestBefore = BestTimes.Get(v.Course.courseName);
             // Round 3: a race against the rivals shows the lap and splits but only a Time Trial (alone) sets the best lap
-            NewBest = !(Game.Instance && Game.Instance.RaceMode) && BestTimes.Submit(v.Course.courseName, Lap, SegmentTimes);
+            float single = v.Course.laps > 1 && SegmentTimes.Count > 0 ? Mathf.Min(SegmentTimes.ToArray()) : -1; NewBestLap = false;
+            bool alone = !(Game.Instance && Game.Instance.RaceMode);
+            bool nbl = false; NewBest = alone && BestTimes.Submit(v.Course.courseName, Lap, SegmentTimes, single, out nbl); NewBestLap = alone && nbl;
             Best = BestTimes.Get(v.Course.courseName);
             HasResults = true;
             v.Note("results", $"results: lap {Lap:0.00} s, {SegmentTimes.Count} splits, best {(Best != null ? Best.lap.ToString("0.00") : "-")} s{(NewBest ? " (NEW BEST)" : "")}");

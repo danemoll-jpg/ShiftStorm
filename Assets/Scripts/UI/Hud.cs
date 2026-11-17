@@ -92,6 +92,7 @@ namespace ShiftStorm
             timer = Label(p, new Vector2(1, 1), new Vector2(-24, -14), 46, TextAnchor.UpperRight, new Vector2(400, 56));
             segment = Label(p, new Vector2(1, 1), new Vector2(-24, -66), 22, TextAnchor.UpperRight, new Vector2(700, 50));
             last = Label(p, new Vector2(.5f, 1), new Vector2(0, -18), 22, TextAnchor.UpperCenter, new Vector2(900, 40));
+            lapText = Label(p, new Vector2(0, 1), new Vector2(24, -186), 36, TextAnchor.UpperLeft, new Vector2(400, 50)); lapText.supportRichText = true; lapText.color = new Color(.65f, .93f, 1f);   // Round 16: LAP 2 / 3
             center = Label(p, new Vector2(.5f, .5f), new Vector2(0, 120), 90, TextAnchor.MiddleCenter, new Vector2(1200, 120));
             help = Label(p, new Vector2(.5f, 0), new Vector2(0, 8), 16, TextAnchor.LowerCenter, new Vector2(1250, 26));
             help.color = new Color(1, 1, 1, .75f);
@@ -115,12 +116,12 @@ namespace ShiftStorm
             var bkr = buckCard.GetComponent<RectTransform>(); bkr.anchorMin = bkr.anchorMax = bkr.pivot = new Vector2(.5f, 0); bkr.anchoredPosition = new Vector2(0, 150);
             var pg = new GameObject("Buck portrait"); pg.transform.SetParent(buckCard.transform, false); var pi = pg.AddComponent<RawImage>(); pi.texture = Buck.Portrait;
             var pr = pi.rectTransform; pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0, .5f); pr.anchoredPosition = new Vector2(14, 0); pr.sizeDelta = new Vector2(144, 144);
-            var bt = Label(buckCard.transform, new Vector2(0, 1), new Vector2(176, -12), 22, TextAnchor.UpperLeft, new Vector2(660, 30)); bt.text = Buck.Title; bt.color = new Color(1f, .78f, .3f);
+            var bt = Label(buckCard.transform, new Vector2(0, 1), new Vector2(176, -12), 22, TextAnchor.UpperLeft, new Vector2(660, 30)); bt.text = Buck.Title; buckTitle = bt; bt.color = new Color(1f, .78f, .3f);
             buckSub = Label(buckCard.transform, new Vector2(0, 1), new Vector2(176, -44), 22, TextAnchor.UpperLeft, new Vector2(660, 100)); buckSub.horizontalOverflow = HorizontalWrapMode.Wrap;
             buckHint = Label(buckCard.transform, new Vector2(1, 0), new Vector2(-14, 10), 16, TextAnchor.LowerRight, new Vector2(300, 22)); buckHint.color = new Color(.85f, .85f, .75f);
             buckCard.SetActive(false);
         }
-        GameObject buckCard; Text buckSub, buckHint;
+        GameObject buckCard; Text buckSub, buckHint, buckTitle;
         public bool BuckCardShown => buckCard && buckCard.activeSelf;
 
         Camera cam;
@@ -140,7 +141,7 @@ namespace ShiftStorm
             UpdateGuide();
             var bk = Buck.Instance; bool card = bk && (bk.CardOn || (bk.Voice && bk.Voice.isPlaying && bk.Subtitle != ""));
             if (buckCard && card != buckCard.activeSelf) buckCard.SetActive(card);
-            if (card) { buckSub.text = bk.Subtitle; buckHint.text = bk.CardOn ? bk.Hint : ""; }
+            if (card) { buckSub.text = bk.Subtitle; buckHint.text = bk.CardOn ? bk.Hint : ""; if (buckTitle) buckTitle.text = bk.Speaker; }
             boostFill.offsetMax = new Vector2(3 + 314 * v.Boost, -3); boostImage.color = v.Boosting ? new Color(1, .45f, .1f) : new Color(1, .78f, .15f);
             var c = v.Course; bool trial = c && c.timeTrial;
             float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime + v.Penalty;   // Round 4: near-miss penalties count at once
@@ -168,6 +169,7 @@ namespace ShiftStorm
             else if (trial && v.HoldUntil > 0 && Time.time - v.HoldUntil < .9f && !v.Finished) { center.fontSize = 110; center.color = new Color(.5f, 1, .5f); center.text = "GO!"; }
             else if (v.WingsOpen && (v.GroundedWheels == 0 || !ShiftVehicle.OldChoice))   // Round 7: the choice jump's wings window; Round 14: from the ramp on
             { center.fontSize = 64; center.color = v.WingsArmed ? new Color(.5f, 1f, .55f) : new Color(.55f, .95f, 1f); center.text = v.WingsArmed ? "WINGS READY" : v.Input.Device is UnityEngine.InputSystem.Keyboard ? "E: FLY" : "LB: FLY"; }
+            else if (Time.time < lapFlashUntil && !v.Finished) { center.fontSize = 76; center.color = lapFlashText.StartsWith("FINAL") ? new Color(1f, .55f, .25f) : new Color(.65f, .93f, 1f); center.text = lapFlashText; }   // Round 16
             else if (Time.time < v.CueUntil && !v.Finished)
             {
                 center.fontSize = v.CueType == ShiftVehicle.CueKind.Guide ? 44 : 52;
@@ -178,6 +180,14 @@ namespace ShiftStorm
             last.text = v.Finished ? $"FINISHED {TimeTrial.Clock(v.FinishTime)}  -  Y / R to race again" : v.LastEvent;
             // Round 7: the race caller's words
             var cl = Caller.Instance; if (sub) sub.text = cl && Time.time < cl.SubtitleUntil && cl.Subtitle != "" && player != 2 ? $"<color=#ffd34d><b>{Caller.Name}:</b></color> {cl.Subtitle}" : "";
+            // Round 16: the lap on a multi-lap course (and a flash as each lap starts)
+            if (c && c.laps > 1 && !v.Holding)
+            {
+                int lap = c.LapAt(v.Progress); if (v.Finished) lap = c.laps;
+                lapText.text = $"LAP <b>{lap}</b><size=24> / {c.laps}</size>";
+                if (lap != lapShown) { if (lapShown > 0 && lap > lapShown && !v.Finished) { lapFlashText = lap == c.laps ? "FINAL LAP!" : $"LAP {lap} / {c.laps}"; lapFlashUntil = Time.time + 2.2f; } lapShown = lap; }
+            }
+            else { lapText.text = c && c.laps > 1 ? $"LAP <b>1</b><size=24> / {c.laps}</size>" : ""; lapShown = c && c.laps > 1 && v.Holding ? 1 : lapShown; }
             // race position
             var race = game ? game.Race : null;
             if (race && race.Active && c) { int pl = race.Place(v); place.text = $"{Race.Ordinal(pl)}<size=28> / {race.Racers.Count}</size>"; place.color = pl == 1 ? new Color(1, .85f, .3f) : Color.white; }
@@ -207,6 +217,8 @@ namespace ShiftStorm
         public bool ResultsShown => resultsPanel && resultsPanel.activeSelf; public string ResultsBody => results ? results.text : "";
         public Camera Cam => cam;
         bool firstFlightSeen; float noteUntil = -1;
+        Text lapText; int lapShown; float lapFlashUntil = -1; string lapFlashText = "";
+        public string LapText => lapText ? lapText.text : ""; public string LapFlash => Time.time < lapFlashUntil ? lapFlashText : "";
         public string NoteText => note ? note.text : "";
         string ResultsText(TimeTrial tt, Course c)
         {
@@ -227,6 +239,7 @@ namespace ShiftStorm
                 sb.AppendLine();
             }
             sb.AppendLine($"<size=40><b>{TimeTrial.Clock(tt.Lap)}</b></size>{(tt.NewBest ? "   <color=#ffd34d><b>NEW BEST!</b></color>" : "")}");
+            if (c.laps > 1 && tt.SegmentTimes.Count > 0) { float bl = Mathf.Min(tt.SegmentTimes.ToArray()); int bi = tt.SegmentTimes.IndexOf(bl); sb.AppendLine($"<size=24>best lap this race <b>{TimeTrial.Clock(bl)}</b> (lap {bi + 1}){(tt.NewBestLap ? "   <color=#ffd34d><b>NEW BEST LAP!</b></color>" : "")}   best lap ever {TimeTrial.Clock(tt.Best != null && tt.Best.single > 0 ? tt.Best.single : -1)}</size>"); }   // Round 16
             sb.AppendLine($"best {TimeTrial.Clock(tt.Best != null ? tt.Best.lap : -1)}   resets {v.Resets}{(v.Penalty > 0 ? $"   <color=#ffb070>penalty +{v.Penalty:0} s (missed {Missed(v)})</color>" : "")}");
             sb.AppendLine();
             for (int i = 0; i < c.segments.Count; i++)

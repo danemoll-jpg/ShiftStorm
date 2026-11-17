@@ -127,3 +127,17 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   Tour's Stop 3 scenes (4 intro, 2 pass, 2 retry; he reads Lionel Lustre's dare aloud until the ringmaster has a voice), Vivi's
   challenge; `tour_done_1` now says "Three stops, three shows".
 - **Vivi, 3 lines** (`driver_lines.py` ROUND15, 98 credits): her Cannonball Run challenge (taunt, win, lose).
+
+## Round 16 (2026-11-17): Big Top's Clown flight, Dam Shame
+- **Music:** Dam Shame asks for `race_dam` (Dan's Suno song "ShiftStorm - Dam Shame", prompt in `Docs/AUDIO-NEEDED.md` song 6); until
+  it is in `Art/Incoming/Music/`, CourseAudio falls back to ShiftStorm's theme. When it arrives: `python Tools/Music/make_loops.py race_dam`.
+- **Dam siren** (`DamWater.SirenClip`): made in code (a 4.2 s wailing tone, 380-800 Hz), played once at each rise of the water on the
+  Effects volume (x 0.32), SoundLog kind "siren".
+- **Barnaby, 38 new lines** (`caller_lines.py` ROUND16): Big Top's Clown flight ("Through the hoops and on to the big top!", the hoops);
+  Dam Shame's `dm*` pools: start (3), fill-ins (4), wings (2), splashdown, results (2), the flip bucket, the two rises (2 + 2), lap 2 (2),
+  the final lap (2), the spillway (2), the gates, the turbines (2), Buck at the window, the beavers (2), the heron, the trout, the flood's
+  logs, the dam, the hall, the flooded road, the dive (set-piece lines only while that thing is big on the screen).
+- **Buck, 24 new lines** (`buck_lines.py`): Dam Shame briefings (3 + 2 short), results remarks (6), his tannoy lines as the water
+  rises (`rise1_*`, `rise2_*`), The Tour's Stop 4 scenes (4 intro, 2 pass, 2 retry), Rae's Flood Run. Hattie Sluice, the dam keeper,
+  speaks in subtitles only (no voice yet: her Voice Design prompt is in `Docs/STORY.md`).
+- **Rae, 3 lines** (`driver_lines.py` ROUND16): her Flood Run challenge (taunt, win, lose). All voices re-levelled to -16 LUFS.

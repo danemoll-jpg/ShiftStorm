@@ -57,12 +57,20 @@ ROUND15 = {
              "chwin_1": "[delighted] And the crowd goes wild! For me, darling. Obviously.",
              "chlose_1": "[gasps] You stole my spotlight! [sighs] Fine. Take a bow, darling. A small one."},
 }
+# Round 16: Rae's second challenge (Rae's Flood Run, Dam Shame, lap 2's water)
+ROUND16 = {
+    "rae": {"chintro_2": "[smug] Rematch, rookie! Down the spillway and through the turbines. Bring a towel!",
+            "chwin_2": "[laughing] Ha! Rocket Rae rules the rapids!",
+            "chlose_2": "[grudging] Okay, that was a clean run. I'm still drying off, though."},
+}
 REMOVED = {"abigail": ["trouble_1"], "rae": ["mishit_1", "trouble_2", "water_1"], "vivi": ["lose_1"]}
 for _who, _d in ROUND9.items():
     NEW.setdefault(_who, {}).update(_d)
 for _who, _d in ROUND13.items():
     NEW.setdefault(_who, {}).update(_d)
 for _who, _d in ROUND15.items():
+    NEW.setdefault(_who, {}).update(_d)
+for _who, _d in ROUND16.items():
     NEW.setdefault(_who, {}).update(_d)
 WORDS_NEW = {who: {k: v.split("] ", 1)[-1] for k, v in d.items()} for who, d in NEW.items()}
 # their Tee'd Off clips that fit a race (copied as they are)

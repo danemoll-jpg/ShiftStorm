@@ -34,7 +34,7 @@ OUT = os.path.join(REPO, "Assets", "Resources", "Audio", "Music")
 CHECK = os.path.join(REPO, "local", "audio_check")
 SR = 44100
 XFADE = 0.10  # seconds
-TRACKS = {"race_paradise": True, "race_coaster": True, "race_bigtop": True, "menu": True, "results": False, "theme": True}  # ShiftStorm: the race, menu / Garage, results, title theme  # Round 30-31: Farmageddon (the front nine, the back nine's alien take)
+TRACKS = {"race_paradise": True, "race_coaster": True, "race_bigtop": True, "race_dam": True, "menu": True, "results": False, "theme": True}  # ShiftStorm: the race, menu / Garage, results, title theme  # Round 30-31: Farmageddon (the front nine, the back nine's alien take)
 # Round 20: tracks with sung parts get hand-picked loop points instead of the search, so no vocal is cut at the seam.
 # course_lunar: Dan's space-age pop with wordless "oohs" / "pows". The vocals were located with a Demucs vocal stem
 # (htdemucs, run once outside the repo): both points sit in vocal-free stretches (the stem stays below -70 dBFS for
@@ -102,7 +102,7 @@ OPTIONAL = {"course_seaside", "minigolf", "course_suburban", "course_candy", "co
 
 
 # ShiftStorm: Dan's Suno downloads keep their own names
-ALIASES = {"race_paradise": "ShiftStorm - Paradise Plunge", "race_coaster": "ShiftStorm - Coaster Coast", "race_bigtop": "ShiftStorm - Big Top Breakdown", "menu": "ShiftStorm - Garage", "theme": "ShiftStorm - Theme", "results": "ShiftStorm - Victory"}
+ALIASES = {"race_paradise": "ShiftStorm - Paradise Plunge", "race_coaster": "ShiftStorm - Coaster Coast", "race_bigtop": "ShiftStorm - Big Top Breakdown", "race_dam": "ShiftStorm - Dam Shame", "menu": "ShiftStorm - Garage", "theme": "ShiftStorm - Theme", "results": "ShiftStorm - Victory"}
 def find_source(name):
     for d in SRC_DIRS:
         p = os.path.join(d, name + ".mp3")

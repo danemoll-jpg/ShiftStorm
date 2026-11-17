@@ -1,0 +1,47 @@
+ShiftStorm check 'damlap', 2026-11-17 09:44, build 0.14.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+DAM LAP: Dam Shame, line 9058 m (3 laps of 2969 m), 16 gates, 3 segments, 73 anchors, shortcuts Canyon flight 994 m
+DAM LAP PASS: finished True in 147.22 s, gates 16/16 in order True, resets 0, wall hits 0
+  water: lap 2 began at water stage 0 (-2.5 m); lap 3 began at water stage 2 (1.4 m)
+  lap                      form          time   target   delta   longest set-piece moment (>= 8 % of the screen's height)
+  1 Lap 1: Dry run         Driving      45.8 s    44 s    +1.8   5.1 s (The dam)
+  2 Lap 2: A smidge        Boating      44.6 s    48 s    -3.4   5.2 s (The dam)
+  3 Lap 3: The full show   Diving       56.8 s    56 s    +0.8   5.0 s (The dam)
+DAM SET-PIECES PASS: 3 of 3 laps had a set-piece >= 8 % of the screen for >= 1 s
+  form changes: Drive->Boat Boat->Fly Fly->Boat Boat->Drive Drive->Boat Boat->Dive Dive->Boat Boat->Dive Dive->Boat Boat->Drive
+  water: 49.9 stage 0 -> 1 (the leader's lap), rising -2.5 -> 1.4 m over 10 s
+  water: 59.9 risen to 1.4 m
+  water: 94.4 stage 1 -> 2 (the leader's lap), rising 1.4 -> 16.0 m over 10 s
+  water: 104.5 risen to 16.0 m
+  water: 109.6 Abi: Dive (held under by the flood (4.9 m)) at stage 2
+  water: 132.3 Abi: Dive (held under by the flood (6.8 m)) at stage 2
+  top speed per form: Drive 75.2 m/s, Boat 58.7 m/s, Fly 92.0 m/s, Dive 44.0 m/s
+  log: [ 147.22] finish in 147.22 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 3.91 ms, 95th pct 5.32 ms, 99th pct 7.63 ms, worst 127.67 ms over 26500 frames (45 over 16.7 ms); peak draw calls 0, batches 0, triangles 1412k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Lap 1: Dry run       3.86 /   5.33 / 127.67 ms       0 draws    1330k tris
+  Lap 2: A smidge      3.97 /   5.19 /  82.09 ms       0 draws    1412k tris
+  Lap 3: The full show   3.89 /   5.42 /  53.85 ms       0 draws    1407k tris
+  frames over 50 ms during the race: 11
+DAM RESULTS PASS: race 147.22 s, laps 45.85 / 44.58 / 56.78, best on file 147.22 s, best single lap on file 44.58 s; HUD: "LAP <b>3</b><size=24> / 3</size>"
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.00  wind 0.27  FOV 89.9  particles 91  speed 100 % of top
+  Boat  pitch 2.02  wind 0.26  FOV 90.0  particles 146  speed 101 % of top
+  Fly   pitch 2.30  wind 0.27  FOV 90.0  particles 104  speed 100 % of top
+  Dive  pitch 1.86  wind 0.25  FOV 90.0  particles 114  speed 130 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 5.94 ms, 95th pct 7.17 ms, 99th pct 10.57 ms, worst 12055.97 ms over 29198 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  damlap       Drive->Boat z -9094.0  0.606 s  frames worst 12.74 / mean 6.07 ms
+  damlap       Boat->Fly   z -9483.8  0.602 s  frames worst 16.20 / mean 5.66 ms
+  damlap       Fly->Boat   z -9786.7  0.601 s  frames worst 8.75 / mean 4.92 ms
+  damlap       Boat->Drive z -9449.7  0.604 s  frames worst 7.75 / mean 5.24 ms
+  damlap       Drive->Boat z -9093.8  0.605 s  frames worst 12.61 / mean 5.89 ms
+  damlap       Boat->Dive  z -9362.5  0.603 s  frames worst 11.21 / mean 5.17 ms
+  damlap       Dive->Boat  z -9787.9  0.600 s  frames worst 8.07 / mean 5.20 ms
+  damlap       Boat->Dive  z -9776.7  0.601 s  frames worst 6.74 / mean 4.96 ms
+  damlap       Dive->Boat  z -9394.6  0.602 s  frames worst 6.91 / mean 5.04 ms
+  damlap       Boat->Drive z -9327.2  0.605 s  frames worst 9.85 / mean 5.28 ms
+sound: music results playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

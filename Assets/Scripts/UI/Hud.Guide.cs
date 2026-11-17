@@ -98,6 +98,12 @@ namespace ShiftStorm
                     Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + (a0 + b0) * .5f, 7), new Vector2(Mathf.Max(4, b0 - a0), 6), new Color(.3f, 1f, .95f));
                 }
             }
+            // Round 16 item 1: the flight branches over the strip (violet): where a choice jump's flight leaves the route and where it comes back
+            foreach (var sc in c.shortcuts)
+            {
+                if (!sc.choice) continue; float a1 = sc.mainFrom / L * StripW, b1 = Mathf.Min(sc.mainTo, L) / L * StripW;
+                Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + (a1 + b1) * .5f, 13), new Vector2(Mathf.Max(4, b1 - a1), 4), new Color(.75f, .45f, 1f));
+            }
             foreach (var g in c.gates) stripGates.Add(Img(stripBar, null, new Vector2(0, .5f), new Vector2(4 + g.progress / L * StripW, 0), new Vector2(3, 16), new Color(1, 1, 1, .8f)));
         }
 

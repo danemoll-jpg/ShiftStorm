@@ -13,7 +13,7 @@ namespace ShiftStorm
         {
             var g = Game.Instance; if (g != null && g.Courses != null) foreach (var k in g.Courses) if (k) k.gameObject.SetActive(k == c);
             Shown = c;
-            if (c && c.look == "coaster") CoasterLook.Apply(); else if (c && c.look == "bigtop") BigTopLook.Apply(); else JurassicLook.Apply(true);
+            if (c && c.look == "coaster") CoasterLook.Apply(); else if (c && c.look == "bigtop") BigTopLook.Apply(); else if (c && c.look == "dam") DamLook.Apply(); else JurassicLook.Apply(true);
         }
     }
 

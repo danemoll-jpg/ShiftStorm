@@ -1,0 +1,18 @@
+ShiftStorm check 'btglobe', 2026-11-17 10:40, build 0.14.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BT RAIL Globe of Death full (70 m/s) PASS: onto it at 8.0 m/s, rode it True, off its end True, lowest speed on it 8.0 m/s (booster minimum 30), then Drive at 1107 m (66 m/s), resets 0
+BT RAIL Globe of Death slow (30 m/s) PASS: onto it at 5.0 m/s, rode it True, off its end True, lowest speed on it 5.0 m/s (booster minimum 30), then Drive at 1015 m (30 m/s), resets 0
+BT RAIL Globe of Death very slow (8 m/s, coasting on it) PASS: onto it at 26.1 m/s, rode it True, off its end True, lowest speed on it 26.0 m/s (booster minimum 30), then Drive at 988 m (11 m/s), resets 0
+BT RAIL cannon full (70 m/s) PASS: onto it at 68.3 m/s, rode it True, off its end True, lowest speed on it 68.3 m/s (booster minimum 80), then Fly at 1745 m (90 m/s), resets 0
+BT RAIL cannon slow (30 m/s) PASS: onto it at 14.8 m/s, rode it True, off its end True, lowest speed on it 14.8 m/s (booster minimum 80), then Fly at 1704 m (84 m/s), resets 0
+BT RAIL cannon very slow (8 m/s, coasting on it) PASS: onto it at 30.0 m/s, rode it True, off its end True, lowest speed on it 30.0 m/s (booster minimum 80), then Fly at 1702 m (84 m/s), resets 0
+BT RAILS PASS: the Globe of Death and the cannon at full / slow / very slow speed
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.24 ms, 95th pct 4.30 ms, 99th pct 11.64 ms, worst 843.00 ms over 18271 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  bt-cannon-full Drive->Fly  z   960.0  0.624 s  frames worst 54.18 / mean 2.28 ms
+  bt-cannon-slow Drive->Fly  z   960.0  0.647 s  frames worst 96.34 / mean 2.10 ms
+  bt-cannon-very-slow Drive->Fly  z   960.0  0.611 s  frames worst 24.04 / mean 2.09 ms
+sound: music race_bigtop playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -73,7 +73,7 @@ namespace ShiftStorm
                 if (v.Resets > rc) { rc = v.Resets; resets.Add($"{v.LastResetReason} -> {v.LastResetHow} at {v.Progress - lip:+0;-0} m from the lip ({v.LastResetBack:0} m back)"); minBack = Mathf.Min(minBack, v.Progress - lip); }
                 yield return null;
             }
-            bool flew = v.ShortcutsTaken.Contains("Lake flight") || v.ShortcutsTaken.Contains("Midway flight");
+            bool flew = v.ShortcutsTaken.Contains("Lake flight") || v.ShortcutsTaken.Contains("Midway flight") || v.ShortcutsTaken.Contains("Clown flight") || v.ShortcutsTaken.Contains("Canyon flight");   // Round 16: Big Top, Dam Shame
             float t = v.GatesPassed >= 2 && tLip > 0 ? Time.time - tLip : -1;
             bool ok = t > 0 && v.Resets == r0 && (!flyIt || flew);
             done(ok, t, $"{(h.keys ? "keys" : "stick")}, {speed:0} m/s, lane {lane:+0.0;-0.0} m, heading {head:+0;-0} deg, late {h.delay:0.00} s, LB {(flyIt ? (pressed ? $"{h.wingsAt:0.00} s into the window" : "not in time") : "-")}: {(t > 0 ? $"{t:0.00} s lip -> G1" : "did not reach G1")}, flew {flew}, penalty {v.Penalty:0} s{(v.NearMisses.Count > 0 ? $" ({string.Join(", ", v.NearMisses)})" : "")}, resets {v.Resets - r0}{(resets.Count > 0 ? ": " + string.Join("; ", resets) : "")}");

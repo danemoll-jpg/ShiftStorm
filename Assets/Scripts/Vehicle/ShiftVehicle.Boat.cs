@@ -33,7 +33,7 @@ namespace ShiftStorm
             {
                 var origin = transform.TransformPoint(local);
                 if (!physics.Raycast(origin, -transform.up, out RaycastHit hit, .9f, GroundMask, QueryTriggerInteraction.Ignore)) continue;
-                hits++; n += hit.normal; if (hit.collider.GetComponentInParent<WetRamp>()) wet = true;
+                hits++; n += hit.normal; var wr = hit.collider.GetComponentInParent<WetRamp>(); if (wr && wr.enabled) wet = true;   // Round 16: Dam Shame's chute is wet only once its water runs
                 float comp = .9f - hit.distance, sp = Vector3.Dot(Body.GetPointVelocity(origin), transform.up);
                 Body.AddForceAtPosition(transform.up * (Mathf.Clamp(comp * 70 - sp * 8, 0, 50) / HullPoints.Length), origin, ForceMode.Acceleration);
             }

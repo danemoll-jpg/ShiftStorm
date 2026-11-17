@@ -47,6 +47,8 @@ namespace ShiftStorm
         // (20 m/s per second) instead of jumping at the change: at the waterfall's Boat->Drive the old jump (50 -> 65 m/s) narrowed the view
         // about 4 deg and pulled the camera in at the moment the car left the ramp, which read as a stop. Legacy: the build 3 camera (checks).
         public static bool Legacy; float topRef = -1;
+        public static readonly bool OldFlightLook = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldBtFlight") >= 0;   // checks: build 18's camera in flight
+        float guideW;
         public float SpeedFrac { get; private set; }
         public float Kick { get; private set; }
         bool wasBoosting; float kickAt = -1;
@@ -103,7 +105,24 @@ namespace ShiftStorm
             if (!snapped || reset) { offset = wantOffset; velocity = Vector3.zero; snapped = true; }
             else offset = Vector3.SmoothDamp(offset, wantOffset, ref velocity, Mathf.Lerp(.12f, .03f, lw));   // Round 7: tight round the loop
             transform.position = focus + offset;
-            transform.rotation = Quaternion.LookRotation(focus + fwd * 6f - transform.position, up);
+            // Round 16 item 1 (Dan: "confusing where the first flight is supposed to go"): on a flight branch, and for 3 s after a change into
+            // the plane, the view turns part of the way (at most 25 deg) toward where the route goes (the HUD arrow's target), not only where
+            // the nose points, so the next ring / the exit is on the screen; eased in and out
+            var lookDir = fwd;
+            if (!Legacy && !OldFlightLook)
+            {
+                bool flightNow = m == Mode.Fly && (target.OnShortcut && target.OnShortcut.flight || (target.ChangeStartedAt > 0 && Time.time - target.ChangeStartedAt < 3f && target.ChangeFrom != Mode.Fly));
+                guideW = Mathf.MoveTowards(guideW, flightNow ? .5f : 0, Time.deltaTime * 1.2f);
+                if (guideW > .001f)
+                {
+                    var to = target.GuideTarget - focus; if (to.sqrMagnitude > 4f)
+                    {
+                        var want = Vector3.RotateTowards(fwd, to.normalized, 25f * Mathf.Deg2Rad, 0f);
+                        lookDir = Vector3.Slerp(fwd, want, guideW).normalized;
+                    }
+                }
+            }
+            transform.rotation = Quaternion.LookRotation(focus + lookDir * 6f - transform.position, up);
             // sense of speed: field of view, and a light shake on boost
             float wantFov = Legacy ? BaseFov + 18f * speedFrac + (target.Boosting ? 6f : 0f) : BaseFov + 20f * speedFrac * speedFrac + 5f * speedFrac + (target.Boosting ? 8f : 0f);
             fov = Mathf.Lerp(fov, wantFov, 1 - Mathf.Exp(-3f * Time.deltaTime)); if (cam) cam.fieldOfView = fov + (Legacy ? 0 : kick * 6f);

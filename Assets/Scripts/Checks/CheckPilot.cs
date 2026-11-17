@@ -233,6 +233,7 @@ namespace ShiftStorm
             if (which == "round14" || which == "menus14" || which == "mix" || which == "bubble" || which == "finishcam" || which == "wheel") yield return Round14(which);   // Round 14
             if (which == "round15" || which == "shimmer" || which == "bigtop" || which == "btlap" || which == "btglobe" || which == "btsplits") yield return Round15(which);   // Round 15
             if (which == "shake") yield return ShakeCheck();
+            if (which == "round16" || which == "bt16" || which == "btflight" || which == "humanclown" || which == "dam" || which == "damlap" || which == "damrise" || which == "damviews") yield return Round16(which);   // Round 16
             if (which == "menuwalk") { yield return MenuWalk(); yield break; }
             bool r9 = which == "round9";
             if (r9) yield return SteeringCheck();

@@ -2,6 +2,57 @@
 
 Keep each round's list short; each item is Dan's time.
 
+## Round 16 — Dam Shame: three models (image AI, then Tripo by hand) — stand-ins in the game now
+
+Dam Shame (the fourth course: a dam in a mountain canyon, three laps, the water rises each lap) is fully playable with stand-ins built
+from simple shapes. Three of them carry it and read as placeholders: **the beavers** (their lodge and little stick dam on the river,
+under the Canyon flight), **the heron** (on a rock by the valley road on laps 1-2) and **Hattie Sluice, the dam keeper** (her words are
+subtitles in The Tour's Stop 4 scene; today no figure). Nothing waits on them; make them when you have time.
+
+**What Code does with them:** clean up in Blender (size, origin at the feet, facing +Z, LOD), replace the stand-ins (kept as the
+fallback); the animals are animated in code (Mixamo rigs humanoids only); Hattie is rigged by you in Mixamo.
+
+### Shared for all three images
+Same art direction as Tee'd Off's characters and dinosaurs: cute stylized 3D cartoon, chunky friendly proportions, big readable
+shapes, flat hand-painted cel-shaded colours, smooth surfaces, original. **Full body, plain white background, even lighting, no
+shadows, no cropping, no props (except where a line says so), no ground, no text.** For Tripo multiview: the same pose from the
+side and from the back.
+
+### 1. Beaver — `Art/Incoming/Dam/Beaver/Beaver.glb`
+- Prompt: *"Cartoon beaver for a family racing game, cute stylized 3D toon style: a plump, round, friendly brown beaver standing on all
+  four short legs, a big flat dark paddle-shaped tail, two large white buck teeth in a cheeky grin, big shiny eyes, small round ears,
+  a tiny yellow hard hat, hand-painted cel-shaded colours, smooth surfaces, full body, neutral pose, side view (left side), plain white
+  background, no props, no ground, no text."*
+- Design note: four of them on their lodge and their little dam beside the river ("DAM GOOD"); one slaps its tail, one carries a
+  stick. Seen at 30-90 m from the road and from the Canyon flight; the tail, the teeth and the hard hat carry it. About 4 m long
+  (cartoon big).
+- Tripo: **Image to Model**, textured, **low-poly / standard**, **GLB**, about 10k faces.
+- Animations: none (code slaps the tail and walks it along the dam).
+
+### 2. Grey heron — `Art/Incoming/Dam/Heron/Heron.glb`
+- Prompt: *"Cartoon grey heron for a family racing game, cute stylized 3D toon style: a tall, elegant, slightly grumpy grey heron
+  standing on one long yellow leg, the other tucked up, a long S-curved neck, a long sharp yellow beak, a black crest feather at the
+  back of its head, big expressive eyes with a grumpy look, hand-painted cel-shaded colours, smooth surfaces, full body, side view
+  (left side), plain white background, no fish, no props, no ground, no text."*
+- Design note: stands on a rock by the valley road (laps 1 and 2), a fish in its beak (the game's own); about 6 m tall (cartoon big).
+- Tripo: **Image to Model**, textured, **low-poly / standard**, **GLB**, about 8k faces.
+- Animations: none (code turns its head).
+
+### 3. The dam keeper, Hattie Sluice — image `Art/Concepts/Characters/Hattie/Hattie.png`, model `Art/Incoming/Characters/Hattie/Hattie.fbx`
+- Prompt: *"Full-body character concept art of an original cartoon dam keeper, front view, standing in an A-pose with arms straight and
+  angled down away from the body, plain white background, even lighting, no shadows. A short, sturdy, no-nonsense woman in her
+  sixties with a weathered friendly face, grey hair in a practical bun, small round glasses on a cord, a dry unimpressed half-smile,
+  wearing a navy blue work jacket with a reflective orange stripe and a 'LOCKHART DAM' patch shape (no readable text), a white
+  hard hat, a walkie-talkie clipped to her belt, sturdy work trousers and muddy rubber boots. Practical, protective, deadpan, secretly
+  kind. Cute stylized 3D cartoon style, head slightly large but normal proportions, not chibi. Empty hands, no props."*
+- Design note: the keeper of the Lockhart Dam for forty-one years (Docs/STORY.md). Distinct from Buck (big, red jacket, showman) and
+  Lionel (tall, scarlet tailcoat): small, navy and safety orange, a hard hat. She appears on the card in The Tour's Stop 4 scene and
+  could stand at the control tower's door.
+- Tripo: **Image to Model**, textured, **standard**, **FBX** (for Mixamo), about 20k faces. Then Mixamo (Humanoid), download with
+  skin: **"Talking"** (her warnings), **"Shaking Head No"** (at Buck), **"Waving"** (greeting the racers), **"Arms Crossed"** (her
+  default stance), **"Standing Clap"** (podium). Save the clips beside the model.
+- Voice (ElevenLabs Voice Design, for Dan): see `Docs/STORY.md` (Dam Shame) for the prompt; name it "ShiftStorm Hattie".
+
 ## Round 15 — Big Top Breakdown: three models (image AI, then Tripo by hand) — stand-ins in the game now
 
 Big Top Breakdown (the third course, a travelling circus in bright daylight) is fully playable with stand-ins built from simple

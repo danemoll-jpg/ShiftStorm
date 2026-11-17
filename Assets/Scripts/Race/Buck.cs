@@ -53,7 +53,7 @@ namespace ShiftStorm
             var fresh = all.Where(k => !used.Contains(k)).ToList(); if (fresh.Count == 0) { foreach (var k in all) used.Remove(k); fresh = all; }
             var id = fresh[Random.Range(0, fresh.Count)]; used.Add(id); return id;
         }
-        static string Key(int course) => course == 1 ? "cc" : course == 2 ? "bt" : "pp";
+        static string Key(int course) => course == 1 ? "cc" : course == 2 ? "bt" : course == 3 ? "dm" : "pp";
 
         // ---------------- the briefing ----------------
         public bool WantsBriefing(int course) => Enabled && Settings.BuckBriefings != 2 && !briefed.Contains(course) && clips.Count > 0;
@@ -80,7 +80,7 @@ namespace ShiftStorm
         public IEnumerator Say(string id, string what)
         {
             if (string.IsNullOrEmpty(id) || !clips.TryGetValue(id, out var clip)) yield break;
-            words.TryGetValue(id, out var text); Subtitle = text ?? "";
+            words.TryGetValue(id, out var text); Subtitle = text ?? ""; Speaker = Title;
             voice.Stop(); voice.clip = clip; voice.volume = Settings.Voices; voice.Play();
             Said.Add((Time.realtimeSinceStartup, clip.length, id, what)); SoundLog.Add("voice", "Buck " + id);
             Debug.Log($"[Buck] {what}: {id} \"{text}\" ({clip.length:0.0} s)");
@@ -90,14 +90,34 @@ namespace ShiftStorm
         }
 
         // ---------------- The Tour's scenes (Tour.cs): several lines in order, skippable as a whole ----------------
-        public IEnumerator Scene(IList<string> ids, string what)
+        public IEnumerator Scene(IList<string> ids, string what, IList<(int after, string speaker, string text)> texts = null)
         {
             Hold(); skip = false; Events.Add($"{Time.realtimeSinceStartup:0.00} scene {what}: {string.Join(" + ", ids)}");
-            foreach (var id in ids) { if (skip) break; yield return Say(id, what); }
+            for (int i = 0; i < ids.Count; i++)
+            {
+                if (skip) break; yield return Say(ids[i], what);
+                if (texts != null) foreach (var t in texts) if (t.after == i && !skip) yield return Text(t.speaker, t.text, Mathf.Clamp(t.text.Length * .065f, 3.5f, 7f));   // Round 16: Hattie's words (no voice yet)
+            }
             Events.Add($"{Time.realtimeSinceStartup:0.00} scene {what} {(skip ? "skipped" : "done")}");
             CardOn = false; Subtitle = ""; Hint = "";
         }
         public bool Skipped => skip;
+
+        // Round 16: over the tannoy during a race (Dam Shame's water rising): one line of a pool, his card while it plays; nothing if he is busy
+        public void PA(string prefix)
+        {
+            if (!Enabled || clips.Count == 0 || Busy) return; var id = Pick(prefix); if (id == "") return;
+            Speaker = Title; Events.Add($"{Time.realtimeSinceStartup:0.00} PA {id}"); StartCoroutine(Say(id, "PA"));
+        }
+        // Round 16: a line from someone with no voice yet (Hattie Sluice, the dam keeper): her name on the card, the words, no sound
+        public string Speaker { get; private set; } = Title;
+        public IEnumerator Text(string speaker, string text, float seconds)
+        {
+            Speaker = speaker; Subtitle = text; Events.Add($"{Time.realtimeSinceStartup:0.00} text {speaker}: {text}"); Said.Add((Time.realtimeSinceStartup, seconds, "text:" + speaker, "scene"));
+            Debug.Log($"[Buck] {speaker} (text): \"{text}\"");
+            float end = Time.realtimeSinceStartup + seconds; while (Time.realtimeSinceStartup < end && !skip) yield return null;
+            Speaker = Title; Subtitle = "";
+        }
 
         // ---------------- the results remark ----------------
         public void Watch(ShiftVehicle v) { v.Event += (kind, text) => { if (kind == "finish" && v == game.Player) StartCoroutine(Remark(v)); if (kind == "start") remarkFor = -1; }; }
@@ -108,7 +128,7 @@ namespace ShiftStorm
             int run = ++remarkFor;
             float t0 = Time.realtimeSinceStartup;
             // after Barnaby's results line (or 10 s), when nobody is talking
-            while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "podium" || l.pool == "last"))) yield return null;
+            while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "btres" || l.pool == "dmres" || l.pool == "podium" || l.pool == "last"))) yield return null;
             float t1 = Time.realtimeSinceStartup;
             while (Time.realtimeSinceStartup - t1 < 8f && ((Caller.Instance && (Caller.Instance.BarkerTalking || (Caller.Instance.Voice && Caller.Instance.Voice.isPlaying))) || Time.time < Driver.AnySpeakingUntil)) yield return null;
             if (run != remarkFor || !v.Finished) yield break;

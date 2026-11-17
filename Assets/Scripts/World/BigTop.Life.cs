@@ -343,10 +343,11 @@ namespace ShiftStorm
             edge.Object(scen, "Edge lines", BigTopLook.Vc(false, new Color(.15f, .15f, .14f)), false, false);
             chev.Object(scen, "Road chevrons", BigTopLook.Vc(false, new Color(.25f, .15f, .02f)), false, false);
             // the flight over the camp: rings along the line
-            var rings = new MeshKit.Batch(); var gold = new Color(1f, .9f, .55f, .55f);
-            for (float p = M("flap") + 70; p < M("splash") - 60; p += 75)
+            // Round 16 item 1: bigger and brighter (the cannonball flight's way over the camp reads from the top flap on), every 70 m
+            var rings = new MeshKit.Batch(); var gold = OldClown ? new Color(1f, .9f, .55f, .55f) : new Color(1f, .86f, .4f, .8f);
+            for (float p = M("flap") + 70; p < M("splash") - 60; p += OldClown ? 75 : 70)
             {
-                var q = At(p); var frame = Quaternion.LookRotation(Dir(p), Vector3.up); const float R = 11f;
+                var q = At(p); var frame = Quaternion.LookRotation(Dir(p), Vector3.up); float R = OldClown ? 11f : 14f;
                 for (int i = 0; i < 14; i++) { float a = i * 360f / 14; rings.Add(MeshKit.Cube, q + frame * (new Vector3(Mathf.Cos(a * Mathf.Deg2Rad), Mathf.Sin(a * Mathf.Deg2Rad), 0) * R), frame * Quaternion.Euler(0, 0, a), new Vector3(.7f, R * .47f, .7f), gold); }
             }
             rings.Object(scen, "Flight rings", GateMarker.Beacon, false, false);

@@ -1,0 +1,64 @@
+ShiftStorm check 'btsplits', 2026-11-17 10:41, build 0.14.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  BT clown jump car (through the Globe) run 1: 13.75 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 2: 13.75 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 3: 13.75 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+BT CLOWN JUMP car PASS: 10 of 10 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.75 s (anchor -> G1)
+  BT clown jump fly (past the Globe) run 1: 11.85 s to G1, resets 0, wagon hits 0, wings used 1, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 2: 11.85 s to G1, resets 0, wagon hits 0, wings used 2, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 3: 11.85 s to G1, resets 0, wagon hits 0, wings used 3, shortcuts Clown flight
+BT CLOWN JUMP fly PASS: 10 of 10 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+  BT river main channel run 1: 28.19 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 2: 28.23 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 3: 28.39 s to G7, resets 0, wall hits 0, shortcuts 
+BT RIVER main channel PASS: 10 of 10 clean, 0 stuck, 0 resets, mean 28.24 s (anchor -> G7)
+  BT river rapids run 1: 32.93 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 2: 32.51 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 3: 32.72 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+BT RIVER rapids PASS: 10 of 10 clean, 0 stuck, 0 resets, mean 32.66 s (anchor -> G7)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.90 ms, 95th pct 3.57 ms, 99th pct 7.23 ms, worst 1056.58 ms over 455840 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  bt-clown-fly-1 Drive->Fly  z   642.6  0.601 s  frames worst 25.39 / mean 2.19 ms
+  bt-clown-fly-1 Fly->Drive  z   813.0  0.601 s  frames worst 5.83 / mean 1.85 ms
+  bt-clown-fly-2 Drive->Fly  z   642.6  0.601 s  frames worst 70.02 / mean 3.05 ms
+  bt-clown-fly-2 Fly->Drive  z   813.0  0.601 s  frames worst 71.78 / mean 3.68 ms
+  bt-clown-fly-3 Drive->Fly  z   642.6  0.605 s  frames worst 21.34 / mean 3.15 ms
+  bt-clown-fly-3 Fly->Drive  z   813.0  0.600 s  frames worst 77.48 / mean 3.13 ms
+  bt-clown-fly-4 Drive->Fly  z   642.6  0.602 s  frames worst 94.73 / mean 2.46 ms
+  bt-clown-fly-4 Fly->Drive  z   813.0  0.601 s  frames worst 58.36 / mean 2.38 ms
+  bt-clown-fly-5 Drive->Fly  z   642.6  0.602 s  frames worst 55.95 / mean 3.08 ms
+  bt-clown-fly-5 Fly->Drive  z   813.0  0.600 s  frames worst 148.80 / mean 3.24 ms
+  bt-clown-fly-6 Drive->Fly  z   642.6  0.601 s  frames worst 94.58 / mean 7.04 ms
+  bt-clown-fly-6 Fly->Drive  z   813.0  0.600 s  frames worst 32.46 / mean 1.96 ms
+  bt-clown-fly-7 Drive->Fly  z   642.6  0.600 s  frames worst 19.18 / mean 1.85 ms
+  bt-clown-fly-7 Fly->Drive  z   813.0  0.601 s  frames worst 5.05 / mean 1.71 ms
+  bt-clown-fly-8 Drive->Fly  z   642.6  0.602 s  frames worst 43.65 / mean 2.19 ms
+  bt-clown-fly-8 Fly->Drive  z   813.0  0.604 s  frames worst 28.86 / mean 2.78 ms
+  bt-clown-fly-9 Drive->Fly  z   642.6  0.648 s  frames worst 376.09 / mean 3.57 ms
+  bt-clown-fly-9 Fly->Drive  z   813.0  0.610 s  frames worst 318.39 / mean 8.09 ms
+  bt-clown-fly-10 Drive->Fly  z   642.6  0.604 s  frames worst 129.83 / mean 3.22 ms
+  bt-clown-fly-10 Fly->Drive  z   813.0  0.600 s  frames worst 21.11 / mean 1.94 ms
+  bt-river-main-1 Boat->Dive  z  -228.9  0.602 s  frames worst 29.13 / mean 1.84 ms
+  bt-river-main-2 Boat->Dive  z  -229.2  0.600 s  frames worst 96.79 / mean 2.43 ms
+  bt-river-main-3 Boat->Dive  z  -228.7  0.606 s  frames worst 38.79 / mean 2.02 ms
+  bt-river-main-4 Boat->Dive  z  -228.5  0.601 s  frames worst 6.95 / mean 1.75 ms
+  bt-river-main-5 Boat->Dive  z  -229.0  0.632 s  frames worst 111.81 / mean 2.73 ms
+  bt-river-main-6 Boat->Dive  z  -229.0  0.602 s  frames worst 91.28 / mean 1.84 ms
+  bt-river-main-7 Boat->Dive  z  -228.6  0.600 s  frames worst 24.53 / mean 2.06 ms
+  bt-river-main-8 Boat->Dive  z  -229.2  0.633 s  frames worst 148.91 / mean 2.83 ms
+  bt-river-main-9 Boat->Dive  z  -228.8  0.601 s  frames worst 95.01 / mean 2.36 ms
+  bt-river-main-10 Boat->Dive  z  -228.4  0.600 s  frames worst 11.01 / mean 1.81 ms
+  bt-river-rapids-1 Boat->Dive  z  -228.3  0.601 s  frames worst 24.09 / mean 2.41 ms
+  bt-river-rapids-2 Boat->Dive  z  -228.7  0.600 s  frames worst 8.37 / mean 1.69 ms
+  bt-river-rapids-3 Boat->Dive  z  -228.6  0.602 s  frames worst 38.91 / mean 2.14 ms
+  bt-river-rapids-4 Boat->Dive  z  -228.8  0.602 s  frames worst 19.42 / mean 1.80 ms
+  bt-river-rapids-5 Boat->Dive  z  -228.5  0.601 s  frames worst 27.28 / mean 2.09 ms
+  bt-river-rapids-6 Boat->Dive  z  -229.0  0.604 s  frames worst 25.46 / mean 2.02 ms
+  bt-river-rapids-7 Boat->Dive  z  -228.7  0.600 s  frames worst 22.02 / mean 2.42 ms
+  bt-river-rapids-8 Boat->Dive  z  -228.8  0.601 s  frames worst 9.37 / mean 1.86 ms
+  bt-river-rapids-9 Boat->Dive  z  -228.4  0.601 s  frames worst 28.35 / mean 1.84 ms
+  bt-river-rapids-10 Boat->Dive  z  -228.8  0.600 s  frames worst 53.58 / mean 2.90 ms
+sound: music race_bigtop playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

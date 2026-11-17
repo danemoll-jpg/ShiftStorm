@@ -14,7 +14,7 @@ namespace ShiftStorm
     // first time; win or lose, the rival says something about it. Saved in tour.json (won, best margin, tries).
     public sealed class Challenge
     {
-        public int stop, course, gates; public string key, title, rival, rivalShort, blurb, paint; public Func<float> startAt;
+        public int stop, course, gates; public string key, title, rival, rivalShort, blurb, paint, lines = ""; public Func<float> startAt;   // lines: the rival's own line pools for this one ("2": chintro2 ...)
         public static readonly Challenge[] All =
         {
             new Challenge { stop = 0, course = 0, key = "c1", title = "Rae's Waterfall Dash", rival = "Rocket Rae", rivalShort = "Rae", paint = "Rocket Red",
@@ -24,6 +24,9 @@ namespace ShiftStorm
             // Round 15: Stop 3's challenge: Vivi, round the ring, out of the cannon, through the top flap
             new Challenge { stop = 2, course = 2, key = "c3", title = "Vivi's Cannonball Run", rival = "Vivi", rivalShort = "Vivi", paint = "Vivi Violet",
                             blurb = "beat Vivi round the ring, out of the cannon and through the top flap", gates = 5, startAt = () => BigTop.Marks["door"] + 5 },
+            // Round 16: Stop 4's challenge: Rae again, on lap 2's water: down the running spillway, over the awash valley, through the turbine hall
+            new Challenge { stop = 3, course = 3, key = "c4", title = "Rae's Flood Run", rival = "Rocket Rae", rivalShort = "Rae", paint = "Spillway Teal", lines = "2",
+                            blurb = "beat Rae down the running spillway, over the flooded valley and through the turbine hall", gates = DamShame.FirstGate(2) + 3, startAt = () => DamShame.Marks["F@2"] + 40 },
         };
         public static Challenge Active;   // the challenge being played
         public static int Last = -1;      // the last one started (Restart replays it)
@@ -50,7 +53,7 @@ namespace ShiftStorm
     {
         public static readonly (string name, Color color, int challenge)[] All =
         {
-            ("Factory", VehicleDesigns.PlayerTint, -1), ("Rocket Red", new Color(.85f, .12f, .15f), 0), ("Showtime Blue", new Color(.15f, .4f, .95f), 1), ("Vivi Violet", new Color(.62f, .25f, .9f), 2),
+            ("Factory", VehicleDesigns.PlayerTint, -1), ("Rocket Red", new Color(.85f, .12f, .15f), 0), ("Showtime Blue", new Color(.15f, .4f, .95f), 1), ("Vivi Violet", new Color(.62f, .25f, .9f), 2), ("Spillway Teal", new Color(.1f, .72f, .7f), 3),
         };
         public static bool Unlocked(int i) => All[i].challenge < 0 || Tour.ChallengeWon(All[i].challenge);
         public static int Current => Unlocked(Mathf.Clamp(Settings.Paint, 0, All.Length - 1)) ? Mathf.Clamp(Settings.Paint, 0, All.Length - 1) : 0;
@@ -90,7 +93,7 @@ namespace ShiftStorm
             Step($"start: {ch.title}, {p.RacerName} against {rival.RacerName} from the anchor at {c.anchors[ai].progress:0} m ({c.anchors[ai].mode}), first through gate {ch.gates} ({c.gates[ch.gates - 1].label})");
             if (talk) yield return buck.Scene(buck.Pool($"ch_{ch.key}_intro"), $"challenge {ch.key}");
             { var d = Driver.All.Find(x => x && x.Vehicle == rival); float t0 = Time.realtimeSinceStartup;
-              if (d && d.Say("chintro", true)) { Step($"{ch.rivalShort}: chintro"); while (Time.time < Driver.AnySpeakingUntil && Time.realtimeSinceStartup - t0 < 8f) yield return null; } }
+              if (d && (d.Say("chintro" + ch.lines, true) || d.Say("chintro", true))) { Step($"{ch.rivalShort}: chintro{ch.lines}"); while (Time.time < Driver.AnySpeakingUntil && Time.realtimeSinceStartup - t0 < 8f) yield return null; } }
             if (Challenge.Active != ch) { Running = false; yield break; }
             p.HoldFor(3f); rival.HoldFor(3f);
             if (Caller.Instance) Caller.Instance.Call("chstart", p, true);
@@ -122,7 +125,7 @@ namespace ShiftStorm
             t3 = Time.realtimeSinceStartup;
             while (Time.realtimeSinceStartup - t3 < 6f && Caller.Instance && (Caller.Instance.BarkerTalking || Caller.Instance.Voice && Caller.Instance.Voice.isPlaying)) yield return null;
             var rd = Driver.All.Find(x => x && x.Vehicle == rival);
-            if (rd && rd.Say(won ? "chlose" : "chwin", true)) { Step($"{ch.rivalShort}: {(won ? "chlose" : "chwin")}"); float t4 = Time.realtimeSinceStartup; while (Time.time < Driver.AnySpeakingUntil && Time.realtimeSinceStartup - t4 < 8f) yield return null; }
+            if (rd && (rd.Say((won ? "chlose" : "chwin") + ch.lines, true) || rd.Say(won ? "chlose" : "chwin", true))) { Step($"{ch.rivalShort}: {(won ? "chlose" : "chwin")}"); float t4 = Time.realtimeSinceStartup; while (Time.time < Driver.AnySpeakingUntil && Time.realtimeSinceStartup - t4 < 8f) yield return null; }
             if (talk && first) { yield return buck.Scene(buck.Pool("ch_reward"), "challenge reward"); Step("Buck: reward"); }
             float t5 = Time.realtimeSinceStartup; while (Time.realtimeSinceStartup - t5 < 2.5f) yield return null;
             Running = false; Challenge.Active = null;

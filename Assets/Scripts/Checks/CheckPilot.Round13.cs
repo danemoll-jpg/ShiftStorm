@@ -274,7 +274,7 @@ namespace ShiftStorm
                     bool okResult = game.ChallengeRun.LastWon == win;
                     var buckSaid = Buck.Instance.Events.Skip(bl).Where(e => e.Contains(" said ") || e.Contains("scene")).ToList();
                     var barker = Caller.Instance.Lines.Where(l => l.t >= clT).Select(l => $"{l.pool}/{l.clip}").ToList();
-                    var drivers = Driver.AllSpoken.Skip(spoken0).Where(s => s.Contains(" chintro ") || s.Contains(" chwin ") || s.Contains(" chlose ")).ToList();
+                    var drivers = Driver.AllSpoken.Skip(spoken0).Where(s => s.Contains(" chintro") || s.Contains(" chwin") || s.Contains(" chlose")).ToList();
                     bool lines = barker.Any(x => x.StartsWith("ch")) && drivers.Count >= 2 && buckSaid.Count > 0;
                     bool ok = okResult && saved && reloaded && lines; if (ok) pass++;
                     Line($"  {ch.key} {(win ? "win" : "lose")} run {(ok ? "PASS" : "FAIL")}: result {(game.ChallengeRun.LastWon ? "won" : "lost")} by {game.ChallengeRun.LastMargin:0.0} s ({Challenge.Note}); saved {saved}, after a reload {reloaded} (tries {Tour.ChallengeTries(i)}, won {Tour.ChallengeWon(i)}, best {Tour.ChallengeBest(i):0.0} s); paint {ch.paint} unlocked {Paints.Unlocked(i + 1)}");

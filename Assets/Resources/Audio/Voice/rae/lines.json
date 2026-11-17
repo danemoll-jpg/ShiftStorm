@@ -6,12 +6,24 @@
    "text": "One on one, rookie? Try to keep my bubbles in sight!"
   },
   {
+   "id": "chintro_2",
+   "text": "Rematch, rookie! Down the spillway and through the turbines. Bring a towel!"
+  },
+  {
    "id": "chlose_1",
    "text": "Okay. Okay! You earned that one."
   },
   {
+   "id": "chlose_2",
+   "text": "Okay, that was a clean run. I'm still drying off, though."
+  },
+  {
    "id": "chwin_1",
    "text": "Ha! The waterfall is MY turf!"
+  },
+  {
+   "id": "chwin_2",
+   "text": "Ha! Rocket Rae rules the rapids!"
   },
   {
    "id": "disaster_1",

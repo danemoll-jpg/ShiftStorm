@@ -163,7 +163,7 @@ namespace ShiftStorm
             var gc = GlobeCentre;
             var bars = new MeshKit.Batch(); float R = GlobeSphere;
             // open where the track goes in and out: the bottom band over the track's width (the entry at x 0, the exit 6 m east)
-            bool Open(Vector3 q) => q.y < G - .2f || (q.y < Road + 5f && q.x - O.x > -6f && q.x - O.x < 12f);
+            bool Open(Vector3 q) => q.y < G - .2f || (q.y < Road + 5f && q.x - O.x > GlobeX - 6f && q.x - O.x < GlobeX + 12f);
             void Bar(Vector3 p0, Vector3 p1, Color col) { var m = (p0 + p1) * .5f; if (Open(m)) return; var d = p1 - p0; var dn = d.normalized; bars.Add(MeshKit.Cube, m, Quaternion.LookRotation(dn, Mathf.Abs(dn.y) > .95f ? Vector3.right : Vector3.up), new Vector3(.32f, .32f, d.magnitude + .2f), col); }
             for (int mer = 0; mer < 14; mer++)
             {
