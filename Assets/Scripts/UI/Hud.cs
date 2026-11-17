@@ -160,7 +160,7 @@ namespace ShiftStorm
             bool showResults = tt && tt.HasResults && v.Finished && !menuPanel.activeSelf;
             if (showResults != resultsPanel.activeSelf) resultsPanel.SetActive(showResults);
             if (showResults) results.text = ResultsText(tt, c);
-            sub.rectTransform.anchoredPosition = new Vector2(0, showResults ? 6 : 118); if (help) help.enabled = !SplitScreen.Active && !showResults;   // Round 14: Barker's words under the results panel, not over its buttons
+            sub.rectTransform.anchoredPosition = new Vector2(0, showResults ? 6 : 118); if (help) help.enabled = !SplitScreen.Active && !showResults;   // Round 14: Barnaby's words under the results panel, not over its buttons
             // menu (Round 14: Hud.Menu)
             bool open = game && game.MenuOpen && player != 2;
             // Round 5: the Garage hides the race HUD (everything but the menu) while it is open; Round 14: so do the front menus (title, main menu)

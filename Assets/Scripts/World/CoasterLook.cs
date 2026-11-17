@@ -13,7 +13,7 @@ namespace ShiftStorm
         {
             var g = Game.Instance; if (g != null && g.Courses != null) foreach (var k in g.Courses) if (k) k.gameObject.SetActive(k == c);
             Shown = c;
-            if (c && c.look == "coaster") CoasterLook.Apply(); else JurassicLook.Apply(true);
+            if (c && c.look == "coaster") CoasterLook.Apply(); else if (c && c.look == "bigtop") BigTopLook.Apply(); else JurassicLook.Apply(true);
         }
     }
 
@@ -65,18 +65,27 @@ namespace ShiftStorm
     {
         public Course course; float shown = -1;
         public static float Forced = -1;   // checks: a fixed time of the evening
+        public static readonly bool OldSky = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldSky") >= 0;   // Round 15: build 16's evening
         void Update()
         {
             var g = Game.Instance; if (!g || !course || CourseLook.Shown != course) return;
             float best = 0; foreach (var h in g.Humans) if (h && h.Course == course) best = Mathf.Max(best, h.Finished ? course.Length : h.Progress);
             float want = Forced >= 0 ? Forced : Mathf.Clamp01(best / Mathf.Max(1, course.Length) * 1.05f);
-            shown = shown < 0 ? want : Mathf.MoveTowards(shown, want, Time.deltaTime * .04f);
-            if (Mathf.Abs(shown - CoasterLook.Now) > .002f) CoasterLook.Evening(shown);
+            if (OldSky) { shown = shown < 0 ? want : Mathf.MoveTowards(shown, want, Time.deltaTime * .04f); if (Mathf.Abs(shown - CoasterLook.Now) > .002f) CoasterLook.Evening(shown); return; }
+            // Round 15 item 1 (Dan: "The shimmering only happens on the 2nd track and it is before and after the race"): the cause, measured
+            // by the shimmer check: after a race (night) a restart's grid wants the sunset again, and the sky eased back at .04 / s in ~170
+            // steps of .002, each one turning the sun ~0.15 deg (27 deg in 10 s on the grid): the toon shading's light / shadow bands and every
+            // shadow crawled across the whole picture, seen only while parked (moving, it hides in the motion). Now the evening moves only
+            // while a person is racing; parked (the grid's countdown, after the finish, the front menus) it is set once, at once.
+            bool racing = false; foreach (var h in g.Humans) if (h && h.Course == course && !h.Holding && !h.Finished) racing = true;
+            if (g.InFront) { want = 0; racing = false; }
+            shown = shown < 0 || !racing ? want : Mathf.MoveTowards(shown, want, Time.deltaTime * .04f);
+            if (Mathf.Abs(shown - CoasterLook.Now) > (racing ? .002f : 1e-5f)) CoasterLook.Evening(shown);
         }
     }
 
     // Round 10: a big moving thing along the lap that should be seen (Round 8b's rule: >= 8 % of the screen's height for >= 1 s): its box
-    // (local centre and size), the segment it belongs to, the Barker pool that names it. Like DinoActor.ScreenShare: the box's corners on
+    // (local centre and size), the segment it belongs to, the Barnaby pool that names it. Like DinoActor.ScreenShare: the box's corners on
     // the screen, 0 when behind the camera, too far in the fog / underwater, hidden behind solid ground or not showing (a firework between
     // bursts).
     public sealed class SetPiece : MonoBehaviour

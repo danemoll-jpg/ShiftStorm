@@ -1,0 +1,359 @@
+==== shimmer (shimmer )
+exit 0
+ShiftStorm check 'shimmer', 2026-11-16 18:06, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  Paradise Plunge    grid before GO      STEADY: 743 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.04 / 255 (median 0.04, 95th pct 0.07), pixels changing (> 8 levels): median 0.14 %, 95th pct 0.21 %
+  Paradise Plunge    after the finish    STEADY: 824 frames; camera moved at most 56695.08 mm / 72.9122 deg, car 13593.52 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.87 / 255 (median 0.77, 95th pct 1.46), pixels changing (> 8 levels): median 2.69 %, 95th pct 4.74 %
+  Paradise Plunge    grid after Race again STEADY: 743 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.06 / 255 (median 0.04, 95th pct 0.13), pixels changing (> 8 levels): median 0.14 %, 95th pct 0.42 %
+  Coaster Coast      grid before GO      STEADY: 862 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.04 / 255 (median 0.03, 95th pct 0.06), pixels changing (> 8 levels): median 0.12 %, 95th pct 0.20 %
+  Coaster Coast      after the finish    STEADY: 1041 frames; camera moved at most 64070.55 mm / 73.1278 deg, car 17127.97 mm; sun turned 0.0000 deg; evening 1.000-1.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 6.51 / 255 (median 6.14, 95th pct 10.48), pixels changing (> 8 levels): median 12.48 %, 95th pct 16.00 %
+  Coaster Coast      grid after Race again STEADY: 896 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.25 / 255 (median 0.03, 95th pct 1.39), pixels changing (> 8 levels): median 0.13 %, 95th pct 3.81 %
+  Big Top Breakdown  grid before GO      STEADY: 921 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.04 / 255 (median 0.03, 95th pct 0.05), pixels changing (> 8 levels): median 0.11 %, 95th pct 0.17 %
+  Big Top Breakdown  after the finish    STEADY: 1048 frames; camera moved at most 64157.94 mm / 73.1391 deg, car 17166.90 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 5.91 / 255 (median 5.67, 95th pct 9.16), pixels changing (> 8 levels): median 13.24 %, 95th pct 16.86 %
+  Big Top Breakdown  grid after Race again STEADY: 887 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.34 / 255 (median 0.04, 95th pct 1.80), pixels changing (> 8 levels): median 0.13 %, 95th pct 4.02 %
+SHIMMER PASS: parked = camera, car, sun and sky still on every course (after the finish: the sun and sky; the camera circles on purpose) (the picture then changes only where things are meant to move: see the heat maps)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== bigtop (bigtop )
+exit 0
+ShiftStorm check 'bigtop', 2026-11-16 18:09, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BT LAP PASS: finished True in 94.83 s (target ~2 min), gates 11/11 in order True, resets 0, wall hits 0, wagon hits 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+BT SET-PIECES PASS: 6 of 6 segments had a set-piece >= 8 % of the screen for >= 1 s
+  log: [  67.70] gate G7 sunken wagon passed (8/11)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.26 ms, 95th pct 6.38 ms, 99th pct 7.75 ms, worst 62.47 ms over 15904 frames (2 over 16.7 ms); peak draw calls 0, batches 0, triangles 910k
+BT RESULTS PASS: lap 94.83 s, 6 splits, best on file 94.83 s
+BT RAIL Globe of Death full (70 m/s) PASS: onto it at 13.3 m/s, rode it True, off its end True, lowest speed on it 13.3 m/s (booster minimum 30), then Drive at 1101 m (69 m/s), resets 0
+BT RAIL Globe of Death slow (30 m/s) PASS: onto it at 24.4 m/s, rode it True, off its end True, lowest speed on it 24.4 m/s (booster minimum 30), then Drive at 1014 m (30 m/s), resets 0
+BT RAIL Globe of Death very slow (8 m/s, coasting on it) PASS: onto it at 19.9 m/s, rode it True, off its end True, lowest speed on it 19.9 m/s (booster minimum 30), then Drive at 988 m (11 m/s), resets 0
+BT RAIL cannon full (70 m/s) PASS: onto it at 22.0 m/s, rode it True, off its end True, lowest speed on it 22.0 m/s (booster minimum 80), then Fly at 1735 m (89 m/s), resets 0
+BT RAIL cannon slow (30 m/s) PASS: onto it at 14.8 m/s, rode it True, off its end True, lowest speed on it 14.8 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAIL cannon very slow (8 m/s, coasting on it) PASS: onto it at 25.8 m/s, rode it True, off its end True, lowest speed on it 25.8 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAILS PASS: the Globe of Death and the cannon at full / slow / very slow speed
+BT CLOWN JUMP car PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.68 s (anchor -> G1)
+BT CLOWN JUMP fly PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+BT RIVER main channel PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 28.24 s (anchor -> G7)
+BT RIVER rapids PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 32.58 s (anchor -> G7)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  btlap        Drive->Fly  z   960.0  0.603 s  frames worst 18.16 / mean 6.50 ms
+  btlap        Fly->Boat   z   818.6  0.603 s  frames worst 10.58 / mean 6.58 ms
+  btlap        Boat->Dive  z  -229.2  0.600 s  frames worst 9.30 / mean 5.22 ms
+  btlap        Dive->Boat  z  -473.4  0.601 s  frames worst 9.61 / mean 7.13 ms
+  btlap        Boat->Drive z  -370.7  0.601 s  frames worst 9.65 / mean 7.33 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== cclap (cclap )
+exit 0
+ShiftStorm check 'cclap', 2026-11-16 18:16, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+CC LAP PASS: finished True in 106.38 s (target ~120), gates 11/11 in order True, resets 0, changes 7: Drive->Fly, Fly->Drive, Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+CC SET-PIECES PASS: 8 of 8 segments had a set-piece >= 8 % of the screen for >= 1 s
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 6.07 ms, 95th pct 12.28 ms, 99th pct 24.38 ms, worst 172.73 ms over 11585 frames (281 over 16.7 ms); peak draw calls 0, batches 0, triangles 998k
+CC RESULTS PASS: lap 106.38 s, 8 splits, best on file 106.32 s (per course: Paradise Plunge -1.00)
+CC RESTART PASS: after the finish, Reset started Coaster Coast again (course 1)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  cclap        Drive->Fly  z   231.0  0.648 s  frames worst 71.74 / mean 26.46 ms
+  cclap        Fly->Drive  z   703.7  0.602 s  frames worst 29.17 / mean 8.47 ms
+  cclap        Drive->Fly  z   572.0  0.637 s  frames worst 182.46 / mean 31.27 ms
+  cclap        Fly->Boat   z   908.3  0.610 s  frames worst 33.01 / mean 11.75 ms
+  cclap        Boat->Dive  z  -366.6  0.604 s  frames worst 20.95 / mean 7.97 ms
+  cclap        Dive->Boat  z  -473.3  0.610 s  frames worst 23.21 / mean 9.77 ms
+  cclap        Boat->Drive z  -370.9  0.608 s  frames worst 29.54 / mean 9.78 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== ccrails (ccrails )
+exit 0
+ShiftStorm check 'ccrails', 2026-11-16 18:19, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+CC RAIL coaster (rail A) full (70 m/s) PASS: onto it at 1.8 m/s, rode it True, off its end True, lowest speed on it 1.8 m/s (booster minimum 40), after the Coaster Gap: Drive at 1859 m, resets 0
+CC RAIL coaster (rail A) slow (30 m/s) PASS: onto it at 31.0 m/s, rode it True, off its end True, lowest speed on it 31.0 m/s (booster minimum 40), after the Coaster Gap: Drive at 1809 m, resets 0
+CC RAIL coaster (rail A) very slow (8 m/s, coasting on the rail) PASS: onto it at 40.0 m/s, rode it True, off its end True, lowest speed on it 39.9 m/s (booster minimum 40), after the Coaster Gap: Drive at 1811 m, resets 0
+CC RAIL top hat (rail B) full (70 m/s) PASS: onto it at 56.9 m/s, rode it True, off its end True, lowest speed on it 56.9 m/s (booster minimum 28), after the top hat: Fly at 2623 m, resets 0
+CC RAIL top hat (rail B) slow (30 m/s) PASS: onto it at 23.6 m/s, rode it True, off its end True, lowest speed on it 23.6 m/s (booster minimum 28), after the top hat: Fly at 2589 m, resets 0
+CC RAIL top hat (rail B) very slow (8 m/s, coasting on the rail) PASS: onto it at 18.0 m/s, rode it True, off its end True, lowest speed on it 18.0 m/s (booster minimum 28), after the top hat: Fly at 2579 m, resets 0
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== round11 (round11 )
+exit 0
+ShiftStorm check 'round11', 2026-11-16 18:22, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BUCK Paradise Plunge PASS: card at the start True; briefing brief_pp_3 (15.8 s), the game stopped meanwhile; then Barnaby's start; race finished 1st; Barnaby's results line True; Buck's remark res_pp_first_1 (results (1st)); frames with two voices at once: 0 of 26614 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK Coaster Coast PASS: card at the start True; briefing brief_cc_3 (14.8 s), the game stopped meanwhile; then Barnaby's ccstart; race finished 1st; Barnaby's results line True; Buck's remark res_cc_first_3 (results (1st)); frames with two voices at once: 0 of 45554 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK Big Top Breakdown PASS: card at the start True; briefing brief_bt_1 (8.9 s), the game stopped meanwhile; then Barnaby's btstart; race finished 1st; Barnaby's results line True; Buck's remark res_bt_first_1 (results (1st)); frames with two voices at once: 0 of 47187 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK SKIP PASS: talking when A was pressed True; card gone after 0.00 s, his voice stopped True, the game running again True, Barnaby's start line next True
+BUCK ONCE PASS: the same course started again in the session: briefing not repeated
+BUCK SETTING PASS: Short -> short_cc_2 (4.3 s); Off -> no card True
+BUCK PASS
+TOUR stop 1 The Trial PASS: scene: stop 1 The Trial -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 2 (playable 3) -> reaction tour_s1_pass_1 + tour_s1_pass_2; unlocked 2, total 10 points; results line "THE TOUR - Stop 1 The Trial: 1st, 10 points  -  Stop 2 unlocked!"
+    Buck: tour_s1_intro_1 (tour stop 1 scene), tour_s1_intro_2 (tour stop 1 scene), tour_s1_intro_3 (tour stop 1 scene), tour_s1_intro_4 (tour stop 1 scene), tour_s1_pass_1 (tour stop 1 passed), tour_s1_pass_2 (tour stop 1 passed)
+TOUR stop 2 Opening Night PASS: scene: stop 2 Opening Night -> scene skipped -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s2_pass_1 + tour_s2_pass_2; unlocked 3, total 20 points; results line "THE TOUR - Stop 2 Opening Night: 1st, 10 points  -  Stop 3 unlocked!"
+    Buck: tour_s2_intro_1 (tour stop 2 scene), tour_s2_pass_1 (tour stop 2 passed), tour_s2_pass_2 (tour stop 2 passed)
+TOUR stop 3 The Big Top Dare PASS: scene: stop 3 The Big Top Dare -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s3_pass_1 + tour_s3_pass_2 + tour_done_1; unlocked 3, total 30 points; results line "THE TOUR - Stop 3 The Big Top Dare: 1st, 10 points  -  Tour complete!"
+    Buck: tour_s3_intro_1 (tour stop 3 scene), tour_s3_intro_2 (tour stop 3 scene), tour_s3_intro_3 (tour stop 3 scene), tour_s3_intro_4 (tour stop 3 scene), tour_s3_pass_1 (tour stop 3 passed), tour_s3_pass_2 (tour stop 3 passed), tour_done_1 (tour stop 3 passed)
+TOUR RELOAD PASS: read back best 1st / 1st, 30 points, unlocked 3, done True; file: {   "version": 1,   "unlocked": 3,   "best": [     1,     1,     1   ],   "points": [     10,     10,     10   ],   "tries": [     1,     1,     1   ],   "done": true,   "cWon": [     false,     false,     false   ],   "cBest": [     0.0,     0.0,     0.0   ],   "cTries": [     0,     0,     0   ] }
+TOUR RETRY PASS: finished 4th (throttle 50 %): best kept 1st, points kept 10, unlocked 3, tries 2; Buck: tour_s1_intro_1, tour_s1_retry_2; results line "THE TOUR - Stop 1 The Trial: 4th, 2 points (best 1st)  -  top 3 to go on: Race again to retry"
+TOUR RACE AGAIN PASS: stop 1 started again, steps race
+TOUR PASS
+  Abi                        in Grand Prix : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Hot Rod    : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Jetstream  : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Scrambler  : seated True (Abigail, scale 0.97), mechanism grips, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Grand Prix : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Hot Rod    : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Jetstream  : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Scrambler  : seated True (Rae, scale 0.73), mechanism grips, hands 8 / 8 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Grand Prix : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Hot Rod    : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Jetstream  : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Scrambler  : seated True (Chip, scale 0.96), mechanism grips, hands 2 / 2 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Vivi                       in Grand Prix : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Hot Rod    : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Jetstream  : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Scrambler  : seated True (Vivi, scale 1.04), mechanism grips, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+RACERS PASS: 16 of 16 driver x machine combinations
+RACERS SPLIT PASS: P1 Chip "Showtime" Sterling in Hot Rod, P2 Abi (Abigail) in Scrambler; AI Rocket Rae in Grand Prix, Vivi in Hot Rod
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== challenges (challenges )
+exit 0
+ShiftStorm check 'challenges', 2026-11-16 18:37, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  c1 lose run PASS: result lost by 25.1 s (CHALLENGE LOST: Rae's Waterfall Dash, Rae by 25.1 s  -  try again from The Tour page); saved True, after a reload True (tries 3, won False, best 0.0 s); paint Rocket Red unlocked False
+  c1 win run PASS: result won by 2.2 s (CHALLENGE WON: Rae's Waterfall Dash, by 2.2 s  -  new paint: Rocket Red (Garage)); saved True, after a reload True (tries 4, won True, best 2.2 s); paint Rocket Red unlocked True
+  c2 lose run PASS: result lost by 35.3 s (CHALLENGE LOST: Chip's Coaster Showdown, Chip by 35.3 s  -  try again from The Tour page); saved True, after a reload True (tries 3, won True, best 4.3 s); paint Showtime Blue unlocked True
+  c2 win run PASS: result won by 4.3 s (CHALLENGE WON: Chip's Coaster Showdown, by 4.3 s); saved True, after a reload True (tries 4, won True, best 4.3 s); paint Showtime Blue unlocked True
+  c3 lose run PASS: result lost by 19.1 s (CHALLENGE LOST: Vivi's Cannonball Run, Vivi by 19.1 s  -  try again from The Tour page); saved True, after a reload True (tries 3, won True, best 2.1 s); paint Vivi Violet unlocked True
+  c3 win run PASS: result won by 2.0 s (CHALLENGE WON: Vivi's Cannonball Run, by 2.0 s); saved True, after a reload True (tries 4, won True, best 2.1 s); paint Vivi Violet unlocked True
+CHALLENGES PASS: 6 of 6 runs (each challenge won and lost: result, tour.json saved and read back, Buck + the rival + Barnaby lines)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== menus14 (menus14 )
+exit 0
+ShiftStorm check 'menus14', 2026-11-16 18:42, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  //  Time trial: alone, best lap saved. Left / right: another course, A: choose your racer.
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== split-bt (split -course 2)
+exit 0
+ShiftStorm check 'split', 2026-11-16 18:43, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 1.5 m, P2 1.4 m (pause frame included)
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 94 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 1:37.37
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 9.35 ms, 95th pct 15.40 ms, 99th pct 28.55 ms, worst 517.77 ms over 7133 frames (259 over 16.7 ms); peak draw calls 0, batches 0, triangles 2173k
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== ai25 (btsplits -runs 25)
+exit 0
+ShiftStorm check 'btsplits', 2026-11-16 18:45, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BT CLOWN JUMP car PASS: 25 of 25 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.68 s (anchor -> G1)
+BT CLOWN JUMP fly PASS: 25 of 25 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+BT RIVER main channel PASS: 25 of 25 clean, 0 stuck, 0 resets, mean 28.22 s (anchor -> G7)
+BT RIVER rapids PASS: 25 of 25 clean, 0 stuck, 0 resets, mean 32.71 s (anchor -> G7)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== soak-pp (soak -course 0 -laps 50 -difficulty Normal)
+exit 0
+ShiftStorm check 'soak', 2026-11-16 19:22, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SOAK (Paradise Plunge): 50 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+  race 2: Rocket Rae 132.4 [Cliff flight], Abi 132.9 [Lake flight], Chip "Showtime" Sterling 133.7, Vivi 138.5 [Mangrove bypass]
+  race 8: Rocket Rae 133.3 [Cliff flight], Abi 133.9 [Lake flight+Cliff flight], Chip "Showtime" Sterling 136.7 [Lake flight], Vivi 141.6 [Cliff flight+Mangrove bypass]
+  race 9: Rocket Rae 132.7 [Cliff flight], Chip "Showtime" Sterling 135.4 [Cliff flight], Abi 140.1 [Cliff flight+Mangrove bypass], Vivi 141.0 [Cliff flight+Mangrove bypass]
+  race 10: Rocket Rae 133.7, Abi 134.2 [Lake flight], Chip "Showtime" Sterling 134.7 [Cliff flight], Vivi 137.8 [Lake flight+Cliff flight+Mangrove bypass]
+SOAK PASS: 50 of 50 laps finished within 300 s (need 48); 0 counted finishes with a bad gate sequence; lap times min 131.1 / median 133.9 / max 141.6 s; shortcuts taken: Cliff flight 25, Coral Vault tunnel 4, Lake flight 20, Mangrove bypass 5, Sky Arch slit 3
+  soak1        Drive->Fly  z  1183.0  0.602 s  frames worst 13.97 / mean 3.68 ms
+  soak1        Fly->Boat   z  -605.9  0.608 s  frames worst 8.42 / mean 3.60 ms
+  soak1        Boat->Dive  z  -203.2  0.611 s  frames worst 12.42 / mean 4.48 ms
+  soak1        Dive->Boat  z  -466.7  0.605 s  frames worst 15.27 / mean 5.56 ms
+  soak1        Boat->Drive z  -305.0  0.602 s  frames worst 9.10 / mean 4.05 ms
+  soak2        Drive->Fly  z   652.0  0.607 s  frames worst 11.88 / mean 5.81 ms
+  soak2        Fly->Drive  z   929.2  0.607 s  frames worst 8.39 / mean 4.92 ms
+  soak2        Drive->Fly  z   944.6  0.607 s  frames worst 10.83 / mean 4.34 ms
+  soak2        Fly->Boat   z  -606.6  0.604 s  frames worst 7.63 / mean 3.81 ms
+  soak2        Boat->Dive  z  -202.7  0.603 s  frames worst 7.65 / mean 3.71 ms
+  soak2        Dive->Boat  z  -466.9  0.607 s  frames worst 7.00 / mean 3.90 ms
+  soak2        Boat->Drive z  -305.0  0.608 s  frames worst 9.58 / mean 3.97 ms
+  soak3        Drive->Fly  z   652.0  0.613 s  frames worst 8.23 / mean 4.80 ms
+  soak3        Fly->Drive  z   929.2  0.600 s  frames worst 9.19 / mean 4.82 ms
+  soak3        Drive->Fly  z   944.8  0.605 s  frames worst 7.59 / mean 3.41 ms
+  soak3        Fly->Boat   z  -606.9  0.601 s  frames worst 10.88 / mean 4.16 ms
+  soak3        Boat->Dive  z  -201.4  0.607 s  frames worst 9.22 / mean 4.19 ms
+  soak3        Dive->Boat  z  -467.0  0.613 s  frames worst 9.54 / mean 4.78 ms
+  soak3        Boat->Drive z  -305.0  0.607 s  frames worst 8.28 / mean 4.15 ms
+  soak4        Drive->Fly  z   652.0  0.612 s  frames worst 7.58 / mean 4.74 ms
+  soak4        Fly->Drive  z   929.2  0.603 s  frames worst 8.81 / mean 4.15 ms
+  soak4        Drive->Fly  z  1182.2  0.610 s  frames worst 6.87 / mean 3.60 ms
+  soak4        Fly->Boat   z  -606.5  0.613 s  frames worst 7.44 / mean 4.10 ms
+  soak4        Boat->Dive  z  -202.0  0.613 s  frames worst 9.28 / mean 4.49 ms
+  soak4        Dive->Boat  z  -466.6  0.602 s  frames worst 7.44 / mean 4.00 ms
+  soak4        Boat->Drive z  -304.7  0.604 s  frames worst 7.22 / mean 4.03 ms
+  soak5        Drive->Fly  z   652.0  0.603 s  frames worst 7.09 / mean 4.53 ms
+  soak5        Fly->Drive  z   929.2  0.608 s  frames worst 8.45 / mean 4.46 ms
+  soak5        Drive->Fly  z  1181.9  0.601 s  frames worst 6.64 / mean 3.31 ms
+  soak5        Fly->Boat   z  -606.9  0.607 s  frames worst 9.70 / mean 3.90 ms
+  soak5        Boat->Dive  z  -202.3  0.606 s  frames worst 7.97 / mean 3.71 ms
+  soak5        Dive->Boat  z  -466.9  0.603 s  frames worst 7.39 / mean 3.69 ms
+  soak5        Boat->Drive z  -305.0  0.605 s  frames worst 12.04 / mean 3.98 ms
+  soak6        Drive->Fly  z   944.4  0.606 s  frames worst 12.66 / mean 4.29 ms
+  soak6        Fly->Boat   z  -606.5  0.609 s  frames worst 8.02 / mean 4.17 ms
+  soak6        Boat->Dive  z  -201.7  0.608 s  frames worst 10.45 / mean 3.82 ms
+  soak6        Dive->Boat  z  -466.5  0.602 s  frames worst 9.01 / mean 3.69 ms
+  soak6        Boat->Drive z  -304.6  0.605 s  frames worst 7.17 / mean 3.65 ms
+  soak7        Drive->Fly  z   652.0  0.610 s  frames worst 7.89 / mean 4.03 ms
+  soak7        Fly->Drive  z   929.5  0.601 s  frames worst 6.09 / mean 4.05 ms
+  soak7        Drive->Fly  z  1182.4  0.601 s  frames worst 5.96 / mean 3.11 ms
+  soak7        Fly->Boat   z  -606.9  0.606 s  frames worst 13.61 / mean 4.57 ms
+  soak7        Boat->Dive  z  -202.8  0.601 s  frames worst 7.86 / mean 3.73 ms
+  soak7        Dive->Boat  z  -466.9  0.606 s  frames worst 14.20 / mean 5.26 ms
+  soak7        Boat->Drive z  -304.9  0.602 s  frames worst 14.00 / mean 4.80 ms
+  soak8        Drive->Fly  z   652.0  0.611 s  frames worst 11.91 / mean 5.19 ms
+  soak8        Fly->Drive  z   929.2  0.604 s  frames worst 7.31 / mean 3.88 ms
+  soak8        Drive->Fly  z  1182.0  0.605 s  frames worst 9.72 / mean 3.70 ms
+  soak8        Fly->Boat   z  -607.3  0.606 s  frames worst 11.75 / mean 4.96 ms
+  soak8        Boat->Dive  z  -202.6  0.604 s  frames worst 19.90 / mean 5.68 ms
+  soak8        Dive->Boat  z  -466.8  0.889 s  frames worst 622.39 / mean 148.29 ms  OUT OF 0.5-0.8 s
+  soak8        Boat->Drive z  -304.4  0.664 s  frames worst 38.70 / mean 10.85 ms
+==== soak-cc (soak -course 1 -laps 50 -difficulty Normal)
+exit 0
+ShiftStorm check 'soak', 2026-11-16 19:32, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SOAK (Coaster Coast): 50 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+SOAK PASS: 50 of 50 laps finished within 300 s (need 48); 0 counted finishes with a bad gate sequence; lap times min 113.3 / median 116.2 / max 121.0 s; shortcuts taken: Lighthouse rocks 10
+  soak1        Drive->Fly  z   230.4  0.603 s  frames worst 12.32 / mean 3.00 ms
+  soak1        Fly->Drive  z   703.8  0.610 s  frames worst 8.54 / mean 3.23 ms
+  soak1        Drive->Fly  z   572.0  0.601 s  frames worst 11.63 / mean 3.45 ms
+  soak1        Fly->Boat   z   909.6  0.605 s  frames worst 5.26 / mean 2.59 ms
+  soak1        Boat->Dive  z  -366.8  0.600 s  frames worst 7.96 / mean 2.45 ms
+  soak1        Dive->Boat  z  -473.3  0.603 s  frames worst 5.85 / mean 2.75 ms
+  soak1        Boat->Drive z  -370.6  0.601 s  frames worst 6.54 / mean 2.30 ms
+  soak2        Drive->Fly  z   230.6  0.605 s  frames worst 4.84 / mean 2.58 ms
+  soak2        Fly->Drive  z   704.0  0.606 s  frames worst 5.90 / mean 2.58 ms
+  soak2        Drive->Fly  z   572.0  0.601 s  frames worst 8.31 / mean 2.31 ms
+  soak2        Fly->Boat   z   908.9  0.605 s  frames worst 4.22 / mean 2.29 ms
+  soak2        Boat->Dive  z  -366.1  0.603 s  frames worst 4.60 / mean 2.36 ms
+  soak2        Dive->Boat  z  -473.7  0.603 s  frames worst 4.88 / mean 2.11 ms
+  soak2        Boat->Drive z  -370.8  0.601 s  frames worst 8.16 / mean 2.34 ms
+  soak3        Drive->Fly  z   230.5  0.604 s  frames worst 8.15 / mean 2.15 ms
+  soak3        Fly->Drive  z   703.9  0.604 s  frames worst 4.96 / mean 2.24 ms
+  soak3        Drive->Fly  z   572.0  0.604 s  frames worst 3.88 / mean 2.33 ms
+  soak3        Fly->Boat   z   909.0  0.600 s  frames worst 4.43 / mean 2.35 ms
+  soak3        Boat->Dive  z  -366.2  0.603 s  frames worst 9.44 / mean 2.82 ms
+  soak3        Dive->Boat  z  -473.5  0.601 s  frames worst 8.99 / mean 3.01 ms
+  soak3        Boat->Drive z  -370.4  0.610 s  frames worst 6.11 / mean 2.86 ms
+  soak4        Drive->Fly  z   230.4  0.607 s  frames worst 9.22 / mean 3.33 ms
+  soak4        Fly->Drive  z   703.8  0.602 s  frames worst 6.52 / mean 2.62 ms
+  soak4        Drive->Fly  z   572.0  0.604 s  frames worst 10.38 / mean 2.55 ms
+  soak4        Fly->Boat   z   908.6  0.602 s  frames worst 8.80 / mean 2.43 ms
+  soak4        Boat->Dive  z  -366.5  0.602 s  frames worst 6.46 / mean 2.57 ms
+  soak4        Dive->Boat  z  -473.3  0.601 s  frames worst 5.42 / mean 2.36 ms
+  soak4        Boat->Drive z  -370.2  0.600 s  frames worst 4.36 / mean 2.29 ms
+  soak5        Drive->Fly  z   230.4  0.604 s  frames worst 8.98 / mean 2.31 ms
+  soak5        Fly->Drive  z   703.8  0.607 s  frames worst 7.18 / mean 2.32 ms
+  soak5        Drive->Fly  z   572.0  0.607 s  frames worst 4.46 / mean 2.27 ms
+  soak5        Fly->Boat   z   909.1  0.604 s  frames worst 9.33 / mean 3.34 ms
+  soak5        Boat->Dive  z  -367.3  0.607 s  frames worst 12.14 / mean 3.28 ms
+  soak5        Dive->Boat  z  -473.3  0.613 s  frames worst 9.60 / mean 3.43 ms
+  soak5        Boat->Drive z  -370.9  0.641 s  frames worst 18.18 / mean 4.10 ms
+  soak6        Drive->Fly  z   230.4  0.601 s  frames worst 9.91 / mean 2.84 ms
+  soak6        Fly->Drive  z   703.8  0.601 s  frames worst 5.98 / mean 2.84 ms
+  soak6        Drive->Fly  z   572.0  0.605 s  frames worst 33.87 / mean 3.58 ms
+  soak6        Fly->Boat   z   909.4  0.601 s  frames worst 14.87 / mean 3.29 ms
+  soak6        Boat->Dive  z  -366.8  0.601 s  frames worst 7.64 / mean 2.75 ms
+  soak6        Dive->Boat  z  -473.5  0.602 s  frames worst 5.07 / mean 2.50 ms
+  soak6        Boat->Drive z  -370.7  0.607 s  frames worst 5.55 / mean 2.45 ms
+  soak7        Drive->Fly  z   230.8  0.608 s  frames worst 21.53 / mean 3.87 ms
+  soak7        Fly->Drive  z   704.2  0.609 s  frames worst 12.43 / mean 3.44 ms
+  soak7        Drive->Fly  z   572.0  0.612 s  frames worst 16.28 / mean 3.30 ms
+  soak7        Fly->Boat   z   909.5  0.607 s  frames worst 8.91 / mean 2.57 ms
+  soak7        Boat->Dive  z  -367.3  0.620 s  frames worst 7.99 / mean 2.68 ms
+  soak7        Dive->Boat  z  -473.3  0.606 s  frames worst 9.97 / mean 2.84 ms
+  soak7        Boat->Drive z  -370.9  0.601 s  frames worst 4.86 / mean 2.33 ms
+  soak8        Drive->Fly  z   230.1  0.606 s  frames worst 10.65 / mean 3.25 ms
+  soak8        Fly->Drive  z   703.5  0.607 s  frames worst 7.53 / mean 3.02 ms
+  soak8        Drive->Fly  z   572.0  0.606 s  frames worst 9.37 / mean 2.69 ms
+  soak8        Fly->Boat   z   908.5  0.609 s  frames worst 12.32 / mean 3.37 ms
+  soak8        Boat->Dive  z  -367.9  0.600 s  frames worst 5.22 / mean 2.58 ms
+  soak8        Dive->Boat  z  -473.2  0.604 s  frames worst 7.16 / mean 2.48 ms
+  soak8        Boat->Drive z  -370.8  0.601 s  frames worst 4.76 / mean 2.41 ms
+==== bigtop (bigtop )
+exit 0
+ShiftStorm check 'bigtop', 2026-11-16 19:45, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BT LAP PASS: finished True in 95.13 s (target ~2 min), gates 11/11 in order True, resets 0, wall hits 1, wagon hits 1, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+BT SET-PIECES PASS: 6 of 6 segments had a set-piece >= 8 % of the screen for >= 1 s
+  log: [  68.00] gate G7 sunken wagon passed (8/11)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 8.11 ms, 95th pct 10.67 ms, 99th pct 34.89 ms, worst 2389.88 ms over 10178 frames (179 over 16.7 ms); peak draw calls 0, batches 0, triangles 907k
+BT RESULTS PASS: lap 95.13 s, 6 splits, best on file 94.83 s
+BT RAIL Globe of Death full (70 m/s) PASS: onto it at 13.3 m/s, rode it True, off its end True, lowest speed on it 13.3 m/s (booster minimum 30), then Drive at 1101 m (69 m/s), resets 0
+BT RAIL Globe of Death slow (30 m/s) PASS: onto it at 21.7 m/s, rode it True, off its end True, lowest speed on it 21.7 m/s (booster minimum 30), then Drive at 1014 m (30 m/s), resets 0
+BT RAIL Globe of Death very slow (8 m/s, coasting on it) PASS: onto it at 22.5 m/s, rode it True, off its end True, lowest speed on it 22.5 m/s (booster minimum 30), then Drive at 988 m (11 m/s), resets 0
+BT RAIL cannon full (70 m/s) PASS: onto it at 62.0 m/s, rode it True, off its end True, lowest speed on it 62.0 m/s (booster minimum 80), then Fly at 1734 m (90 m/s), resets 0
+BT RAIL cannon slow (30 m/s) PASS: onto it at 32.2 m/s, rode it True, off its end True, lowest speed on it 30.0 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAIL cannon very slow (8 m/s, coasting on it) PASS: onto it at 28.5 m/s, rode it True, off its end True, lowest speed on it 28.5 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAILS PASS: the Globe of Death and the cannon at full / slow / very slow speed
+BT CLOWN JUMP car PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.69 s (anchor -> G1)
+BT CLOWN JUMP fly PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+BT RIVER main channel PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 28.24 s (anchor -> G7)
+BT RIVER rapids PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 32.41 s (anchor -> G7)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  btlap        Drive->Fly  z   960.0  0.627 s  frames worst 905.30 / mean 66.94 ms
+  btlap        Fly->Boat   z   819.0  0.604 s  frames worst 25.43 / mean 7.48 ms
+  btlap        Boat->Dive  z  -229.2  0.604 s  frames worst 119.69 / mean 8.43 ms
+  btlap        Dive->Boat  z  -473.5  0.604 s  frames worst 13.21 / mean 6.75 ms
+  btlap        Boat->Drive z  -370.8  0.602 s  frames worst 14.71 / mean 7.35 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== split-bt (split -course 2)
+exit 0
+ShiftStorm check 'split', 2026-11-16 19:53, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 0.0 m, P2 0.0 m (pause frame included)
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 90 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 1:33.93
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 11.64 ms, 95th pct 13.03 ms, 99th pct 325.01 ms, worst 538.30 ms over 7324 frames (153 over 16.7 ms); peak draw calls 0, batches 0, triangles 2208k
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== soak-bt (soak -course 2 -laps 50 -difficulty Normal)
+exit 0
+ShiftStorm check 'soak', 2026-11-16 19:55, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SOAK (Big Top Breakdown): 50 AI laps, four AI cars per race (Abi's car driven by an AI too), time scale 3.0 (physics still at 60 Hz steps), a lap counts when finished within 300 s (twice the 150 s target)
+SOAK PASS: 50 of 50 laps finished within 300 s (need 48); 0 counted finishes with a bad gate sequence; lap times min 99.3 / median 104.6 / max 111.6 s; shortcuts taken: Clown flight 20, Island rapids 10
+  resets: 2 in 50 laps; by reason: G4 top flap passed as Drive 2
+  stuck spot near x -8920, z 960: 2 resets (G4 top flap passed as Drive 2; Vivi, Abi)
+  soak1        Drive->Fly  z   960.0  0.834 s  frames worst 399.93 / mean 20.56 ms  OUT OF 0.5-0.8 s
+  soak1        Fly->Boat   z   818.8  0.607 s  frames worst 7.19 / mean 3.08 ms
+  soak1        Boat->Dive  z  -228.7  0.607 s  frames worst 10.13 / mean 2.82 ms
+  soak1        Dive->Boat  z  -473.5  0.602 s  frames worst 23.42 / mean 3.30 ms
+  soak1        Boat->Drive z  -370.6  0.601 s  frames worst 20.54 / mean 2.47 ms
+  soak2        Drive->Fly  z   960.0  0.639 s  frames worst 201.59 / mean 8.09 ms
+  soak2        Fly->Boat   z   819.9  1.181 s  frames worst 125.76 / mean 4.70 ms  OUT OF 0.5-0.8 s
+  soak2        Boat->Dive  z  -228.6  0.800 s  frames worst 346.06 / mean 9.91 ms
+  soak2        Dive->Boat  z  -473.7  0.601 s  frames worst 29.13 / mean 2.41 ms
+  soak2        Boat->Drive z  -370.4  0.603 s  frames worst 24.72 / mean 2.39 ms
+  soak3        Drive->Fly  z   960.0  0.601 s  frames worst 9.34 / mean 2.47 ms
+  soak3        Fly->Boat   z   818.9  0.600 s  frames worst 5.47 / mean 2.23 ms
+  soak3        Boat->Dive  z  -228.9  0.600 s  frames worst 6.48 / mean 2.42 ms
+  soak3        Dive->Boat  z  -473.6  0.604 s  frames worst 5.66 / mean 2.07 ms
+  soak3        Boat->Drive z  -370.7  0.604 s  frames worst 7.09 / mean 2.26 ms
+  soak4        Drive->Fly  z   960.0  0.605 s  frames worst 13.29 / mean 2.98 ms
+  soak4        Fly->Boat   z   819.3  0.605 s  frames worst 11.25 / mean 2.84 ms
+  soak4        Boat->Dive  z  -229.0  0.602 s  frames worst 7.44 / mean 2.32 ms
+  soak4        Dive->Boat  z  -473.4  0.605 s  frames worst 6.05 / mean 2.54 ms
+  soak4        Boat->Drive z  -370.9  0.602 s  frames worst 11.35 / mean 2.60 ms
+  soak5        Drive->Fly  z   960.0  0.603 s  frames worst 5.21 / mean 2.96 ms
+  soak5        Fly->Boat   z   818.8  0.602 s  frames worst 8.98 / mean 2.29 ms
+  soak5        Boat->Dive  z  -228.8  0.600 s  frames worst 5.52 / mean 2.01 ms
+  soak5        Dive->Boat  z  -473.9  0.601 s  frames worst 6.81 / mean 2.87 ms
+  soak5        Boat->Drive z  -370.4  0.603 s  frames worst 5.94 / mean 2.72 ms
+  soak6        Drive->Fly  z   960.0  0.600 s  frames worst 7.14 / mean 3.02 ms
+  soak6        Fly->Boat   z   819.4  0.608 s  frames worst 13.93 / mean 3.44 ms
+  soak6        Boat->Dive  z  -228.5  0.602 s  frames worst 12.63 / mean 3.13 ms
+  soak6        Dive->Boat  z  -473.8  0.601 s  frames worst 7.79 / mean 2.69 ms
+  soak6        Boat->Drive z  -370.6  0.606 s  frames worst 15.53 / mean 2.78 ms
+  soak7        Drive->Fly  z   960.0  0.607 s  frames worst 5.96 / mean 2.51 ms
+  soak7        Fly->Boat   z   819.7  0.601 s  frames worst 19.83 / mean 2.61 ms
+  soak7        Boat->Dive  z  -228.7  0.602 s  frames worst 4.29 / mean 1.89 ms
+  soak7        Dive->Boat  z  -473.3  0.604 s  frames worst 6.28 / mean 2.37 ms
+  soak7        Boat->Drive z  -370.3  0.605 s  frames worst 5.05 / mean 2.12 ms
+  soak8        Drive->Fly  z   643.3  0.610 s  frames worst 57.55 / mean 6.38 ms
+  soak8        Fly->Drive  z   827.4  0.701 s  frames worst 36.53 / mean 4.85 ms
+  soak8        Drive->Fly  z   960.0  0.602 s  frames worst 15.58 / mean 4.74 ms
+  soak8        Fly->Boat   z   818.9  0.601 s  frames worst 10.74 / mean 3.00 ms
+  soak8        Boat->Dive  z  -228.8  0.608 s  frames worst 34.21 / mean 7.20 ms
+  soak8        Dive->Boat  z  -473.8  0.811 s  frames worst 2426.33 / mean 2411.94 ms  OUT OF 0.5-0.8 s
+  soak8        Boat->Drive z  -370.8  0.605 s  frames worst 11.09 / mean 3.86 ms
+  soak9        Drive->Fly  z   960.0  0.620 s  frames worst 57.51 / mean 5.06 ms
+  soak9        Fly->Boat   z   818.9  0.605 s  frames worst 5.99 / mean 2.77 ms
+  soak9        Boat->Dive  z  -228.7  0.613 s  frames worst 16.07 / mean 4.17 ms
+  soak9        Dive->Boat  z  -473.4  0.600 s  frames worst 26.16 / mean 3.65 ms
+  soak9        Boat->Drive z  -370.4  0.608 s  frames worst 40.70 / mean 6.21 ms
+  soak10       Drive->Fly  z   960.0  0.886 s  frames worst 130.56 / mean 17.16 ms  OUT OF 0.5-0.8 s
+  soak10       Fly->Boat   z   819.8  0.614 s  frames worst 21.26 / mean 3.88 ms
+  soak10       Boat->Dive  z  -229.2  0.610 s  frames worst 51.23 / mean 4.35 ms
+  soak10       Dive->Boat  z  -473.6  0.611 s  frames worst 32.41 / mean 4.37 ms
+  soak10       Boat->Drive z  -370.2  0.632 s  frames worst 10.80 / mean 2.85 ms
+  soak11       Drive->Fly  z   960.0  0.614 s  frames worst 26.93 / mean 8.19 ms
+  soak11       Fly->Boat   z   818.8  0.818 s  frames worst 44.81 / mean 10.66 ms  OUT OF 0.5-0.8 s

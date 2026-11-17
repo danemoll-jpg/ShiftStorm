@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShiftStorm
 {
-    // Round 10: what the AI, the check pilot, the HUD's route strip and TeedOff Barker need to know about a course's stunts, per course
+    // Round 10: what the AI, the check pilot, the HUD's route strip and Barnaby need to know about a course's stunts, per course
     // (build 11 asked ParadisePlunge directly, so only course 0 had any). Paradise Plunge: its jumps and the loop; Coaster Coast: its
     // jumps and the two coaster rails.
     public abstract class CourseStunts
@@ -18,7 +18,7 @@ namespace ShiftStorm
         public virtual bool NoBrake(float from, float to) => false;
         // the aim on the way into a loop / rail: straight on along its entry lane (not up into the rail's own line)
         public virtual bool EntryAim(float p, float ahead, out Vector3 aim) { aim = default; return false; }
-        // the landmark name for a progress (TeedOff Barker's "where" lines), "" if none
+        // the landmark name for a progress (Barnaby's "where" lines), "" if none
         public virtual string Where(float p) => "";
     }
 

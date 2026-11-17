@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ShiftStorm
 {
     // Round 10 item 4: Coaster Coast (working name), the second course: a seaside boardwalk amusement park on a pier at sunset turning to
-    // night. Same universe and toon style, reused systems (gates, zones, anchors, shortcuts, the crowd, TeedOff Barker), a new place (not a
+    // night. Same universe and toon style, reused systems (gates, zones, anchors, shortcuts, the crowd, Barnaby), a new place (not a
     // Tee'd Off layout). Built at start-up from one racer line like Paradise Plunge; the two coaster rails are part of that line (their dense
     // points are its control points), so progress, gates and the route strip count along them. 8 km east of Paradise Plunge; only the
     // course being raced is shown (CourseLook). Water level y = 0, the pier's deck (the boardwalk, the plazas) y = 4.
@@ -142,7 +142,7 @@ namespace ShiftStorm
         }
 
         // a rail's shape: pieces appended one after another from a start point and heading (flat), every 1 m
-        sealed class RailPath
+        internal sealed class RailPath   // Round 15: shared with Big Top Breakdown (the Globe of Death, the cannon)
         {
             public readonly List<Vector3> p = new List<Vector3>(), u = new List<Vector3>(); public readonly List<float> cum = new List<float>();
             public readonly Dictionary<string, int> names = new Dictionary<string, int>();
@@ -156,6 +156,13 @@ namespace ShiftStorm
             {
                 Vector3 p0 = P; int n = N(len);
                 for (int i = 1; i <= n; i++) { float t = i / (float)n; Add(p0 + F * len * t + Vector3.up * rise * Smooth(t), Vector3.up); }
+                P = p0 + F * len + Vector3.up * rise;
+            }
+            // Round 15: a ramp that ends rising (y = rise t^2): the cannon's barrel (it leaves at slope 2 rise / len)
+            public void Ramp(float len, float rise)
+            {
+                Vector3 p0 = P; int n = N(len);
+                for (int i = 1; i <= n; i++) { float t = i / (float)n; Add(p0 + F * len * t + Vector3.up * rise * t * t, Vector3.up); }
                 P = p0 + F * len + Vector3.up * rise;
             }
             public void Hill(float len, float h)

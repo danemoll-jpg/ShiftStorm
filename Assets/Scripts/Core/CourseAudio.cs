@@ -116,7 +116,7 @@ namespace ShiftStorm
             jungle.volume = Mathf.Lerp(jungle.volume, (under || front || !jungle.isPlaying ? 0f : .38f) * Settings.Effects, k); bubbles.volume = Mathf.Lerp(bubbles.volume, (under ? .5f : 0f) * Settings.Effects, k);
             // the mix by form (the player's own racer): louder and open in flight, muffled underwater, a lift at the waterfall exit
             var m = v ? v.Mode : Mode.Drive; bool bright = Time.time < brightUntil;
-            // Round 8 item 6: music louder than build 8 (x1.3, +2.3 dB: road .65, flight .78, underwater .39) and ducked 8 dB under TeedOff Barker
+            // Round 8 item 6: music louder than build 8 (x1.3, +2.3 dB: road .65, flight .78, underwater .39) and ducked 8 dB under Barnaby
             float vol = ((under || m == Mode.Dive ? .3f : m == Mode.Fly ? .6f : .5f) + (bright ? .12f : 0)) * MusicGain * Caller.Duck;
             float cut = under || m == Mode.Dive ? 650f : 22000f;
             float raceVol = altNow == "" ? vol * Settings.Music : 0, altVol = altNow != "" ? .55f * MusicGain * Settings.Music : 0;

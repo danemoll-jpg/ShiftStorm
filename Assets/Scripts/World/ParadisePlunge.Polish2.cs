@@ -11,7 +11,7 @@ namespace ShiftStorm
     // corridor, the cave's guide lights and gate frames stay the brightest things in the water.
     //   Beach Promenade: a sand beach on the lake side with boulders and driftwood, a jungle wall of cycads and tree ferns inland,
     //     grandstands with a crowd and pennant flags at the start / finish, a brontosaurus wading in the lake, pterodactyls over the loop,
-    //     a smoking volcano far off, hot springs by the creeks, TeedOff Barker's booth at the start line
+    //     a smoking volcano far off, hot springs by the creeks, Barnaby's booth at the start line
     //   Mangrove Run: lily pads, reeds, fallen logs, hanging vines on bigger tree ferns, a triceratops at the water's edge
     //   Sunken Gateway: two giant carved stone heads and glyph pillars either side of the portal, bubbles rising from the opening
     //   Coral Vault: coral clusters (pink / orange / violet) on the floor and walls, light shafts down from cracks in the roof, more
@@ -195,7 +195,7 @@ namespace ShiftStorm
             Booth();
         }
 
-        // TeedOff Barker's booth at the start line (west side, behind the barrier): a striped podium, his name board, Barnaby himself
+        // Barnaby's booth at the start line (west side, behind the barrier): a striped podium, his name board, Barnaby himself
         // (Tee'd Off's model, copied to Resources/Drivers/Barnaby, in his "Standing Arguing" loop: a showman waving his arms)
         static void Booth()
         {
@@ -205,27 +205,27 @@ namespace ShiftStorm
             for (int i = 0; i < 5; i++) b.Add(MeshKit.Cube, at + Vector3.up * .9f + face * new Vector3(-1.8f + i * .9f, 0, -1.72f), face, new Vector3(.42f, 1.82f, .05f), new Color(.98f, .92f, .78f));
             b.Add(MeshKit.Cube, at + Vector3.up * 5.4f, face, new Vector3(5f, .3f, 4f), new Color(.98f, .92f, .78f));
             foreach (float x in new[] { -2.2f, 2.2f }) b.Add(MeshKit.LowCylinder, at + face * new Vector3(x, 0, 1.5f) + Vector3.up * 2.7f, Quaternion.identity, new Vector3(.2f, 2.7f, .2f), JurassicLook.FernTrunk);
-            b.Object(scen, "Barker booth", JurassicLook.VertexColored(true), false, true);
-            // his name board (the name players see: TeedOff Barker), amber with dark letters, both faces
-            var board = Box(scen, "Barker board", at + Vector3.up * 6.7f, new Vector3(5.6f, 1.4f, .2f), Mt(JurassicLook.Amber, true), face, false);
+            b.Object(scen, "Barnaby booth", JurassicLook.VertexColored(true), false, true);
+            // his name board (the name players see: Barnaby), amber with dark letters, both faces
+            var board = Box(scen, "Barnaby board", at + Vector3.up * 6.7f, new Vector3(5.6f, 1.4f, .2f), Mt(JurassicLook.Amber, true), face, false);
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             foreach (float side in new[] { -1f, 1f })
             {
-                var tg = new GameObject("Barker name"); tg.transform.SetParent(scen, false);
+                var tg = new GameObject("Barnaby name"); tg.transform.SetParent(scen, false);
                 tg.transform.SetPositionAndRotation(board.transform.position + face * Vector3.forward * (side * .12f), face * Quaternion.Euler(0, side < 0 ? 0 : 180, 0));
                 var tm = tg.AddComponent<TextMesh>(); tm.font = font; tm.text = Caller.Name; tm.fontSize = 64; tm.characterSize = .07f; tm.anchor = TextAnchor.MiddleCenter; tm.alignment = TextAlignment.Center; tm.color = new Color(.18f, .1f, .04f);
                 tg.GetComponent<MeshRenderer>().sharedMaterial = font.material;
             }
             var prefab = Resources.Load<GameObject>("Drivers/Barnaby/Barnaby");
-            if (!prefab) { Debug.Log("[Course] TeedOff Barker's model is missing (Resources/Drivers/Barnaby): the booth stands empty"); return; }
-            var m = Object.Instantiate(prefab, scen, false); m.name = "TeedOff Barker"; foreach (var c in m.GetComponentsInChildren<Collider>(true)) Object.Destroy(c);
+            if (!prefab) { Debug.Log("[Course] Barnaby's model is missing (Resources/Drivers/Barnaby): the booth stands empty"); return; }
+            var m = Object.Instantiate(prefab, scen, false); m.name = "Barnaby"; foreach (var c in m.GetComponentsInChildren<Collider>(true)) Object.Destroy(c);
             var rend = m.GetComponentsInChildren<Renderer>(true); var bb = new Bounds(m.transform.position, Vector3.zero); foreach (var r in rend) bb.Encapsulate(r.bounds);
             float k = 1.85f / Mathf.Max(.1f, bb.size.y); m.transform.localScale = Vector3.one * k;
             m.transform.SetPositionAndRotation(at + Vector3.up * 1.8f, face);
             var tex = Resources.Load<Texture2D>("Drivers/Barnaby/Barnaby_basecolor"); if (tex) { var mat = JurassicLook.Textured(tex, true); foreach (var r in rend) r.sharedMaterial = mat; }
             var anim = m.GetComponentInChildren<Animator>(); var clip = Resources.Load<AnimationClip>("Drivers/Barnaby/Standing Arguing");
             if (anim && clip) m.AddComponent<LoopClip>().Play(anim, clip);
-            Debug.Log($"[Course] TeedOff Barker in his booth ({(anim && clip ? "animated" : "standing")})");
+            Debug.Log($"[Course] Barnaby in his booth ({(anim && clip ? "animated" : "standing")})");
         }
     }
 
@@ -235,7 +235,7 @@ namespace ShiftStorm
         UnityEngine.Playables.PlayableGraph graph; UnityEngine.Animations.AnimationClipPlayable play; float len;
         public void Play(Animator a, AnimationClip c)
         {
-            graph = UnityEngine.Playables.PlayableGraph.Create("Barker"); var o = UnityEngine.Animations.AnimationPlayableOutput.Create(graph, "anim", a);
+            graph = UnityEngine.Playables.PlayableGraph.Create("Barnaby"); var o = UnityEngine.Animations.AnimationPlayableOutput.Create(graph, "anim", a);
             play = UnityEngine.Animations.AnimationClipPlayable.Create(graph, c); o.SetSourcePlayable(play); graph.Play(); len = c.length;
         }
         void Update() { if (graph.IsValid() && len > 0 && play.GetTime() > len) play.SetTime(play.GetTime() % len); }

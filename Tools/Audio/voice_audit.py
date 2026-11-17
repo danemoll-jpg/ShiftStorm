@@ -17,7 +17,7 @@ sys.path.insert(0, HERE)
 from caller_lines import api_key  # noqa: E402
 
 GOLF = re.compile(r"\b(aim(ed)?|shot|putt(s|ed|ing)?|club(s)?|hole(s)?|green|fore|caddie|caddy|par|birdie|bogey|eagle|tee|fairway|bunker|rough|swing|slice|hook|chip shot|links|course record)\b", re.I)
-NAMES = {"abigail": "Abi", "rae": "Rocket Rae", "chip": "Chip", "vivi": "Vivi", "barker": "TeedOff Barker"}
+NAMES = {"abigail": "Abi", "rae": "Rocket Rae", "chip": "Chip", "vivi": "Vivi", "barker": "Barnaby"}
 
 
 def stt(key, path):

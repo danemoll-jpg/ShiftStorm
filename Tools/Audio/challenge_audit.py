@@ -1,4 +1,4 @@
-"""Round 13 item 4: the rival challenges' lines (Rae, Chip, Buck, TeedOff Barker): the words written, what local speech-to-text hears in the
+"""Round 13 item 4: the rival challenges' lines (Rae, Chip, Buck, Barnaby): the words written, what local speech-to-text hears in the
 clip (faster-whisper small.en, via Tools/Audio/voice_audit.py), a word match score, the clip's length and where the game says it. Writes
 Docs/Checks/round13/challenge_lines.md. A line is flagged when the match is under 0.8."""
 import difflib, os, sys
@@ -13,7 +13,7 @@ VOICE = os.path.join(REPO, "Assets", "Resources", "Audio", "Voice")
 OUT = os.path.join(REPO, "Docs", "Checks", "round13", "challenge_lines.md")
 USE = {"chintro": "the rival's taunt before the 3-2-1", "chwin": "the rival won the challenge", "chlose": "the rival lost the challenge",
        "ch_c1_intro": "Buck before Rae's Waterfall Dash", "ch_c2_intro": "Buck before Chip's Coaster Showdown", "ch_reward": "Buck after a first win (the paint)",
-       "chstart": "Barker at the challenge's start", "chwon": "Barker: the player won", "chlost": "Barker: the rival won"}
+       "chstart": "Barnaby at the challenge's start", "chwon": "Barnaby: the player won", "chlost": "Barnaby: the rival won"}
 
 
 def main():

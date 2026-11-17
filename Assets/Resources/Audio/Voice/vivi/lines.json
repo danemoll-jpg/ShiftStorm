@@ -2,6 +2,18 @@
  "speaker": "vivi",
  "lines": [
   {
+   "id": "chintro_1",
+   "text": "Darling, the cannon is my stage. Try not to get lost in my spotlight!"
+  },
+  {
+   "id": "chlose_1",
+   "text": "You stole my spotlight! [sighs] Fine. Take a bow, darling. A small one."
+  },
+  {
+   "id": "chwin_1",
+   "text": "And the crowd goes wild! For me, darling. Obviously."
+  },
+  {
    "id": "disaster_1",
    "text": "I simply cannot!"
   },

@@ -6,7 +6,7 @@ namespace ShiftStorm
     // Round 9 item 3b: the grandstands, filled with Gridiron Glory's crowd (World/Crowd.cs). Build 10 had two stands of 104 ball-and-head
     // figures each at the start (Dan: "I didn't even notice a crowd"). Now, close to the road and cartoon-big so they are noticed as you pass
     // (same idea as the dinosaurs):
-    //   start / finish   both sides, 60 m long, 6 rows from 9 m past the road's edge (behind the barrier and Barker's booth): they roar at GO
+    //   start / finish   both sides, 60 m long, 6 rows from 9 m past the road's edge (behind the barrier and Barnaby's booth): they roar at GO
     //                    and cheer each racer home (the finish's own crowd sound stays the one sound there)
     //   the loop         on the beach side, facing the loop, 64 m long, 6 rows: they rise and cheer as each racer goes round
     //   waterfall landing on the inland side of the finishing road just past the landing, 56 m, 5 rows: a cheer you hear as you land

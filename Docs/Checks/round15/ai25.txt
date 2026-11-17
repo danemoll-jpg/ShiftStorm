@@ -1,0 +1,124 @@
+ShiftStorm check 'btsplits', 2026-11-16 18:45, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  BT clown jump car (through the Globe) run 1: 13.68 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 2: 13.68 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 3: 13.68 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+BT CLOWN JUMP car PASS: 25 of 25 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.68 s (anchor -> G1)
+  BT clown jump fly (past the Globe) run 1: 11.85 s to G1, resets 0, wagon hits 0, wings used 1, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 2: 11.85 s to G1, resets 0, wagon hits 0, wings used 2, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 3: 11.85 s to G1, resets 0, wagon hits 0, wings used 3, shortcuts Clown flight
+BT CLOWN JUMP fly PASS: 25 of 25 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+  BT river main channel run 1: 28.18 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 2: 28.22 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 3: 28.23 s to G7, resets 0, wall hits 0, shortcuts 
+BT RIVER main channel PASS: 25 of 25 clean, 0 stuck, 0 resets, mean 28.22 s (anchor -> G7)
+  BT river rapids run 1: 32.75 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 2: 32.58 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 3: 32.64 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+BT RIVER rapids PASS: 25 of 25 clean, 0 stuck, 0 resets, mean 32.71 s (anchor -> G7)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.54 ms, 95th pct 2.67 ms, 99th pct 4.85 ms, worst 3120.44 ms over 1412266 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  bt-clown-fly-1 Drive->Fly  z   642.6  0.601 s  frames worst 17.72 / mean 1.54 ms
+  bt-clown-fly-1 Fly->Drive  z   827.3  0.600 s  frames worst 44.90 / mean 2.17 ms
+  bt-clown-fly-2 Drive->Fly  z   642.6  0.602 s  frames worst 17.44 / mean 3.01 ms
+  bt-clown-fly-2 Fly->Drive  z   827.3  0.604 s  frames worst 47.68 / mean 2.56 ms
+  bt-clown-fly-3 Drive->Fly  z   642.6  0.600 s  frames worst 26.78 / mean 1.47 ms
+  bt-clown-fly-3 Fly->Drive  z   827.3  0.600 s  frames worst 4.62 / mean 1.47 ms
+  bt-clown-fly-4 Drive->Fly  z   642.6  0.601 s  frames worst 5.31 / mean 1.50 ms
+  bt-clown-fly-4 Fly->Drive  z   827.3  0.600 s  frames worst 75.28 / mean 2.29 ms
+  bt-clown-fly-5 Drive->Fly  z   642.6  0.600 s  frames worst 5.65 / mean 1.49 ms
+  bt-clown-fly-5 Fly->Drive  z   827.3  0.600 s  frames worst 7.19 / mean 1.46 ms
+  bt-clown-fly-6 Drive->Fly  z   642.6  0.601 s  frames worst 22.40 / mean 1.85 ms
+  bt-clown-fly-6 Fly->Drive  z   827.3  0.601 s  frames worst 10.12 / mean 1.54 ms
+  bt-clown-fly-7 Drive->Fly  z   642.6  0.601 s  frames worst 5.77 / mean 1.47 ms
+  bt-clown-fly-7 Fly->Drive  z   827.3  0.600 s  frames worst 7.01 / mean 1.46 ms
+  bt-clown-fly-8 Drive->Fly  z   642.6  0.600 s  frames worst 7.92 / mean 1.50 ms
+  bt-clown-fly-8 Fly->Drive  z   827.3  0.600 s  frames worst 5.99 / mean 1.47 ms
+  bt-clown-fly-9 Drive->Fly  z   642.6  0.601 s  frames worst 10.25 / mean 1.53 ms
+  bt-clown-fly-9 Fly->Drive  z   827.3  0.624 s  frames worst 34.67 / mean 1.57 ms
+  bt-clown-fly-10 Drive->Fly  z   642.6  0.600 s  frames worst 6.29 / mean 1.47 ms
+  bt-clown-fly-10 Fly->Drive  z   827.3  0.601 s  frames worst 5.47 / mean 1.42 ms
+  bt-clown-fly-11 Drive->Fly  z   642.6  0.601 s  frames worst 64.15 / mean 1.74 ms
+  bt-clown-fly-11 Fly->Drive  z   827.3  0.600 s  frames worst 5.20 / mean 1.48 ms
+  bt-clown-fly-12 Drive->Fly  z   642.6  0.600 s  frames worst 4.68 / mean 1.40 ms
+  bt-clown-fly-12 Fly->Drive  z   827.3  0.600 s  frames worst 8.39 / mean 1.44 ms
+  bt-clown-fly-13 Drive->Fly  z   642.6  0.600 s  frames worst 8.38 / mean 1.57 ms
+  bt-clown-fly-13 Fly->Drive  z   827.3  0.600 s  frames worst 8.21 / mean 1.51 ms
+  bt-clown-fly-14 Drive->Fly  z   642.6  0.601 s  frames worst 7.31 / mean 1.63 ms
+  bt-clown-fly-14 Fly->Drive  z   827.3  0.601 s  frames worst 52.89 / mean 2.21 ms
+  bt-clown-fly-15 Drive->Fly  z   642.6  0.601 s  frames worst 38.54 / mean 1.53 ms
+  bt-clown-fly-15 Fly->Drive  z   827.3  0.603 s  frames worst 47.55 / mean 1.56 ms
+  bt-clown-fly-16 Drive->Fly  z   642.6  0.601 s  frames worst 9.58 / mean 1.78 ms
+  bt-clown-fly-16 Fly->Drive  z   827.3  0.601 s  frames worst 5.12 / mean 1.43 ms
+  bt-clown-fly-17 Drive->Fly  z   642.6  0.601 s  frames worst 4.36 / mean 1.41 ms
+  bt-clown-fly-17 Fly->Drive  z   827.3  0.600 s  frames worst 4.78 / mean 1.44 ms
+  bt-clown-fly-18 Drive->Fly  z   642.6  0.602 s  frames worst 5.01 / mean 1.46 ms
+  bt-clown-fly-18 Fly->Drive  z   827.3  0.602 s  frames worst 44.97 / mean 1.56 ms
+  bt-clown-fly-19 Drive->Fly  z   642.6  0.602 s  frames worst 6.07 / mean 1.50 ms
+  bt-clown-fly-19 Fly->Drive  z   827.3  0.601 s  frames worst 4.16 / mean 1.46 ms
+  bt-clown-fly-20 Drive->Fly  z   642.6  0.601 s  frames worst 6.17 / mean 1.59 ms
+  bt-clown-fly-20 Fly->Drive  z   827.3  0.600 s  frames worst 5.30 / mean 1.51 ms
+  bt-clown-fly-21 Drive->Fly  z   642.6  0.601 s  frames worst 5.03 / mean 1.50 ms
+  bt-clown-fly-21 Fly->Drive  z   827.3  0.603 s  frames worst 17.21 / mean 1.61 ms
+  bt-clown-fly-22 Drive->Fly  z   642.6  0.602 s  frames worst 117.09 / mean 6.33 ms
+  bt-clown-fly-22 Fly->Drive  z   827.3  0.601 s  frames worst 10.35 / mean 1.46 ms
+  bt-clown-fly-23 Drive->Fly  z   642.6  0.601 s  frames worst 5.75 / mean 1.41 ms
+  bt-clown-fly-23 Fly->Drive  z   827.3  0.600 s  frames worst 5.16 / mean 1.42 ms
+  bt-clown-fly-24 Drive->Fly  z   642.6  0.712 s  frames worst 356.30 / mean 2.24 ms
+  bt-clown-fly-24 Fly->Drive  z   827.3  0.601 s  frames worst 27.40 / mean 1.81 ms
+  bt-clown-fly-25 Drive->Fly  z   642.6  0.601 s  frames worst 6.26 / mean 1.57 ms
+  bt-clown-fly-25 Fly->Drive  z   827.3  0.600 s  frames worst 3.76 / mean 1.37 ms
+  bt-river-main-1 Boat->Dive  z  -229.0  0.601 s  frames worst 7.93 / mean 1.54 ms
+  bt-river-main-2 Boat->Dive  z  -228.6  0.601 s  frames worst 16.60 / mean 1.91 ms
+  bt-river-main-3 Boat->Dive  z  -228.6  0.600 s  frames worst 5.41 / mean 1.32 ms
+  bt-river-main-4 Boat->Dive  z  -229.2  0.601 s  frames worst 6.44 / mean 1.41 ms
+  bt-river-main-5 Boat->Dive  z  -228.7  0.601 s  frames worst 6.46 / mean 1.33 ms
+  bt-river-main-6 Boat->Dive  z  -228.9  0.600 s  frames worst 4.28 / mean 1.30 ms
+  bt-river-main-7 Boat->Dive  z  -228.8  0.601 s  frames worst 12.76 / mean 1.38 ms
+  bt-river-main-8 Boat->Dive  z  -229.2  0.600 s  frames worst 3.69 / mean 1.33 ms
+  bt-river-main-9 Boat->Dive  z  -229.2  0.602 s  frames worst 34.43 / mean 2.23 ms
+  bt-river-main-10 Boat->Dive  z  -229.2  0.601 s  frames worst 5.07 / mean 1.46 ms
+  bt-river-main-11 Boat->Dive  z  -228.9  0.601 s  frames worst 12.00 / mean 1.48 ms
+  bt-river-main-12 Boat->Dive  z  -229.2  0.601 s  frames worst 7.50 / mean 1.33 ms
+  bt-river-main-13 Boat->Dive  z  -229.1  0.600 s  frames worst 5.51 / mean 1.34 ms
+  bt-river-main-14 Boat->Dive  z  -228.7  0.600 s  frames worst 15.15 / mean 1.56 ms
+  bt-river-main-15 Boat->Dive  z  -228.4  0.673 s  frames worst 3120.44 / mean 264.36 ms
+  bt-river-main-16 Boat->Dive  z  -229.0  0.600 s  frames worst 8.65 / mean 1.54 ms
+  bt-river-main-17 Boat->Dive  z  -228.7  0.601 s  frames worst 40.20 / mean 2.70 ms
+  bt-river-main-18 Boat->Dive  z  -228.8  0.601 s  frames worst 51.29 / mean 1.81 ms
+  bt-river-main-19 Boat->Dive  z  -228.6  0.600 s  frames worst 7.21 / mean 1.44 ms
+  bt-river-main-20 Boat->Dive  z  -228.5  0.600 s  frames worst 11.08 / mean 1.63 ms
+  bt-river-main-21 Boat->Dive  z  -228.9  0.601 s  frames worst 10.49 / mean 1.47 ms
+  bt-river-main-22 Boat->Dive  z  -228.4  0.603 s  frames worst 6.86 / mean 1.47 ms
+  bt-river-main-23 Boat->Dive  z  -228.9  0.601 s  frames worst 3.97 / mean 1.33 ms
+  bt-river-main-24 Boat->Dive  z  -228.5  0.602 s  frames worst 12.76 / mean 1.32 ms
+  bt-river-main-25 Boat->Dive  z  -229.2  0.601 s  frames worst 7.10 / mean 1.47 ms
+  bt-river-rapids-1 Boat->Dive  z  -228.5  0.600 s  frames worst 8.37 / mean 1.45 ms
+  bt-river-rapids-2 Boat->Dive  z  -228.8  0.601 s  frames worst 9.27 / mean 1.39 ms
+  bt-river-rapids-3 Boat->Dive  z  -228.5  0.601 s  frames worst 8.78 / mean 1.36 ms
+  bt-river-rapids-4 Boat->Dive  z  -229.0  0.601 s  frames worst 10.59 / mean 1.37 ms
+  bt-river-rapids-5 Boat->Dive  z  -228.8  0.601 s  frames worst 4.07 / mean 1.47 ms
+  bt-river-rapids-6 Boat->Dive  z  -229.0  0.600 s  frames worst 9.39 / mean 1.55 ms
+  bt-river-rapids-7 Boat->Dive  z  -228.7  0.602 s  frames worst 8.55 / mean 1.51 ms
+  bt-river-rapids-8 Boat->Dive  z  -228.8  0.601 s  frames worst 14.22 / mean 1.37 ms
+  bt-river-rapids-9 Boat->Dive  z  -228.6  0.601 s  frames worst 7.47 / mean 1.54 ms
+  bt-river-rapids-10 Boat->Dive  z  -228.6  0.601 s  frames worst 7.54 / mean 1.31 ms
+  bt-river-rapids-11 Boat->Dive  z  -228.4  0.601 s  frames worst 48.36 / mean 2.16 ms
+  bt-river-rapids-12 Boat->Dive  z  -228.8  0.601 s  frames worst 4.85 / mean 1.66 ms
+  bt-river-rapids-13 Boat->Dive  z  -228.6  0.601 s  frames worst 4.69 / mean 1.21 ms
+  bt-river-rapids-14 Boat->Dive  z  -228.9  0.601 s  frames worst 3.88 / mean 1.31 ms
+  bt-river-rapids-15 Boat->Dive  z  -228.7  0.600 s  frames worst 15.58 / mean 1.34 ms
+  bt-river-rapids-16 Boat->Dive  z  -228.5  0.602 s  frames worst 213.27 / mean 4.62 ms
+  bt-river-rapids-17 Boat->Dive  z  -228.5  0.604 s  frames worst 95.36 / mean 3.25 ms
+  bt-river-rapids-18 Boat->Dive  z  -228.8  0.602 s  frames worst 12.55 / mean 2.03 ms
+  bt-river-rapids-19 Boat->Dive  z  -228.5  0.600 s  frames worst 15.71 / mean 1.77 ms
+  bt-river-rapids-20 Boat->Dive  z  -228.8  0.601 s  frames worst 6.54 / mean 1.48 ms
+  bt-river-rapids-21 Boat->Dive  z  -228.3  0.601 s  frames worst 23.51 / mean 1.95 ms
+  bt-river-rapids-22 Boat->Dive  z  -228.7  0.601 s  frames worst 59.60 / mean 1.65 ms
+  bt-river-rapids-23 Boat->Dive  z  -228.9  0.601 s  frames worst 8.46 / mean 2.00 ms
+  bt-river-rapids-24 Boat->Dive  z  -229.0  0.602 s  frames worst 10.76 / mean 1.56 ms
+  bt-river-rapids-25 Boat->Dive  z  -228.7  0.602 s  frames worst 4.86 / mean 1.56 ms
+sound: music race_bigtop playing (its own signal peak 0.000), splashes played 0, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

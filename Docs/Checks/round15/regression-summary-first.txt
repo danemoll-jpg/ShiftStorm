@@ -1,0 +1,176 @@
+==== shimmer (shimmer )
+exit 0
+ShiftStorm check 'shimmer', 2026-11-16 17:04, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  Paradise Plunge    grid before GO      STEADY: 818 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.04 / 255 (median 0.04, 95th pct 0.06), pixels changing (> 8 levels): median 0.13 %, 95th pct 0.20 %
+  Paradise Plunge    after the finish    CHANGING: 886 frames; camera moved at most 56673.49 mm / 72.8924 deg, car 13581.91 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.83 / 255 (median 0.75, 95th pct 1.37), pixels changing (> 8 levels): median 2.66 %, 95th pct 4.52 %
+  Paradise Plunge    grid after Race again STEADY: 786 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.000-0.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.05 / 255 (median 0.04, 95th pct 0.12), pixels changing (> 8 levels): median 0.14 %, 95th pct 0.37 %
+  Coaster Coast      grid before GO      STEADY: 925 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.03 / 255 (median 0.03, 95th pct 0.06), pixels changing (> 8 levels): median 0.11 %, 95th pct 0.19 %
+  Coaster Coast      after the finish    CHANGING: 1157 frames; camera moved at most 64051.16 mm / 73.1193 deg, car 17125.02 mm; sun turned 0.0000 deg; evening 1.000-1.000 (0 changes); fog colour changed 0.0000; picture change per frame: mean 6.29 / 255 (median 5.92, 95th pct 10.43), pixels changing (> 8 levels): median 12.06 %, 95th pct 16.10 %
+  Coaster Coast      grid after Race again STEADY: 981 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.24 / 255 (median 0.03, 95th pct 1.51), pixels changing (> 8 levels): median 0.12 %, 95th pct 3.95 %
+  Big Top Breakdown  grid before GO      STEADY: 1056 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.03 / 255 (median 0.03, 95th pct 0.05), pixels changing (> 8 levels): median 0.10 %, 95th pct 0.16 %
+  Big Top Breakdown  after the finish    CHANGING: 1163 frames; camera moved at most 64102.19 mm / 73.1314 deg, car 17141.46 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 5.93 / 255 (median 5.66, 95th pct 9.08), pixels changing (> 8 levels): median 13.34 %, 95th pct 16.63 %
+  Big Top Breakdown  grid after Race again STEADY: 984 frames; camera moved at most 0.00 mm / 0.0000 deg, car 0.00 mm; sun turned 0.0000 deg; evening 0.006-0.006 (0 changes); fog colour changed 0.0000; picture change per frame: mean 0.36 / 255 (median 0.03, 95th pct 1.91), pixels changing (> 8 levels): median 0.12 %, 95th pct 4.30 %
+SHIMMER FAIL: parked = camera, car, sun and sky still on every course (the picture then changes only where things are meant to move: see the heat maps)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== bigtop (bigtop )
+exit 0
+ShiftStorm check 'bigtop', 2026-11-16 17:06, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BT LAP PASS: finished True in 95.00 s (target ~2 min), gates 11/11 in order True, resets 0, wall hits 0, wagon hits 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+BT SET-PIECES PASS: 6 of 6 segments had a set-piece >= 8 % of the screen for >= 1 s
+  log: [  67.85] gate G7 sunken wagon passed (8/11)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.58 ms, 95th pct 7.15 ms, 99th pct 9.75 ms, worst 100.80 ms over 14635 frames (24 over 16.7 ms); peak draw calls 0, batches 0, triangles 909k
+BT RESULTS PASS: lap 95.00 s, 6 splits, best on file 95.00 s
+BT RAIL Globe of Death full (70 m/s) PASS: onto it at 13.3 m/s, rode it True, off its end True, lowest speed on it 13.3 m/s (booster minimum 30), then Drive at 1094 m (69 m/s), resets 0
+BT RAIL Globe of Death slow (30 m/s) PASS: onto it at 24.4 m/s, rode it True, off its end True, lowest speed on it 24.4 m/s (booster minimum 30), then Drive at 1005 m (30 m/s), resets 0
+BT RAIL Globe of Death very slow (8 m/s, coasting on it) PASS: onto it at 19.9 m/s, rode it True, off its end True, lowest speed on it 19.9 m/s (booster minimum 30), then Drive at 980 m (11 m/s), resets 0
+BT RAIL cannon full (70 m/s) PASS: onto it at 22.0 m/s, rode it True, off its end True, lowest speed on it 22.0 m/s (booster minimum 80), then Fly at 1735 m (89 m/s), resets 0
+BT RAIL cannon slow (30 m/s) PASS: onto it at 14.8 m/s, rode it True, off its end True, lowest speed on it 14.8 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAIL cannon very slow (8 m/s, coasting on it) PASS: onto it at 25.8 m/s, rode it True, off its end True, lowest speed on it 25.8 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAILS PASS: the Globe of Death and the cannon at full / slow / very slow speed
+BT CLOWN JUMP car PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.77 s (anchor -> G1)
+BT CLOWN JUMP fly PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.83 s (anchor -> G1)
+BT RIVER main channel PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 28.22 s (anchor -> G7)
+BT RIVER rapids PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 32.77 s (anchor -> G7)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  btlap        Drive->Fly  z   960.0  0.605 s  frames worst 25.61 / mean 7.05 ms
+  btlap        Fly->Boat   z   818.6  0.600 s  frames worst 29.71 / mean 8.79 ms
+  btlap        Boat->Dive  z  -228.7  0.603 s  frames worst 12.41 / mean 5.53 ms
+  btlap        Dive->Boat  z  -473.3  0.604 s  frames worst 12.85 / mean 7.53 ms
+  btlap        Boat->Drive z  -370.6  0.601 s  frames worst 14.01 / mean 8.05 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== round2 (round2 )
+exit 0
+ShiftStorm check 'round2', 2026-11-16 17:13, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+LAP countdown: held on the grid 3.0 s, then GO (clock started at GO)
+LAP PASS: finished True in 124.58 s (target 150), gates 11/11 in order True, resets 0, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  top speed per form on the lap: Drive 76.2 m/s (170 mph), Boat 58.2 m/s (130 mph), Fly 92.4 m/s (207 mph), Dive 49.1 m/s (110 mph) (build 2: lap 141.8 s; Drive 34.5, Boat 26.0, Fly 57.7, Dive 28.0 m/s on the lanes)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 6.06 ms, 95th pct 9.64 ms, 99th pct 11.68 ms, worst 20.22 ms over 14018 frames (5 over 16.7 ms); peak draw calls 0, batches 0, triangles 4984k
+RESULTS PASS: shown True, lap 124.58 s, 8 splits, new best True, best on file 124.58 s (local/round15/save-round2\besttimes.json)
+RESTART PASS: after the finish, Reset started the course again: countdown True, finished False, gates 0, results hidden True, best kept 124.58 s
+SKIP BY AIR PASS (rejected): after G5 the check turned it into a plane 40 m up and flew the cave's line: cue "", then reset (missed gate G6 dive portal as Fly) to the anchor at 5504 m in Boat; gates 6/11 (G6-G10 never counted), finished False
+REVERSE CROSSING PASS (rejected): through G0, back through it (cue WRONG WAY: True), forward again: gates 1 (still 1)
+FINISH OUT OF ORDER PASS (rejected): from the pool (gates 8) placed on the road past G9 and driven over the line: crossed it True, finished False, gates 8, then no reset
+ABI PASS: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69; head top 0.80 m under a closed canopy top of 0.87 m; Drive: 0 below the hull; Boat: 0 below the hull; Fly: 0 below the hull; Dive: 0 of 0 vertices outside the closed canopy above the body, 0 below the hull
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  lap          Drive->Fly  z   944.7  0.604 s  frames worst 15.22 / mean 8.74 ms
+  lap          Fly->Boat   z  -607.3  0.603 s  frames worst 16.66 / mean 8.37 ms
+  lap          Boat->Dive  z  -202.4  0.603 s  frames worst 20.46 / mean 10.30 ms
+  lap          Dive->Boat  z  -466.3  0.602 s  frames worst 13.97 / mean 11.22 ms
+  lap          Boat->Drive z  -304.9  0.604 s  frames worst 14.89 / mean 10.79 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== cclap (cclap )
+exit 0
+ShiftStorm check 'cclap', 2026-11-16 17:16, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+CC LAP PASS: finished True in 106.32 s (target ~120), gates 11/11 in order True, resets 0, changes 7: Drive->Fly, Fly->Drive, Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+CC SET-PIECES PASS: 8 of 8 segments had a set-piece >= 8 % of the screen for >= 1 s
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 6.83 ms, 95th pct 12.91 ms, 99th pct 29.32 ms, worst 1434.58 ms over 10353 frames (284 over 16.7 ms); peak draw calls 0, batches 0, triangles 998k
+CC RESULTS PASS: lap 106.32 s, 8 splits, best on file 106.32 s (per course: Paradise Plunge -1.00)
+CC RESTART PASS: after the finish, Reset started Coaster Coast again (course 1)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  cclap        Drive->Fly  z   231.0  0.610 s  frames worst 19.35 / mean 6.55 ms
+  cclap        Fly->Drive  z   703.7  0.604 s  frames worst 12.78 / mean 6.21 ms
+  cclap        Drive->Fly  z   572.0  0.604 s  frames worst 2601.76 / mean 1357.85 ms
+  cclap        Fly->Boat   z   908.8  0.607 s  frames worst 15.43 / mean 8.64 ms
+  cclap        Boat->Dive  z  -366.4  0.607 s  frames worst 88.69 / mean 15.90 ms
+  cclap        Dive->Boat  z  -473.6  0.614 s  frames worst 324.91 / mean 21.91 ms
+  cclap        Boat->Drive z  -371.0  0.614 s  frames worst 98.94 / mean 22.50 ms
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== round11 (round11 )
+exit 0
+ShiftStorm check 'round11', 2026-11-16 17:19, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+BUCK Paradise Plunge PASS: card at the start True; briefing brief_pp_4 (14.3 s), the game stopped meanwhile; then Barnaby's start; race finished 1st; Barnaby's results line True; Buck's remark res_pp_first_1 (results (1st)); frames with two voices at once: 0 of 19150 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK Coaster Coast PASS: card at the start True; briefing brief_cc_1 (13.6 s), the game stopped meanwhile; then Barnaby's go; race finished 1st; Barnaby's results line True; Buck's remark res_cc_first_3 (results (1st)); frames with two voices at once: 0 of 22491 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK Coaster Coast FAIL: card at the start True; briefing brief_bt_3 (9.2 s), the game stopped meanwhile; then Barnaby's btstart; race finished 1st; Barnaby's results line False; Buck's remark res_bt_first_1 (results (1st)); frames with two voices at once: 0 of 41325 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+BUCK SKIP PASS: talking when A was pressed True; card gone after 0.00 s, his voice stopped True, the game running again True, Barnaby's start line next True
+BUCK ONCE PASS: the same course started again in the session: briefing not repeated
+BUCK SETTING PASS: Short -> short_cc_1 (4.2 s); Off -> no card True
+BUCK FAIL
+TOUR stop 1 The Trial PASS: scene: stop 1 The Trial -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 2 (playable 3) -> reaction tour_s1_pass_1 + tour_s1_pass_2; unlocked 2, total 10 points; results line "THE TOUR - Stop 1 The Trial: 1st, 10 points  -  Stop 2 unlocked!"
+    Buck: tour_s1_intro_1 (tour stop 1 scene), tour_s1_intro_2 (tour stop 1 scene), tour_s1_intro_3 (tour stop 1 scene), tour_s1_intro_4 (tour stop 1 scene), tour_s1_pass_1 (tour stop 1 passed), tour_s1_pass_2 (tour stop 1 passed)
+TOUR stop 2 Opening Night PASS: scene: stop 2 Opening Night -> scene skipped -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s2_pass_1 + tour_s2_pass_2; unlocked 3, total 20 points; results line "THE TOUR - Stop 2 Opening Night: 1st, 10 points  -  Stop 3 unlocked!"
+    Buck: tour_s2_intro_1 (tour stop 2 scene), tour_s2_pass_1 (tour stop 2 passed), tour_s2_pass_2 (tour stop 2 passed)
+TOUR stop 3 The Big Top Dare PASS: scene: stop 3 The Big Top Dare -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s3_pass_1 + tour_s3_pass_2 + tour_done_1; unlocked 3, total 30 points; results line "THE TOUR - Stop 3 The Big Top Dare: 1st, 10 points  -  Tour complete!"
+    Buck: tour_s3_intro_1 (tour stop 3 scene), tour_s3_intro_2 (tour stop 3 scene), tour_s3_intro_3 (tour stop 3 scene), tour_s3_intro_4 (tour stop 3 scene), tour_s3_pass_1 (tour stop 3 passed), tour_s3_pass_2 (tour stop 3 passed), tour_done_1 (tour stop 3 passed)
+TOUR RELOAD PASS: read back best 1st / 1st, 30 points, unlocked 3, done True; file: {   "version": 1,   "unlocked": 3,   "best": [     1,     1,     1   ],   "points": [     10,     10,     10   ],   "tries": [     1,     1,     1   ],   "done": true,   "cWon": [     false,     false,     false   ],   "cBest": [     0.0,     0.0,     0.0   ],   "cTries": [     0,     0,     0   ] }
+TOUR RETRY PASS: finished 4th (throttle 50 %): best kept 1st, points kept 10, unlocked 3, tries 2; Buck: tour_s1_intro_1, tour_s1_retry_2; results line "THE TOUR - Stop 1 The Trial: 4th, 2 points (best 1st)  -  top 3 to go on: Race again to retry"
+TOUR RACE AGAIN PASS: stop 1 started again, steps race
+TOUR PASS
+  Abi                        in Grand Prix : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Hot Rod    : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Jetstream  : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Scrambler  : seated True (Abigail, scale 0.97), mechanism grips, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Grand Prix : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Hot Rod    : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Jetstream  : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Scrambler  : seated True (Rae, scale 0.73), mechanism grips, hands 8 / 8 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Grand Prix : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Hot Rod    : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Jetstream  : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Scrambler  : seated True (Chip, scale 0.96), mechanism grips, hands 2 / 2 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Vivi                       in Grand Prix : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Hot Rod    : seated True (Vivi, scale 0.74), mechanism wheel, hands 3 / 3 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Jetstream  : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Scrambler  : seated True (Vivi, scale 1.04), mechanism grips, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+RACERS PASS: 16 of 16 driver x machine combinations
+RACERS SPLIT PASS: P1 Chip "Showtime" Sterling in Hot Rod, P2 Abi (Abigail) in Scrambler; AI Rocket Rae in Grand Prix, Vivi in Hot Rod
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== challenges (challenges )
+exit 0
+ShiftStorm check 'challenges', 2026-11-16 17:36, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  c1 lose run PASS: result lost by 25.3 s (CHALLENGE LOST: Rae's Waterfall Dash, Rae by 25.3 s  -  try again from The Tour page); saved True, after a reload True (tries 1, won False, best 0.0 s); paint Rocket Red unlocked False
+  c1 win run FAIL: result lost by 0.2 s (CHALLENGE LOST: Rae's Waterfall Dash, Rae by 0.2 s  -  try again from The Tour page); saved False, after a reload True (tries 2, won False, best 0.0 s); paint Rocket Red unlocked False
+  c2 lose run PASS: result lost by 39.7 s (CHALLENGE LOST: Chip's Coaster Showdown, Chip by 39.7 s  -  try again from The Tour page); saved True, after a reload True (tries 1, won False, best 0.0 s); paint Showtime Blue unlocked False
+  c2 win run PASS: result won by 4.3 s (CHALLENGE WON: Chip's Coaster Showdown, by 4.3 s  -  new paint: Showtime Blue (Garage)); saved True, after a reload True (tries 2, won True, best 4.3 s); paint Showtime Blue unlocked True
+  c3 lose run FAIL: result lost by 18.9 s (CHALLENGE LOST: Vivi's Cannonball Run, Vivi by 18.9 s  -  try again from The Tour page); saved True, after a reload True (tries 1, won False, best 0.0 s); paint Vivi Violet unlocked False
+  c3 win run FAIL: result won by 2.1 s (CHALLENGE WON: Vivi's Cannonball Run, by 2.1 s  -  new paint: Vivi Violet (Garage)); saved True, after a reload True (tries 2, won True, best 2.1 s); paint Vivi Violet unlocked True
+CHALLENGES FAIL: 3 of 6 runs (each challenge won and lost: result, tour.json saved and read back, Buck + the rival + Barnaby lines)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== menus14 (menus14 )
+exit 0
+ShiftStorm check 'menus14', 2026-11-16 17:43, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  //  Time trial: alone, best lap saved. Left / right: another course, A: choose your racer.
+  //       Challenge: Vivi's Cannonball Run (Big Top Breakdown): beat Vivi round the ring, out of the cannon and through the top flap   win: Vivi Violet paint   (open: Unlock all Tour stops) | 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== menuwalk (menuwalk )
+exit 0
+ShiftStorm check 'menuwalk', 2026-11-16 17:43, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+MENU WALK PASS: 13 steps
+  choosing "Yes, quit" now; the process must end with exit code 0
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, AudioListener.volume 0
+==== unlock (unlock )
+exit 0
+ShiftStorm check 'unlock', 2026-11-16 17:44, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+UNLOCK Race PASS: main menu "Course: Coaster Coast"; pick page "Go: Race Coaster Coast"; started course Coaster Coast, race True
+UNLOCK Time Trial PASS: "Course: Coaster Coast"; started Coaster Coast, race False
+UNLOCK 2 Players PASS: page "Course: Coaster Coast"; split active True, course Coaster Coast
+UNLOCK Tour PASS: setting On: "Stop 2: Opening Night (Coaster Coast)   not raced yet   (open: Unlock all Tour stops)"; Off: "Stop 2: Opening Night (Coaster Coast)   - locked: top 3 at Stop 1 -"
+UNLOCK PASS: Coaster Coast open in Race, Time Trial and 2 Players on a fresh save; only the Tour's own order can lock (and not while "Unlock all Tour stops" is On)
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== finishcam (finishcam )
+exit 0
+ShiftStorm check 'finishcam', 2026-11-16 17:44, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+  Paradise Plunge  Chase        STEADY: 6306 frames, jitter max 0.02 cm (at 0.88 s) / 0.028 deg, 99th pct 0.011 cm / 0.000 deg, 0 frames over 1 cm (1096 next to a hitch left out); camera speed at most 53.3 m/s; car 0.7 m/s 20 s after the line; finish camera on
+  Paradise Plunge  First person STEADY: 5655 frames, jitter max 0.08 cm (at 0.03 s) / 0.034 deg, 99th pct 0.025 cm / 0.000 deg, 0 frames over 1 cm (1105 next to a hitch left out); camera speed at most 54.9 m/s; car 0.6 m/s 20 s after the line; finish camera on
+  Coaster Coast    Chase        STEADY: 9330 frames, jitter max 0.05 cm (at 1.48 s) / 0.028 deg, 99th pct 0.025 cm / 0.000 deg, 0 frames over 1 cm (817 next to a hitch left out); camera speed at most 54.9 m/s; car 0.1 m/s 20 s after the line; finish camera on
+  Coaster Coast    First person STEADY: 9494 frames, jitter max 0.04 cm (at 1.58 s) / 0.028 deg, 99th pct 0.024 cm / 0.000 deg, 0 frames over 1 cm (1038 next to a hitch left out); camera speed at most 54.9 m/s; car 0.1 m/s 20 s after the line; finish camera on
+  Big Top Breakdown Chase        STEADY: 8007 frames, jitter max 0.10 cm (at 18.32 s) / 0.028 deg, 99th pct 0.024 cm / 0.000 deg, 0 frames over 1 cm (1264 next to a hitch left out); camera speed at most 54.7 m/s; car 0.0 m/s 20 s after the line; finish camera on
+  Big Top Breakdown First person STEADY: 10355 frames, jitter max 0.07 cm (at 1.76 s) / 0.028 deg, 99th pct 0.037 cm / 0.000 deg, 0 frames over 1 cm (1197 next to a hitch left out); camera speed at most 55.2 m/s; car 0.0 m/s 20 s after the line; finish camera on
+FINISH CAMERA PASS: no shake after the finish on both courses, chase and first person
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== mix (mix )
+exit 0
+ShiftStorm check 'mix', 2026-11-16 17:47, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+MIX Paradise Plunge CHECK: music -26.7 dBFS, player's engine -32.8, Barnaby -19.8 (306 samples while he talks); crowd: the stands' murmur on the grid -39.2 (build 15: -20.0), loudest passing a stand -32.6 (build 15: -13.4), loudest cheer / finish sound -34.8 (build 15: -15.6); the crowd's loudest is 2.0 dB under the engine, 15.0 dB under Barnaby, 8.1 dB under the music
+MIX Coaster Coast CHECK: music -26.7 dBFS, player's engine -31.7, Barnaby -19.4 (250 samples while he talks); crowd: the stands' murmur on the grid -40.5 (build 15: -21.4), loudest passing a stand -35.3 (build 15: -16.2), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 2.2 dB under the engine, 14.5 dB under Barnaby, 7.2 dB under the music
+MIX Big Top Breakdown CHECK: music -27.4 dBFS, player's engine -32.7, Barnaby -19.9 (232 samples while he talks); crowd: the stands' murmur on the grid -40.6 (build 15: -21.5), loudest passing a stand -29.7 (build 15: -10.5), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 1.2 dB under the engine, 14.0 dB under Barnaby, 6.5 dB under the music
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
+==== split-bt (split -course 2)
+exit 0
+ShiftStorm check 'split', 2026-11-16 17:50, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 1.5 m, P2 1.4 m (pause frame included)
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 95 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 1:37.30
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 9.04 ms, 95th pct 14.40 ms, 99th pct 22.42 ms, worst 276.68 ms over 7772 frames (194 over 16.7 ms); peak draw calls 0, batches 0, triangles 2207k
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

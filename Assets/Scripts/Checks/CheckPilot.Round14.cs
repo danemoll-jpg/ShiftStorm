@@ -13,7 +13,7 @@ namespace ShiftStorm
     //   menuwalk  the scripted walk with the player's own buttons: title -> menu -> course -> racer -> race -> pause -> quit to menu ->
     //             settings (left / right change a volume and an option) -> quit game (the process must end with exit code 0)
     //   mix       the would-be levels per bus in a race and at the finish with the default volumes (the run stays muted): music, engine,
-    //             TeedOff Barker, the crowd (stands' murmur, cheers, the GO roar, the finish's crowd sound), against build 15's crowd gains
+    //             Barnaby, the crowd (stands' murmur, cheers, the GO roar, the finish's crowd sound), against build 15's crowd gains
     //   bubble    the Scrambler's sub: pictures from the side, the front, first person and the chase camera, the change forming the bubble;
     //             every bone of the rider, the grips and the bike's mesh extents inside the glass
     //   finishcam both courses: the camera for 10 s after the finish (chase and first person): frame-to-frame jitter (no shake)
@@ -132,7 +132,7 @@ namespace ShiftStorm
             }
             float Att(AudioSource s) { if (!s || s.spatialBlend < .5f) return 1; float d = Vector3.Distance(s.transform.position, cam.transform.position); return Mathf.Clamp01(1 - (d - s.minDistance) / Mathf.Max(1, s.maxDistance - s.minDistance)); }
             Line($"MIX (item 2): default volumes: Music {Settings.Music * 100:0} %, Voices {Settings.Voices * 100:0} %, Engines {Settings.Engines * 100:0} %, Effects {Settings.Effects * 100:0} %, Crowd {Settings.Crowd * 100:0} % (x{Settings.CrowdGain:0.00} = {Db(Settings.CrowdGain):0.0} dB under build 15's crowd); the run is muted (would-be levels: each clip's signal x its source volume x the 3D roll-off at the camera)");
-            foreach (int course in new[] { 0, 1 })
+            foreach (int course in new[] { 0, 1, 2 })   // Round 15: Big Top Breakdown too
             {
                 game.StartCourse(course, true); var caller = Caller.Instance; var snd = v.GetComponent<VehicleSound>();
                 var pilot = v.gameObject.AddComponent<RivalPilot>(); pilot.rival = new Rival { name = "Abi (AI)", lane = 0, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, seed = 77 }; pilot.AlwaysOn = true; aiDrives = true;
@@ -159,7 +159,7 @@ namespace ShiftStorm
                 }
                 float mus = music.Count > 0 ? music.Average() : 0, eng = engine.Count > 0 ? engine.Average() : 0, bar = barker.Count > 0 ? barker.Average() : 0, bg = bedGrid.Count > 0 ? bedGrid.Average() : 0, bl = bedLap.Count > 0 ? bedLap.Max() : 0;
                 bool pass = Db(shotLevel) < Db(eng) - 3 && Db(bl) < Db(eng) - 6 && Db(shotLevel) < Db(bar) - 10 && Db(shotLevel) < Db(mus) - 6;
-                Line($"MIX {game.Courses[course].courseName} {(pass ? "PASS" : "CHECK")}: music {Db(mus):0.0} dBFS, player's engine {Db(eng):0.0}, Barker {Db(bar):0.0} ({barker.Count} samples while he talks); crowd: the stands' murmur on the grid {Db(bg):0.0} (build 15: {Db(bg / Settings.CrowdGain):0.0}), loudest passing a stand {Db(bl):0.0} (build 15: {Db(bl / Settings.CrowdGain):0.0}), loudest cheer / finish sound {Db(shotLevel):0.0} (build 15: {Db(shotLevel / Settings.CrowdGain):0.0}); the crowd's loudest is {Db(eng) - Db(shotLevel):0.0} dB under the engine, {Db(bar) - Db(shotLevel):0.0} dB under Barker, {Db(mus) - Db(shotLevel):0.0} dB under the music");
+                Line($"MIX {game.Courses[course].courseName} {(pass ? "PASS" : "CHECK")}: music {Db(mus):0.0} dBFS, player's engine {Db(eng):0.0}, Barnaby {Db(bar):0.0} ({barker.Count} samples while he talks); crowd: the stands' murmur on the grid {Db(bg):0.0} (build 15: {Db(bg / Settings.CrowdGain):0.0}), loudest passing a stand {Db(bl):0.0} (build 15: {Db(bl / Settings.CrowdGain):0.0}), loudest cheer / finish sound {Db(shotLevel):0.0} (build 15: {Db(shotLevel / Settings.CrowdGain):0.0}); the crowd's loudest is {Db(eng) - Db(shotLevel):0.0} dB under the engine, {Db(bar) - Db(shotLevel):0.0} dB under Barnaby, {Db(mus) - Db(shotLevel):0.0} dB under the music");
                 Line($"  crowd sounds this race ({crowdShots.Count}): {string.Join(", ", shotNames)}");
             }
             Line($"  the Crowd row: Settings > Audio > Crowd, {Settings.Crowd * 100:0} % (left / right in steps of 10 %, saved in settings.json \"crowdVol\")");
@@ -210,11 +210,11 @@ namespace ShiftStorm
         {
             scenario = "finishcam"; Line($"FINISH CAMERA (item 4){(ChaseCam.OldFinish ? " BUILD 15's (-oldFinish)" : "")}: each course raced to the line from the last anchors (the AI behind), the camera logged for 20 s after the finish (frames next to a hitch, over twice the median frame time, left out); jitter = how far each frame's position / aim is from where the frames either side put it at that frame's time (a shake shows as jitter; a smooth move, at any frame rate, does not)");
             bool allOk = true;
-            foreach (int course in new[] { 0, 1 })
+            foreach (int course in new[] { 0, 1, 2 })   // Round 15: Big Top Breakdown too
                 foreach (var view in new[] { CameraViews.View.Chase, CameraViews.View.FirstPerson })
                 {
                     Clear(); game.StartCourse(course, true); var c = game.Courses[course];
-                    float g9 = course == 0 ? Mk("G9") : CoasterCoast.Marks["G9"];
+                    float g9 = c.marks != null && c.marks.ContainsKey("G9") ? c.marks["G9"] : Mk("G9");
                     var views = cam.GetComponent<CameraViews>(); views.SetView(view);
                     yield return Until(() => !v.Holding, 8f);
                     v.Begin(c, c.anchors[AnchorNear(g9 + 20)]); smart = true; boost = true;   // boost on the way in: the boost shake must stop at the line too

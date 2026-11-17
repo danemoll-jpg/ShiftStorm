@@ -8,8 +8,8 @@ using UnityEngine;
 namespace ShiftStorm
 {
     // Round 11 checks (built exe, -batchmode -mute):
-    //   buck    a race on each course: Buck's briefing -> Barker (start line, the race) -> Buck's results remark after Barker's results line;
-    //           frames with two voices at once (Buck, Barker, any driver); the skip (A / Enter); once per session per course; Short; Off
+    //   buck    a race on each course: Buck's briefing -> Barnaby (start line, the race) -> Buck's results remark after Barnaby's results line;
+    //           frames with two voices at once (Buck, Barnaby, any driver); the skip (A / Enter); once per session per course; Short; Off
     //   tour    The Tour from a fresh tour.json: stop 1 (scene played in full) and stop 2 (scene skipped): scene -> race -> reaction ->
     //           unlock; tour.json read back as after a restart; a 4th place at stop 1 keeps the best place, the points and the unlock and
     //           plays the retry line; Race again retries the stop without the scene
@@ -37,7 +37,7 @@ namespace ShiftStorm
                 if (n > 1)
                 {
                     overlapFrames++; if (bk) buckOver++; else if (br) barkerDriver++; else driverDriver++;
-                    if (overlapSeen.Count < 6) { string w = $"{(bk ? "Buck " + b.Voice.clip.name + " " : "")}{(br ? "Barker " + cl.Voice.clip.name + " " : "")}{string.Join(" ", drv.Select(d => d.Who + " " + d.VoiceSource.clip.name))}"; if (!overlapSeen.Contains(w)) overlapSeen.Add(w); }
+                    if (overlapSeen.Count < 6) { string w = $"{(bk ? "Buck " + b.Voice.clip.name + " " : "")}{(br ? "Barnaby " + cl.Voice.clip.name + " " : "")}{string.Join(" ", drv.Select(d => d.Who + " " + d.VoiceSource.clip.name))}"; if (!overlapSeen.Contains(w)) overlapSeen.Add(w); }
                 }
                 yield return null;
             }
@@ -48,9 +48,9 @@ namespace ShiftStorm
             var b = Buck.Instance; Buck.Enabled = true; b.ForgetBriefings(); Settings.BuckBriefings = 0; Settings.Difficulty = Difficulty.Easy;
             Line($"BUCK: {b.LinesLoaded} lines loaded (Resources/Audio/Voice/buck); briefings per course: Paradise Plunge {b.Pool("brief_pp").Count} + {b.Pool("short_pp").Count} short, Coaster Coast {b.Pool("brief_cc").Count} + {b.Pool("short_cc").Count} short; results remarks {b.Pool("res_pp_first").Count + b.Pool("res_pp_podium").Count + b.Pool("res_pp_back").Count} / {b.Pool("res_cc_first").Count + b.Pool("res_cc_podium").Count + b.Pool("res_cc_back").Count}; anecdotes {b.Pool("yarn").Count}");
             bool allOk = true;
-            foreach (int course in new[] { 0, 1 })
+            foreach (int course in new[] { 0, 1, 2 })   // Round 15: Big Top Breakdown too
             {
-                scenario = $"buck-{(course == 0 ? "pp" : "cc")}"; Clear(); smart = true; boost = true;
+                scenario = $"buck-{(course == 0 ? "pp" : course == 1 ? "cc" : "bt")}"; Clear(); smart = true; boost = true;
                 b.Said.Clear(); int caller0 = 0; StartCoroutine(VoiceSampler());
                 float t0 = Time.realtimeSinceStartup;
                 game.StartCourse(course, true);
@@ -58,18 +58,18 @@ namespace ShiftStorm
                 yield return RealUntil(() => !b.CardOn, 60f);
                 float briefEnd = Time.realtimeSinceStartup;
                 var brief = b.Said.Where(s => s.what == "briefing").ToList();
-                // Barker after the briefing: his start line
+                // Barnaby after the briefing: his start line
                 yield return RealUntil(() => Caller.Instance.Lines.Count > caller0, 8f);
                 string firstBarker = Caller.Instance.Lines.Count > 0 ? Caller.Instance.Lines[0].pool : "-";
-                yield return Until(() => v.Finished, 240f);   // at normal speed: Barker's timing is game time, the voices real time
+                yield return Until(() => v.Finished, 240f);   // at normal speed: Barnaby's timing is game time, the voices real time
                 yield return RealUntil(() => b.Said.Any(s => s.what.StartsWith("results")), 30f);
                 yield return RealUntil(() => !(b.Voice && b.Voice.isPlaying), 20f);
                 sampling = false; yield return null;
                 var res = b.Said.FirstOrDefault(s => s.what.StartsWith("results"));
-                bool barkerResults = Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "podium" || l.pool == "last");
-                bool ok = card && brief.Count > 0 && firstBarker != "-" && res.id != null && barkerResults && buckOver == 0;   // Buck never with anyone (Barker / drivers among themselves: the Round 8 rules, reported)
+                bool barkerResults = Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "btres" || l.pool == "podium" || l.pool == "last");
+                bool ok = card && brief.Count > 0 && firstBarker != "-" && res.id != null && barkerResults && buckOver == 0;   // Buck never with anyone (Barnaby / drivers among themselves: the Round 8 rules, reported)
                 allOk &= ok;
-                Line($"BUCK {(course == 0 ? "Paradise Plunge" : "Coaster Coast")} {(ok ? "PASS" : "FAIL")}: card at the start {card}; briefing {string.Join(" + ", brief.Select(s => $"{s.id} ({s.len:0.0} s)"))}, the game stopped meanwhile; then Barker's {firstBarker}; race finished {Race.Ordinal(game.Race.Place(v))}; Barker's results line {barkerResults}; Buck's remark {(res.id ?? "none")} ({res.what}); frames with two voices at once: {overlapFrames} of {voiceFrames} with a voice (Buck with anyone {buckOver}, Barker with a driver {barkerDriver}, two drivers {driverDriver}){(overlapSeen.Count > 0 ? "; e.g. " + string.Join(" | ", overlapSeen) : "")}");
+                Line($"BUCK {game.Courses[course].courseName} {(ok ? "PASS" : "FAIL")}: card at the start {card}; briefing {string.Join(" + ", brief.Select(s => $"{s.id} ({s.len:0.0} s)"))}, the game stopped meanwhile; then Barnaby's {firstBarker}; race finished {Race.Ordinal(game.Race.Place(v))}; Barnaby's results line {barkerResults}; Buck's remark {(res.id ?? "none")} ({res.what}); frames with two voices at once: {overlapFrames} of {voiceFrames} with a voice (Buck with anyone {buckOver}, Barnaby with a driver {barkerDriver}, two drivers {driverDriver}){(overlapSeen.Count > 0 ? "; e.g. " + string.Join(" | ", overlapSeen) : "")}");
                 foreach (var e in b.Events.Skip(Math.Max(0, b.Events.Count - 3))) Line("    " + e);
             }
             // the skip: a briefing skipped 1.5 s in with A / Enter (the scripted pad's A)
@@ -79,7 +79,7 @@ namespace ShiftStorm
             yield return RealUntil(() => !b.CardOn, 3f); float took = Time.realtimeSinceStartup - ts;
             yield return RealUntil(() => Caller.Instance.Lines.Count > 0, 6f);
             bool skipOk = talking && !b.CardOn && !b.Voice.isPlaying && took < .5f && Time.timeScale == 1f;
-            Line($"BUCK SKIP {(skipOk ? "PASS" : "FAIL")}: talking when A was pressed {talking}; card gone after {took:0.00} s, his voice stopped {!b.Voice.isPlaying}, the game running again {Time.timeScale == 1f}, Barker's start line next {Caller.Instance.Lines.Count > 0}");
+            Line($"BUCK SKIP {(skipOk ? "PASS" : "FAIL")}: talking when A was pressed {talking}; card gone after {took:0.00} s, his voice stopped {!b.Voice.isPlaying}, the game running again {Time.timeScale == 1f}, Barnaby's start line next {Caller.Instance.Lines.Count > 0}");
             // once per session per course
             game.StartCourse(0, true); yield return RealWait(.3f);
             bool again = b.CardOn;

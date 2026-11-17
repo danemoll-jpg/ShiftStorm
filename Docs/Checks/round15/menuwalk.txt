@@ -1,0 +1,21 @@
+ShiftStorm check 'menuwalk', 2026-11-16 17:43, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  title shown: ok (page Title, row "")
+  A on the title -> main menu: ok (page Main, row "The Tour")
+  Race -> the course page: ok (page Course, row "Course: Paradise Plunge")
+  right: course Paradise Plunge -> Coaster Coast: ok (page Course, row "Course: Coaster Coast")
+  left: back to Paradise Plunge: ok (page Course, row "Course: Paradise Plunge")
+  A -> choose your racer: ok (page Pick, row "Go: Race Paradise Plunge")
+  Go -> the race (Paradise Plunge, race True): ok (page Pick, row "Go: Race Paradise Plunge")
+  Menu in the race -> pause: ok (page Pause, row "Resume")
+  Quit to menu -> main menu: ok (page Main, row "The Tour")
+  [walk-audio] page SetAudio, row 0 "Music: 90 %": SETTINGS: AUDIO  //  ▶  Music | <color=#ffd34d>‹</color>  90 %  <color=#ffd34d>›</color>  //       Voices |    100 %     //       Engines |    60 %     //       Effects |    100 %     //       Crowd |    100 %     //       Back |   //  Dan's songs: the races, the menus, the results.
+  left / left / right on Music: 100 % -> 90 -> 80 -> 90 %, the row shows "Music: 90 %" then "Music: 90 %": ok (page SetAudio, row "Music: 90 %")
+  [walk-gameplay] page SetGameplay, row 0 "AI difficulty: Easy": SETTINGS: GAMEPLAY  //  ▶  AI difficulty | <color=#ffd34d>‹</color>  Easy  <color=#ffd34d>›</color>  //       Buck's briefings |    On     //       Unlock all Tour stops |    On     //       Save playtest logs |    On     //       Open log folder |   //       Back |   //  How well the three rivals drive (never faster machines).
+  right / left on AI difficulty: Easy -> Normal -> Easy: ok (page SetGameplay, row "AI difficulty: Easy")
+  B, B -> main menu: ok (page Main, row "Settings")
+  Quit game -> Quit page, No selected: ok (page Quit, row "No, keep playing")
+MENU WALK PASS: 13 steps
+  choosing "Yes, quit" now; the process must end with exit code 0
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, AudioListener.volume 0

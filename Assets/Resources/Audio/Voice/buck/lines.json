@@ -2,6 +2,18 @@
  "speaker": "Buck Barlow",
  "lines": [
   {
+   "id": "brief_bt_1",
+   "text": "Welcome to the Lustre Brothers Circus! Mind the wagons, they've got right of way. They've always had right of way."
+  },
+  {
+   "id": "brief_bt_2",
+   "text": "Down the midway, round the ring, and out of the cannon. Don't worry. I asked about the cannon. They said it's mostly confetti."
+  },
+  {
+   "id": "brief_bt_3",
+   "text": "The top flap blew open this morning, so that's your way out of the tent. Lionel calls it a feature. I call it a draught."
+  },
+  {
    "id": "brief_cc_1",
    "text": "Ladies and gentlemen, opening night! Oh, no. We're not jumping over the Ferris wheel. That'd be irresponsible. We're going through it."
   },
@@ -42,8 +54,36 @@
    "text": "Chip wants a one-on-one over both coasters, all the way to the top hat. He's already booked a camera crew."
   },
   {
+   "id": "ch_c3_intro_1",
+   "text": "Vivi says the cannon is her stage. From the big top's door to the top flap, one on one. She's already practising her bow."
+  },
+  {
    "id": "ch_reward_1",
    "text": "Now that's a show! Head to the Garage, partner. I had them mix you a new paint, on the house."
+  },
+  {
+   "id": "res_bt_back_1",
+   "text": "Not this time, but the show's not over. Lionel's already resetting the ring. Shall we go again?"
+  },
+  {
+   "id": "res_bt_back_2",
+   "text": "The cannon takes a little getting used to. My first time, I landed in the popcorn stand. Very tasty."
+  },
+  {
+   "id": "res_bt_first_1",
+   "text": "First place under the big top! Lionel's ringing his bell. Through gritted teeth, but he's ringing it."
+  },
+  {
+   "id": "res_bt_first_2",
+   "text": "A winner! Wagons, the Globe, the cannon and the river. Somebody get that racer a top hat."
+  },
+  {
+   "id": "res_bt_podium_1",
+   "text": "On the podium! The elephants approve. One of them sneezed, and I'm taking that as a yes."
+  },
+  {
+   "id": "res_bt_podium_2",
+   "text": "Lovely racing! You came out of that cannon like a real pro. Better than me in eighty-seven."
   },
   {
    "id": "res_cc_back_1",
@@ -118,6 +158,14 @@
    "text": "On the podium! See? Gentle introductory outing. Nothing to worry about."
   },
   {
+   "id": "short_bt_1",
+   "text": "Midway, big top, cannon, river. Have a ball, partner!"
+  },
+  {
+   "id": "short_bt_2",
+   "text": "Mind the wagons and aim for the top flap!"
+  },
+  {
    "id": "short_cc_1",
    "text": "Opening night, folks! Through the wheel, not over it!"
   },
@@ -135,7 +183,7 @@
   },
   {
    "id": "tour_done_1",
-   "text": "Two stops, two shows, and a tour that's really happening. Thank you, partner. Now, about that volcano..."
+   "text": "Three stops, three shows, and a tour that's really happening. Thank you, partner. Now, about that volcano..."
   },
   {
    "id": "tour_s1_intro_1",
@@ -200,6 +248,38 @@
   {
    "id": "tour_s2_retry_2",
    "text": "Ride the coaster all the way and take the wheel's middle if you dare. You've got this."
+  },
+  {
+   "id": "tour_s3_intro_1",
+   "text": "The Lustre Brothers Circus. Lionel Lustre and I shared a bill back in eighty-seven. He had elephants. I had a bus."
+  },
+  {
+   "id": "tour_s3_intro_2",
+   "text": "He's sent a letter. Let me read it. Quote: Buck, old boy, I hear you've gone respectable. Prove you've still got it. Unquote."
+  },
+  {
+   "id": "tour_s3_intro_3",
+   "text": "So we race his circus! The midway, the Globe of Death, the ring, and the human cannonball, straight out of the top flap."
+  },
+  {
+   "id": "tour_s3_intro_4",
+   "text": "A top three finish, and I get to send Lionel a letter of my own. I've already written it. It's very short."
+  },
+  {
+   "id": "tour_s3_pass_1",
+   "text": "Ha! Did you see Lionel's face? I'm framing it. Well, I'm framing the photo. He wouldn't sit still."
+  },
+  {
+   "id": "tour_s3_pass_2",
+   "text": "He shook my hand, you know. Said we still have it. He said we. I'm choosing to hear it that way."
+  },
+  {
+   "id": "tour_s3_retry_1",
+   "text": "Not quite the top three. Lionel's being gracious. Very loudly gracious. Let's give him something to be quiet about."
+  },
+  {
+   "id": "tour_s3_retry_2",
+   "text": "Keep to the middle of the midway, the wagons keep to the sides. And trust the cannon. I mostly do."
   },
   {
    "id": "yarn_1",

@@ -222,7 +222,7 @@ namespace ShiftStorm
         // a giant dinosaur skeleton in the cave wall (Round 8b: 60 m long, 13 m tall, laid along the outside wall of a bend so the sub heads
         // straight at it and then runs along it): spine and tail following the wall, upright ribs, skull and jaw, legs; bone with a faint
         // glow so it reads in the dark water. It counts as a dinosaur on screen (DinoActor.Still, style "skeleton") for the visibility
-        // check and TeedOff Barker's skeleton line.
+        // check and Barnaby's skeleton line.
         static void Fossil(float prog, float side, string seg)
         {
             const float L = 60f, H = 13f; float y = Mathf.Lerp(CaveFloor, CaveRoof, .45f); var up = Vector3.up;

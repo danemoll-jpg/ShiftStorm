@@ -21,6 +21,9 @@ namespace ShiftStorm
                             blurb = "beat Rae from the Coral Vault up the waterfall to the landing", gates = 10, startAt = () => ParadisePlunge.Marks["hi2"] - 25 },
             new Challenge { stop = 1, course = 1, key = "c2", title = "Chip's Coaster Showdown", rival = "Chip \"Showtime\" Sterling", rivalShort = "Chip", paint = "Showtime Blue",
                             blurb = "stay ahead of Chip over both coasters to the top hat", gates = 4, startAt = () => CoasterCoast.Marks["G1"] + 5 },
+            // Round 15: Stop 3's challenge: Vivi, round the ring, out of the cannon, through the top flap
+            new Challenge { stop = 2, course = 2, key = "c3", title = "Vivi's Cannonball Run", rival = "Vivi", rivalShort = "Vivi", paint = "Vivi Violet",
+                            blurb = "beat Vivi round the ring, out of the cannon and through the top flap", gates = 5, startAt = () => BigTop.Marks["door"] + 5 },
         };
         public static Challenge Active;   // the challenge being played
         public static int Last = -1;      // the last one started (Restart replays it)
@@ -31,7 +34,13 @@ namespace ShiftStorm
             if (!Open(i)) return $"Challenge: {ch.title} ({course})   - locked: top {Tour.QualifyPlace} at Stop {ch.stop + 1} -";
             string st = Tour.ChallengeWon(i) ? $"WON (best by {Tour.ChallengeBest(i):0.0} s), {ch.paint} paint" : Tour.ChallengeTries(i) > 0 ? $"not won yet ({Tour.ChallengeTries(i)} tries)" : $"win: {ch.paint} paint";
             bool earned = Tour.Best(ch.stop) > 0 && Tour.Best(ch.stop) <= Tour.QualifyPlace;
-            return $"Challenge: {ch.title} ({course}): {ch.blurb}   {st}{(earned ? "" : "   (open: Unlock all Tour stops)")}";
+            return $"Challenge: {ch.title}   {st}";   // Round 15: shorter (the rows ran off the Deck's screen); the rest is the row's description
+        }
+        public static string Describe(int i)
+        {
+            var ch = All[i]; string course = Game.Instance ? Game.Instance.Courses[ch.course].courseName : "";
+            bool earned = Tour.Best(ch.stop) > 0 && Tour.Best(ch.stop) <= Tour.QualifyPlace;
+            return $"{course}: {ch.blurb}. One on one; a first win gives the {ch.paint} paint." + (Open(i) && !earned ? " Open now because of Settings > Unlock all Tour stops." : "");
         }
         public static string Note = "";   // the HUD's result line
     }
@@ -41,7 +50,7 @@ namespace ShiftStorm
     {
         public static readonly (string name, Color color, int challenge)[] All =
         {
-            ("Factory", VehicleDesigns.PlayerTint, -1), ("Rocket Red", new Color(.85f, .12f, .15f), 0), ("Showtime Blue", new Color(.15f, .4f, .95f), 1),
+            ("Factory", VehicleDesigns.PlayerTint, -1), ("Rocket Red", new Color(.85f, .12f, .15f), 0), ("Showtime Blue", new Color(.15f, .4f, .95f), 1), ("Vivi Violet", new Color(.62f, .25f, .9f), 2),
         };
         public static bool Unlocked(int i) => All[i].challenge < 0 || Tour.ChallengeWon(All[i].challenge);
         public static int Current => Unlocked(Mathf.Clamp(Settings.Paint, 0, All.Length - 1)) ? Mathf.Clamp(Settings.Paint, 0, All.Length - 1) : 0;

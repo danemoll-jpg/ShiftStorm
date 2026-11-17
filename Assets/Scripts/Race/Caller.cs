@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ShiftStorm
 {
-    // Round 7 item 5b: TeedOff Barker (Barnaby, Tee'd Off's carnival barker; "Barnaby" is only his folder / id) calls the race.
+    // Round 7 item 5b: Barnaby (Tee'd Off's carnival barker; Round 15: shown and spoken as "Barnaby" everywhere, "barker" is only his folder / ids) calls the race.
     // His clips: Resources/Audio/Voice/barker (new racing lines made with ElevenLabs in his Tee'd Off voice, Tools/Audio/caller_lines.py,
     // plus seven of his Tee'd Off clips that fit; lines.json has the words for the subtitles). One caller for everyone (split screen too),
     // through one non-spatial source at the Voices volume. Each call has a pool (the clip id's prefix), a cooldown per pool and a gap
@@ -20,7 +20,7 @@ namespace ShiftStorm
     public sealed class Caller : MonoBehaviour
     {
         public static Caller Instance { get; private set; }
-        public const string Name = "TeedOff Barker";
+        public const string Name = "Barnaby";
         AudioSource voice; readonly Dictionary<string, List<AudioClip>> pools = new Dictionary<string, List<AudioClip>>();
         readonly Dictionary<string, string> words = new Dictionary<string, string>();
         readonly Dictionary<string, float> poolNext = new Dictionary<string, float>(), clipLast = new Dictionary<string, float>();
@@ -34,7 +34,7 @@ namespace ShiftStorm
         public int Pools => pools.Count;
         public bool BarkerTalking => Time.time < busyUntil && voice && voice.isPlaying;
         public bool Talking => BarkerTalking || (Buck.Instance && Buck.Instance.Busy);   // Round 11: the drivers wait for Buck too
-        // Round 11: after Buck's briefing, Barker's start line (held back while Buck talked)
+        // Round 11: after Buck's briefing, Barnaby's start line (held back while Buck talked)
         public void Quiet() { if (voice) voice.Stop(); busyUntil = Time.time; SubtitleUntil = 0; }   // Round 11: Buck starts a briefing / scene
         public void AfterBriefing(ShiftVehicle p) { if (p && p.Course && p.Course.timeTrial) Call(game.Race && game.Race.Active ? "start" : "trial", p, true); }
         public AudioSource Voice => voice;
@@ -64,17 +64,43 @@ namespace ShiftStorm
             ["cccoaster"] = (40, 1), ["ccgap"] = (40, 1), ["cccork"] = (40, 1), ["cctophat"] = (40, 2), ["ccwheel"] = (60, 1), ["cchelter"] = (60, 1),
             ["ccfireworks"] = (60, 1), ["ccballoon"] = (60, 1), ["ccflume"] = (60, 1), ["cclighthouse"] = (60, 1), ["ccpier"] = (60, 1), ["cccarousel"] = (60, 1),
             ["ccoctopus"] = (60, 1), ["ccwhale"] = (60, 1), ["ccpool"] = (60, 1),
+            // Round 15: Big Top Breakdown's own pools
+            ["btstart"] = (30, 2), ["btfill"] = (7, 0), ["btwings"] = (25, 2), ["btsplash"] = (20, 1), ["btres"] = (60, 2), ["btjump"] = (40, 1),
+            ["btglobe"] = (60, 1), ["btcannon"] = (60, 2), ["btwagons"] = (60, 1), ["btstrongman"] = (60, 1), ["bttightrope"] = (60, 1), ["btclowns"] = (60, 1),
+            ["bttent"] = (60, 1), ["bttrapeze"] = (60, 1), ["btelephants"] = (60, 1), ["btsteamer"] = (60, 1), ["btseals"] = (60, 1), ["btrapids"] = (60, 1),
+            ["bttank"] = (60, 1), ["btsunken"] = (60, 1), ["btpool"] = (60, 1),
         };
         // Round 10: Coaster Coast's landmarks (places on its lap) and its set-pieces (said only while big on screen, SetPiece)
         static readonly (string pool, string mark, float at)[] CoasterLandmarks =
         {
             ("cchelter", "helter", -160), ("ccflume", "splash", -30), ("cclighthouse", "sea1", -20), ("ccpier", "portal", -50), ("ccpool", "G8", -25),
         };
-        static readonly string[] SetPiecePools = { "ccwheel", "ccballoon", "ccfireworks", "ccwhale", "ccoctopus", "cccarousel" };
-        bool Coaster(ShiftVehicle who) { var c = who ? who.Course : game && game.Player ? game.Player.Course : null; return c && c.look == "coaster"; }
+        // Round 15: Big Top Breakdown's landmarks
+        static readonly (string pool, string mark, float at)[] BigTopLandmarks =
+        {
+            ("bttent", "door", -90), ("btrapids", "islandN", -60), ("btpool", "G8", -25),
+        };
+        static readonly string[] SetPiecePools = { "ccwheel", "ccballoon", "ccfireworks", "ccwhale", "ccoctopus", "cccarousel",
+            "btwagons", "btstrongman", "bttightrope", "btclowns", "btglobe", "btcannon", "bttrapeze", "btelephants", "btsteamer", "btseals", "bttank", "btsunken" };
+        string Look(ShiftVehicle who) { var c = who ? who.Course : game && game.Player ? game.Player.Course : null; return c ? c.look : ""; }
+        bool Coaster(ShiftVehicle who) => Look(who) == "coaster";
+        bool BigTopCourse(ShiftVehicle who) => Look(who) == "bigtop";
         // the Paradise Plunge pools that name the jungle, the lake or the dinosaurs, swapped on Coaster Coast for its own
         string ForCourse(string pool, ShiftVehicle who)
         {
+            if (BigTopCourse(who))   // Round 15: no jungle, lake, dinosaur or Coaster Coast line on Big Top Breakdown
+            {
+                switch (pool)
+                {
+                    case "results": return pools.ContainsKey("btres") ? "btres" : pool;
+                    case "start": return pools.ContainsKey("btstart") ? "btstart" : pool;
+                    case "fill": return pools.ContainsKey("btfill") ? "btfill" : "";
+                    case "wings": return pools.ContainsKey("btwings") ? "btwings" : pool;
+                    case "splash": return pools.ContainsKey("btsplash") ? "btsplash" : pool;
+                    case "creek": case "cliff": case "canyon": return "";
+                }
+                return pool.StartsWith("cc") ? "" : pool;
+            }
             bool cc = Coaster(who);
             if (pool == "results") return cc ? (pools.ContainsKey("ccres") ? "ccres" : pool) : (pools.ContainsKey("ppres") && Random.value < .6f ? "ppres" : pool);
             if (!cc) return pool;
@@ -176,14 +202,15 @@ namespace ShiftStorm
                     string which = ""; float best = 1e9f;
                     if (v.Course && v.Course.stunts != null) foreach (var j in v.Course.stunts.Jumps) { float d = v.Progress - j.lip; if (d > 0 && d < best) { best = d; which = j.name; } }
                     if (which == "Coaster Gap" && Call("ccgap", v)) break;
+                    if (which == "Clown Jump" && Call("btjump", v)) break;
                     if (which == "Creek Jump" && Call("creek", v)) break;
                     if (which == "Cliff Gap" && Call("cliff", v)) break;
                     if (v.LastAirTime > 1.3f) Call("jump", v);
                     break;
                 case "wings": stayPending = false; Call("wings", v); break;
                 // Round 10: the coaster rails (Coaster Coast)
-                case "railin": if (v.Rail && v.Rail.label.Contains("rail A")) Call("cccoaster", v); else if (v.Rail) Call("cccork", v); break;
-                case "railout": if (v.Mode == Mode.Drive && v.Progress > (v.Course && v.Course.marks != null && v.Course.marks.TryGetValue("crest", out var cr) ? cr - 20 : 1e9f)) Call("cctophat", v); break;
+                case "railin": if (v.Rail && v.Rail.label.Contains("Globe")) Call("btglobe", v); else if (v.Rail && v.Rail.label.Contains("cannon")) Call("btcannon", v); else if (v.Rail && v.Rail.label.Contains("rail A")) Call("cccoaster", v); else if (v.Rail) Call("cccork", v); break;
+                case "railout": if (Coaster(v) && v.Mode == Mode.Drive && v.Progress > (v.Course && v.Course.marks != null && v.Course.marks.TryGetValue("crest", out var cr) ? cr - 20 : 1e9f)) Call("cctophat", v); break;
             }
         }
 
@@ -283,7 +310,7 @@ namespace ShiftStorm
         void LandmarkPass(ShiftVehicle h)
         {
             if (!h.Course || h.Holding) return;
-            if (Coaster(h))
+            if (Coaster(h) || BigTopCourse(h))
             {
                 if (h == game.Player && game.Cam)
                 {
@@ -294,7 +321,7 @@ namespace ShiftStorm
                         if (SetPiece.BigOnScreen(pool, DinoHeld)) { marksDone.Add(key); pendingMark = pool; pendingUntil = Time.time + 4f; break; }
                     }
                 }
-                foreach (var lm in CoasterLandmarks)
+                foreach (var lm in Coaster(h) ? CoasterLandmarks : BigTopLandmarks)
                 {
                     if (h.Course.marks == null || !h.Course.marks.TryGetValue(lm.mark, out var cm)) continue;
                     float at = cm + lm.at; string key = (h == game.Player ? "1" : "2") + lm.pool;
@@ -368,7 +395,7 @@ namespace ShiftStorm
             var clip = fresh.OrderBy(c => clipLast.TryGetValue(c.name, out var l) ? l : -1000f).ThenBy(_ => Random.value).First();
             if (talking) voice.Stop();
             Driver.Hush();
-            voice.clip = clip; voice.Play(); SoundLog.Add("voice", "Barker " + clip.name);
+            voice.clip = clip; voice.Play(); SoundLog.Add("voice", "Barnaby " + clip.name);
             busyUntil = now + clip.length; busyPriority = pri; nextAny = busyUntil + AnyGap; poolNext[pool] = now + rule.Item1; clipLast[clip.name] = now; usedThisRace.Add(clip.name);
             if (nextFill > 0) nextFill = Mathf.Max(nextFill, busyUntil + Random.Range(5f, 8f));
             Subtitle = words.TryGetValue(clip.name, out var w) ? w : ""; SubtitleUntil = now + Mathf.Max(2f, clip.length + .6f);

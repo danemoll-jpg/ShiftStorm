@@ -16,7 +16,7 @@ namespace ShiftStorm
     public static class Tour
     {
         public sealed class Stop { public int course; public string title, key; }
-        public static readonly Stop[] Stops = { new Stop { course = 0, title = "The Trial", key = "s1" }, new Stop { course = 1, title = "Opening Night", key = "s2" } };
+        public static readonly Stop[] Stops = { new Stop { course = 0, title = "The Trial", key = "s1" }, new Stop { course = 1, title = "Opening Night", key = "s2" }, new Stop { course = 2, title = "The Big Top Dare", key = "s3" } };   // Round 15: Stop 3
         public const int QualifyPlace = 3;
         public static int PointsFor(int place) => place == 1 ? 10 : place == 2 ? 6 : place == 3 ? 4 : place == 4 ? 2 : 1;
 
@@ -98,8 +98,9 @@ namespace ShiftStorm
         {
             var s = Stops[stop]; string course = Game.Instance ? Game.Instance.Courses[s.course].courseName : "";
             if (stop + 1 > Unlocked) return $"Stop {stop + 1}: {s.title} ({course})   - locked: top {QualifyPlace} at Stop {stop} -";
-            return $"Stop {stop + 1}: {s.title} ({course})   " + (Best(stop) > 0 ? $"best {Race.Ordinal(Best(stop))}, {Points(stop)} pts" : "not raced yet") + (stop + 1 > Earned ? "   (open: Unlock all Tour stops)" : "");
+            return $"Stop {stop + 1}: {s.title} ({course})   " + (Best(stop) > 0 ? $"best {Race.Ordinal(Best(stop))}, {Points(stop)} pts" : "not raced yet");   // Round 15: shorter (the rows ran off the Deck's screen)
         }
+        public static string Describe(int stop) => $"Points so far: {Total} (1st 10, 2nd 6, 3rd 4, 4th 2; top {QualifyPlace} unlocks the next stop)." + (stop + 1 > Earned && stop + 1 <= Unlocked ? " Open now because of Settings > Unlock all Tour stops." : "");
     }
 
     // plays a stop: scene -> race -> reaction (Game.PlayTour)
@@ -120,7 +121,7 @@ namespace ShiftStorm
             Tour.ActiveStop = stop; Tour.Running = true; Tour.Note = "";
             Lineup.Apply(game);
             bool talk = buck && Buck.Enabled;
-            if (scene && talk) buck.Hold();   // Barker waits for the scene
+            if (scene && talk) buck.Hold();   // Barnaby waits for the scene
             game.StartTourCourse(st.course);
             if (scene && talk)
             {
@@ -142,7 +143,7 @@ namespace ShiftStorm
             Step($"finished {Race.Ordinal(place)}: {Tour.LastPoints} points, passed {Tour.LastPassed}, unlocked {Tour.Earned} (playable {Tour.Unlocked})");
             if (talk)
             {
-                // after Barker's results line, when nobody is talking (as Buck's results remark)
+                // after Barnaby's results line, when nobody is talking (as Buck's results remark)
                 float t0 = Time.realtimeSinceStartup;
                 while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "podium" || l.pool == "last"))) yield return null;
                 float t1 = Time.realtimeSinceStartup;

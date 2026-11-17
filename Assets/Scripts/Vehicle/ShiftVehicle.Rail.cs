@@ -8,7 +8,7 @@ namespace ShiftStorm
     // the section's minimum speed. At the end it leaves with its speed along the track's last direction (a jump, a launch into flight).
     public sealed partial class ShiftVehicle
     {
-        CoasterRail rail; float railS, railV, railLat, railEnterSpeed;
+        CoasterRail rail; float railS, railV, railLat, railUp, railEnterSpeed;
         public bool OnRail => rail != null;
         public CoasterRail Rail => rail;
         public float RailS => railS;
@@ -21,6 +21,9 @@ namespace ShiftStorm
                 if (r.Count > 1 && r.Entered(prev, p, out float lat) && Vector3.Dot(Body.linearVelocity, r.F0) > 0)
                 {
                     rail = r; railS = 0; railV = Mathf.Max(r.MinSpeedAt(0), Vector3.Dot(Body.linearVelocity, r.F0)); railLat = lat; railEnterSpeed = railV; RailMinSpeed = railV;
+                    // Round 15: a car still in the air at the entry (Big Top's Clown Jump lands near the Globe; Coaster Coast's flight before
+                    // the station) is eased down onto the track instead of snapped there in one step (a 6 m pop, 411 m/s for a frame)
+                    { r.Sample(0, out var p0, out _, out var n0); railUp = Mathf.Max(0, Vector3.Dot(Body.position - p0, n0)); }
                     Body.useGravity = false; Drifting = false; GroundedWheels = 4;
                     Note("rail", $"onto the {r.label} at {railV:0} m/s ({lat:0.0} m across)"); Stunt?.Invoke("railin");
                     StepRail(dt); return true;
@@ -39,11 +42,11 @@ namespace ShiftStorm
             float min = r.MinSpeedAt(railS); if (railV < min) railV = Mathf.Min(min, railV + 30f * dt);   // the booster tyres
             railV = Mathf.Clamp(railV, 4f, r.maxSpeed);   // never stops or rolls back on the track
             RailMinSpeed = Mathf.Min(RailMinSpeed, railV);
-            railLat = Mathf.MoveTowards(railLat, 0, 4f * dt);
+            railLat = Mathf.MoveTowards(railLat, 0, 4f * dt); railUp = Mathf.MoveTowards(railUp, 0, 20f * dt);
             railS += railV * dt;
             if (railS >= r.Length) { ExitRail(); return; }
             r.Sample(railS, out var at, out var t2, out var n2);
-            at += Vector3.Cross(n2, t2).normalized * railLat;
+            at += Vector3.Cross(n2, t2).normalized * railLat + n2 * railUp;
             Body.linearVelocity = (at - Body.position) / dt; Body.angularVelocity = Vector3.zero;
             Body.MoveRotation(Quaternion.LookRotation(t2, n2));
             GroundedWheels = 4;

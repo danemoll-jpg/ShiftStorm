@@ -1,4 +1,4 @@
-"""Round 8 item 2: voice loudness. Measured: TeedOff Barker's ElevenLabs lines from Round 7 came out at about -43 LUFS (his Tee'd Off
+"""Round 8 item 2: voice loudness. Measured: Barnaby's ElevenLabs lines from Round 7 came out at about -43 LUFS (his Tee'd Off
 clips and the music are at -15 / -16 LUFS), so in a race they were ~28 dB under everything: Dan's "can't hear most of Barnaby's lines".
 
 Every voice clip in Assets/Resources/Audio/Voice/<who>/*.ogg is measured (ffmpeg ebur128: integrated loudness, true peak) and, when it is

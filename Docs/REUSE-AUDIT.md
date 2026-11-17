@@ -317,3 +317,6 @@ Docs/SOUNDS.md lists every sound and where it is used.
   four stands; Tee'd Off's toon shaders and the Round 7 loop's rail maths (`LoopRail.Pos`) for the coaster rails (`World/CoasterRail.cs`,
   `Vehicle/ShiftVehicle.Rail.cs`); `Tools/Music/make_loops.py` (Round 7 copy) for Dan's `race_coaster` song.
 - **Removed:** Tee'd Off's Jurassic Par music (`course_jurassic*.ogg`, the Round 7 fallback): no Tee'd Off music is in the game any more.
+
+## Round 15 (2026-11-16)
+Nothing new copied from chastain_rush. Big Top Breakdown reuses this project's own Coaster Coast code (`CoasterCoast.RailPath`, now shared, with a new `Ramp` piece; the grandstand, label and shortcut helpers were duplicated into `World/BigTop*.cs`). `Tools/Music/make_loops.py` (from Tee'd Off, Round 7) got the `race_bigtop` track.

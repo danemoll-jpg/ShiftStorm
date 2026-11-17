@@ -53,17 +53,17 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
 - Dan's Suno files: drop them in `Art/Incoming/Music/` and run `python Tools/Music/make_loops.py` (copied from
   Tee'd Off) to make the intro + seamless loop in `Assets/Resources/Audio/Music/`.
 
-## The race caller: TeedOff Barker (`Race/Caller.cs`, **Voices** volume)
-- 39 new lines made with ElevenLabs in his own Tee'd Off voice ("TeedOff Barker", voice id from Tee'd Off's
+## The race caller: Barnaby (`Race/Caller.cs`, **Voices** volume)
+- 39 new lines made with ElevenLabs in his own Tee'd Off voice ("TeedOff Barker" (the ElevenLabs voice's own name), voice id from Tee'd Off's
   `Tools/Audio/voices.json`, model eleven_v3): `Tools/Audio/caller_lines.py`, 949 credits.
 - 7 of his Tee'd Off clips reused: `winner_1`, `winner_3`, `winner_5`, `finale_1` (the winner), `great_2` (a big jump),
   `ohno_1` (a near miss), `ohno_3` (the results when you didn't win).
-- Words: `Assets/Resources/Audio/Voice/barker/lines.json` (subtitles on the HUD: "TeedOff Barker: ...").
+- Words: `Assets/Resources/Audio/Voice/barker/lines.json` (subtitles on the HUD: "Barnaby: ...").
 
 ## Round 8 (2026-11-14)
-- **Volumes:** Music, Voices (TeedOff Barker + the drivers), **Engines** (new: engines + wind, default 60 %), Effects. An older
+- **Volumes:** Music, Voices (Barnaby + the drivers), **Engines** (new: engines + wind, default 60 %), Effects. An older
   settings.json gets Engines = 60 % of its old Effects value (never more than 60 %). Music is 1.3x build 8's level (+2.3 dB).
-- **TeedOff Barker loud:** build 8's converter faded every new line out from its first sample (`afade=t=out:st=0`): his 39 ElevenLabs
+- **Barnaby loud:** build 8's converter faded every new line out from its first sample (`afade=t=out:st=0`): his 39 ElevenLabs
   lines were silent after 20 ms (-43 LUFS). All re-recorded (151 ElevenLabs lines now, 3,875 credits) + 7 Tee'd Off clips = 158;
   every voice clip levelled to -16 LUFS (`Tools/Audio/normalize_voice.py`). Under his lines the music and engines duck 8 dB (`Caller.Duck`).
 - **Drivers' mess-ups:** per driver 3 new ElevenLabs lines ("Noooo!", "Oh no!", one in character) + 5 of their Tee'd Off clips (140 credits).
@@ -86,7 +86,7 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   "ShiftStorm - Coaster Coast", looped by `Tools/Music/make_loops.py`: 145.6 bpm, an 86-bar loop after an 18.5 s intro, seam OK). A course
   whose song is missing plays ShiftStorm's `theme`. Tee'd Off's Jurassic Par (`course_jurassic`, the old fallback) is deleted.
 - **Ambience:** the jungle bed and the far dinosaur calls only on Paradise Plunge; the bubbles under water on both.
-- **TeedOff Barker:** 53 new lines (ElevenLabs, his voice, -16 LUFS; 1,676 credits): Coaster Coast's own start / opening-night (Docs/STORY.md:
+- **Barnaby:** 53 new lines (ElevenLabs, his voice, -16 LUFS; 1,676 credits): Coaster Coast's own start / opening-night (Docs/STORY.md:
   the tour's first public race), fill-ins, wings (through the Ferris wheel), splash, the coaster, the Coaster Gap, the corkscrew, the top hat,
   the helter-skelter, fireworks, the balloon, the flume, the lighthouse, the pier, the carousel, the octopus, the whale / dolphins, the splash
   pool, and a results line naming each course (`ccres_*`, `ppres_*`). On Coaster Coast the Paradise Plunge pools that name the jungle swap
@@ -98,9 +98,9 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   short briefings (2 each), results remarks by place per course (9 each), anecdotes (6), The Tour's scenes and reactions (17).
   Transcribed back with local speech-to-text: `Docs/Checks/round11/buck_lines.md` (52 of 53 at a 0.80+ word match; the 53rd is
   "all right" heard as "alright").
-- Never over anyone: while he talks Barker plays nothing (not even GO or the winner: `Caller.Play`), drivers wait (`Caller.Talking`), and
-  his briefing / scene starts by stopping Barker and any driver line (`Buck.Hold`). Music and engines duck under him as under Barker.
-- Barker: 4 new lines for Abi as an AI rival (passabi_1-2, byabi_1-2, his voice, 101 credits); overtakes and the winner's line now go
+- Never over anyone: while he talks Barnaby plays nothing (not even GO or the winner: `Caller.Play`), drivers wait (`Caller.Talking`), and
+  his briefing / scene starts by stopping Barnaby and any driver line (`Buck.Hold`). Music and engines duck under him as under Barnaby.
+- Barnaby: 4 new lines for Abi as an AI rival (passabi_1-2, byabi_1-2, his voice, 101 credits); overtakes and the winner's line now go
   by the racer's name (any driver can be player 1 or the AI).
 
 ## Round 14 (2026-11-16): the crowd's own volume, much quieter
@@ -112,3 +112,18 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   These no longer follow the Effects volume.
 - Music: the title screen and the main menu play the theme (`theme`); the other menu pages `menu`. Engines, wind and the jungle are
   silent behind the front menus (the race there is frozen). Left / right on a menu value plays the move click (a little higher).
+
+## Round 15 (2026-11-16): Barnaby by name, Big Top Breakdown
+- **Barnaby by name:** the race caller is "Barnaby" in his subtitles ("Barnaby: ..."), on his booth's board, in the results ("Race called
+  by Barnaby") and the Voices volume's description. None of his lines (or anyone else's) ever said "Barker" (the line texts and the
+  speech-to-text transcripts were searched), so nothing needed re-recording for the name. The clip folder stays `Voice/barker` (an id).
+- **Music:** Big Top Breakdown plays Dan's Suno song "ShiftStorm - Big Top Breakdown" as `race_bigtop` (+ `_intro`; 178.6 s,
+  74.7 bpm, loop 71.18-167.50 s, `Tools/Music/make_loops.py race_bigtop`, seam checks OK).
+- **Barnaby, 30 new lines** (`caller_lines.py` ROUND15, 861 credits): `bt*` pools: start (3), fill-ins (4), wings, splashdown,
+  results (2), the Clown Jump, the Globe of Death (2), the cannon (2) and one each for the wagon parade, the strongman, the tightrope
+  walker, the clowns, the big top, the trapeze, the elephants, the show boat, the sea lions, the rapids, the escape tank, the sunken
+  wagon and the splash pool (set-piece lines only while that thing is big on the screen, Round 8b's rule).
+- **Buck, 20 new lines + 1 re-recorded** (`buck_lines.py`, 1,053 credits): Big Top briefings (3 + 2 short), results remarks (6), The
+  Tour's Stop 3 scenes (4 intro, 2 pass, 2 retry; he reads Lionel Lustre's dare aloud until the ringmaster has a voice), Vivi's
+  challenge; `tour_done_1` now says "Three stops, three shows".
+- **Vivi, 3 lines** (`driver_lines.py` ROUND15, 98 credits): her Cannonball Run challenge (taunt, win, lose).

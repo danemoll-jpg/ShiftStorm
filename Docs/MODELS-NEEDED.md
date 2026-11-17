@@ -2,6 +2,60 @@
 
 Keep each round's list short; each item is Dan's time.
 
+## Round 15 — Big Top Breakdown: three models (image AI, then Tripo by hand) — stand-ins in the game now
+
+Big Top Breakdown (the third course, a travelling circus in bright daylight) is fully playable with stand-ins built from simple
+shapes. Three of them carry the course and read as placeholders: **the elephants** (spraying water over the river), **the sea
+lions** (balancing balls on rocks by the line) and **the ringmaster, Lionel Lustre** (the old show-business acquaintance who dares
+Buck; today only Buck reads his letter aloud). Nothing waits on them; make them when you have time. The clowns, strongman,
+tightrope walker, trapeze artists and escape artist stay simple stand-ins (small, fast, far) unless they look wrong to you.
+
+**What Code does with them:** clean up in Blender (size, origin at the feet / belly, facing +Z, LOD), replace the stand-ins (kept as
+the fallback); the animals are animated in code (no Mixamo: Mixamo rigs humanoids only); the ringmaster is rigged by you in Mixamo.
+
+### Shared for all three images
+Same art direction as Tee'd Off's characters and dinosaurs: cute stylized 3D cartoon, chunky friendly proportions, big readable
+shapes, flat hand-painted cel-shaded colours, smooth surfaces, original. **Full body, plain white background, even lighting, no
+shadows, no cropping, no props (except where a line says so), no ground, no text.** For Tripo multiview: the same pose from the
+side and from the back.
+
+### 1. Circus elephant — `Art/Incoming/BigTop/Elephant/Elephant.glb`
+- Prompt: *"Cartoon circus elephant for a family racing game, cute stylized 3D toon style: a big, round, friendly grey elephant with
+  huge floppy pink-lined ears, big gentle eyes, a happy smile, a long trunk curled up at the tip, short sturdy legs, a red and gold
+  circus saddle cloth with gold fringe on its back, a small red fez-style hat with a pink feather on its head, hand-painted
+  cel-shaded colours, smooth surfaces, full body, standing neutral pose with all four feet on the ground and the trunk raised,
+  side view (left side), plain white background, no props, no ground, no text."*
+- Design note: two of them stand on the river bank and spray water over the boats; seen at 30-80 m, so the ears, the raised trunk
+  and the red saddle cloth carry it. About 7 m tall (cartoon big).
+- Tripo: **Image to Model**, textured, **standard** (not detailed), **GLB**, about 15-20k faces.
+- Animations: none from Mixamo (code sways it and sprays from the trunk's tip).
+
+### 2. Sea lion with a ball — `Art/Incoming/BigTop/SeaLion/SeaLion.glb`
+- Prompt: *"Cartoon circus sea lion for a family racing game, cute stylized 3D toon style: a sleek dark grey-brown sea lion sitting
+  upright on its front flippers, head and nose pointing up, big shiny round eyes, whiskers, a cheeky smile, a small red bow tie,
+  hand-painted cel-shaded colours, smooth surfaces, full body, neutral pose, side view (left side), plain white background, no
+  ball, no props, no ground, no text."*
+- Design note: three of them sit on rocks beside the river line, each balancing a striped ball on its nose (the ball is the game's
+  own, spinning). About 4 m long (cartoon big).
+- Tripo: **Image to Model**, textured, **low-poly / standard**, **GLB**, about 10k faces.
+- Animations: none (code bobs the ball and the head).
+
+### 3. The ringmaster, Lionel Lustre — image `Art/Concepts/Characters/Lionel/Lionel.png`, model `Art/Incoming/Characters/Lionel/Lionel.fbx`
+- Prompt: *"Full-body character concept art of an original cartoon circus ringmaster, front view, standing in an A-pose with arms
+  straight and angled down away from the body, plain white background, even lighting, no shadows. A tall, thin, theatrical older
+  man in his sixties with a long pointed nose, a pencil-thin black mustache waxed into neat points, a sly showman's smile, silver
+  slicked-back hair, wearing a tall black top hat with a purple band, an immaculate scarlet tailcoat with gold buttons and gold
+  braid on the cuffs, a purple waistcoat, a white bow tie, white gloves, black trousers with a gold side stripe and polished black
+  riding boots. Vain, elegant, competitive, secretly fond of Buck. Cute stylized 3D cartoon style, head slightly large but normal
+  proportions, not chibi. Empty hands, no props."*
+- Design note: Buck's old rival from a shared bill in 1987 (Docs/STORY.md). Distinct from Buck (barrel-chested, red stunt jacket,
+  yellow scarf, handlebar mustache): Lionel is tall and thin, scarlet tailcoat and purple, pencil mustache. He appears on the HUD
+  card in The Tour's Stop 3 scene and could stand in the ring.
+- Tripo: **Image to Model**, textured, **standard**, **FBX** (for Mixamo), about 20k faces. Then Mixamo (Humanoid), download with
+  skin: **"Talking"** (his dare), **"Waving"** (greeting), **"Quick Formal Bow"** (when you win), **"Standing Clap"** (podium),
+  **"Angry"** (when Buck wins). Save the clips beside the model.
+- Voice (ElevenLabs Voice Design, for Dan): see `Docs/STORY.md` (Big Top Breakdown) for the prompt; name it "ShiftStorm Lionel".
+
 ## Round 11 — Buck "Big Finish" Barlow: pick one of three looks (image AI, then Tripo and Mixamo by hand)
 
 Buck is the tour's organiser (`Docs/STORY.md`): a barrel-chested older showman, a retired stunt performer, warm and unshakably

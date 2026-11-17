@@ -9,7 +9,7 @@ namespace ShiftStorm
     //   music  a song starting (race, menu, theme, results)       jingle  a short musical cue (none left: Tee'd Off's win jingle was one)
     //   crowd  cheers, applause, claps, "aww", "ooh"               splash  water            whoosh  air / change / boost whooshes
     //   impact wall hits, landings, scrapes                         mech    gear, canopy, wings, the boost kick, beeps, the horn, resets
-    //   chime  gate / ring chimes      voice  Barker and the drivers      ambience  far calls, dinosaurs      ui  menu clicks
+    //   chime  gate / ring chimes      voice  Barnaby and the drivers      ambience  far calls, dinosaurs      ui  menu clicks
     public static class SoundLog
     {
         public struct Entry { public float t; public string kind, what; }

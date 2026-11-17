@@ -1,0 +1,39 @@
+ShiftStorm check 'split', 2026-11-16 19:53, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+SPLIT: top / bottom, player 1 Abi (camera (x:0.00, y:0.50, width:1.00, height:0.50)), player 2 Rocket Rae (camera (x:0.00, y:0.00, width:1.00, height:0.50)), racers Abi, Rocket Rae, Chip "Showtime" Sterling, Vivi
+  quality while split: LOD bias 0.85 -> 0.51, shadow distance 95 -> 57 m, far clip 2000 -> 1150 m, Detail layer cull 650 -> 500 m, texture mip limit 0 -> 1
+SPLIT pause from player 2 PASS: menu open True, time scale 0, player 2's half shows "PAUSED"; moved in 0.5 s real time: P1 0.0 m, P2 0.0 m (pause frame included)
+  closed again from player 2's Menu: menu open False, time scale 1
+  Abi [P1]: 95.58 s, place 2, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Rocket Rae [P2]: 93.93 s, place 1, gates 11/11 (0 1 2 3 4 5 6 7 8 9 10) valid, resets 0
+  Chip "Showtime" Sterling: DNF, place 3, gates 8/11 (0 1 2 3 4 5 6 7) BAD SEQUENCE, resets 0
+  Vivi: DNF, place 4, gates 8/11 (0 1 2 3 4 5 6 7) BAD SEQUENCE, resets 0
+SPLIT race PASS: both players finished with valid gate sequences: P1 True True, P2 True True
+SPLIT HUDs PASS: 90 samples a second apart: player 1's HUD wrong 0x, player 2's 0x
+SPLIT results PASS: shown on player 1's half True, on player 2's True; both list [P1] and [P2]; P2's lap on its half: 1:33.93
+SPLIT pictures: 27 so far, player 2 changes pictured 7; sound: engine mix 0.7, P1 engine non-spatial, P2 engine non-spatial (0), listener on player 1's camera only (1 listener)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 11.64 ms, 95th pct 13.03 ms, 99th pct 325.01 ms, worst 538.30 ms over 7324 frames (153 over 16.7 ms); peak draw calls 0, batches 0, triangles 2208k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  The Midway          17.60 /  15.88 / 537.76 ms       0 draws    2208k tris
+  The Big Top          7.38 /   9.33 /  80.35 ms       0 draws    1527k tris
+  Human Cannonball    11.17 /  12.37 / 538.30 ms       0 draws    1298k tris
+  The River           22.59 /  19.00 / 481.04 ms       0 draws    1378k tris
+  Sunken Circus        6.94 /  10.03 / 409.37 ms       0 draws    1467k tris
+  Ring Return         19.24 /  15.52 / 485.08 ms       0 draws    1444k tris
+  (both views rendered every frame: the cost of a split-screen frame at 1280 x 800 on this PC)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.18  FOV 89.8  particles 80  speed 102 % of top
+  Fly   pitch 2.31  wind 0.19  FOV 90.0  particles 104  speed 101 % of top
+  Boat  pitch 2.02  wind 0.17  FOV 90.0  particles 149  speed 102 % of top
+  Dive  pitch 1.50  wind 0.04  FOV 90.0  particles 116  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 12.47 ms, 95th pct 16.38 ms, 99th pct 50.07 ms, worst 543.35 ms over 8784 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  split        Drive->Fly  z   960.0  0.608 s  frames worst 11.24 / mean 8.56 ms
+  split        Fly->Boat   z   819.1  0.606 s  frames worst 18.08 / mean 12.92 ms
+  split        Boat->Dive  z  -229.0  0.604 s  frames worst 392.83 / mean 24.47 ms
+  split        Dive->Boat  z  -473.6  0.601 s  frames worst 28.63 / mean 10.58 ms
+  split        Boat->Drive z  -371.0  0.777 s  frames worst 431.75 / mean 25.70 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 1, Abi lines: waterfall: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

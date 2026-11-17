@@ -1,5 +1,5 @@
 {
- "speaker": "TeedOff Barker",
+ "speaker": "Barnaby",
  "lines": [
   {
    "id": "arch_1",
@@ -36,6 +36,126 @@
   {
    "id": "bronto_2",
    "text": "Mind the long necks, folks! They have the right of way!"
+  },
+  {
+   "id": "btcannon_1",
+   "text": "Ready... aim... BOOM! Human cannonball, folks!"
+  },
+  {
+   "id": "btcannon_2",
+   "text": "Fired out of the cannon! Through the hoops, out the top!"
+  },
+  {
+   "id": "btclowns_1",
+   "text": "Clowns everywhere! How many fit in that little car?"
+  },
+  {
+   "id": "btelephants_1",
+   "text": "The elephants are giving everyone a shower!"
+  },
+  {
+   "id": "btfill_1",
+   "text": "What a show, folks! And nobody's even juggled yet!"
+  },
+  {
+   "id": "btfill_2",
+   "text": "Somebody tell the popcorn man to duck!"
+  },
+  {
+   "id": "btfill_3",
+   "text": "The greatest race under the sun! The tent's around here somewhere!"
+  },
+  {
+   "id": "btfill_4",
+   "text": "Hold on to your candy floss, folks, it's getting breezy!"
+  },
+  {
+   "id": "btglobe_1",
+   "text": "Into the Globe of Death! Round and round and out the other side!"
+  },
+  {
+   "id": "btglobe_2",
+   "text": "The Globe of Death, folks! Don't try this at home. Or anywhere!"
+  },
+  {
+   "id": "btjump_1",
+   "text": "Over the clown cars! Honk honk, folks!"
+  },
+  {
+   "id": "btpool_1",
+   "text": "Up out of the water and back to the midway! Here comes the finish!"
+  },
+  {
+   "id": "btrapids_1",
+   "text": "Ooh, through the rapids! Hold on to your hat!"
+  },
+  {
+   "id": "btres_1",
+   "text": "And that's the show, folks! Give the racers a big top round of applause!"
+  },
+  {
+   "id": "btres_2",
+   "text": "What a performance! Take a bow, every one of you!"
+  },
+  {
+   "id": "btseals_1",
+   "text": "Sea lions balancing balls! Now that's talent!"
+  },
+  {
+   "id": "btsplash_1",
+   "text": "Splashdown! The elephants are jealous!"
+  },
+  {
+   "id": "btstart_1",
+   "text": "Ladies and gentlemen, children of all ages! Welcome to the Big Top Breakdown!"
+  },
+  {
+   "id": "btstart_2",
+   "text": "Roll up, roll up! Four racers, one circus, and a cannon with their names on it!"
+  },
+  {
+   "id": "btstart_3",
+   "text": "The Lustre Brothers Circus, folks! Mind the wagons, mind the clowns, and mind the elephants!"
+  },
+  {
+   "id": "btsteamer_1",
+   "text": "There's the showboat, folks! Toot toot!"
+  },
+  {
+   "id": "btstrongman_1",
+   "text": "Look at the strongman, folks! He's holding up the whole midway!"
+  },
+  {
+   "id": "btsunken_1",
+   "text": "Through the sunken circus wagon! Mind the clowns' old shoes!"
+  },
+  {
+   "id": "bttank_1",
+   "text": "The escape artist's tank! Is he still in there?"
+  },
+  {
+   "id": "bttent_1",
+   "text": "Into the big top, folks! Once round the ring and into the cannon!"
+  },
+  {
+   "id": "bttightrope_1",
+   "text": "Up on the tightrope! Don't look down, sweetheart!"
+  },
+  {
+   "id": "bttrapeze_1",
+   "text": "The flying trapeze! They make it look so easy!"
+  },
+  {
+   "id": "btwagons_1",
+   "text": "Mind the wagon parade! They've got right of way!"
+  },
+  {
+   "id": "btwings_1",
+   "text": "Wings out at the Clown Jump! Right over the Globe of Death!"
+  },
+  {
+   "id": "btwings_2",
+   "text": "Look, no loop! Flying the long way round, folks!"
   },
   {
    "id": "byabi_1",

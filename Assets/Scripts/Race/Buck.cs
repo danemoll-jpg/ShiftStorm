@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace ShiftStorm
 {
-    // Round 11 item 2: Buck "Big Finish" Barlow, the tour's organiser (Docs/STORY.md). TeedOff Barker calls the races; Buck talks before
+    // Round 11 item 2: Buck "Big Finish" Barlow, the tour's organiser (Docs/STORY.md). Barnaby calls the races; Buck talks before
     // and after them and in The Tour's scenes; they never talk over each other.
     //   Briefing: before a course's first race or time trial of the session (Settings "Buck's briefings": On = a briefing, sometimes an
     //   anecdote after it; Short = one sentence; Off), a card at the bottom of the screen (a placeholder portrait until his model exists,
-    //   his name, subtitles) with his voice; the game waits (time stopped) until he is done or A / Enter skips him; then Barker's start
+    //   his name, subtitles) with his voice; the game waits (time stopped) until he is done or A / Enter skips him; then Barnaby's start
     //   line and the countdown.
-    //   Results remark: after Barker's results line, by the player's place (1st / 2nd-3rd / back), per course; not in a time trial, not
+    //   Results remark: after Barnaby's results line, by the player's place (1st / 2nd-3rd / back), per course; not in a time trial, not
     //   in The Tour (its own reactions).
     // Clips: Resources/Audio/Voice/buck/<id>.ogg + lines.json (Tools/Audio/buck_lines.py, ElevenLabs voice "ShiftStorm Buck").
-    // Split screen: one Buck for both players (the card on both halves). While he talks, Barker and the drivers wait (Caller.Talking).
+    // Split screen: one Buck for both players (the card on both halves). While he talks, Barnaby and the drivers wait (Caller.Talking).
     public sealed class Buck : MonoBehaviour
     {
         public static Buck Instance { get; private set; }
@@ -53,12 +53,12 @@ namespace ShiftStorm
             var fresh = all.Where(k => !used.Contains(k)).ToList(); if (fresh.Count == 0) { foreach (var k in all) used.Remove(k); fresh = all; }
             var id = fresh[Random.Range(0, fresh.Count)]; used.Add(id); return id;
         }
-        static string Key(int course) => course == 1 ? "cc" : "pp";
+        static string Key(int course) => course == 1 ? "cc" : course == 2 ? "bt" : "pp";
 
         // ---------------- the briefing ----------------
         public bool WantsBriefing(int course) => Enabled && Settings.BuckBriefings != 2 && !briefed.Contains(course) && clips.Count > 0;
-        // before the course starts: from now Barker waits (the start line comes after the briefing)
-        public void Hold() { CardOn = true; Subtitle = ""; Hint = "A / Enter: skip"; if (Caller.Instance) Caller.Instance.Quiet(); Driver.Hush(); }   // Barker and the drivers stop for him
+        // before the course starts: from now Barnaby waits (the start line comes after the briefing)
+        public void Hold() { CardOn = true; Subtitle = ""; Hint = "A / Enter: skip"; if (Caller.Instance) Caller.Instance.Quiet(); Driver.Hush(); }   // Barnaby and the drivers stop for him
         public void Briefing(int course) { briefed.Add(course); StopAllCoroutines(); StartCoroutine(Brief(course)); }
         public void ForgetBriefings() => briefed.Clear();   // checks: a new "session"
         IEnumerator Brief(int course)
@@ -107,7 +107,7 @@ namespace ShiftStorm
             var race = game.Race; if (!(race && race.Active && race.Racers.Contains(v))) yield break;   // races only (a time trial has no place)
             int run = ++remarkFor;
             float t0 = Time.realtimeSinceStartup;
-            // after Barker's results line (or 10 s), when nobody is talking
+            // after Barnaby's results line (or 10 s), when nobody is talking
             while (Time.realtimeSinceStartup - t0 < 10f && !(Caller.Instance && Caller.Instance.Lines.Any(l => l.pool == "results" || l.pool == "ppres" || l.pool == "ccres" || l.pool == "podium" || l.pool == "last"))) yield return null;
             float t1 = Time.realtimeSinceStartup;
             while (Time.realtimeSinceStartup - t1 < 8f && ((Caller.Instance && (Caller.Instance.BarkerTalking || (Caller.Instance.Voice && Caller.Instance.Voice.isPlaying))) || Time.time < Driver.AnySpeakingUntil)) yield return null;

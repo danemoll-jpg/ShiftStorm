@@ -209,7 +209,7 @@ namespace ShiftStorm
             }
             return 0;
         }
-        // the main camera: how long each one has been big on screen without a break (TeedOff Barker's dinosaur lines wait for it)
+        // the main camera: how long each one has been big on screen without a break (Barnaby's dinosaur lines wait for it)
         public float BigFor { get; private set; }
         public float ShareNow { get; private set; }
         static int trackedFrame = -1; static float trackedAt;

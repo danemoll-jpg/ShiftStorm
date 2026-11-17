@@ -1,0 +1,81 @@
+ShiftStorm check 'bigtop', 2026-11-16 19:45, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BT LAP: Big Top Breakdown, line 5539 m, 11 gates, 6 segments, 28 anchors, rails Globe of Death 134 m, cannon 43 m, shortcuts Clown flight 233 m, Island rapids 415 m
+BT LAP PASS: finished True in 95.13 s (target ~2 min), gates 11/11 in order True, resets 0, wall hits 1, wagon hits 1, changes 5: Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta   longest set-piece moment (>= 8 % of the screen's height)
+  1 The Midway          Driving            16.1 s    17 s    -0.9   4.3 s (Globe of Death)
+  2 The Big Top         Driving             9.6 s    10 s    -0.4   3.4 s (Hoops)
+  3 Human Cannonball    Flying             14.6 s    15 s    -0.4   1.5 s (Top flap)
+  4 The River           Boating            19.1 s    19 s    +0.1   3.0 s (Show boat)
+  5 Sunken Circus       Diving             28.3 s    29 s    -0.7   2.6 s (Sunken wagon)
+  6 Ring Return         Dive-boat-drive     7.4 s     8 s    -0.6   1.5 s (Splash arch)
+BT SET-PIECES PASS: 6 of 6 segments had a set-piece >= 8 % of the screen for >= 1 s
+  rails: [  14.75] off the Globe of Death at 75 m/s (on at 73, lowest 71) (lowest 54.6 m/s); [  25.72] off the cannon at 64 m/s (on at 47, lowest 47) (lowest 39.9 m/s)
+  top speed per form: Drive 76.2 m/s, Boat 59.3 m/s, Fly 93.0 m/s, Dive 44.0 m/s
+  log: [  68.00] gate G7 sunken wagon passed (8/11)
+  log: [  95.13] finish in 95.13 s, 0 resets
+  log: [  96.50] wall Circus wagon 10 as Drive at 5539 m: 11 deg, 71.4 -> 67.4 m/s (94 % kept)
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 8.11 ms, 95th pct 10.67 ms, 99th pct 34.89 ms, worst 2389.88 ms over 10178 frames (179 over 16.7 ms); peak draw calls 0, batches 0, triangles 907k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  The Midway          14.20 /  13.02 / 1624.64 ms       0 draws     844k tris
+  The Big Top         41.66 / 222.52 / 1149.62 ms       0 draws     887k tris
+  Human Cannonball     6.91 /   8.40 / 901.59 ms       0 draws     780k tris
+  The River            5.71 /   9.50 / 318.50 ms       0 draws     788k tris
+  Sunken Circus        5.98 /   9.25 / 2389.88 ms       0 draws     437k tris
+  Ring Return          5.25 /   8.02 /  29.45 ms       0 draws     907k tris
+  frames over 50 ms during the lap: 113
+BT RESULTS PASS: lap 95.13 s, 6 splits, best on file 94.83 s
+BT RAIL Globe of Death full (70 m/s) PASS: onto it at 13.3 m/s, rode it True, off its end True, lowest speed on it 13.3 m/s (booster minimum 30), then Drive at 1101 m (69 m/s), resets 0
+BT RAIL Globe of Death slow (30 m/s) PASS: onto it at 21.7 m/s, rode it True, off its end True, lowest speed on it 21.7 m/s (booster minimum 30), then Drive at 1014 m (30 m/s), resets 0
+BT RAIL Globe of Death very slow (8 m/s, coasting on it) PASS: onto it at 22.5 m/s, rode it True, off its end True, lowest speed on it 22.5 m/s (booster minimum 30), then Drive at 988 m (11 m/s), resets 0
+BT RAIL cannon full (70 m/s) PASS: onto it at 62.0 m/s, rode it True, off its end True, lowest speed on it 62.0 m/s (booster minimum 80), then Fly at 1734 m (90 m/s), resets 0
+BT RAIL cannon slow (30 m/s) PASS: onto it at 32.2 m/s, rode it True, off its end True, lowest speed on it 30.0 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAIL cannon very slow (8 m/s, coasting on it) PASS: onto it at 28.5 m/s, rode it True, off its end True, lowest speed on it 28.5 m/s (booster minimum 80), then Fly at 1699 m (84 m/s), resets 0
+BT RAILS PASS: the Globe of Death and the cannon at full / slow / very slow speed
+  BT clown jump car (through the Globe) run 1: 13.71 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 2: 13.67 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+  BT clown jump car (through the Globe) run 3: 13.68 s to G1, resets 0, wagon hits 0, wings used 0, shortcuts 
+BT CLOWN JUMP car PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 13.69 s (anchor -> G1)
+  BT clown jump fly (past the Globe) run 1: 11.85 s to G1, resets 0, wagon hits 0, wings used 1, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 2: 11.85 s to G1, resets 0, wagon hits 0, wings used 2, shortcuts Clown flight
+  BT clown jump fly (past the Globe) run 3: 11.85 s to G1, resets 0, wagon hits 0, wings used 3, shortcuts Clown flight
+BT CLOWN JUMP fly PASS: 3 of 3 clean, 0 stuck, 0 resets, 0 wagon hits, mean 11.85 s (anchor -> G1)
+  BT river main channel run 1: 28.28 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 2: 28.19 s to G7, resets 0, wall hits 0, shortcuts 
+  BT river main channel run 3: 28.26 s to G7, resets 0, wall hits 0, shortcuts 
+BT RIVER main channel PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 28.24 s (anchor -> G7)
+  BT river rapids run 1: 32.20 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 2: 32.65 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+  BT river rapids run 3: 32.38 s to G7, resets 0, wall hits 0, shortcuts Island rapids
+BT RIVER rapids PASS: 3 of 3 clean, 0 stuck, 0 resets, mean 32.41 s (anchor -> G7)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.02  wind 0.27  FOV 89.6  particles 80  speed 101 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 104  speed 101 % of top
+  Boat  pitch 2.03  wind 0.27  FOV 90.0  particles 144  speed 102 % of top
+  Dive  pitch 1.50  wind 0.20  FOV 90.0  particles 115  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 4.65 ms, 95th pct 9.37 ms, 99th pct 41.64 ms, worst 4837.65 ms over 96306 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  btlap        Drive->Fly  z   960.0  0.627 s  frames worst 905.30 / mean 66.94 ms
+  btlap        Fly->Boat   z   819.0  0.604 s  frames worst 25.43 / mean 7.48 ms
+  btlap        Boat->Dive  z  -229.2  0.604 s  frames worst 119.69 / mean 8.43 ms
+  btlap        Dive->Boat  z  -473.5  0.604 s  frames worst 13.21 / mean 6.75 ms
+  btlap        Boat->Drive z  -370.8  0.602 s  frames worst 14.71 / mean 7.35 ms
+  bt-cannon-full Drive->Fly  z   960.0  0.670 s  frames worst 69.53 / mean 3.83 ms
+  bt-cannon-slow Drive->Fly  z   960.0  0.813 s  frames worst 28.16 / mean 2.48 ms  OUT OF 0.5-0.8 s
+  bt-cannon-very-slow Drive->Fly  z   960.0  0.669 s  frames worst 52.53 / mean 3.16 ms
+  bt-clown-fly-1 Drive->Fly  z   642.6  0.601 s  frames worst 11.67 / mean 1.98 ms
+  bt-clown-fly-1 Fly->Drive  z   827.3  0.600 s  frames worst 747.21 / mean 5.26 ms
+  bt-clown-fly-2 Drive->Fly  z   642.6  0.601 s  frames worst 21.85 / mean 2.23 ms
+  bt-clown-fly-2 Fly->Drive  z   827.3  0.600 s  frames worst 36.83 / mean 2.68 ms
+  bt-clown-fly-3 Drive->Fly  z   642.6  0.601 s  frames worst 122.22 / mean 5.35 ms
+  bt-clown-fly-3 Fly->Drive  z   827.3  0.601 s  frames worst 199.40 / mean 10.05 ms
+  bt-river-main-1 Boat->Dive  z  -228.8  0.633 s  frames worst 1102.57 / mean 19.89 ms
+  bt-river-main-2 Boat->Dive  z  -228.7  0.643 s  frames worst 72.71 / mean 5.14 ms
+  bt-river-main-3 Boat->Dive  z  -228.4  0.622 s  frames worst 162.03 / mean 8.03 ms
+  bt-river-rapids-1 Boat->Dive  z  -228.6  0.845 s  frames worst 1274.73 / mean 14.46 ms  OUT OF 0.5-0.8 s
+  bt-river-rapids-2 Boat->Dive  z  -228.3  0.612 s  frames worst 52.02 / mean 3.44 ms
+  bt-river-rapids-3 Boat->Dive  z  -228.5  0.618 s  frames worst 83.45 / mean 5.02 ms
+sound: music race_bigtop playing (its own signal peak 0.000), splashes played 1, Abi lines: waterfall: laugh_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

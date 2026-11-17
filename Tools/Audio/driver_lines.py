@@ -51,10 +51,18 @@ ROUND13 = {
              "chwin_1": "[cheering] And THAT, folks, is how you ride a coaster!",
              "chlose_1": "[stunned] You beat me on my own coaster? That's going in YOUR highlight reel."},
 }
+# Round 15: Vivi's challenge on Big Top Breakdown (Vivi's Cannonball Run)
+ROUND15 = {
+    "vivi": {"chintro_1": "[dramatic] Darling, the cannon is my stage. Try not to get lost in my spotlight!",
+             "chwin_1": "[delighted] And the crowd goes wild! For me, darling. Obviously.",
+             "chlose_1": "[gasps] You stole my spotlight! [sighs] Fine. Take a bow, darling. A small one."},
+}
 REMOVED = {"abigail": ["trouble_1"], "rae": ["mishit_1", "trouble_2", "water_1"], "vivi": ["lose_1"]}
 for _who, _d in ROUND9.items():
     NEW.setdefault(_who, {}).update(_d)
 for _who, _d in ROUND13.items():
+    NEW.setdefault(_who, {}).update(_d)
+for _who, _d in ROUND15.items():
     NEW.setdefault(_who, {}).update(_d)
 WORDS_NEW = {who: {k: v.split("] ", 1)[-1] for k, v in d.items()} for who, d in NEW.items()}
 # their Tee'd Off clips that fit a race (copied as they are)

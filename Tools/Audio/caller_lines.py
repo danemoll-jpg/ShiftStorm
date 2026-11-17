@@ -1,4 +1,4 @@
-"""Round 7 item 5b: TeedOff Barker (Barnaby, Tee'd Off's carnival barker) calls the race.
+"""Round 7 item 5b: Barnaby (Barnaby, Tee'd Off's carnival barker) calls the race.
 
 His new racing lines, made with ElevenLabs in his own Tee'd Off voice ("TeedOff Barker", the voice Tee'd Off's
 Tools/Audio/voices.json uses for "barker" and "barnaby"; model eleven_v3 with [tags], as Tee'd Off's elevenlabs_voice.py).
@@ -257,6 +257,40 @@ ROUND13 = {
     "chlost_1": "[showman] Not this time! The rival holds on, but there's always a rematch, folks!",
 }
 LINES.update(ROUND13)
+# Round 15: Big Top Breakdown (Race/Caller.cs: bt* pools; the set-piece ones only while that thing is big on the screen)
+ROUND15 = {
+    "btstart_1": "[showman] Ladies and gentlemen, children of all ages! Welcome to the Big Top Breakdown!",
+    "btstart_2": "[excited] Roll up, roll up! Four racers, one circus, and a cannon with their names on it!",
+    "btstart_3": "[showman] The Lustre Brothers Circus, folks! Mind the wagons, mind the clowns, and mind the elephants!",
+    "btfill_1": "[showman] What a show, folks! And nobody's even juggled yet!",
+    "btfill_2": "[chuckles] Somebody tell the popcorn man to duck!",
+    "btfill_3": "[excited] The greatest race under the sun! The tent's around here somewhere!",
+    "btfill_4": "[showman] Hold on to your candy floss, folks, it's getting breezy!",
+    "btwings_1": "[showman] Wings out at the Clown Jump! Right over the Globe of Death!",
+    "btwings_2": "[excited] Look, no loop! Flying the long way round, folks!",
+    "btsplash_1": "[chuckles] Splashdown! The elephants are jealous!",
+    "btres_1": "[showman] And that's the show, folks! Give the racers a big top round of applause!",
+    "btres_2": "[delighted] What a performance! Take a bow, every one of you!",
+    "btjump_1": "[excited] Over the clown cars! Honk honk, folks!",
+    "btglobe_1": "[gasps] Into the Globe of Death! Round and round and out the other side!",
+    "btglobe_2": "[showman] The Globe of Death, folks! Don't try this at home. Or anywhere!",
+    "btcannon_1": "[shouting] Ready... aim... BOOM! Human cannonball, folks!",
+    "btcannon_2": "[excited] Fired out of the cannon! Through the hoops, out the top!",
+    "btwagons_1": "[showman] Mind the wagon parade! They've got right of way!",
+    "btstrongman_1": "[chuckles] Look at the strongman, folks! He's holding up the whole midway!",
+    "bttightrope_1": "[gasps] Up on the tightrope! Don't look down, sweetheart!",
+    "btclowns_1": "[laughs] Clowns everywhere! How many fit in that little car?",
+    "bttent_1": "[showman] Into the big top, folks! Once round the ring and into the cannon!",
+    "bttrapeze_1": "[excited] The flying trapeze! They make it look so easy!",
+    "btelephants_1": "[delighted] The elephants are giving everyone a shower!",
+    "btsteamer_1": "[showman] There's the showboat, folks! Toot toot!",
+    "btseals_1": "[chuckles] Sea lions balancing balls! Now that's talent!",
+    "btrapids_1": "[sly] Ooh, through the rapids! Hold on to your hat!",
+    "bttank_1": "[gasps] The escape artist's tank! Is he still in there?",
+    "btsunken_1": "[showman] Through the sunken circus wagon! Mind the clowns' old shoes!",
+    "btpool_1": "[excited] Up out of the water and back to the midway! Here comes the finish!",
+}
+LINES.update(ROUND15)
 # his Tee'd Off clips that fit a race (copied as they are): id here -> Tee'd Off file
 EXISTING = {
     "win_any_1": "winner_1", "win_any_2": "winner_3", "win_any_3": "winner_5", "win_any_4": "finale_1",
@@ -345,7 +379,7 @@ def main():
     words = {k: t.split("] ", 1)[-1] for k, t in LINES.items()}
     words.update(EXISTING_WORDS)
     with open(os.path.join(OUT, "lines.json"), "w", encoding="utf-8") as f:
-        json.dump({"speaker": "TeedOff Barker", "lines": [{"id": k, "text": v} for k, v in sorted(words.items())]}, f, indent=1)
+        json.dump({"speaker": "Barnaby", "lines": [{"id": k, "text": v} for k, v in sorted(words.items())]}, f, indent=1)
     print(f"done: {spent} credits; lines.json written")
 
 

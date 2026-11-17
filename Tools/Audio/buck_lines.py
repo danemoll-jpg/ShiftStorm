@@ -1,4 +1,4 @@
-"""Round 11 item 1: Buck "Big Finish" Barlow, the tour's organiser (Docs/STORY.md). TeedOff Barker calls the races; Buck talks
+"""Round 11 item 1: Buck "Big Finish" Barlow, the tour's organiser (Docs/STORY.md). Barnaby calls the races; Buck talks
 before and after them (briefings, results remarks) and in The Tour's scenes. They never talk over each other.
 
 His ElevenLabs voice is "ShiftStorm Buck" (Dan made it, 2026-11-15; voice design prompt in Docs/STORY.md); model eleven_v3 with
@@ -99,7 +99,29 @@ LINES = {
     "tour_s2_pass_2": "[proudly] Folks are already asking where we go next. [chuckles] I've got a few ideas. Most of them are probably fine.",
     "tour_s2_retry_1": "[kindly] Opening nights are tricky. The crowd's still here, the coaster's still running. Let's go again.",
     "tour_s2_retry_2": "[cheerfully] Ride the coaster all the way and take the wheel's middle if you dare. You've got this.",
-    "tour_done_1": "[warmly] Two stops, two shows, and a tour that's really happening. Thank you, partner. [pause] Now, about that volcano...",
+    "tour_done_1": "[warmly] Three stops, three shows, and a tour that's really happening. Thank you, partner. [pause] Now, about that volcano...",   # Round 15: was "Two stops" (re-recorded)
+    # ---- Round 15: Big Top Breakdown (Stop 3, The Big Top Dare). Lionel Lustre, ringmaster of the Lustre Brothers Circus, once shared a
+    # bill with Buck; he dares Buck to prove he still has it. Until the ringmaster has a voice, Buck reads his dare aloud. ----
+    "brief_bt_1": "[excited] Welcome to the Lustre Brothers Circus! Mind the wagons, they've got right of way. [pause] They've always had right of way.",
+    "brief_bt_2": "[proudly] Down the midway, round the ring, and out of the cannon. Don't worry. I asked about the cannon. [pause] They said it's mostly confetti.",
+    "brief_bt_3": "[chuckles] The top flap blew open this morning, so that's your way out of the tent. Lionel calls it a feature. I call it a draught.",
+    "short_bt_1": "[excited] Midway, big top, cannon, river. Have a ball, partner!",
+    "short_bt_2": "[cheerfully] Mind the wagons and aim for the top flap!",
+    "res_bt_first_1": "[delighted] First place under the big top! Lionel's ringing his bell. [chuckles] Through gritted teeth, but he's ringing it.",
+    "res_bt_first_2": "[proudly] A winner! Wagons, the Globe, the cannon and the river. Somebody get that racer a top hat.",
+    "res_bt_podium_1": "[warmly] On the podium! The elephants approve. One of them sneezed, and I'm taking that as a yes.",
+    "res_bt_podium_2": "[cheerfully] Lovely racing! You came out of that cannon like a real pro. Better than me in eighty-seven.",
+    "res_bt_back_1": "[kindly] Not this time, but the show's not over. Lionel's already resetting the ring. Shall we go again?",
+    "res_bt_back_2": "[chuckles] The cannon takes a little getting used to. My first time, I landed in the popcorn stand. Very tasty.",
+    "tour_s3_intro_1": "[nostalgic] The Lustre Brothers Circus. Lionel Lustre and I shared a bill back in eighty-seven. He had elephants. I had a bus.",
+    "tour_s3_intro_2": "[amused] He's sent a letter. Let me read it. Quote: Buck, old boy, I hear you've gone respectable. Prove you've still got it. Unquote.",
+    "tour_s3_intro_3": "[excited] So we race his circus! The midway, the Globe of Death, the ring, and the human cannonball, straight out of the top flap.",
+    "tour_s3_intro_4": "[warmly] A top three finish, and I get to send Lionel a letter of my own. [pause] I've already written it. It's very short.",
+    "tour_s3_pass_1": "[delighted] Ha! Did you see Lionel's face? I'm framing it. Well, I'm framing the photo. He wouldn't sit still.",
+    "tour_s3_pass_2": "[warmly] He shook my hand, you know. Said we still have it. [pause] He said we. I'm choosing to hear it that way.",
+    "tour_s3_retry_1": "[kindly] Not quite the top three. Lionel's being gracious. Very loudly gracious. Let's give him something to be quiet about.",
+    "tour_s3_retry_2": "[cheerfully] Keep to the middle of the midway, the wagons keep to the sides. And trust the cannon. I mostly do.",
+    "ch_c3_intro_1": "[amused] Vivi says the cannon is her stage. From the big top's door to the top flap, one on one. She's already practising her bow.",
     # ---- Round 13: rival challenges (one on one, after a stop is cleared) ----
     "ch_c1_intro_1": "[amused] Rae says nobody beats her from the Coral Vault up the waterfall. [chuckles] She says it a lot. Let's find out.",
     "ch_c2_intro_1": "[cheerfully] Chip wants a one-on-one over both coasters, all the way to the top hat. He's already booked a camera crew.",

@@ -111,7 +111,7 @@ namespace ShiftStorm
             Cam.gameObject.AddComponent<CameraViews>();   // Round 6: X / V cycles Chase, Far chase, First person, Front
             Cam.gameObject.AddComponent<MenuCam>();       // Round 14: the course flying by behind the front menus
             CourseAudio.Make(Cam.gameObject, Player);
-            Caller.Make(this).Watch(Player);   // Round 7: TeedOff Barker calls the race
+            Caller.Make(this).Watch(Player);   // Round 7: Barnaby calls the race
             Buck.Make(this).Watch(Player);   // Round 11: Buck briefs before a race and remarks after it
             TourRun = TourRunner.Make(this);   // Round 11: The Tour
             ChallengeRun = ChallengeRunner.Make(this);   // Round 13: rival challenges
@@ -157,7 +157,7 @@ namespace ShiftStorm
             InFront = false;
             CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex;
             var c = Courses[CourseIndex];
-            // Round 11: Buck's briefing before a course's first race / time trial of the session (Barker's start line waits for it)
+            // Round 11: Buck's briefing before a course's first race / time trial of the session (Barnaby's start line waits for it)
             brief = brief && Buck.Instance && Buck.Instance.WantsBriefing(CourseIndex) && c.timeTrial;
             if (brief) Buck.Instance.Hold();
             try { StartCourseInner(c, race); } finally { if (brief) Buck.Instance.Briefing(CourseIndex); }
@@ -336,7 +336,7 @@ namespace ShiftStorm
         // the front menus: the main menu, the race behind frozen and hidden
         public void OpenFrontMenu() { MenuOpen = true; InFront = true; Time.timeScale = 0; ShowPage(Page.Main); }
         public void ShowTitle() { MenuOpen = true; InFront = true; Time.timeScale = 0; Hush(); ShowPage(Page.Title); }
-        // Round 14: Quit to menu (the pause menu, the results): the race stops, Barker, Buck and the drivers stop, the main menu
+        // Round 14: Quit to menu (the pause menu, the results): the race stops, Barnaby, Buck and the drivers stop, the main menu
         public void QuitToMenu()
         {
             if (SplitScreen.Active) { CloseMenuForced(); EndSplit(false); }
@@ -439,7 +439,7 @@ namespace ShiftStorm
                 case Page.SetAudio:
                     void Vol(string label, string key, string desc) { int max = Settings.MaxVolume(key); Item(label, () => Settings.SetVolume(key, Settings.Volume(key) >= max ? 0 : Settings.Volume(key) + 1), desc, Pct(Settings.Volume(key) / 10f), d => Settings.SetVolume(key, Settings.Volume(key) + d), Settings.Volume(key) / (float)max); }
                     Vol("Music", "music", "Dan's songs: the races, the menus, the results.");
-                    Vol("Voices", "voice", "TeedOff Barker, Buck and the drivers.");
+                    Vol("Voices", "voice", "Barnaby, Buck and the drivers.");
                     Vol("Engines", "engine", "Every machine's engine and the wind.");
                     Vol("Effects", "sfx", "Changes, gates, boosts, splashes, the menus.");
                     Vol("Crowd", "crowd", "The grandstands: murmur, cheers, the roar at GO, the finish (up to 200 %).");
@@ -494,9 +494,9 @@ namespace ShiftStorm
                     break;
                 case Page.Tour:
                     // Round 11 item 3: the stops in order, best place and points; a locked stop says what unlocks it
-                    for (int k = 0; k < Tour.Stops.Length; k++) { int stop = k; Item(Tour.Row(stop), stop + 1 <= Tour.Unlocked ? () => ShowPick(PickFor.Tour, stop) : (Action)null, $"Points so far: {Tour.Total} (1st 10, 2nd 6, 3rd 4, 4th 2; top {Tour.QualifyPlace} unlocks the next stop)."); }
+                    for (int k = 0; k < Tour.Stops.Length; k++) { int stop = k; Item(Tour.Row(stop), stop + 1 <= Tour.Unlocked ? () => ShowPick(PickFor.Tour, stop) : (Action)null, Tour.Describe(stop)); }
                     // Round 13 item 4: a one-on-one rival challenge per cleared stop
-                    for (int k = 0; k < Challenge.All.Length; k++) { int ci = k; Item(Challenge.Row(ci), Challenge.Open(ci) ? () => { CloseMenuForced(); ChallengeRun.Play(ci); } : (Action)null, "One on one against a rival over part of the lap. A first win gives a Garage paint."); }
+                    for (int k = 0; k < Challenge.All.Length; k++) { int ci = k; Item(Challenge.Row(ci), Challenge.Open(ci) ? () => { CloseMenuForced(); ChallengeRun.Play(ci); } : (Action)null, Challenge.Describe(ci)); }
                     if (Challenge.Note != "") Info(Challenge.Note);
                     Item("Back", Back, "");
                     break;

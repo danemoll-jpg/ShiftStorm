@@ -64,7 +64,7 @@ namespace ShiftStorm
             // 0 .. 1 over the form's top speed, on to ~1.25 at the boost top speed: the pitch keeps climbing all the way
             else pitch = Mathf.Lerp(.7f, 2.0f, Mathf.Clamp01(frac)) * k + Mathf.Max(0, frac - 1) * 1.2f + (v.Boosting ? .12f : 0);
             float load = Mathf.Clamp01(.55f + .45f * v.Input.Throttle + (v.Boosting ? .2f : 0));
-            // Round 8 item 6: the engines (and the wind) have their own volume (Settings.Engines, default 60 %) and duck under TeedOff Barker
+            // Round 8 item 6: the engines (and the wind) have their own volume (Settings.Engines, default 60 %) and duck under Barnaby
             // Round 14: silent behind the front menus (the title, the main menu): the race there is frozen
             var gm = Game.Instance; bool front = gm && gm.MenuOpen && gm.InFront;
             float fx = front ? 0 : (spatial ? 1 : Mix) * Settings.Engines * Caller.Duck * (spatial ? 1.3f : 1f), step = (front ? Time.unscaledDeltaTime : Time.deltaTime) / .35f;

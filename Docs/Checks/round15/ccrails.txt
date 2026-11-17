@@ -1,0 +1,17 @@
+ShiftStorm check 'ccrails', 2026-11-16 18:19, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CC RAIL coaster (rail A) full (70 m/s) PASS: onto it at 1.8 m/s, rode it True, off its end True, lowest speed on it 1.8 m/s (booster minimum 40), after the Coaster Gap: Drive at 1859 m, resets 0
+CC RAIL coaster (rail A) slow (30 m/s) PASS: onto it at 31.0 m/s, rode it True, off its end True, lowest speed on it 31.0 m/s (booster minimum 40), after the Coaster Gap: Drive at 1809 m, resets 0
+CC RAIL coaster (rail A) very slow (8 m/s, coasting on the rail) PASS: onto it at 40.0 m/s, rode it True, off its end True, lowest speed on it 39.9 m/s (booster minimum 40), after the Coaster Gap: Drive at 1811 m, resets 0
+CC RAIL top hat (rail B) full (70 m/s) PASS: onto it at 56.9 m/s, rode it True, off its end True, lowest speed on it 56.9 m/s (booster minimum 28), after the top hat: Fly at 2623 m, resets 0
+CC RAIL top hat (rail B) slow (30 m/s) PASS: onto it at 23.6 m/s, rode it True, off its end True, lowest speed on it 23.6 m/s (booster minimum 28), after the top hat: Fly at 2589 m, resets 0
+CC RAIL top hat (rail B) very slow (8 m/s, coasting on the rail) PASS: onto it at 18.0 m/s, rode it True, off its end True, lowest speed on it 18.0 m/s (booster minimum 28), after the top hat: Fly at 2579 m, resets 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 4.58 ms, 95th pct 11.09 ms, 99th pct 35.10 ms, worst 3568.45 ms over 30196 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  rail-B-full  Drive->Fly  z   572.0  0.601 s  frames worst 39.73 / mean 3.42 ms
+  rail-B-slow  Drive->Fly  z   572.0  0.609 s  frames worst 100.65 / mean 7.46 ms
+  rail-B-very-slow Drive->Fly  z   572.0  0.601 s  frames worst 37.02 / mean 2.31 ms
+sound: music race_coaster playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: disaster_1
+Abi's clips: 6 loaded, one-shots played: Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

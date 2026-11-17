@@ -1,0 +1,93 @@
+ShiftStorm check 'round11', 2026-11-16 18:22, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+BUCK: 76 lines loaded (Resources/Audio/Voice/buck); briefings per course: Paradise Plunge 4 + 2 short, Coaster Coast 4 + 2 short; results remarks 9 / 9; anecdotes 6
+BUCK Paradise Plunge PASS: card at the start True; briefing brief_pp_3 (15.8 s), the game stopped meanwhile; then Barnaby's start; race finished 1st; Barnaby's results line True; Buck's remark res_pp_first_1 (results (1st)); frames with two voices at once: 0 of 26614 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+    13.42 briefing pp On: brief_pp_3
+    29.67 briefing done
+BUCK Coaster Coast PASS: card at the start True; briefing brief_cc_3 (14.8 s), the game stopped meanwhile; then Barnaby's ccstart; race finished 1st; Barnaby's results line True; Buck's remark res_cc_first_3 (results (1st)); frames with two voices at once: 0 of 45554 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+    29.67 briefing done
+    174.01 briefing cc On: brief_cc_3
+    189.26 briefing done
+BUCK Big Top Breakdown PASS: card at the start True; briefing brief_bt_1 (8.9 s), the game stopped meanwhile; then Barnaby's btstart; race finished 1st; Barnaby's results line True; Buck's remark res_bt_first_1 (results (1st)); frames with two voices at once: 0 of 47187 with a voice (Buck with anyone 0, Barnaby with a driver 0, two drivers 0)
+    189.26 briefing done
+    320.74 briefing bt On: brief_bt_1
+    330.09 briefing done
+BUCK SKIP PASS: talking when A was pressed True; card gone after 0.00 s, his voice stopped True, the game running again True, Barnaby's start line next True
+BUCK ONCE PASS: the same course started again in the session: briefing not repeated
+BUCK SETTING PASS: Short -> short_cc_2 (4.3 s); Off -> no card True
+BUCK PASS
+TOUR: fresh local/round15/save-round11\tour.json; stops 3, unlocked 1; points 1st 10 / 2nd 6 / 3rd 4 / 4th 2, top 3 unlocks the next
+TOUR stop 1 The Trial PASS: scene: stop 1 The Trial -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 2 (playable 3) -> reaction tour_s1_pass_1 + tour_s1_pass_2; unlocked 2, total 10 points; results line "THE TOUR - Stop 1 The Trial: 1st, 10 points  -  Stop 2 unlocked!"
+    Buck: tour_s1_intro_1 (tour stop 1 scene), tour_s1_intro_2 (tour stop 1 scene), tour_s1_intro_3 (tour stop 1 scene), tour_s1_intro_4 (tour stop 1 scene), tour_s1_pass_1 (tour stop 1 passed), tour_s1_pass_2 (tour stop 1 passed)
+TOUR stop 2 Opening Night PASS: scene: stop 2 Opening Night -> scene skipped -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s2_pass_1 + tour_s2_pass_2; unlocked 3, total 20 points; results line "THE TOUR - Stop 2 Opening Night: 1st, 10 points  -  Stop 3 unlocked!"
+    Buck: tour_s2_intro_1 (tour stop 2 scene), tour_s2_pass_1 (tour stop 2 passed), tour_s2_pass_2 (tour stop 2 passed)
+TOUR stop 3 The Big Top Dare PASS: scene: stop 3 The Big Top Dare -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 3) -> reaction tour_s3_pass_1 + tour_s3_pass_2 + tour_done_1; unlocked 3, total 30 points; results line "THE TOUR - Stop 3 The Big Top Dare: 1st, 10 points  -  Tour complete!"
+    Buck: tour_s3_intro_1 (tour stop 3 scene), tour_s3_intro_2 (tour stop 3 scene), tour_s3_intro_3 (tour stop 3 scene), tour_s3_intro_4 (tour stop 3 scene), tour_s3_pass_1 (tour stop 3 passed), tour_s3_pass_2 (tour stop 3 passed), tour_done_1 (tour stop 3 passed)
+TOUR RELOAD PASS: read back best 1st / 1st, 30 points, unlocked 3, done True; file: {   "version": 1,   "unlocked": 3,   "best": [     1,     1,     1   ],   "points": [     10,     10,     10   ],   "tries": [     1,     1,     1   ],   "done": true,   "cWon": [     false,     false,     false   ],   "cBest": [     0.0,     0.0,     0.0   ],   "cTries": [     0,     0,     0   ] }
+TOUR RETRY PASS: finished 4th (throttle 50 %): best kept 1st, points kept 10, unlocked 3, tries 2; Buck: tour_s1_intro_1, tour_s1_retry_2; results line "THE TOUR - Stop 1 The Trial: 4th, 2 points (best 1st)  -  top 3 to go on: Race again to retry"
+TOUR RACE AGAIN PASS: stop 1 started again, steps race
+TOUR PASS
+RACERS: drivers Abi, Rocket Rae, Chip "Showtime" Sterling, Vivi; machines Grand Prix, Hot Rod, Jetstream, Scrambler
+  Abi                        in Grand Prix : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Hot Rod    : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Jetstream  : seated True (Abigail, scale 0.69), mechanism wheel, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Abi                        in Scrambler  : seated True (Abigail, scale 0.97), mechanism grips, hands 0 / 0 cm off the grips, AI Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Grand Prix : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Hot Rod    : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Jetstream  : seated True (Rae, scale 0.52), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Rocket Rae                 in Scrambler  : seated True (Rae, scale 0.73), mechanism grips, hands 8 / 8 cm off the grips, AI Abi (Jetstream), Chip "Showtime" Sterling (Scrambler), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Grand Prix : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Hot Rod    : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Jetstream  : seated True (Chip, scale 0.68), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Chip "Showtime" Sterling   in Scrambler  : seated True (Chip, scale 0.96), mechanism grips, hands 2 / 2 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Vivi (Hot Rod) ok, drove off True  PASS
+  Vivi                       in Grand Prix : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Hot Rod    : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Jetstream  : seated True (Vivi, scale 0.74), mechanism wheel, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+  Vivi                       in Scrambler  : seated True (Vivi, scale 1.04), mechanism grips, hands 0 / 0 cm off the grips, AI Abi (Jetstream), Rocket Rae (Grand Prix), Chip "Showtime" Sterling (Scrambler) ok, drove off True  PASS
+RACERS PASS: 16 of 16 driver x machine combinations
+RACERS SPLIT PASS: P1 Chip "Showtime" Sterling in Hot Rod, P2 Abi (Abigail) in Scrambler; AI Rocket Rae in Grand Prix, Vivi in Hot Rod
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.20 ms, 95th pct 4.25 ms, 99th pct 7.04 ms, worst 1718.06 ms over 394021 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  buck-pp      Drive->Fly  z   945.2  0.602 s  frames worst 22.70 / mean 3.92 ms
+  buck-pp      Fly->Boat   z  -607.1  0.602 s  frames worst 1622.35 / mean 18.25 ms
+  buck-pp      Boat->Dive  z  -201.7  0.601 s  frames worst 12.92 / mean 3.74 ms
+  buck-pp      Dive->Boat  z  -466.8  0.603 s  frames worst 16.00 / mean 3.77 ms
+  buck-pp      Boat->Drive z  -304.9  0.604 s  frames worst 101.72 / mean 4.82 ms
+  buck-cc      Drive->Fly  z   230.2  0.601 s  frames worst 11.49 / mean 2.72 ms
+  buck-cc      Fly->Drive  z   703.1  0.600 s  frames worst 6.83 / mean 2.00 ms
+  buck-cc      Drive->Fly  z   572.0  0.613 s  frames worst 64.88 / mean 7.01 ms
+  buck-cc      Fly->Boat   z   908.2  0.602 s  frames worst 10.29 / mean 2.36 ms
+  buck-cc      Boat->Dive  z  -366.8  0.602 s  frames worst 6.35 / mean 1.93 ms
+  buck-cc      Dive->Boat  z  -473.4  0.603 s  frames worst 32.70 / mean 3.89 ms
+  buck-cc      Boat->Drive z  -370.1  0.601 s  frames worst 17.09 / mean 2.45 ms
+  buck-bt      Drive->Fly  z   960.0  0.600 s  frames worst 4.57 / mean 1.80 ms
+  buck-bt      Fly->Boat   z   819.9  0.602 s  frames worst 10.10 / mean 2.35 ms
+  buck-bt      Boat->Dive  z  -228.6  0.601 s  frames worst 17.49 / mean 2.09 ms
+  buck-bt      Dive->Boat  z  -473.6  0.600 s  frames worst 17.45 / mean 1.77 ms
+  buck-bt      Boat->Drive z  -370.9  0.600 s  frames worst 5.74 / mean 1.62 ms
+  tour-stop1   Drive->Fly  z   944.7  0.601 s  frames worst 10.51 / mean 3.37 ms
+  tour-stop1   Fly->Boat   z  -606.9  0.608 s  frames worst 6.30 / mean 3.37 ms
+  tour-stop1   Boat->Dive  z  -202.0  0.602 s  frames worst 8.31 / mean 3.39 ms
+  tour-stop1   Dive->Boat  z  -466.4  0.606 s  frames worst 9.29 / mean 3.61 ms
+  tour-stop1   Boat->Drive z  -304.5  0.607 s  frames worst 7.00 / mean 3.28 ms
+  tour-stop2   Drive->Fly  z   230.2  0.601 s  frames worst 10.00 / mean 2.05 ms
+  tour-stop2   Fly->Drive  z   703.1  0.603 s  frames worst 4.59 / mean 2.12 ms
+  tour-stop2   Drive->Fly  z   572.0  0.604 s  frames worst 4.41 / mean 1.99 ms
+  tour-stop2   Fly->Boat   z   909.5  0.605 s  frames worst 4.40 / mean 2.00 ms
+  tour-stop2   Boat->Dive  z  -366.4  0.603 s  frames worst 9.14 / mean 2.94 ms
+  tour-stop2   Dive->Boat  z  -473.3  0.953 s  frames worst 75.46 / mean 61.83 ms  OUT OF 0.5-0.8 s
+  tour-stop2   Boat->Drive z  -370.5  1.303 s  frames worst 468.96 / mean 438.85 ms  OUT OF 0.5-0.8 s
+  tour-stop3   Drive->Fly  z   960.0  0.609 s  frames worst 14.10 / mean 4.50 ms
+  tour-stop3   Fly->Boat   z   819.0  0.606 s  frames worst 21.55 / mean 2.71 ms
+  tour-stop3   Boat->Dive  z  -228.5  0.604 s  frames worst 6.21 / mean 3.03 ms
+  tour-stop3   Dive->Boat  z  -473.8  0.603 s  frames worst 4.42 / mean 1.93 ms
+  tour-stop3   Boat->Drive z  -370.9  0.600 s  frames worst 5.92 / mean 2.08 ms
+  tour-retry   Drive->Fly  z   944.7  0.602 s  frames worst 9.72 / mean 2.99 ms
+  tour-retry   Fly->Boat   z  -606.2  0.607 s  frames worst 11.25 / mean 3.14 ms
+  tour-retry   Boat->Dive  z  -203.9  0.612 s  frames worst 10.25 / mean 3.77 ms
+  tour-retry   Dive->Boat  z  -466.8  0.603 s  frames worst 10.61 / mean 3.33 ms
+  tour-retry   Boat->Drive z  -305.1  0.606 s  frames worst 8.16 / mean 3.25 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 7, Abi lines: 
+Abi's clips: 6 loaded, one-shots played: 
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

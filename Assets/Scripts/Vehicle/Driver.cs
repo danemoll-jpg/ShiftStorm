@@ -57,7 +57,8 @@ namespace ShiftStorm
                 { "chintro", new[] { "chintro_1" } }, { "chwin", new[] { "chwin_1" } }, { "chlose", new[] { "chlose_1" } } },   // Round 13: the rival challenge
             ["vivi"] = new Dictionary<string, string[]> {
                 { "win", new[] { "win_1", "quipgood_1" } }, { "last", new[] { "last_1" } },
-                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_2" } } },
+                { "messup", new[] { "messup_1", "messup_2", "messup_3", "disaster_1", "disaster_2", "mishit_1", "gasp_1", "trouble_1" } }, { "water", new[] { "water_1", "messup_2" } },
+                { "chintro", new[] { "chintro_1" } }, { "chwin", new[] { "chwin_1" } }, { "chlose", new[] { "chlose_1" } } },   // Round 15: Vivi's Cannonball Run
         };
         public static string[] MessupNames(string folder) => LineNames.TryGetValue(folder, out var t) && t.TryGetValue("messup", out var m) ? m : new string[0];
         const float LineCooldown = 8f, AnyCooldown = 3f, MessupCooldown = 5f, NearPlayer = 70f;
@@ -404,7 +405,7 @@ namespace ShiftStorm
             else { FinishReaction = $"disappointed ({Race.Ordinal(place)}, last)"; PlayOnce(Grumble); if (v.Human) Say("last"); }
             v.Note("reaction", $"{who} finished {(raced ? Race.Ordinal(place) + " of " + field : "the time trial")}: {FinishReaction}");
         }
-        // a mess-up yell: the people's own drivers always, a rival only near a person's racer; never over TeedOff Barker (he narrates)
+        // a mess-up yell: the people's own drivers always, a rival only near a person's racer; never over Barnaby (he narrates)
         public void MessUp(string pool, string why)
         {
             if (!v.Course || !v.Course.timeTrial || v.Holding) return;
@@ -415,7 +416,7 @@ namespace ShiftStorm
                 if (!near) return;
             }
             if (Time.time < AnySpeakingUntil) { Spoken.Add($"{pool}: skipped (another driver, {why})"); return; }
-            // Barker mid-line: the yell waits (up to 6 s) for his line to end, and he starts nothing new meanwhile (PendingYell)
+            // Barnaby mid-line: the yell waits (up to 6 s) for his line to end, and he starts nothing new meanwhile (PendingYell)
             if (Caller.Instance && Caller.Instance.Talking) { pendPool = pool; pendWhy = why; pendUntil = Time.time + 6f; PendingYell = true; return; }
             if (Say(pool, false, MessupCooldown)) v.Note("messup", $"{who} reacts: {why}");
         }
@@ -424,17 +425,17 @@ namespace ShiftStorm
         void TryPending()
         {
             if (pendUntil < 0) return;
-            if (Time.time > pendUntil) { Spoken.Add($"{pendPool}: skipped (Barker talking, {pendWhy})"); pendUntil = -1; PendingYell = false; return; }
+            if (Time.time > pendUntil) { Spoken.Add($"{pendPool}: skipped (Barnaby talking, {pendWhy})"); pendUntil = -1; PendingYell = false; return; }
             if (Caller.Instance && Caller.Instance.Talking) return;
             pendUntil = -1; PendingYell = false; nextAny = 0;
-            if (Say(pendPool, false, MessupCooldown)) v.Note("messup", $"{who} reacts (after Barker's line): {pendWhy}");
+            if (Say(pendPool, false, MessupCooldown)) v.Note("messup", $"{who} reacts (after Barnaby's line): {pendWhy}");
         }
         public bool Say(string what, bool force = false, float cooldown = LineCooldown)
         {
             if (!lines.TryGetValue(what, out var set) || set.Length == 0) return false;
             float now = Time.time;
             if (!force && (now < nextAny || (nextOf.TryGetValue(what, out var t) && now < t))) { Spoken.Add($"{what}: skipped (cooldown)"); return false; }
-            if (Caller.Instance && Caller.Instance.Talking && !force) { Spoken.Add($"{what}: skipped (Barker talking)"); return false; }
+            if (Caller.Instance && Caller.Instance.Talking && !force) { Spoken.Add($"{what}: skipped (Barnaby talking)"); return false; }
             AudioClip clip = set[Random.Range(0, set.Length)];
             for (int k = 0; k < 4 && set.Length > 1 && Spoken.Count > 0 && Spoken[Spoken.Count - 1].EndsWith(clip.name); k++) clip = set[Random.Range(0, set.Length)];
             voice.Stop(); voice.clip = clip; voice.volume = .95f * Settings.Voices * (v.Human ? 1f : .85f); voice.Play(); SoundLog.Add("voice", who + " " + clip.name);
@@ -444,10 +445,10 @@ namespace ShiftStorm
             v.Note("voice", $"{who} says {clip.name} ({what})");
             return true;
         }
-        // TeedOff Barker cuts in: a driver's line stops (he has priority)
+        // Barnaby cuts in: a driver's line stops (he has priority)
         public static void Hush()
         {
-            foreach (var d in All) if (d && d.voice && d.voice.isPlaying) { d.voice.Stop(); if (d.SpeakingUntil > Time.time) { AllSpoken.Add($"{Time.time:0.00} {d.who} cut by Barker"); d.SpeakingUntil = Time.time; } }
+            foreach (var d in All) if (d && d.voice && d.voice.isPlaying) { d.voice.Stop(); if (d.SpeakingUntil > Time.time) { AllSpoken.Add($"{Time.time:0.00} {d.who} cut by Barnaby"); d.SpeakingUntil = Time.time; } }
             AnySpeakingUntil = Mathf.Min(AnySpeakingUntil, Time.time);
         }
         public AudioSource VoiceSource => voice;

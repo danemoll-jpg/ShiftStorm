@@ -49,6 +49,28 @@ doesn't need to keep topping the last stunt — the racers, friendships and plac
   link: he once did stunt shows at this park, knows the staff, persuaded the owner. Crowds and fireworks vs. Paradise
   Plunge's small private test — now he has expectations to live up to.
 
+- **Big Top Breakdown — the dare** (Round 15, the Tour's third stop, "Growing success"). The tour has momentum; an old show-business
+  acquaintance wants a piece of the spotlight. Answers to the four questions:
+  - *Fun and distinctive to race:* a big-top circus camp in bright, gusty daylight (Coaster Coast is a seaside fair at night):
+    weave down a midway between rolling circus wagons, a clown-car pile-up jump with a choice (ride the Globe of Death, a loop
+    inside a steel-mesh sphere, or open the wings and fly past it), once round the ring under the big top in front of the crowd,
+    then fired out of a giant cannon as a human cannonball through hoops under the canvas and out of the top flap, a long flight
+    over the camp to the river (elephants, a paddle-steamer show boat, a rocky rapids shortcut), and down into the lake past the
+    escape artist's tank and through a sunken circus wagon, back up into the ring's splash pool.
+  - *Why Buck brings the tour here:* **Lionel Lustre**, ringmaster of the Lustre Brothers Circus, shared a bill with Buck in 1987
+    (Lionel had elephants; Buck had a bus). He has heard Buck "went respectable" and dares him in a letter to prove he still has
+    it. Buck can't refuse a dare, or a crowd.
+  - *Who cares about this place:* Lionel and his performers (the clowns, the strongman, the trapeze family, the escape artist):
+    a travelling show that is a bit ramshackle ("Breakdown": wagons roll where they like, the top flap blew open, the cannon is
+    "mostly confetti") but proud of it.
+  - *What changes:* Buck and Lionel go from rivals to old friends who admit they both still love the show: Lionel shakes his hand
+    ("we still have it"; Buck chooses to hear the "we"). The player's challenge here is **Vivi's** (her Cannonball Run: the
+    cannon is "her stage"), the first time Vivi steps forward as a rival.
+  - *Lionel's voice (ElevenLabs Voice Design prompt, for Dan; until then Buck reads Lionel's letter aloud):* "A theatrical older
+    British ringmaster in his sixties: a rich, booming, plummy baritone with grand rolling R's and dramatic pauses, smooth and a
+    little vain, warmly mischievous rather than villainous, perfect clear diction, speaking as if to a packed big top." Name it
+    "ShiftStorm Lionel". His look: `Docs/MODELS-NEEDED.md` (Round 15).
+
 ## Choosing tracks
 **Pick tracks because they'd be fun to race.** The tour connects them — no real geography, shared theme or open world.
 Each stop needs only a small purpose: introduce a host, develop a rivalry, expose an extravagant promise, or let someone

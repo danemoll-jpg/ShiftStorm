@@ -1,0 +1,38 @@
+ShiftStorm check 'mix', 2026-11-16 17:47, build 0.13.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+MIX (item 2): default volumes: Music 100 %, Voices 100 %, Engines 60 %, Effects 100 %, Crowd 100 % (x0.11 = -19.2 dB under build 15's crowd); the run is muted (would-be levels: each clip's signal x its source volume x the 3D roll-off at the camera)
+MIX Paradise Plunge CHECK: music -26.7 dBFS, player's engine -32.8, Barnaby -19.8 (306 samples while he talks); crowd: the stands' murmur on the grid -39.2 (build 15: -20.0), loudest passing a stand -32.6 (build 15: -13.4), loudest cheer / finish sound -34.8 (build 15: -15.6); the crowd's loudest is 2.0 dB under the engine, 15.0 dB under Barnaby, 8.1 dB under the music
+  crowd sounds this race (5): Start W gg_crowd_cheer_big_2 -34.8, to_crowd_ooh -38.3, Waterfall landing gg_crowd_cheer_small_2 -36.2, Waterfall landing gg_crowd_cheer_small_1 -38.8, to_cheer_big -35.3
+MIX Coaster Coast CHECK: music -26.7 dBFS, player's engine -31.7, Barnaby -19.4 (250 samples while he talks); crowd: the stands' murmur on the grid -40.5 (build 15: -21.4), loudest passing a stand -35.3 (build 15: -16.2), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 2.2 dB under the engine, 14.5 dB under Barnaby, 7.2 dB under the music
+  crowd sounds this race (3): CC start W gg_crowd_cheer_big_1 -33.9, CC splash landing gg_crowd_cheer_small_1 -38.8, to_cheer_big -35.3
+MIX Big Top Breakdown CHECK: music -27.4 dBFS, player's engine -32.7, Barnaby -19.9 (232 samples while he talks); crowd: the stands' murmur on the grid -40.6 (build 15: -21.5), loudest passing a stand -29.7 (build 15: -10.5), loudest cheer / finish sound -33.9 (build 15: -14.7); the crowd's loudest is 1.2 dB under the engine, 14.0 dB under Barnaby, 6.5 dB under the music
+  crowd sounds this race (4): BT start W gg_crowd_cheer_big_1 -33.9, BT ring 50 gg_crowd_cheer_small_3 -37.2, BT ring 140 gg_crowd_cheer_small_2 -36.2, to_cheer_big -35.3
+  the Crowd row: Settings > Audio > Crowd, 100 % (left / right in steps of 10 %, saved in settings.json "crowdVol")
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.47 ms, 95th pct 4.32 ms, 99th pct 6.09 ms, worst 313.32 ms over 53475 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  mix          Drive->Fly  z   652.0  0.607 s  frames worst 11.03 / mean 4.69 ms
+  mix          Fly->Drive  z   929.2  0.608 s  frames worst 11.49 / mean 5.26 ms
+  mix          Drive->Fly  z   945.2  0.609 s  frames worst 16.72 / mean 5.39 ms
+  mix          Fly->Boat   z  -607.1  0.601 s  frames worst 9.47 / mean 3.26 ms
+  mix          Boat->Dive  z  -202.6  0.604 s  frames worst 10.02 / mean 3.76 ms
+  mix          Dive->Boat  z  -466.6  0.603 s  frames worst 11.26 / mean 4.76 ms
+  mix          Boat->Drive z  -304.7  0.606 s  frames worst 7.84 / mean 3.72 ms
+  mix          Drive->Fly  z   230.9  0.603 s  frames worst 5.08 / mean 2.01 ms
+  mix          Fly->Drive  z   703.6  0.604 s  frames worst 7.49 / mean 2.16 ms
+  mix          Drive->Fly  z   572.0  0.602 s  frames worst 5.91 / mean 2.09 ms
+  mix          Fly->Boat   z   909.3  0.603 s  frames worst 8.85 / mean 2.59 ms
+  mix          Boat->Dive  z  -366.3  0.600 s  frames worst 5.51 / mean 2.29 ms
+  mix          Dive->Boat  z  -473.4  0.606 s  frames worst 4.42 / mean 1.99 ms
+  mix          Boat->Drive z  -370.5  0.603 s  frames worst 8.96 / mean 2.75 ms
+  mix          Drive->Fly  z   642.9  0.603 s  frames worst 73.96 / mean 5.99 ms
+  mix          Fly->Drive  z   833.7  0.604 s  frames worst 5.11 / mean 2.11 ms
+  mix          Drive->Fly  z   958.2  0.604 s  frames worst 6.64 / mean 2.44 ms
+  mix          Drive->Fly  z   960.0  0.604 s  frames worst 3.82 / mean 1.87 ms
+  mix          Fly->Boat   z   819.2  0.605 s  frames worst 9.59 / mean 2.41 ms
+  mix          Boat->Dive  z  -228.4  0.604 s  frames worst 3.22 / mean 1.74 ms
+  mix          Dive->Boat  z  -473.3  0.601 s  frames worst 5.14 / mean 1.77 ms
+  mix          Boat->Drive z  -371.0  0.605 s  frames worst 5.35 / mean 1.88 ms
+sound: music results playing (its own signal peak 0.000), splashes played 3, Abi lines: waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); messup: bogey_1; waterfall: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

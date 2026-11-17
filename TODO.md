@@ -21,8 +21,70 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 15 — the shimmer's cause fixed, Barnaby by name, Big Top Breakdown** (2026-11-16, release `build-17` / 0.13.0). Status below.
 - **Round 14 — title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race, the Ferris wheel on the main route** (2026-11-16, release `build-16` / 0.12.0). Status below.
 - **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 15 delivery (2026-11-16) — status per item
+Evidence: `Docs/Checks/round15/` (reports, pictures, heat maps). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy
+job at a time; measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+1. **Coaster Coast's shimmer — DONE (cause found and fixed).** New `shimmer` check (10 s parked on the grid, after the finish, and on the
+   grid after Race again, every course; camera / car / sun / sky every frame, the picture compared frame to frame, heat maps). Build 16:
+   camera and car perfectly still, but on Coaster Coast the sun turned 27 deg in 10 s on the grid after Race again (171 steps of the sky's
+   evening value): `CoasterSky` eased the sky from night back to sunset at .04 / s in .002 steps, each turning the sun ~0.15 deg, so the
+   toon shading's light / shadow bands and every shadow crawled across the picture (the heat map: edges changing all over a still scene);
+   only noticeable while parked, only on the course with a moving sun. Fix (`World/CoasterLook.cs`): the evening moves only while a person
+   is racing; parked (countdown, after the finish, front menus) it is set once, at once. *Check:* PASS on all three courses: sun 0.0000 deg,
+   0 sky changes in all 9 parked windows (build 16: 27 deg, 171 changes). The frame-to-frame picture number is small either way (0.2 / 255;
+   a 0.15 deg step is subtle per frame, it is the steady crawl the eye sees) and is now only the sea, rides and fireworks. Paradise Plunge
+   unchanged. `-oldSky` keeps build 16's. Not verified on the Deck's screen itself.
+2. **Barnaby by name — DONE.** `Caller.Name` = "Barnaby": subtitles ("Barnaby: ..."), the booth's board, the results ("Race called by
+   Barnaby"), the Voices volume description; code comments, check reports and the audio tools too; `CLAUDE.md`, `Docs/STORY.md`,
+   `Docs/AUDIO-NEEDED.md`, `Docs/SOUNDS.md`, `Docs/REUSE-AUDIT.md` say Barnaby (the ElevenLabs voice keeps its own name "TeedOff Barker";
+   the clip folder `Voice/barker` is an id). No voice line ever said "Barker", so nothing needed re-recording for the name. *Check*
+   (`Tools/Audio/barnaby_audit.py` -> `Docs/Checks/round15/barnaby.md`): PASS: 0 strings a player can see say "Barker" (the shipped Assembly-CSharp.dll and data files), 0 of 384 voice clips say it (written or heard by local speech-to-text); the 53 new lines all transcribe back at a 0.80+ word match.
+3. **Big Top Breakdown — DONE (stand-ins for the animals, performers and the ringmaster).** Course 2 (`World/BigTop*.cs`, `BigTopLook`): a
+   circus camp in bright, gusty daylight (flags and the top flap flapping), 9 km west of Paradise Plunge. STORY.md's four questions
+   answered (Lionel Lustre, ringmaster of the Lustre Brothers Circus, dares Buck; the Tour's Stop 3 "The Big Top Dare"). Route (line
+   5.5 km): the Midway (the wagon parade rolling along both side lanes, the middle always clear; the strongman, the tightrope walker) ->
+   the **Clown Jump** over the clowns' car pile-up: **choice** (car: the **Globe of Death**, a loop rail inside a steel-mesh sphere; LB on
+   the ramp: the Clown flight past it) -> the big top's door, once round the ring (six stands of fans) -> the **giant cannon** (a rail up
+   its barrel, launch to 80 m/s) -> **human cannonball** flight through three hoops beside the trapeze artists and out of the **top flap**
+   -> two long arcs over the camp -> the **river** (elephants spraying, the paddle-steamer show boat, the island: main channel or the
+   **Island rapids** (current, rocks): the water's choice; sea lions) -> **dive** into the lake past the escape artist's tank and through a
+   **sunken circus wagon** -> up into the splash pool, its ramp, the finish. Everything the other tracks have: gates, near misses, route
+   guides / arrow / strip, AI, split screen, camera views, recovery, crowd, reactions, playtest logs, best times, a course card, the Tour's
+   Stop 3 + **Vivi's Cannonball Run** challenge (paint "Vivi Violet"). Music: Dan's "Big Top Breakdown" song (`race_bigtop`, it was already
+   in Art/Incoming). Voices: Barnaby 30 new lines, Buck 20 (+ "Three stops" re-recorded), Vivi 3. Tripo prompts (elephant, sea lion,
+   ringmaster) + the ringmaster's voice prompt: `Docs/MODELS-NEEDED.md`, `Docs/STORY.md`.
+   *Checks:* `btlap` PASS: 94.8 s (check pilot, safe line; segments 16.0 / 9.4 / 14.6 / 19.1 / 28.4 / 7.4 s), 11 / 11 gates, 0 resets, 0
+   wagon hits while racing; set-pieces >= 8 % for >= 1 s in 6 of 6 segments; PC render + GPU mean 4-6 ms per segment, 95th pct <= 7.3 ms.
+   `btglobe` PASS: the Globe and the cannon at full / slow / very slow, 6 of 6. AI runs (`btsplits -runs 25`): Clown Jump car 25 / 25 and
+   fly 25 / 25 clean, river main channel 25 / 25 and rapids 25 / 25 clean, 0 stuck, 0 resets, 0 wagon hits. Split-screen lap PASS (0
+   resets). Soak (Normal, 50 AI laps) 50 / 50, median 104.6 s, 2 resets (an AI arriving off-line missed the cannon's rail, drove under
+   the top flap and was put forward onto the flight line). Fixed on the way: the cannon's wings zone reached the ring road (a rival grew
+   wings on the ground), a car still in the air at a rail entry was snapped down 6 m in one step (now eased: also smooths Coaster Coast's
+   station entry), Vivi's challenge lines were not loaded, the Tour page's rows ran off the screen, G9's frame was too low.
+   **Not as asked:** the lap is ~1:35 for the check pilot (~1:45 for the AI), not quite 2 min; the Island rapids are 4.4 s *slower* for the
+   AI (it brakes through the rocks; a person may do better, not verified).
+4. **Regression + soaks + release — DONE.** Regression (built exe): `round2` PASS (Paradise Plunge lap 124.6 s), `cclap` PASS 106.4 s,
+   `ccrails` 6 / 6, `round11` (Buck on all three courses, The Tour's three stops, 16 racers) PASS, `challenges` 6 / 6 (Vivi speaks now),
+   `menus14` (pictures; The Tour page fits the Deck's screen now), `menuwalk` 13 / 13 + exit 0, `unlock` PASS, `finishcam` STEADY on all
+   three courses, `mix` (Big Top within 1 dB of the others), `shimmer` PASS. **Soaks (Normal, 50 AI laps each):** Paradise Plunge 50 / 50,
+   median 133.9 s, 4 resets; Coaster Coast 50 / 50, median 116.2 s, 3 resets; Big Top Breakdown 50 / 50, median 104.6 s, 2 resets.
+   Release build 17 (0.13.0) published; disk cleaned.
+
+### For Dan to check (build 17)
+1. Coaster Coast: race it, then Race again. Is the picture steady on the grid and at the results now? (The cause: the sky and the sun
+   were still easing back to sunset while you sat there.)
+2. The race caller says / shows "Barnaby" (subtitles, his booth's board at Paradise Plunge's start, the results screen).
+3. Big Top Breakdown (Race, Time Trial, or The Tour's Stop 3): the wagon parade on the midway, the Clown Jump (LB on the ramp = fly past
+   the Globe; no LB = ride the Globe of Death), once round the ring, into the cannon, through the hoops and out of the top flap.
+4. On the river: try the Island rapids (right of the island) against the main channel (left). Worth it, or too rocky?
+5. Is it different enough from Coaster Coast, and is ~1:35-1:45 a good length, or should it be longer?
+6. The stand-ins: elephants, sea lions, clowns, strongman, tightrope walker, trapeze artists, escape artist. Which ones need real models?
+   (Three Tripo prompts are ready in Docs/MODELS-NEEDED.md: elephant, sea lion, the ringmaster Lionel Lustre.)
+7. The Tour's Stop 3 scene: Buck reads Lionel's dare. And Vivi's Cannonball Run challenge on The Tour page.
 
 ### Round 14 delivery (2026-11-16) — status per item
 Evidence: `Docs/Checks/round14/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one heavy job at
@@ -569,7 +631,11 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 15: the shimmer, Barnaby by name, and Big Top Breakdown
+## Current Objective — Round 16: not planned yet
+
+Dan reviews build 17 (0.13.0); his notes become Round 16. Round 15's spec stays below for reference.
+
+## Round 15 spec (delivered as build 17, 2026-11-16): the shimmer, Barnaby by name, and Big Top Breakdown
 
 **Dan's review of build 16 (0.12.0), 2026-11-16, quoted:** "Tested new things. The shimmering only happens on the 2nd track
 and it is before and after the race. No other issues, so go ahead and fold this into the next round." (Round 14's other
@@ -636,8 +702,8 @@ Barker."** Run unattended; don't stop to ask; no visible window. Same testing ru
 ### Defaults (unchanged)
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
-### For Dan to check (fill in at end of round)
-- …
+### For Dan to check
+- See "For Dan to check (build 17)" under Completed Tasks.
 
 ## Next Steps (Do Not Start Yet)
 - **More tracks:** Lantern Reef (boat + sub; draft in `TODO-ARCHIVE.md`),

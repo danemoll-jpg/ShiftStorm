@@ -278,7 +278,7 @@ namespace ShiftStorm
                     bool lines = barker.Any(x => x.StartsWith("ch")) && drivers.Count >= 2 && buckSaid.Count > 0;
                     bool ok = okResult && saved && reloaded && lines; if (ok) pass++;
                     Line($"  {ch.key} {(win ? "win" : "lose")} run {(ok ? "PASS" : "FAIL")}: result {(game.ChallengeRun.LastWon ? "won" : "lost")} by {game.ChallengeRun.LastMargin:0.0} s ({Challenge.Note}); saved {saved}, after a reload {reloaded} (tries {Tour.ChallengeTries(i)}, won {Tour.ChallengeWon(i)}, best {Tour.ChallengeBest(i):0.0} s); paint {ch.paint} unlocked {Paints.Unlocked(i + 1)}");
-                    Line($"     lines: Buck {string.Join("; ", buckSaid)} | Barker {string.Join(", ", barker)} | drivers {string.Join("; ", drivers)}");
+                    Line($"     lines: Buck {string.Join("; ", buckSaid)} | Barnaby {string.Join(", ", barker)} | drivers {string.Join("; ", drivers)}");
                     Line($"     steps: {string.Join(" / ", steps)}; menu after: {(game.MenuOpen ? game.MenuTitle : "closed")}");
                     if (game.MenuOpen) game.CloseMenu(); yield return Wait(.3f);
                     Save();
@@ -287,7 +287,7 @@ namespace ShiftStorm
             game.ShowGarage(); yield return null; string row0 = game.MenuItems.FirstOrDefault(x => x.StartsWith("Paint")); int pi = game.MenuItems.FindIndex(x => x.StartsWith("Paint"));
             game.Choose(pi); yield return null; string row1 = game.MenuItems.FirstOrDefault(x => x.StartsWith("Paint")); Capture("garage-paint"); game.Choose(pi); yield return null; game.Choose(pi); yield return null; game.CloseMenu();
             Line($"  Garage paint: \"{row0}\" -> \"{row1}\"");
-            Line($"CHALLENGES {(pass == total ? "PASS" : "FAIL")}: {pass} of {total} runs (each challenge won and lost: result, tour.json saved and read back, Buck + the rival + Barker lines)");
+            Line($"CHALLENGES {(pass == total ? "PASS" : "FAIL")}: {pass} of {total} runs (each challenge won and lost: result, tour.json saved and read back, Buck + the rival + Barnaby lines)");
             Buck.Enabled = false; Save();
         }
 
@@ -297,7 +297,7 @@ namespace ShiftStorm
             float secs = ArgFloat("-seconds", 40f);
             Line($"GRAPHICS PRESETS: frame times per preset, both courses, one player and 2 players (PC: {SystemInfo.graphicsDeviceName}, every frame rendered at {W}x{H} with the GPU waited for; batch mode, so CPU + GPU of the render, not the Deck); Steam Deck detected here: {GraphicsPreset.IsSteamDeck}; Auto here = {GraphicsPreset.Names[GraphicsPreset.Base]}");
             foreach (bool split in new[] { false, true })
-                for (int course = 0; course < 2; course++)
+                for (int course = 0; course < game.Courses.Count; course++)   // Round 15: all three courses
                     for (int lvl = 0; lvl < 4; lvl++)
                     {
                         scenario = $"preset-{GraphicsPreset.Names[lvl]}-{course}{(split ? "-split" : "")}"; Clear(); GraphicsPreset.Override = lvl;
