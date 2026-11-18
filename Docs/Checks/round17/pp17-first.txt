@@ -1,0 +1,45 @@
+ShiftStorm check 'pp17', 2026-11-17 19:13, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  human Valley Flight try 1 MADE IT: stick, late 0.42 s, lip -> G3's way 21.2 s, flew it True, resets 0
+  human Valley Flight try 2 MADE IT: keys, late 0.32 s, lip -> G3's way 19.7 s, flew it True, resets 0
+  human Valley Flight try 3 MISSED: stick, late 0.43 s, lip -> G3's way 43.8 s, flew it False, resets 1: G1 promenade exit passed as Fly -> anchor
+  human Valley Flight try 4 MISSED: keys, late 0.33 s, lip -> G3's way 27.1 s, flew it False, resets 1
+  human Valley Flight try 5 MADE IT: stick, late 0.44 s, lip -> G3's way 20.3 s, flew it True, resets 0
+  human Valley Flight try 6 MISSED: stick, late 0.34 s, lip -> G3's way 25.7 s, flew it False, resets 1
+  human Valley Flight try 7 MISSED: keys, late 0.45 s, lip -> G3's way 42.8 s, flew it False, resets 3: into the water outside the landing corridor -> anchor; out of bounds -> anchor; fell off the climb -> anchor
+  human Valley Flight try 8 MISSED: stick, late 0.35 s, lip -> G3's way 23.0 s, flew it False, resets 1
+HUMAN-LIKE VALLEY FLIGHT CHECK: made it 3 of 8, lip to the rejoin mean 20.4 s
+PARADISE PLUNGE LAP: line 5923 m, check pilot 98.0 s, resets 0; splits Beach Promenade 18.4, Cliffside Climb 14.1, Sky Arch 19.2, Lagoon Landing 8.0, Mangrove Run 12.6, Sunken Gateway 7.0, Coral Vault 7.2, Waterfall Return 11.5; 3 laps ~ 4.9 min
+  Sky Arch slit BRANCH: 12.5 s fork to rejoin, took it True, resets 0 (G1 promenade exit crossed as Fly)
+  Sky Arch slit MAIN: 12.5 s fork to rejoin, took it False, resets 0 (G1 promenade exit crossed as Fly)
+  Valley Flight BRANCH: 18.8 s fork to rejoin, took it True, resets 0 (G1 promenade exit crossed as Fly)
+  Valley Flight MAIN: 22.4 s fork to rejoin, took it False, resets 0 (G1 promenade exit crossed as Fly)
+  Sunken Caves BRANCH: 19.2 s fork to rejoin, took it True, resets 0 (G1 promenade exit crossed as Fly)
+  Sunken Caves MAIN: 21.5 s fork to rejoin, took it False, resets 0 (G1 promenade exit crossed as Fly)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.39 ms, 95th pct 6.02 ms, 99th pct 10.27 ms, worst 606.19 ms over 155230 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  pp17-human-valley Drive->Fly  z   652.0  0.689 s  frames worst 101.79 / mean 8.31 ms
+  pp17-human-valley Drive->Fly  z   651.7  0.601 s  frames worst 27.18 / mean 4.76 ms
+  pp17-human-valley Drive->Fly  z   659.9  0.603 s  frames worst 278.34 / mean 6.10 ms
+  pp17-human-valley Drive->Fly  z   652.9  0.603 s  frames worst 70.16 / mean 4.77 ms
+  pp17-human-valley Drive->Fly  z   652.7  0.602 s  frames worst 11.91 / mean 3.24 ms
+  pp17-human-valley Drive->Fly  z   652.1  0.602 s  frames worst 25.35 / mean 3.62 ms
+  pp17-human-valley Drive->Fly  z   652.9  0.602 s  frames worst 21.38 / mean 3.79 ms
+  pp17-human-valley Drive->Fly  z   652.8  0.603 s  frames worst 13.49 / mean 3.57 ms
+  pp17-lap     Drive->Fly  z   944.9  0.601 s  frames worst 9.70 / mean 3.26 ms
+  pp17-lap     Fly->Boat   z  -607.5  0.601 s  frames worst 15.62 / mean 3.73 ms
+  pp17-lap     Boat->Dive  z  -199.2  0.601 s  frames worst 39.80 / mean 3.75 ms
+  pp17-lap     Dive->Boat  z  -466.8  0.603 s  frames worst 7.38 / mean 2.84 ms
+  pp17-lap     Boat->Drive z  -304.7  0.602 s  frames worst 27.13 / mean 4.15 ms
+  pp17-Sky-Arch-slit-branch Drive->Fly  z   944.9  0.602 s  frames worst 11.73 / mean 3.31 ms
+  pp17-Sky-Arch-slit-main Drive->Fly  z   944.9  0.604 s  frames worst 8.12 / mean 3.37 ms
+  pp17-Valley-Flight-branch Drive->Fly  z   652.2  0.603 s  frames worst 12.12 / mean 3.62 ms
+  pp17-Valley-Flight-main Drive->Fly  z   944.2  0.602 s  frames worst 12.10 / mean 3.39 ms
+  pp17-Sunken-Caves-branch Fly->Boat   z  -607.5  0.600 s  frames worst 10.90 / mean 2.70 ms
+  pp17-Sunken-Caves-branch Boat->Dive  z  -779.7  0.602 s  frames worst 9.60 / mean 2.86 ms
+  pp17-Sunken-Caves-main Fly->Boat   z  -607.5  0.603 s  frames worst 35.01 / mean 2.84 ms
+  pp17-Sunken-Caves-main Boat->Dive  z  -199.6  0.601 s  frames worst 8.35 / mean 3.04 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 1, Abi lines: messup: bogey_1; messup: disaster_1; messup: line_1; water: messup_1; messup: skipped (cooldown); messup: mishit_1; messup: skipped (cooldown); messup: gasp_1; waterfall: laugh_1
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

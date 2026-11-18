@@ -1,0 +1,51 @@
+ShiftStorm check 'tour', 2026-11-17 21:58, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+TOUR: fresh C:\Users\danmo\ShiftStorm\local\round17\reg-tour-noitems\tour.json; stops 4, unlocked 1; points 1st 10 / 2nd 6 / 3rd 4 / 4th 2, top 3 unlocks the next
+TOUR stop 1 The Trial PASS: scene: stop 1 The Trial -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 2 (playable 4) -> reaction tour_s1_pass_1 + tour_s1_pass_2; unlocked 2, total 10 points; results line "THE TOUR - Stop 1 The Trial: 1st, 10 points  -  Stop 2 unlocked!"
+    Buck: tour_s1_intro_1 (tour stop 1 scene), tour_s1_intro_2 (tour stop 1 scene), tour_s1_intro_3 (tour stop 1 scene), tour_s1_intro_4 (tour stop 1 scene), tour_s1_pass_1 (tour stop 1 passed), tour_s1_pass_2 (tour stop 1 passed)
+TOUR stop 2 Opening Night PASS: scene: stop 2 Opening Night -> scene skipped -> race -> finished 1st: 10 points, passed True, unlocked 3 (playable 4) -> reaction tour_s2_pass_1 + tour_s2_pass_2; unlocked 3, total 20 points; results line "THE TOUR - Stop 2 Opening Night: 1st, 10 points  -  Stop 3 unlocked!"
+    Buck: tour_s2_intro_1 (tour stop 2 scene), tour_s2_pass_1 (tour stop 2 passed), tour_s2_pass_2 (tour stop 2 passed)
+TOUR stop 3 The Big Top Dare PASS: scene: stop 3 The Big Top Dare -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 4 (playable 4) -> reaction tour_s3_pass_1 + tour_s3_pass_2; unlocked 4, total 30 points; results line "THE TOUR - Stop 3 The Big Top Dare: 1st, 10 points  -  Stop 4 unlocked!"
+    Buck: tour_s3_intro_1 (tour stop 3 scene), tour_s3_intro_2 (tour stop 3 scene), tour_s3_intro_3 (tour stop 3 scene), tour_s3_intro_4 (tour stop 3 scene), tour_s3_pass_1 (tour stop 3 passed), tour_s3_pass_2 (tour stop 3 passed)
+TOUR stop 4 The Controlled Demonstration PASS: scene: stop 4 The Controlled Demonstration -> scene done -> race -> finished 1st: 10 points, passed True, unlocked 4 (playable 4) -> reaction tour_s4_pass_1 + tour_s4_pass_2 + tour_done_1; unlocked 4, total 40 points; results line "THE TOUR - Stop 4 The Controlled Demonstration: 1st, 10 points  -  Tour complete!"
+    Buck: tour_s4_intro_1 (tour stop 4 scene), tour_s4_intro_2 (tour stop 4 scene), text:HATTIE SLUICE, DAM KEEPER (scene), tour_s4_intro_3 (tour stop 4 scene), text:HATTIE SLUICE, DAM KEEPER (scene), tour_s4_intro_4 (tour stop 4 scene), text:HATTIE SLUICE, DAM KEEPER (scene), rise1_1 (PA), rise2_1 (PA), tour_s4_pass_1 (tour stop 4 passed), tour_s4_pass_2 (tour stop 4 passed), tour_done_1 (tour stop 4 passed)
+TOUR RELOAD PASS: read back best 1st / 1st, 40 points, unlocked 4, done True; file: {   "version": 1,   "unlocked": 4,   "best": [     1,     1,     1,     1   ],   "points": [     10,     10,     10,     10   ],   "tries": [     1,     1,     1,     1   ],   "done": true,   "cWon": [     false,     false,     false,     false   ],   "cBest": [     0.0,     0.0,     0.0,     0.0   ],   "cTries": [     0,     0,     0,     0   ] }
+TOUR RETRY PASS: finished 4th (throttle 50 %): best kept 1st, points kept 10, unlocked 4, tries 2; Buck: tour_s1_intro_1, tour_s1_retry_2; results line "THE TOUR - Stop 1 The Trial: 4th, 2 points (best 1st)  -  top 3 to go on: Race again to retry"
+TOUR RACE AGAIN PASS: stop 1 started again, steps race
+TOUR PASS
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.19 ms, 95th pct 4.10 ms, 99th pct 6.70 ms, worst 841.47 ms over 194247 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  tour-stop1   Drive->Fly  z   944.7  0.602 s  frames worst 10.37 / mean 4.44 ms
+  tour-stop1   Fly->Boat   z  -606.3  0.603 s  frames worst 7.24 / mean 3.44 ms
+  tour-stop1   Boat->Dive  z  -199.2  0.602 s  frames worst 10.46 / mean 3.95 ms
+  tour-stop1   Dive->Boat  z  -466.7  0.603 s  frames worst 18.96 / mean 4.71 ms
+  tour-stop1   Boat->Drive z  -305.1  0.603 s  frames worst 7.62 / mean 3.79 ms
+  tour-stop2   Drive->Fly  z   230.2  0.600 s  frames worst 6.98 / mean 2.63 ms
+  tour-stop2   Fly->Drive  z   704.3  0.601 s  frames worst 11.14 / mean 3.36 ms
+  tour-stop2   Drive->Fly  z   572.0  0.602 s  frames worst 10.13 / mean 2.82 ms
+  tour-stop2   Fly->Boat   z   908.4  0.604 s  frames worst 4.43 / mean 2.56 ms
+  tour-stop2   Boat->Dive  z  -366.5  0.604 s  frames worst 17.45 / mean 3.36 ms
+  tour-stop2   Dive->Boat  z  -473.7  0.603 s  frames worst 5.73 / mean 2.76 ms
+  tour-stop2   Boat->Drive z  -370.2  0.603 s  frames worst 6.99 / mean 2.59 ms
+  tour-stop3   Drive->Fly  z   960.0  0.604 s  frames worst 9.58 / mean 2.47 ms
+  tour-stop3   Fly->Boat   z   819.2  0.892 s  frames worst 841.47 / mean 196.72 ms  OUT OF 0.5-0.8 s
+  tour-stop3   Boat->Dive  z  -228.6  0.620 s  frames worst 29.49 / mean 6.35 ms
+  tour-stop3   Dive->Boat  z  -473.5  0.606 s  frames worst 13.19 / mean 2.82 ms
+  tour-stop3   Boat->Drive z  -370.6  0.606 s  frames worst 8.81 / mean 3.25 ms
+  tour-stop4   Drive->Boat z -9093.2  0.602 s  frames worst 4.69 / mean 2.05 ms
+  tour-stop4   Boat->Fly   z -9483.2  0.600 s  frames worst 5.66 / mean 2.16 ms
+  tour-stop4   Fly->Boat   z -9785.7  0.840 s  frames worst 82.50 / mean 7.26 ms  OUT OF 0.5-0.8 s
+  tour-stop4   Boat->Drive z -9449.8  0.605 s  frames worst 5.45 / mean 2.43 ms
+  tour-stop4   Drive->Boat z -9093.3  0.602 s  frames worst 7.73 / mean 2.37 ms
+  tour-stop4   Boat->Dive  z -9362.6  0.606 s  frames worst 10.02 / mean 2.98 ms
+  tour-stop4   Dive->Boat  z -9394.7  0.611 s  frames worst 26.83 / mean 3.13 ms
+  tour-stop4   Boat->Drive z -9327.3  0.601 s  frames worst 5.50 / mean 2.32 ms
+  tour-retry   Drive->Fly  z   944.6  0.601 s  frames worst 10.37 / mean 4.24 ms
+  tour-retry   Fly->Boat   z  -606.7  0.606 s  frames worst 7.55 / mean 3.16 ms
+  tour-retry   Boat->Dive  z  -200.1  0.604 s  frames worst 11.25 / mean 3.58 ms
+  tour-retry   Dive->Boat  z  -466.8  0.604 s  frames worst 8.44 / mean 3.07 ms
+  tour-retry   Boat->Drive z  -304.5  0.601 s  frames worst 7.25 / mean 3.29 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 6, Abi lines: waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); waterfall: lucky_1; win: skipped (Barnaby talking); waterfall: laugh_1; win: skipped (Barnaby talking); waterfall: lucky_1; waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); last: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

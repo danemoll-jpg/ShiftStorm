@@ -74,6 +74,17 @@ namespace ShiftStorm
             ["dmrise1"] = (30, 3), ["dmrise2"] = (30, 3), ["dmlap2"] = (30, 2), ["dmlap3"] = (30, 2),
             ["dmspill"] = (60, 1), ["dmgates"] = (60, 1), ["dmturbine"] = (60, 1), ["dmbuck"] = (60, 1), ["dmbeaver"] = (60, 1), ["dmheron"] = (60, 1),
             ["dmtrout"] = (60, 1), ["dmlogs"] = (60, 1), ["dmdam"] = (60, 1), ["dmhall"] = (40, 1), ["dmflood"] = (40, 1), ["dmdive"] = (40, 1),
+            // Round 17: laps on every course, the items (a person's racer firing or hit), the stunts (combos, shift tricks, wipeouts), Stunt Show
+            ["lapnext"] = (30, 2), ["lapfinal"] = (30, 2), ["showstart"] = (30, 2), ["showwin"] = (60, 2),
+            ["combo"] = (14, 1), ["bigcombo"] = (20, 2), ["shifttrick"] = (18, 2), ["wipeout"] = (16, 1), ["breach"] = (30, 1), ["hop"] = (40, 0),
+            ["ithit"] = (12, 1), ["itblock"] = (20, 1), ["itwrong"] = (18, 2), ["itbubble"] = (18, 1), ["itswap"] = (18, 2), ["itstorm"] = (18, 1), ["itegg"] = (20, 1),
+            ["itrocket"] = (20, 1), ["itcannon"] = (20, 1), ["itflood"] = (20, 1), ["itbuck"] = (30, 3), ["itrewind"] = (20, 1), ["ithorn"] = (20, 1), ["itmirage"] = (20, 1), ["itrainbow"] = (20, 1),
+        };
+        // Round 17: an item used, by its pool (Slick and Bubble Shield have none: the block / the hit is called)
+        static string ItemPool(string what) => what switch
+        {
+            "WrongForm" => "itwrong", "BubbleTrap" => "itbubble", "SwapSpot" => "itswap", "PocketStorm" => "itstorm", "DinoEgg" => "itegg", "FireworkRocket" => "itrocket",
+            "HumanCannonball" => "itcannon", "FloodWave" => "itflood", "BigFinish" => "itbuck", "Rewind" => "itrewind", "HypeHorn" => "ithorn", "Mirage" => "itmirage", "RainbowBridge" => "itrainbow", _ => ""
         };
         // Round 10: Coaster Coast's landmarks (places on its lap) and its set-pieces (said only while big on screen, SetPiece)
         static readonly (string pool, string mark, float at)[] CoasterLandmarks =
@@ -165,6 +176,7 @@ namespace ShiftStorm
             }
             var ta = Resources.Load<TextAsset>("Audio/Voice/barker/lines");
             if (ta) foreach (var line in JsonUtility.FromJson<LinesFile>(ta.text).lines) c.words[line.id] = line.text;
+            RacerItems.Fired += (by, what, at) => { if (!by || !c.game) return; bool person = by.Human || (at && at.Human); string pool = ItemPool(what); if (person && pool != "") c.Call(pool, by.Human ? by : at); };   // Round 17
             Debug.Log($"[Caller] {Name}: {c.Clips} clips in {c.pools.Count} pools ({string.Join(", ", c.pools.Select(kv => $"{kv.Key} {kv.Value.Count}"))}), {c.words.Count} subtitles");
             return c;
         }
@@ -178,6 +190,16 @@ namespace ShiftStorm
             v.Event += (kind, text) => OnEvent(v, kind, text);
             v.Stunt += s => OnStunt(v, s);
             v.WallHit += (angle, keep, what) => { if (keep < .8f && !v.Finished) Call("wall", v); };
+            // Round 17: the stunts (and the crowd cheers a good landing), an item hitting or blocked
+            v.TrickEvent += (kind, pts, n) =>
+            {
+                if (v.Finished) return;
+                if (kind == "land") { if (pts >= 900 || n >= 4) Call("bigcombo", v); else if (n >= 2 || pts >= 300) Call("combo", v); if (pts >= 250) GameSounds.Instance?.Play(pts >= 800 ? "applause" : "loopcrowd", pts >= 800 ? .45f : .35f); }
+                else if (kind == "shift") Call("shifttrick", v);
+                else if (kind == "fail" && pts >= 150) Call("wipeout", v);
+                if (Buck.Instance && kind != "trick") Buck.Instance.Judge(v, kind, pts);
+            };
+            v.ItemHit += (k, by, how) => { if (how == "hit") Call("ithit", v); else if (how == "blocked") Call("itblock", v); };
             bool boosting = false;
             StartCoroutine(BoostWatch());
             System.Collections.IEnumerator BoostWatch()
@@ -196,13 +218,14 @@ namespace ShiftStorm
                     finalCalled = winnerCalled = resultsCalled = false; leader = null; raceStart = Time.time; stayPending = false;
                     poolNext.Clear(); busyUntil = nextAny = 0; usedThisRace.Clear(); ahead.Clear(); lastPlace.Clear(); closeSince.Clear(); gapMax.Clear(); marksDone.Clear();
                     nextFill = -1; Lines.Clear();
-                    if (Challenge.Active == null) Call(game.Race && game.Race.Active ? "start" : "trial", v, true);   // Round 13: a rival challenge has its own line (ChallengeRunner)
+                    if (Challenge.Active == null) Call(game.StuntShow && pools.ContainsKey("showstart") ? "showstart" : game.Race && game.Race.Active ? "start" : "trial", v, true);   // Round 17: Stunt Show   // Round 13: a rival challenge has its own line (ChallengeRunner)
                     break;
                 case "go": if (v == game.Player) { Call("go", v, true); nextFill = Time.time + 9f; } break;
+                case "lap": if (v == game.Player) Call(v.Lap >= v.LapsTotal ? "lapfinal" : "lapnext", v, true); break;   // Round 17: laps on every course
                 case "shortcut": if (text.Contains(": in") && !text.Contains(" flight")) Call("shortcut", v); break;   // Round 13: no flight branch of a choice jump (Lake / Cliff / Midway flight): the wings lines cover those
                 case "gate":
                     if (text.Contains("near miss")) Call("miss", v);
-                    if (text.Contains("G9") && !finalCalled) { finalCalled = true; Call("final", v); }
+                    if (text.Contains("G9") && !finalCalled && v.Lap >= v.LapsTotal) { finalCalled = true; Call("final", v); }   // Round 17: the final stretch of the last lap
                     if (v.Course.laps > 1 && v == game.Player && (text.Contains(" lap 2 ") || text.Contains(" lap 3 "))) Call(text.Contains(" lap 3 ") ? "dmlap3" : "dmlap2", v, true);   // Round 16: lap 2 / the final lap
                     break;
                 case "reset": if (text.Contains("water") && v.Mode == Mode.Drive && v.Course.marks != null && v.Progress < v.Course.marks.GetValueOrDefault("G1", 0)) Call("splash", v); break;

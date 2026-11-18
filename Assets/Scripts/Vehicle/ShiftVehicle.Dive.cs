@@ -23,6 +23,7 @@ namespace ShiftStorm
 
         void StepDive(float dt)
         {
+            if (StepBreach(dt)) return;   // Round 17: out of the water in a breach
             var p = Body.position; var physics = gameObject.scene.GetPhysicsScene();
             float target = Scraped ? dive.cruiseSpeed * .4f : Input.Brake > .05f ? -dive.reverseSpeed * Input.Brake : Boosting ? dive.boostTopSpeed : Input.Throttle * dive.topSpeed;
             DiveSpeed = Mathf.MoveTowards(DiveSpeed, target, (target < DiveSpeed ? dive.brakeGain : dive.speedGain) * Mathf.Max(4f, Mathf.Abs(target - DiveSpeed)) * dt);

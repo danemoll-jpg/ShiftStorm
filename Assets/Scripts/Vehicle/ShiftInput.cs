@@ -25,8 +25,15 @@ namespace ShiftStorm
         // Round 6: per player (player 2 has their own invert setting, settings.json "invertVertical2")
         public bool MyInvert { get => player == 2 ? Settings.InvertVertical2 : Invert; set { if (player == 2) Settings.InvertVertical2 = value; else Invert = value; } }
 
-        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look;
-        bool viewRequested, wingsRequested;
+        InputAction throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look, item, trickKeys;
+        bool viewRequested, wingsRequested, itemRequested;
+        // Round 17: B / Q uses the item held; tricks in the air: the right stick (T / F / G / H on the keyboard: up / left / down / right)
+        public Vector2 Trick { get; private set; }
+        // a quick flick of the stick is kept for 0.15 s, so the physics step that starts the trick never misses it (Round 17)
+        Vector2 trickLast; float trickAt = -1;
+        public Vector2 TrickHeld => Trick.sqrMagnitude > .36f || Time.time - trickAt > .15f ? Trick : trickLast;
+        public void ConsumeTrick() => trickAt = -1;
+        void LatchTrick() { if (Trick.sqrMagnitude > .36f) { trickLast = Trick; trickAt = Time.time; } }
         public Vector2 Look { get; private set; }   // Round 6: the right stick looks around (CameraViews)
         bool resetRequested; ShiftVehicle owner;
         public bool MenuPressed { get; private set; }
@@ -43,7 +50,7 @@ namespace ShiftStorm
         // position (pushed forward = +, as the pad gives it) and goes through the invert setting like a real stick (the invert check).
         // The one-shot menu presses (sMenu, sMove, sConfirm, sBack) let a check work the menu as a player would.
         [System.NonSerialized] public bool Scripted, sRawStick, sMenu, sConfirm, sBack;
-        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView, sWings; [System.NonSerialized] public int sMove, sSide; [System.NonSerialized] public Vector2 sLook;
+        [System.NonSerialized] public float sThrottle, sBrake, sSteer, sVertical; [System.NonSerialized] public bool sBoost, sSecondary, sView, sWings, sItem; [System.NonSerialized] public Vector2 sTrick; [System.NonSerialized] public int sMove, sSide; [System.NonSerialized] public Vector2 sLook;
 
         void Awake() => Create(null);
 
@@ -84,6 +91,9 @@ namespace ShiftStorm
             wings = A("Wings"); Add(wings, "<Gamepad>/leftShoulder"); Add(wings, "<Keyboard>/e");
             view = A("Change view"); Add(view, "<Gamepad>/buttonWest"); Add(view, "<Keyboard>/v");
             look = new InputAction("Look around", InputActionType.Value, expectedControlType: "Vector2"); Add(look, "<Gamepad>/rightStick", "stickDeadzone(min=0.2,max=0.95)");
+            item = A("Item"); Add(item, "<Gamepad>/buttonEast"); Add(item, "<Keyboard>/q");
+            trickKeys = new InputAction("Tricks (keys)", InputActionType.Value, expectedControlType: "Vector2");
+            if (keys) trickKeys.AddCompositeBinding("2DVector").With("Up", "<Keyboard>/t").With("Down", "<Keyboard>/g").With("Left", "<Keyboard>/f").With("Right", "<Keyboard>/h");
             reset = A("Reset"); Add(reset, "<Gamepad>/buttonNorth"); Add(reset, "<Keyboard>/r");
             invert = A("Invert"); Add(invert, "<Gamepad>/select"); Add(invert, "<Keyboard>/f2");
             menu = A("Menu"); Add(menu, "<Gamepad>/start"); Add(menu, "<Keyboard>/escape");
@@ -99,9 +109,9 @@ namespace ShiftStorm
             enter = A("Enter"); Add(enter, "<Keyboard>/enter"); Add(enter, "<Keyboard>/numpadEnter");
             foreach (var x in new[] { confirm, menu, back, menuUp, menuDown, menuLeft, menuRight }) x.performed += c => LastDevice = c.control.device;
         }
-        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look };
+        InputAction[] All => new[] { throttle, brake, steer, vertical, boost, secondary, wings, reset, invert, menu, menuUp, menuDown, menuLeft, menuRight, confirm, back, stats, enter, view, look, item, trickKeys };
         void OnEnable() { foreach (var a in All) a.Enable(); }
-        void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; viewRequested = false; }
+        void OnDisable() { foreach (var a in All) a.Disable(); Throttle = Brake = Steer = Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; Trick = Vector2.zero; viewRequested = false; itemRequested = false; }
         void OnDestroy() { foreach (var a in All) a.Dispose(); }
 
         void Update()
@@ -121,11 +131,12 @@ namespace ShiftStorm
                 Throttle = sThrottle; Brake = sBrake; Steer = sSteer; Boost = sBoost; Secondary = sSecondary;
                 Vertical = sRawStick ? (MyInvert ? sVertical : -sVertical) : sVertical;
                 Look = sLook; viewRequested |= sView; sView = false; wingsRequested |= sWings; sWings = false;
+                Trick = sTrick; LatchTrick(); itemRequested |= sItem; sItem = false;
                 return;
             }
             // Round 14 item 4: after the finish a person's racer rolls to a stop by itself (the results menu's A / D-pad / stick drive nothing)
             if (!owner) owner = GetComponent<ShiftVehicle>();
-            if (owner && owner.Finished && !ChaseCam.OldFinish) { Throttle = 0; Brake = owner.Speed > 2f ? .35f : 0; Steer = 0; Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; resetRequested |= reset.WasPressedThisFrame(); return; }
+            if (owner && owner.Finished && !ChaseCam.OldFinish) { Throttle = 0; Brake = owner.Speed > 2f ? .35f : 0; Steer = 0; Vertical = 0; Boost = Secondary = false; Look = Vector2.zero; Trick = Vector2.zero; resetRequested |= reset.WasPressedThisFrame(); return; }
             Throttle = throttle.ReadValue<float>(); Brake = brake.ReadValue<float>(); Steer = Mathf.Clamp(steer.ReadValue<float>(), -1, 1);
             // The pad's stick and the keys give "stick pushed up" as +; pulled back (up for the vehicle) is the default, so the sign flips here.
             float v = -Mathf.Clamp(vertical.ReadValue<float>(), -1, 1);
@@ -134,6 +145,7 @@ namespace ShiftStorm
             resetRequested |= reset.WasPressedThisFrame();
             if (invert.WasPressedThisFrame()) MyInvert = !MyInvert;
             Look = look.ReadValue<Vector2>(); viewRequested |= view.WasPressedThisFrame(); wingsRequested |= wings.WasPressedThisFrame();
+            var tk = trickKeys.ReadValue<Vector2>(); Trick = tk.sqrMagnitude > .01f ? tk : Look; LatchTrick(); itemRequested |= item.WasPressedThisFrame();
         }
         // a menu direction: once on the press, then again after 0.4 s held, every 0.11 s (unscaled: the menu pauses the game)
         float upHeld = -1, downHeld = -1, leftHeld = -1, rightHeld = -1;
@@ -149,6 +161,8 @@ namespace ShiftStorm
         public void RequestReset() => resetRequested = true;
         public bool ConsumeWings() { bool r = wingsRequested; wingsRequested = false; return r; }
         public void RequestWings() => wingsRequested = true;
+        public bool ConsumeItem() { bool r = itemRequested; itemRequested = false; return r; }
+        public void RequestItem() => itemRequested = true;
         public bool ConsumeView() { bool r = viewRequested; viewRequested = false; return r; }
     }
 }

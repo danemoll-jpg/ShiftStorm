@@ -21,8 +21,35 @@ namespace ShiftStorm
         static readonly Dictionary<string, float> mark = new Dictionary<string, float>();
         public static IReadOnlyDictionary<string, float> Marks => mark;
 
+        // Round 17 items 3-4: the lap trimmed for three laps and two big route splits (ParadisePlunge.Splits). "-oldPP": build 19's layout
+        // (its Lake flight, Cliff flight, Mangrove bypass and Coral Vault tunnel) for before numbers.
+        public static bool Old => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-oldPP") >= 0;
+        static (string n, float x, float y, float z)[] Points => Old ? OldPoints : Points17;
+        // Round 17: the same lap, shorter: the climb's east run and its ramp 90 m (build-2 metres) further west (the flight to the arch
+        // shorter too), the lagoon's southern loop cut (straight from the splashdown to the river), the Coral Vault compact (the sub's
+        // slalom of two ridges and two curtains on a short run south-west under the island's east side, a hairpin up into the surfacing pool;
+        // it no longer runs under the finishing road). Everything along the line (roads, banks, the cave, gates, zones, anchors, signs,
+        // dinosaurs, the dressing) follows the line.
+        static readonly (string n, float x, float y, float z)[] Points17 =
+        {
+            ("lineStart", 0, 2.9f, -60), ("start", 0, 2.9f, -20), ("G0", 0, 2.9f, 0),
+            ("", 0, 2.9f, 20), ("", 0, 2.9f, 60),
+            ("jA", 0, 2.9f, 126.5f), ("promMid", 0, 2.9f, 200), ("loopApp", 0, 2.9f, 282), ("loopIn", 0, 2.9f, 317.6f),
+            ("loopOut", 9.41f, 2.9f, 317.6f), ("", 9.41f, 2.9f, 345), ("jC", 9.41f, 2.9f, 382), ("", 9.41f, 2.9f, 430),
+            ("canyonIn", 13, 2.9f, 470), ("", 20, 2.9f, 510), ("canyonOut", 26, 2.9f, 545), ("G1", 29, 2.9f, 580),
+            ("climb0", 30, 3.4f, 640), ("corner1", 38, 5, 674), ("", 66, 8, 689), ("climbMid", 190, 18, 697), ("", 262, 28, 694), ("corner2", 304, 31, 676), ("", 320, 32, 636),
+            ("rampStart", 322, 33, 600), ("lip", 322, 43, 556),
+            ("", 321, 48, 530), ("", 290, 52, 400), ("arch", 225, 52, 260), ("", 205, 47, 110), ("", 250, 37, -30), ("", 330, 24, -150), ("", 400, 10, -270), ("splash", 430, .6f, -380),
+            ("", 414, .6f, -425), ("", 375, .6f, -446), ("lagoonEnd", 308, .6f, -400),
+            ("", 270, .6f, -375), ("bend1", 248, .6f, -335), ("bend2", 258, .6f, -290), ("mangMid", 246, .6f, -245), ("bend3", 262, .6f, -205), ("bend4", 263, .6f, -170),
+            ("G5", 250, .6f, -138), ("", 228, .6f, -123),
+            ("diveZone", 205, 0, -121), ("", 180, -3.5f, -120), ("portal", 165, -5.5f, -120), ("underRoad", 130, -8, -138), ("vaultStart", 100, -9, -165),
+            ("hi1", 84, -6, -198), ("lo1", 70, -13, -233), ("hi2", 60, -6, -268), ("lo2", 52, -13, -303), ("G7", 38, -9, -338),
+            ("", 14, -7, -352), ("", -4, -5, -333), ("poolEdge", 0, -3, -300), ("surface", 0, .6f, -268), ("G8", 0, .6f, -238), ("rampFoot", 0, .6f, -222), ("rampLip", 0, 5.6f, -182), ("landing", 0, 4.5f, -160),
+            ("G9", 0, 2.9f, -140), ("", 0, 2.9f, -60), ("finish", 0, 2.9f, 0), ("lineEnd", 0, 2.9f, 20),
+        };
         // the racer line: (mark, x, y, z); y is the height a racer aims for (road + 0.9, water + 0.6, flight altitude, dive depth)
-        static readonly (string n, float x, float y, float z)[] Points =
+        static readonly (string n, float x, float y, float z)[] OldPoints =
         {
             ("lineStart", 0, 2.9f, -60), ("start", 0, 2.9f, -20), ("G0", 0, 2.9f, 0),
             // Round 4 item 3: two points after G0 so the spline's spacing is even there. Build 4 went straight from G0 to (20, 140): the
@@ -311,8 +338,10 @@ namespace ShiftStorm
             Box(root, "Lagoon bank N", W(415, -7, -290), W(230, 17, 20), bank);
             Box(root, "Lagoon bank E", W(510, -7, -470), W(20, 17, 380), bank);
             Box(root, "Lagoon bank S", W(400, -7, -630), W(240, 17, 20), bank);
-            Box(root, "Lagoon bank W", W(290, -7, -415), W(20, 17, 250), bank);
-            Box(root, "Lagoon bed", W(400, -16.5f, -460), W(200, 1, 320), mud);
+            if (Old) Box(root, "Lagoon bank W", W(290, -7, -415), W(20, 17, 250), bank);
+            else { Box(root, "Lagoon bank W", W(290, -7, -483), W(20, 17, 114), bank); Box(root, "Lagoon bank W", W(290, -7, -322), W(20, 17, 64), bank); }   // Round 17: the river leaves on the west side
+            if (Old) Box(root, "Lagoon bed", W(400, -16.5f, -460), W(200, 1, 320), mud);
+            else LagoonBedWithSinkhole(mud);   // Round 17: the Sunken Caves' way down
             // foam markers outline the landing corridor; buoys after a wide runout
             float s = M("splash");
             for (int i = -3; i <= 4; i++) foreach (float side in new[] { -1f, 1f })
@@ -340,7 +369,7 @@ namespace ShiftStorm
             Channel("River", a, b, 42, -16);
             var bankTop = Mt(JurassicLook.JungleDark); var mud = Mt(JurassicLook.Mud);
             // Round 13 item 3: the left bank is cut back to 38 m from the line for the bypass's dive bay (BypassBay)
-            if (MangroveBypass)
+            if (MangroveBypass && Old)
             {
                 MeshKit.Strip(root, "River bank L", Samples(a, BayFrom, -46, -20, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
                 MeshKit.Strip(root, "River bank L", Samples(BayFrom, BayTo, -46, -BayOuter, (p, pt) => 1.4f, (p, pt) => -16f), bankTop, mud);
@@ -720,7 +749,7 @@ namespace ShiftStorm
         // Round 3: built but switched off for build 4 (the sub caught the floor's edge, the chamber wall and the tunnel walls; a miss could
         // grind along it). Round 4: back on: walls glance a racer off (ShiftVehicle.Walls), so a touch costs a little and never traps.
         // "-noTunnel" (checks) builds the course without it.
-        public static bool VaultTunnel => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noTunnel") < 0;   // the cave floor openings, metres from lo1 / G7
+        public static bool VaultTunnel => Old && System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noTunnel") < 0;   // Round 17: the compact vault has none   // the cave floor openings, metres from lo1 / G7
         static readonly Color ShortcutColor = new Color(.75f, .4f, 1f, .9f);
         static void Shortcuts()
         {
@@ -737,9 +766,13 @@ namespace ShiftStorm
             var sz = Vol<SlipstreamZone>("Slit updraft", q + r * slit + Vector3.up * 52, f, new Vector3(half * 2 - 2, hi - lo - 2, 44)); sz.speed = 108;
             var sk = new List<Vector3> { At(ar - 490), At(ar - 450), q + r * slit + Vector3.up * 52, At(ar + 600), At(ar + 640) };
             MakeShortcut("Sky Arch slit", sk, ar - 490, ar + 640, 3, 3, 30f, new Vector2(half + 3, (hi - lo) * .5f + 3), new Vector2(32, 26), -2, 70f, Mode.Fly).flight = true;   // Round 12: a reset on it goes forward (G3 counted, +3 s)
-            if (MangroveBypass) BypassShortcut();   // Round 13 item 3
-            LakeFlight();   // Round 7: the choice jump's flight branch
-            CliffFlight();   // Round 13 item 2: the Cliff Gap's flight branch
+            if (Old)
+            {
+                if (MangroveBypass) BypassShortcut();   // Round 13 item 3
+                LakeFlight();   // Round 7: the choice jump's flight branch
+                CliffFlight();   // Round 13 item 2: the Cliff Gap's flight branch
+            }
+            else { ValleyFlight(); SunkenCaves(); }   // Round 17 item 4: the big route splits (ParadisePlunge.Splits)
 
             // 2 Coral Vault low tunnel: down through an opening in the cave floor just after the first curtain (lo1), under the chamber's
             // wall, a straight run under the island inside the cave's loop, and up through a second opening before G7, the last 75 m
@@ -854,14 +887,15 @@ namespace ShiftStorm
         static void Segments()
         {
             void Sg(string name, string form, float target, float end, int gates) => c.segments.Add(new Course.Segment { name = name, form = form, target = target, endProgress = end, gatesNeeded = gates });
+            bool o = Old;   // Round 17: targets for the trimmed lap (the check pilot's times, rounded up)
             Sg("Beach Promenade", "Driving", 20, M("G1"), 2);
-            Sg("Cliffside Climb", "Driving", 20, M("lip") - 3, 3);
-            Sg("Sky Arch", "Flying", 25, M("splash"), 4);
-            Sg("Lagoon Landing", "Boating", 15, M("lagoonEnd"), 5);
-            Sg("Mangrove Run", "Boating", 20, M("G5"), 6);
-            Sg("Sunken Gateway", "Diving", 10, M("vaultStart"), 7);
-            Sg("Coral Vault", "Diving", 25, M("G7"), 8);
-            Sg("Waterfall Return", "Dive-boat-drive", 15, M("finish"), 11);
+            Sg("Cliffside Climb", "Driving", o ? 20 : 15, M("lip") - 3, 3);
+            Sg("Sky Arch", "Flying", o ? 25 : 20, M("splash"), 4);
+            Sg("Lagoon Landing", "Boating", o ? 15 : 9, M("lagoonEnd"), 5);
+            Sg("Mangrove Run", "Boating", o ? 20 : 14, M("G5"), 6);
+            Sg("Sunken Gateway", "Diving", o ? 10 : 13, M("vaultStart"), 7);
+            Sg("Coral Vault", "Diving", o ? 25 : 10, M("G7"), 8);
+            Sg("Waterfall Return", "Dive-boat-drive", o ? 15 : 12, M("finish"), 11);
         }
     }
 

@@ -54,7 +54,7 @@ namespace ShiftStorm
         {
             var p = Body.position; var prev = stuntPrevSet ? stuntPrev : p; stuntPrev = p; stuntPrevSet = true;
             LoopCam = Mathf.MoveTowards(LoopCam, OnLoop ? 1 : 0, dt / .35f);
-            foreach (var z in ResetZone.All) if (z.Contains(p)) { Recover(z.label); return true; }
+            if (!FunHoldsRecovery) foreach (var z in ResetZone.All) if (z.Contains(p)) { Recover(z.label); return true; }   // Round 17: not while an item's effect holds it
             // the wings button
             if (Input.ConsumeWings())
             {

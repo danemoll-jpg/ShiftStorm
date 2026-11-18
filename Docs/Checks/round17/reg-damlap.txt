@@ -1,0 +1,44 @@
+ShiftStorm check 'damlap', 2026-11-17 20:54, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+DAM LAP: Dam Shame, line 9058 m (3 laps of 2969 m), 16 gates, 3 segments, 73 anchors, shortcuts Canyon flight 994 m
+DAM LAP PASS: finished True in 147.52 s, gates 16/16 in order True, resets 0, wall hits 0
+  water: lap 2 began at water stage 1 (-2.5 m); lap 3 began at water stage 2 (1.4 m)
+  lap                      form          time   target   delta   longest set-piece moment (>= 8 % of the screen's height)
+  1 Lap 1: Dry run         Driving      45.8 s    44 s    +1.8   5.1 s (The dam)
+  2 Lap 2: A smidge        Boating      44.8 s    48 s    -3.2   5.8 s (The dam)
+  3 Lap 3: The full show   Diving       56.9 s    56 s    +0.9   5.0 s (The dam)
+DAM SET-PIECES PASS: 3 of 3 laps had a set-piece >= 8 % of the screen for >= 1 s
+  form changes: Drive->Boat Boat->Fly Fly->Boat Boat->Drive Drive->Boat Boat->Dive Dive->Boat Boat->Drive
+  water: 49.8 stage 0 -> 1 (the leader's lap), rising -2.5 -> 1.4 m over 10 s
+  water: 59.8 risen to 1.4 m
+  water: 94.6 stage 1 -> 2 (the leader's lap), rising 1.4 -> 16.0 m over 10 s
+  water: 104.6 risen to 16.0 m
+  water: 109.7 Abi: Dive (held under by the flood (4.9 m)) at stage 2
+  top speed per form: Drive 75.2 m/s, Boat 58.7 m/s, Fly 92.0 m/s, Dive 44.0 m/s
+  log: [ 147.52] finish in 147.52 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.46 ms, 95th pct 6.47 ms, 99th pct 8.49 ms, worst 199.81 ms over 23971 frames (33 over 16.7 ms); peak draw calls 0, batches 0, triangles 1415k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Lap 1: Dry run       3.92 /   5.68 / 199.81 ms       0 draws    1333k tris
+  Lap 2: A smidge      4.91 /   6.72 /  60.16 ms       0 draws    1415k tris
+  Lap 3: The full show   4.63 /   6.68 /  60.62 ms       0 draws    1412k tris
+  frames over 50 ms during the race: 9
+DAM RESULTS PASS: race 147.52 s, laps 45.83 / 44.77 / 56.92, best on file 147.52 s, best single lap on file 44.77 s; HUD: "LAP <b>3</b><size=24> / 3</size>"
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.00  wind 0.27  FOV 89.9  particles 98  speed 100 % of top
+  Boat  pitch 2.01  wind 0.27  FOV 90.0  particles 143  speed 101 % of top
+  Fly   pitch 2.30  wind 0.27  FOV 90.0  particles 104  speed 100 % of top
+  Dive  pitch 1.85  wind 0.25  FOV 90.0  particles 116  speed 129 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 5.47 ms, 95th pct 8.41 ms, 99th pct 11.50 ms, worst 217.84 ms over 27333 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  damlap       Drive->Boat z -9093.5  0.602 s  frames worst 13.00 / mean 6.95 ms
+  damlap       Boat->Fly   z -9483.6  0.604 s  frames worst 17.25 / mean 6.49 ms
+  damlap       Fly->Boat   z -9786.7  0.605 s  frames worst 14.90 / mean 6.93 ms
+  damlap       Boat->Drive z -9449.8  0.602 s  frames worst 10.03 / mean 6.39 ms
+  damlap       Drive->Boat z -9093.5  0.605 s  frames worst 12.57 / mean 6.76 ms
+  damlap       Boat->Dive  z -9362.5  0.601 s  frames worst 17.42 / mean 6.76 ms
+  damlap       Dive->Boat  z -9394.6  0.600 s  frames worst 13.02 / mean 5.84 ms
+  damlap       Boat->Drive z -9327.2  0.603 s  frames worst 13.82 / mean 7.07 ms
+sound: music results playing (its own signal peak 0.000), splashes played 2, Abi lines: waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

@@ -109,6 +109,18 @@ namespace ShiftStorm
             if (!Enabled || clips.Count == 0 || Busy) return; var id = Pick(prefix); if (id == "") return;
             Speaker = Title; Events.Add($"{Time.realtimeSinceStartup:0.00} PA {id}"); StartCoroutine(Say(id, "PA"));
         }
+        // Round 17 item 2: Buck judges the stunts over the tannoy (he was a stunt performer: he loves a good landing) and fires his own stunt
+        // cannon (the Buck's Big Finish item); a person's racer only, every 25 s at most, never over Barnaby, never with briefings Off
+        float judgeNext;
+        public readonly List<string> Judged = new List<string>();
+        public void Judge(ShiftVehicle v, string how, int pts)
+        {
+            if (!Enabled || !v || !v.Human || Busy || Time.time < judgeNext || Settings.BuckBriefings == 2) return;
+            string pool = how == "shift" ? "judge_shift" : how == "fail" ? (pts >= 300 ? "judge_bad" : "") : pts >= 1200 ? "judge_great" : pts >= 500 ? "judge_good" : "";
+            if (pool == "" || Pool(pool).Count == 0 || (Caller.Instance && Caller.Instance.BarkerTalking)) return;
+            judgeNext = Time.time + 25f; Judged.Add($"{Time.time:0.0} {pool} ({pts})"); PA(pool);
+        }
+        public void BigFinishLine(ShiftVehicle v) { if (v && v.Human && Enabled) PA("cannon"); }
         // Round 16: a line from someone with no voice yet (Hattie Sluice, the dam keeper): her name on the card, the words, no sound
         public string Speaker { get; private set; } = Title;
         public IEnumerator Text(string speaker, string text, float seconds)

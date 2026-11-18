@@ -44,7 +44,7 @@ namespace ShiftStorm
             var sh = OldHud ? null : Resources.Load<Shader>("Shaders/HudUI");
             if (sh) { h.uiMat = new Material(sh) { name = $"HUD {(player == 2 ? 2 : 1)}" }; canvas.planeDistance = CanvasDistance; canvas.sortingOrder = 32000; }
             else if (!OldHud) Debug.LogWarning("[HUD] Shaders/HudUI missing: build 17's canvas");
-            h.Build(go.transform); h.BuildGuide(go.transform); h.Relayout(); h.UseMaterial(); return h;
+            h.Build(go.transform); h.BuildGuide(go.transform); h.BuildFun(go.transform); h.Relayout(); h.UseMaterial(); return h;
         }
         // every graphic on the HUD's shader (rows, cards and markers made later too: checked every half second)
         void UseMaterial() { if (!uiMat) return; foreach (var g in GetComponentsInChildren<Graphic>(true)) if (g.material != uiMat) g.material = uiMat; }
@@ -138,7 +138,7 @@ namespace ShiftStorm
             if (uiMat && Time.frameCount % 30 == 0) UseMaterial();   // Round 15b: rows / cards made later on the HUD's shader too
             string extra = v.Drifting ? "  DRIFT" : v.Carving ? "  CARVE" : "";
             mode.text = $"{Form(v.Mode)}{(v.Changing ? " ..." : "")}{extra}";
-            UpdateGuide();
+            UpdateGuide(); UpdateFun();   // Round 17: items, stunts
             var bk = Buck.Instance; bool card = bk && (bk.CardOn || (bk.Voice && bk.Voice.isPlaying && bk.Subtitle != ""));
             if (buckCard && card != buckCard.activeSelf) buckCard.SetActive(card);
             if (card) { buckSub.text = bk.Subtitle; buckHint.text = bk.CardOn ? bk.Hint : ""; if (buckTitle) buckTitle.text = bk.Speaker; }
@@ -147,15 +147,15 @@ namespace ShiftStorm
             float time = v.Finished ? v.FinishTime : v.Holding ? 0 : Time.time - v.StartTime + v.Penalty;   // Round 4: near-miss penalties count at once
             timer.text = TimeTrial.Clock(time);
             int gates = c ? c.gates.Count : 0;
-            info.text = $"{(c ? c.courseName : "")}\nGates {v.GatesPassed}/{gates}   lap {100f * v.RaceDistance / Mathf.Max(1, gates):0}%   resets {v.Resets}\nInvert {(v.Input.MyInvert ? "ON" : "off")}{(SplitScreen.Active ? $"   view {ViewName}" : "")}";
+            info.text = $"{(c ? c.courseName : "")}\nGates {v.GatesPassed}/{gates}   race {100f * v.RaceDistance / Mathf.Max(1, v.RaceGates):0}%   resets {v.Resets}\nInvert {(v.Input.MyInvert ? "ON" : "off")}{(SplitScreen.Active ? $"   view {ViewName}" : "")}";
             // the segment now, and the last split against its target
             if (trial && c.segments.Count > 0)
             {
-                int i = Mathf.Min(v.Splits.Count, c.segments.Count - 1); var s = c.segments[i];
+                int i = Mathf.Clamp(v.Splits.Count - v.LapSplitBase, 0, c.segments.Count - 1); var s = c.segments[i];   // Round 17: this lap's segment
                 if (v.Splits.Count > 0 && v.Splits[v.Splits.Count - 1] != lastSplitShown)
                 {
-                    int k = v.Splits.Count - 1; float t = v.Splits[k] - (k > 0 ? v.Splits[k - 1] : 0); lastSplitShown = v.Splits[k];
-                    splitLine = $"{c.segments[k].name} {t:0.0} s ({Delta(t - c.segments[k].target)})";
+                    int k = v.Splits.Count - 1; float t = v.Splits[k] - (k > 0 ? v.Splits[k - 1] : 0); lastSplitShown = v.Splits[k]; int sk = k % c.segments.Count;
+                    splitLine = $"{c.segments[sk].name} {t:0.0} s ({Delta(t - c.segments[sk].target)})";
                 }
                 if (v.Splits.Count == 0) splitLine = "";
                 segment.text = v.Finished ? splitLine : $"{i + 1}/{c.segments.Count} {s.name} ({s.target:0} s)\n<size=18>{splitLine}</size>";
@@ -181,13 +181,14 @@ namespace ShiftStorm
             // Round 7: the race caller's words
             var cl = Caller.Instance; if (sub) sub.text = cl && Time.time < cl.SubtitleUntil && cl.Subtitle != "" && player != 2 ? $"<color=#ffd34d><b>{Caller.Name}:</b></color> {cl.Subtitle}" : "";
             // Round 16: the lap on a multi-lap course (and a flash as each lap starts)
-            if (c && c.laps > 1 && !v.Holding)
+            int laps = v.LapsTotal;   // Round 17: every course (Dam Shame: its line's laps; the others: the race's lap count)
+            if (c && laps > 1 && !v.Holding)
             {
-                int lap = c.LapAt(v.Progress); if (v.Finished) lap = c.laps;
-                lapText.text = $"LAP <b>{lap}</b><size=24> / {c.laps}</size>";
-                if (lap != lapShown) { if (lapShown > 0 && lap > lapShown && !v.Finished) { lapFlashText = lap == c.laps ? "FINAL LAP!" : $"LAP {lap} / {c.laps}"; lapFlashUntil = Time.time + 2.2f; } lapShown = lap; }
+                int lap = v.LapNow; if (v.Finished) lap = laps;
+                lapText.text = $"LAP <b>{lap}</b><size=24> / {laps}</size>";
+                if (lap != lapShown) { if (lapShown > 0 && lap > lapShown && !v.Finished) { lapFlashText = lap == laps ? "FINAL LAP!" : $"LAP {lap} / {laps}"; lapFlashUntil = Time.time + 2.2f; } lapShown = lap; }
             }
-            else { lapText.text = c && c.laps > 1 ? $"LAP <b>1</b><size=24> / {c.laps}</size>" : ""; lapShown = c && c.laps > 1 && v.Holding ? 1 : lapShown; }
+            else { lapText.text = c && laps > 1 ? $"LAP <b>1</b><size=24> / {laps}</size>" : ""; lapShown = c && laps > 1 && v.Holding ? 1 : lapShown; }
             // race position
             var race = game ? game.Race : null;
             if (race && race.Active && c) { int pl = race.Place(v); place.text = $"{Race.Ordinal(pl)}<size=28> / {race.Racers.Count}</size>"; place.color = pl == 1 ? new Color(1, .85f, .3f) : Color.white; }
@@ -234,15 +235,22 @@ namespace ShiftStorm
                     var r = order[i]; int fi = race.Finishers.FindIndex(f => f.v == r);
                     string col = ColorUtility.ToHtmlStringRGB(r.Tint), t = fi >= 0 ? TimeTrial.Clock(race.Finishers[fi].time) : $"racing (gate {r.GatesPassed}/{c.gates.Count})";
                     string who = SplitScreen.Active ? (r == game.Player ? "  <b>[P1]</b>" : r == game.Player2 ? "  <b>[P2]</b>" : "") : "";
-                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>{who}   {t}{(r.Penalty > 0 ? $"  <color=#ffb070>(+{r.Penalty:0} s: {Missed(r)})</color>" : "")}{(r == v ? "</b>" : "")}");
+                    sb.AppendLine($"{(r == v ? "<b>" : "")}{i + 1}. <color=#{col}>{r.RacerName}</color>{who}   {t}   <size=17><color=#ffd34d>{r.StuntScore:#,0} stunts</color></size>{(r.Penalty > 0 ? $"  <color=#ffb070>(+{r.Penalty:0} s: {Missed(r)})</color>" : "")}{(r == v ? "</b>" : "")}");
                 }
+                sb.Append(StuntResults());   // Round 17: stunt points (Stunt Show: the standing on points)
                 sb.AppendLine();
             }
             sb.AppendLine($"<size=40><b>{TimeTrial.Clock(tt.Lap)}</b></size>{(tt.NewBest ? "   <color=#ffd34d><b>NEW BEST!</b></color>" : "")}");
             if (c.laps > 1 && tt.SegmentTimes.Count > 0) { float bl = Mathf.Min(tt.SegmentTimes.ToArray()); int bi = tt.SegmentTimes.IndexOf(bl); sb.AppendLine($"<size=24>best lap this race <b>{TimeTrial.Clock(bl)}</b> (lap {bi + 1}){(tt.NewBestLap ? "   <color=#ffd34d><b>NEW BEST LAP!</b></color>" : "")}   best lap ever {TimeTrial.Clock(tt.Best != null && tt.Best.single > 0 ? tt.Best.single : -1)}</size>"); }   // Round 16
             sb.AppendLine($"best {TimeTrial.Clock(tt.Best != null ? tt.Best.lap : -1)}   resets {v.Resets}{(v.Penalty > 0 ? $"   <color=#ffb070>penalty +{v.Penalty:0} s (missed {Missed(v)})</color>" : "")}");
             sb.AppendLine();
-            for (int i = 0; i < c.segments.Count; i++)
+            if (v.OwnLaps && v.LapTimes.Count > 0)   // Round 17: a race of several laps: the lap times (best in gold) instead of every segment
+            {
+                float best = v.BestLap; var lt = new StringBuilder();
+                for (int i = 0; i < v.LapTimes.Count; i++) lt.Append($"lap {i + 1} {(Mathf.Approximately(v.LapTimes[i], best) ? $"<color=#ffd34d><b>{TimeTrial.Clock(v.LapTimes[i])}</b></color>" : TimeTrial.Clock(v.LapTimes[i]))}     ");
+                sb.AppendLine(lt.ToString()); sb.AppendLine($"<size=18>best lap {TimeTrial.Clock(best)}</size>");
+            }
+            else for (int i = 0; i < c.segments.Count; i++)
             {
                 var s = c.segments[i]; float t = i < tt.SegmentTimes.Count ? tt.SegmentTimes[i] : -1;
                 float vsBest = tt.BestBefore != null && tt.BestBefore.splits != null && i < tt.BestBefore.splits.Length && t >= 0 ? t - tt.BestBefore.splits[i] : float.NaN;

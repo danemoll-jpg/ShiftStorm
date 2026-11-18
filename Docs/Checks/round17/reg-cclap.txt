@@ -1,0 +1,52 @@
+ShiftStorm check 'cclap', 2026-11-17 20:50, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+CC LAP: Coaster Coast, line 6690 m, 11 gates, 8 segments, 30 anchors, rails coaster (rail A) 759 m, top hat (rail B) 573 m
+CC LAP PASS: finished True in 106.08 s (target ~120), gates 11/11 in order True, resets 0, changes 7: Drive->Fly, Fly->Drive, Drive->Fly, Fly->Boat, Boat->Dive, Dive->Boat, Boat->Drive
+  segment               form              time   target   delta   longest set-piece moment (>= 8 % of the screen's height)
+  1 Boardwalk           Drive-fly-drive    11.7 s    15 s    -3.3   11.7 s (Fireworks at fw2)
+  2 Coaster Run         Driving            13.1 s    16 s    -2.9   3.1 s (Fireworks at mw3)
+  3 Top Hat             Driving             8.2 s    10 s    -1.8   4.3 s (Helter-skelter)
+  4 Sky Midway          Flying             15.2 s    16 s    -0.8   11.1 s (Fireworks at fw3)
+  5 Log Flume           Boating            20.9 s    20 s    +0.9   3.8 s (Ferris wheel)
+  6 Lighthouse Sea      Boating            15.6 s    17 s    -1.4   5.8 s (Dolphins)
+  7 Sunken Carnival     Diving             14.2 s    16 s    -1.8   2.7 s (Octopus)
+  8 Splash Return       Dive-boat-drive     7.2 s    10 s    -2.8   1.9 s (Splash arch)
+CC SET-PIECES PASS: 8 of 8 segments had a set-piece >= 8 % of the screen for >= 1 s
+  rails: [  23.20] off the coaster (rail A) at 77 m/s (on at 75, lowest 71); [  33.10] off the top hat (rail B) at 71 m/s (on at 77, lowest 71)
+  top speed per form: Drive 77.4 m/s, Boat 72.9 m/s, Fly 92.9 m/s, Dive 44.0 m/s
+  log: [  13.08] onto the coaster (rail A) at 75 m/s (0.0 m across)
+  log: [  23.20] off the coaster (rail A) at 77 m/s (on at 75, lowest 71)
+  log: [  25.47] onto the top hat (rail B) at 77 m/s (0.0 m across)
+  log: [  33.10] off the top hat (rail B) at 71 m/s (on at 77, lowest 71)
+  log: [ 106.08] finish in 106.08 s, 0 resets
+PERF (item 6): every lap frame rendered at 1280x800 and the GPU waited for (PC: NVIDIA GeForce GTX 1660 Ti, Intel(R) Core(TM) i7-9700 CPU @ 3.00GHz): mean 4.68 ms, 95th pct 7.54 ms, 99th pct 12.41 ms, worst 403.02 ms over 15568 frames (70 over 16.7 ms); peak draw calls 0, batches 0, triangles 1010k
+  per segment: render+GPU mean / 95th pct / worst ms, peak draw calls, peak triangles
+  Boardwalk            5.26 /   8.12 /  50.51 ms       0 draws     796k tris
+  Coaster Run          3.93 /   7.22 /  23.85 ms       0 draws    1010k tris
+  Top Hat              7.33 /  13.75 / 403.02 ms       0 draws     898k tris
+  Sky Midway           4.75 /   8.75 / 247.08 ms       0 draws    1001k tris
+  Log Flume            4.85 /   7.48 /  29.82 ms       0 draws     904k tris
+  Lighthouse Sea       4.20 /   6.62 /  13.10 ms       0 draws     570k tris
+  Sunken Carnival      4.41 /   6.77 /  11.81 ms       0 draws     948k tris
+  Splash Return        4.60 /   7.24 /  17.73 ms       0 draws     805k tris
+  frames over 50 ms during the lap: 17
+CC RESULTS PASS: lap 106.08 s, 8 splits, best on file 106.08 s (per course: Paradise Plunge -1.00)
+CC RESTART PASS: after the finish, Reset started Coaster Coast again (course 1)
+SPEED FEEL (item 1), the most on the lap per form: engine pitch (build 5 topped out at 1.8 x at 45 m/s), wind volume (0-0.6), field of view (deg), live speed particles, speed / top speed
+  Drive pitch 2.04  wind 0.28  FOV 90.0  particles 104  speed 103 % of top
+  Fly   pitch 2.31  wind 0.27  FOV 90.0  particles 104  speed 101 % of top
+  Boat  pitch 2.31  wind 0.33  FOV 90.0  particles 139  speed 126 % of top
+  Dive  pitch 1.50  wind 0.07  FOV 90.0  particles 113  speed 100 % of top
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 5.35 ms, 95th pct 9.73 ms, 99th pct 15.86 ms, worst 409.68 ms over 20877 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  cclap        Drive->Fly  z   231.0  0.623 s  frames worst 55.05 / mean 10.65 ms
+  cclap        Fly->Drive  z   703.7  0.603 s  frames worst 22.49 / mean 7.21 ms
+  cclap        Drive->Fly  z   572.0  0.603 s  frames worst 20.97 / mean 6.58 ms
+  cclap        Fly->Boat   z   908.2  0.606 s  frames worst 251.34 / mean 17.11 ms
+  cclap        Boat->Dive  z  -366.8  0.603 s  frames worst 12.81 / mean 4.89 ms
+  cclap        Dive->Boat  z  -473.8  0.601 s  frames worst 12.35 / mean 6.55 ms
+  cclap        Boat->Drive z  -370.3  0.603 s  frames worst 10.62 / mean 6.29 ms
+sound: music race_coaster playing (its own signal peak 0.000), splashes played 1, Abi lines: waterfall: laugh_1; win: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

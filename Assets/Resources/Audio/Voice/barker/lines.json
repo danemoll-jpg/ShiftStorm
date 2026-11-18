@@ -22,6 +22,18 @@
    "text": "A long way back! Hit that boost, my friend!"
   },
   {
+   "id": "bigcombo_1",
+   "text": "What a combo! Are you seeing this?!"
+  },
+  {
+   "id": "bigcombo_2",
+   "text": "Trick after trick after trick! Incredible!"
+  },
+  {
+   "id": "bigcombo_3",
+   "text": "Ladies and gentlemen, that is a highlight reel!"
+  },
+  {
    "id": "boost_1",
    "text": "Boost! Hold on to something!"
   },
@@ -458,6 +470,22 @@
    "text": "Inches apart! I can't watch, but I can't look away!"
   },
   {
+   "id": "combo_1",
+   "text": "Ooh, a combo! Look at that!"
+  },
+  {
+   "id": "combo_2",
+   "text": "Spin and flip, folks! Lovely stuff!"
+  },
+  {
+   "id": "combo_3",
+   "text": "Stuck the landing! The crowd loves it!"
+  },
+  {
+   "id": "combo_4",
+   "text": "Showing off, are we? I approve!"
+  },
+  {
    "id": "creek_1",
    "text": "Over the creek! Don't look down, the fish are watching!"
   },
@@ -698,6 +726,114 @@
    "text": "Green light! Put the pedal down!"
   },
   {
+   "id": "itblock_1",
+   "text": "Blocked it! Nice and safe!"
+  },
+  {
+   "id": "itblock_2",
+   "text": "Bounced right off! Not today!"
+  },
+  {
+   "id": "itbubble_1",
+   "text": "Bubble trap! Up, up and away they go!"
+  },
+  {
+   "id": "itbubble_2",
+   "text": "Floating in a bubble, folks! Enjoy the view!"
+  },
+  {
+   "id": "itbuck_1",
+   "text": "It's Buck's Big Finish! Into the cannon and up the field!"
+  },
+  {
+   "id": "itbuck_2",
+   "text": "Buck's stunt cannon! From the back to the front in one boom!"
+  },
+  {
+   "id": "itcannon_1",
+   "text": "A human cannonball! There goes a clown!"
+  },
+  {
+   "id": "itcannon_2",
+   "text": "Fire the clown! Somebody always has to fire the clown!"
+  },
+  {
+   "id": "itegg_1",
+   "text": "A dino egg! And it's hatched! Run, little raptor, run!"
+  },
+  {
+   "id": "itegg_2",
+   "text": "The baby raptor is off! It's chasing the leader!"
+  },
+  {
+   "id": "itflood_1",
+   "text": "A mini flood! Surf's up, folks!"
+  },
+  {
+   "id": "itflood_2",
+   "text": "Here comes a wave! Everybody hold on!"
+  },
+  {
+   "id": "ithit_1",
+   "text": "Got hit! That's going to cost a second or two!"
+  },
+  {
+   "id": "ithit_2",
+   "text": "Ooh, right on target! Shake it off!"
+  },
+  {
+   "id": "ithit_3",
+   "text": "Direct hit, folks! Direct hit!"
+  },
+  {
+   "id": "ithorn_1",
+   "text": "The hype horn! Double points for every trick now!"
+  },
+  {
+   "id": "itmirage_1",
+   "text": "Three of them? No, it's a mirage! Clever!"
+  },
+  {
+   "id": "itrainbow_1",
+   "text": "A rainbow bridge! Off they go along it!"
+  },
+  {
+   "id": "itrewind_1",
+   "text": "Hang on, didn't we just see that? A rewind, folks!"
+  },
+  {
+   "id": "itrocket_1",
+   "text": "A firework rocket! Ooh! Ahh!"
+  },
+  {
+   "id": "itrocket_2",
+   "text": "Rocket away! Light up the sky, folks!"
+  },
+  {
+   "id": "itstorm_1",
+   "text": "A pocket storm! Somebody brought their own weather!"
+  },
+  {
+   "id": "itstorm_2",
+   "text": "Rain cloud incoming! Hope they packed a brolly!"
+  },
+  {
+   "id": "itswap_1",
+   "text": "They've swapped places! Just like that!"
+  },
+  {
+   "id": "itswap_2",
+   "text": "Swap spot! Now you're ahead, now you're not!"
+  },
+  {
+   "id": "itwrong_1",
+   "text": "Wrong form! Wrong form! That's not a boat, that's a car! Or is it?"
+  },
+  {
+   "id": "itwrong_2",
+   "text": "Zapped into the wrong shape! That's going to be awkward!"
+  },
+  {
    "id": "jump_1",
    "text": "Up, up and over! What airtime, folks!"
   },
@@ -720,6 +856,30 @@
   {
    "id": "lagoon_1",
    "text": "Lagoon Landing! Hope you packed your swimsuit!"
+  },
+  {
+   "id": "lapfinal_1",
+   "text": "Final lap, folks! This is it!"
+  },
+  {
+   "id": "lapfinal_2",
+   "text": "Last time round! Give it everything!"
+  },
+  {
+   "id": "lapfinal_3",
+   "text": "The final lap! Somebody ring the bell!"
+  },
+  {
+   "id": "lapnext_1",
+   "text": "Round they go again, folks! Another lap!"
+  },
+  {
+   "id": "lapnext_2",
+   "text": "Next lap! Same course, fresh chances!"
+  },
+  {
+   "id": "lapnext_3",
+   "text": "Once more round, everybody! Nobody's tired yet!"
   },
   {
    "id": "last_1",
@@ -906,6 +1066,18 @@
    "text": "Oops! Not a winner this time, but don't go away!"
   },
   {
+   "id": "shifttrick_1",
+   "text": "A trick while it changed shape! A shift trick!"
+  },
+  {
+   "id": "shifttrick_2",
+   "text": "Flipping and transforming at the same time! Bonus points!"
+  },
+  {
+   "id": "shifttrick_3",
+   "text": "Shift trick! I didn't know that was even allowed!"
+  },
+  {
    "id": "shortcut_1",
    "text": "Ooh, a sneaky shortcut! I didn't see a thing, folks."
   },
@@ -916,6 +1088,14 @@
   {
    "id": "shortcut_3",
    "text": "The secret way! Don't tell the others, folks!"
+  },
+  {
+   "id": "showstart_1",
+   "text": "Welcome to the Stunt Show, folks! Speed is nice, but style is everything today!"
+  },
+  {
+   "id": "showstart_2",
+   "text": "It's the Stunt Show! Flips, spins, rolls! Points for every one that lands!"
   },
   {
    "id": "skeleton_1",
@@ -1148,6 +1328,18 @@
   {
    "id": "wings_3",
    "text": "The scenic route! Over the lake through the golden rings!"
+  },
+  {
+   "id": "wipeout_1",
+   "text": "Ooh! Landed on its roof. Those points are gone, folks."
+  },
+  {
+   "id": "wipeout_2",
+   "text": "Wipeout! Too much spin, not enough sky."
+  },
+  {
+   "id": "wipeout_3",
+   "text": "Ooh, that landing was not in the brochure."
   }
  ]
 }

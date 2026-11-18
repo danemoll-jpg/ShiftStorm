@@ -93,22 +93,25 @@ Same inputs in every form (`Assets/Scripts/Vehicle/ShiftInput.cs`, Input System 
 | Climb / dive (air, underwater) | Left stick Y: pull back = up | I = up, K = down |
 | Boost (one shared meter) | A | Space |
 | Secondary: drift (car) / tighter carve (boat) | RB | Left Shift |
-| Wings: only on a choice jump (Paradise Plunge's Lake Jump and Cliff Gap, Big Top Breakdown's Clown Jump, Dam Shame's flip bucket on lap 1's water): from the ramp (HUD "LB: FLY"; pressed there = "WINGS READY", out at the lip) to 1.5 s into the air; nothing anywhere else | LB | E |
+| Wings: only on a choice jump (Paradise Plunge's Lake Jump: the Valley Flight (Round 17; the Cliff Gap is a plain jump again), Big Top Breakdown's Clown Jump, Dam Shame's flip bucket on lap 1's water): from the ramp (HUD "LB: FLY"; pressed there = "WINGS READY", out at the lip) to 1.5 s into the air; nothing anywhere else | LB | E |
 | Camera view: Chase / Far chase / First person / Front (per player, saved) | X | V |
-| Look around (pulled back = look behind) | Right stick | - |
+| Look around (pulled back = look behind; on the ground only) | Right stick | - |
+| Use the item held (Round 17; races, Stunt Show, The Tour) | B | Q |
+| Tricks in the air, any form (Round 17): left / right = spin / roll, forward / back = flips / loop | Right stick | T / F / G / H |
+| Boat wave hop (on the water at speed) / sub breach (at speed just under open water) | Left stick back | I |
 | Reset to last safe anchor | Y | R |
 | Invert climb / dive (per player, saved in `settings.json`; also Menu > Settings) | View (Back) | F2 |
 | FPS + speed readout on / off (saved in `settings.json`; also Menu > Settings) | R3 (right stick click) | F1 |
 | Full screen / windowed (saved, `display.json`) | Menu > Settings > Screen | Alt+Enter |
 | Title screen (Round 14): any button | A / Start | Enter / Space / Esc |
-| Main menu: The Tour, Race, Time Trial, 2 Players, Garage, Settings, Quit game (B: the title); Race / Time Trial -> the course cards -> Choose your racer (driver, machine, form) -> Go | - | - |
+| Main menu: The Tour, Race, Time Trial, Stunt Show, 2 Players, Garage, Settings, Quit game (B: the title); Race / Time Trial / Stunt Show -> the course cards -> Choose your racer (driver, machine, form, Laps 1-5 for Race) -> Go | - | - |
 | Pause in a race: Resume, Restart, Settings, Quit to menu (+ 2 Players setup / End 2 players while split) | Menu (Start), either player | Esc |
 | Skip Buck (a briefing or a Tour scene) | A (or Menu / B) | Enter / Space (or Esc / Backspace) |
 | 2 Players: player 2 joins (on Menu > 2 Players) | A on a second controller | Enter (if player 1 is on a pad) |
 | Menu move / change a value / choose / back (held = repeat) | D-pad or left stick up-down / left-right / A / B | Up-Down (W-S) / Left-Right (A-D) / Enter or Space / Backspace |
 
 Menu > Settings (Round 14: four groups, one setting per row, left / right change the value, A also steps it, B back):
-- Gameplay: AI difficulty Easy / Normal / Hard (default Easy), Buck's briefings On / Short / Off, Unlock all Tour stops On / Off (default On
+- Gameplay: AI difficulty Easy / Normal / Hard (default Easy), Items On / Off (Round 17, default On), Buck's briefings On / Short / Off, Unlock all Tour stops On / Off (default On
   while building: `Settings.UnlockTourDefault`), Save playtest logs, Open log folder.
 - Audio (sliders, 10 % steps): Music, Voices (Barnaby, Buck, drivers), Engines, Effects, Crowd (Round 14; defaults 100 / 100 / 60 / 100 / 100).
 - Video: Graphics Auto / Deck / Low / Medium / High (Auto = Deck on a Steam Deck, High elsewhere; 2 players one lighter), Screen, FPS readout,
@@ -188,6 +191,14 @@ Unity batch runs need the sandbox off (its package manager uses a named pipe).
   trial: lap times, the water's stages, every form change, set-pieces per lap, pictures of each lap's water; `damrise`: seven stragglers
   while the water rises round them (a rival put on the next lap); `damviews`: fixed viewpoints at every water stage). `soak` and `split`
   take `-course 3` (a 3-lap race: the soak's limit is 720 s). `-oldBtFlight` = build 18's Clown flight, flight camera and HUD arrow.
+  Round 17: `round17` = `items17` (every item in every form on Paradise Plunge with a rival ahead: used, hit / blocked, resets caused
+  (must be 0); each course's own item; the grace) + `stunts17` (each form's tricks, landings, a wipeout, the breach, the hop, a SHIFT TRICK;
+  the human-like pilot's tricks, `-tries N`) + `laps17` (3-lap races on Paradise Plunge, Coaster Coast and Big Top: laps, lap times, the
+  HUD's LAP / FINAL LAP, the results) + `show17` (a 3-lap Stunt Show race: the standing on points) + `pp17` (Paradise Plunge's new lap
+  time, each big split both ways by the AI, the human-like pilot on the Valley Flight); `aisoak17` (AI races with items on every course,
+  `-races N`: finishes, resets after a hit, item use, the odds by place); `diag17` (a trace of the AI at the Sunken Caves' fork). Check runs
+  race 1 lap unless `-raceLaps N`; `-noItems` turns the items off; `-oldPP` builds build 19's Paradise Plunge (its Lake / Cliff flights,
+  Mangrove bypass, Coral Vault tunnel, the long lap).
   Any check takes `-design <name>` (not saved). Any check takes `-difficulty Easy|Normal|Hard` (not saved) and `-noTunnel`. The launcher's hidden start-up check runs a check named in the `SHIFTSTORM_CHECK` environment variable. `nav`: a guided pilot that steers
   only by the HUD (arrow / next-gate marker) from off the line and facing backwards in the air, plus marker / arrow pictures per form. The lap check also measures render + GPU time per segment (PC numbers).
   Any run with `-mute`, `-check` or `-batchmode` is muted from the first frame and reports the measured output level.
@@ -532,6 +543,46 @@ Round 15b delivered as build 18 (0.13.1), 2026-11-16.
 
 Round 16 delivered as build 19 (0.14.0), 2026-11-17.
 
-Current objective: **Round 17 — the fun round**: creative power-ups (B), stunts with stunt points (right stick in the air;
+- **Round 17 (build 20, 0.15.0): the fun round — items, stunts, laps, Paradise Plunge's big route splits:**
+  - **Items** (`Fun/Items.cs`, `Fun/RacerItems.cs`, `Fun/ItemFx.cs`, `Vehicle/ShiftVehicle.Effects.cs`): rows of 4 rainbow item boxes
+    (`ItemField`: ~1 per 650 m of every course's line, none near a gate, lip, rail or zone; 1-3 on each long shortcut / split), in every
+    form (on the road, on the water, in the air, under water). B / Q uses the one item held (a 1 s roulette after a box). Wrong Form,
+    Rainbow Bridge (a speed lane ahead, only for its owner), Bubble Trap, Swap Spot, Mirage, Rewind (3 s), Pocket Storm, Hype Horn
+    (stunts x2, 10 s), Bubble Shield and Slick (held: block a hit from behind), each course's own (Paradise: dino egg -> a baby
+    raptor / pterodactyl / plesiosaur by the target's form; Coaster: firework rocket; Big Top: human cannonball; Dam: mini flood wave),
+    Buck's Big Finish (last place only: his stunt cannon fires you up to 450 m ahead, never past the gate after the next). Odds by place
+    (`Items.Roll`), a grace after every hit (the effect + 2 s), warnings ("X INCOMING!"), no item ever resets anyone (`FunHoldsRecovery`:
+    the wrong form counts gates in its old form, the water / bounds / fall resets wait). The AI uses them (`RacerItems.Think`). Off in
+    Time Trial, rival challenges and with Settings > Gameplay > Items Off. HUD icons from `Tools/make_item_icons.py`
+    (`Resources/UI/Items`); sounds `it_*` (`Tools/Audio/item_sfx.py`, ElevenLabs sound generation).
+  - **Stunts** (`Vehicle/ShiftVehicle.Tricks.cs`): the right stick (T / F / G / H) in the air in any form: car spin / front / back flip,
+    plane barrel roll / loop / bunt, boat hull spin / flip (left stick back on the water = a wave hop), sub corkscrew / flip (left stick
+    back at 24+ m/s just under open water = a breach, 1.5 s after diving at the earliest). The model turns (looks only; `TrickVisual` on
+    the Forms object). Combos x1 / x1.5 / x2..., a repeat of the same trick from the third on 60 %, land >= 80 % round = banked (+boost,
+    +speed), else WIPEOUT (points lost, a wobble, speed cut); a trick while changing form = SHIFT TRICK (+500, x1.5). HUD: STUNTS score,
+    the combo, pop-ups. Barnaby calls combos / shift tricks / wipeouts, the crowd cheers, Buck judges (tannoy, every 25 s at most). The
+    AI does tricks by difficulty. Every race's results list the stunt points; **Stunt Show** (main menu): 3 laps, items on, won on stunt
+    points + place bonus (1000 / 600 / 300 / 0: `Game.ShowPoints`).
+  - **Laps** (`Vehicle/ShiftVehicle.Laps.cs`): Paradise Plunge, Coaster Coast and Big Top finish on their G0, so a racer's laps are
+    counted per racer (`Course.raceLaps`, set by Game): Race 1-5 (Choose your racer > Laps, saved "laps", default 3), The Tour and Stunt
+    Show 3, Time Trial and challenges 1; Dam Shame keeps its own 3. LAP n / N, FINAL LAP, lap times + best lap on the results; positions
+    across laps (`RaceDistance`); the AI decides each lap's choices again.
+  - **Paradise Plunge trimmed** (`ParadisePlunge.Points17`; "-oldPP" = build 19's): the climb's east end and its ramp ~150 m further west,
+    the lagoon left on its west side right after the splashdown (the river is ~400 m shorter), a compact Coral Vault (two ridges, two
+    curtains, a hairpin up into the pool; no longer under the finishing road). Check pilot lap 124.7 -> 97.9 s (3 laps ~4.9 min).
+  - **Big route splits** (`World/ParadisePlunge.Splits.cs`): **Valley Flight** (LB on the Lake Jump's ramp: a low 1.65 km loop through
+    the dinosaur valley, 6 rings, herds beside it, joins the Sky Arch flight 260 m past the ramp; stands in for G1 + G2:
+    `Shortcut.replacesCount`) vs **Cliffside Run** (canyon, climb, the Cliff Gap as a plain jump, ramp); **Sunken Caves** (the violet dive
+    lane after the splashdown, a sinkhole in the lagoon's bed, a winding drowned riverbed under the river, up before the Sunken Gateway;
+    stands in for G5; its own anchors) vs **Mangrove River**. Folded in: the Lake flight, the Cliff flight, the Mangrove bypass and the
+    Coral Vault tunnel (all only with "-oldPP").
+  - Barnaby 48 new lines (laps, combos, items), Buck 13 (judging, his cannon); playtest logs record laps, stunts and items.
+
+Round 17 delivered as build 20 (0.15.0), 2026-11-17.
+
+Current objective: **Round 18 (planned): the big route splits on Coaster Coast, Big Top Breakdown and Dam Shame** — after Dan's
+feedback on Round 17. See `TODO.md`.
+
+Previous objective: **Round 17 — the fun round**: creative power-ups (B), stunts with stunt points (right stick in the air;
 Stunt Show mode), 1–5 laps on every course (default 3), and Paradise Plunge's big route splits. Release build 20 (0.15.0). See
 `TODO.md`.

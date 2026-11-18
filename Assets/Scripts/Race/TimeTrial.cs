@@ -67,12 +67,12 @@ namespace ShiftStorm
         {
             if (!v || !v.Course || !v.Course.timeTrial || !v.Finished || HasResults) return;
             if (finishedAt < 0) finishedAt = Time.unscaledTime;
-            if (v.Splits.Count < v.Course.segments.Count && Time.unscaledTime - finishedAt < .5f) return;   // the last split lands a step after the finish
+            if (v.Splits.Count < v.Course.segments.Count * (v.OwnLaps ? v.LapsTotal : 1) && Time.unscaledTime - finishedAt < .5f) return;   // Round 17: every lap's segments   // the last split lands a step after the finish
             Lap = v.FinishTime; SegmentTimes.Clear(); float prev = 0;
             foreach (var s in v.Splits) { SegmentTimes.Add(s - prev); prev = s; }
             BestBefore = BestTimes.Get(v.Course.courseName);
             // Round 3: a race against the rivals shows the lap and splits but only a Time Trial (alone) sets the best lap
-            float single = v.Course.laps > 1 && SegmentTimes.Count > 0 ? Mathf.Min(SegmentTimes.ToArray()) : -1; NewBestLap = false;
+            float single = v.Course.laps > 1 && SegmentTimes.Count > 0 ? Mathf.Min(SegmentTimes.ToArray()) : v.OwnLaps ? v.BestLap : -1; NewBestLap = false;
             bool alone = !(Game.Instance && Game.Instance.RaceMode);
             bool nbl = false; NewBest = alone && BestTimes.Submit(v.Course.courseName, Lap, SegmentTimes, single, out nbl); NewBestLap = alone && nbl;
             Best = BestTimes.Get(v.Course.courseName);

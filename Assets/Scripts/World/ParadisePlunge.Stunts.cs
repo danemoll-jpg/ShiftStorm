@@ -332,7 +332,7 @@ namespace ShiftStorm
         // car keeps the climb road (over the gap, corner2, the ramp). The Round 12 rules from the start: entered as the wings open, a wide
         // exit frame, the steering assist, a reset on it (or just off it) goes forward to the Sky Arch's first anchor +3 s, near misses count.
         // "-noCliffFlight": build 14's plain Cliff Gap (before numbers).
-        public static bool CliffChoice => System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noCliffFlight") < 0;
+        public static bool CliffChoice => Old && System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-noCliffFlight") < 0;   // Round 17: a plain jump again (big airtime: a trick spot)
         public const float CliffRejoinAfter = 230f;
         public static float CliffWide = 1f;   // the branch's sideways reach (tuned for an equal time with the car line)
         static void CliffFlight()

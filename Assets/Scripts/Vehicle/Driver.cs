@@ -388,7 +388,8 @@ namespace ShiftStorm
                 else if (kind == "missed") MessUp("messup", "missed gate");
                 else if (kind == "change") { if (v.ChangeFrom == Mode.Boat && v.Mode == Mode.Drive && v.Human) Say("waterfall"); PlayOnce(Thumbs); }
             };
-            v.Stunt += onStunt = st => { if (st == "loopfail") MessUp("messup", "loop failed"); };
+            v.Stunt += onStunt = st => { if (st == "loopfail") MessUp("messup", "loop failed"); else if (st == "trickfail") MessUp("messup", "trick wipeout"); };
+            v.ItemHit += onHit = (k, by, how) => { if (how == "hit") { MessUp("messup", "hit by " + Items.Name(k)); PlayOnce(Grumble); } };   // Round 17
             v.WallHit += onWall = (angle, keep, what) => { if (keep < .7f && !v.Finished && !v.Holding) MessUp("messup", $"wall hit ({angle:0} deg)"); };
             Debug.Log($"[Driver] voice: {n} {who} lines loaded");
         }
@@ -456,7 +457,7 @@ namespace ShiftStorm
         void OnDestroy() { All.Remove(this); if (graph.IsValid()) graph.Destroy(); }
         // Round 11 (choose your racer): another driver in this vehicle: this one leaves (events unhooked, model, voice and clip graph gone,
         // at once so GetComponent<Driver> finds the new one this frame); the steering mechanism stays and the new driver rebuilds it
-        System.Action<string, string> onEvent; System.Action<string> onStunt; System.Action<float, float, string> onWall;
+        System.Action<string, string> onEvent; System.Action<string> onStunt; System.Action<float, float, string> onWall; System.Action<ItemKind, ShiftVehicle, string> onHit;
         public static Driver Swap(ShiftVehicle v, string character, bool main)
         {
             var old = v.GetComponent<Driver>();
@@ -466,7 +467,7 @@ namespace ShiftStorm
         void Retire()
         {
             StopAllCoroutines();
-            if (v) { if (onEvent != null) v.Event -= onEvent; if (onStunt != null) v.Stunt -= onStunt; if (onWall != null) v.WallHit -= onWall; }
+            if (v) { if (onEvent != null) v.Event -= onEvent; if (onStunt != null) v.Stunt -= onStunt; if (onWall != null) v.WallHit -= onWall; if (onHit != null) v.ItemHit -= onHit; }
             if (model) DestroyImmediate(model.gameObject);
             if (voice) DestroyImmediate(voice);
             if (Instance == this) Instance = null;

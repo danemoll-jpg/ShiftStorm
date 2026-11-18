@@ -21,11 +21,69 @@ returning Tee'd Off driver, three AI rivals). Full concept: Dan's
   deferred, and why.
 
 ## Completed Tasks
+- **Round 17 — the fun round: items, stunts and Stunt Show, laps on every course, Paradise Plunge's big route splits** (2026-11-17, release `build-20` / 0.15.0). Status below.
 - **Round 16 — Big Top's first flight made obvious, Dam Shame (the first three-lap race, the water rises every lap)** (2026-11-17, release `build-19` / 0.14.0). Status below.
 - **Round 15b (hotfix) — the screen shake on Coaster Coast and Big Top** (2026-11-16, release `build-18` / 0.13.1). Status below.
 - **Round 15 — the shimmer's cause fixed, Barnaby by name, Big Top Breakdown** (2026-11-16, release `build-17` / 0.13.0). Status below.
 - **Round 14 — title screen and clean menus, crowd much quieter, the Scrambler's whole bubble, no shake after the race, the Ferris wheel on the main route** (2026-11-16, release `build-16` / 0.12.0). Status below.
 - **Round 13 — known resets fixed, Cliff flight, Mangrove bypass, rival challenges, Graphics presets, Coaster Coast's pier** (2026-11-16, release `build-15` / 0.11.0). Status below.
+
+### Round 17 delivery (2026-11-17) — status per item
+Evidence: `Docs/Checks/round17/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal, one at a time;
+measured audio output peak 0.000000 (AudioListener.volume 0) in every run; sound was never unmuted.
+1. **Items — DONE.** 15 items: Wrong Form, Rainbow Bridge (a speed lane ahead, only for you), Bubble Trap, Swap Spot, Mirage, Rewind,
+   Pocket Storm, Hype Horn, Bubble Shield and Slick (both block a hit from behind while held), each course's own (dino egg -> a baby
+   raptor / pterodactyl / plesiosaur by the target's form; firework rocket; human cannonball; mini flood wave) and Buck's Big Finish (last
+   place only). Item boxes on every course, in every form (road, water, air, caves), also on the long shortcuts and both big splits. B / Q
+   uses it; a 1 s roulette; odds by place; a grace after every hit (the effect + 2 s); "X INCOMING!" warnings; no item ever resets anyone.
+   The AI picks up and uses them. HUD icons (`Tools/make_item_icons.py`), 13 new sounds (ElevenLabs), Barnaby calls hits / blocks / each
+   item, the drivers' mess-up yells on a hit. Settings > Gameplay > Items On / Off; off in Time Trial and the rival challenges.
+   *Checks:* `items17`: every item in every form, 47 of 48 used (Buck's cannon refuses in the air: by design, it needs a road / water
+   anchor ahead), 15 hits, 1 blocked, **0 resets caused**; each course's own item on its course; the grace PASS. `aisoak17` (Normal, 4 AI
+   with items, 3 races on each of the four courses): **48 of 48 finished, 6 resets, 0 after an item hit**, every item used by the AI
+   (most: Slick 39, Hype Horn 30, Bubble Shield 21, Bubble Trap 18, Mirage 18). Odds by place (rolls seen in the soak + 50 races' worth):
+   1st: Slick 29 %, Bubble Shield 20 %, Mirage 13 %, Hype Horn 12 %, attacks ~13 %; last: Bubble Trap 15 %, the course's own 14 %,
+   Rainbow Bridge 13 %, Wrong Form 11 %, Swap Spot 10 %, Pocket Storm 9 %, Buck's Big Finish 2 %.
+2. **Stunts, stunt points, Stunt Show — DONE.** Right stick (T / F / G / H) in the air in any form: car spin / front / back flip, plane
+   barrel roll / loop / bunt, boat hull spin / flip (left stick back on the water = a wave hop), sub corkscrew / breach flip (left stick
+   back just under open water at speed = a breach). Combos (x1, x1.5, x2 ...), land clean = boost + speed + points, land mid-trick =
+   WIPEOUT (points lost, a wobble); a trick during a change = SHIFT TRICK (+500, x1.5); the Hype Horn doubles it. HUD score, combo meter,
+   pop-ups; Barnaby calls combos / shift tricks / wipeouts, the crowd cheers, Buck judges over the tannoy (13 new lines). Every race's
+   results list place and stunt points; Stunt Show (main menu): 3 laps, items on, won on points + a place bonus. The AI does tricks by
+   difficulty. *Checks:* `stunts17` PASS: car spin / front flip / back flip landed clean, a late flip a WIPEOUT as meant, plane barrel roll
+   and loop banked, boat hop + spin, sub breach + corkscrew, a SHIFT TRICK off the Lake Jump +650; the human-like pilot (late, noisy)
+   landed **8 of 8**. `show17` PASS: a 3-lap Stunt Show won on points by Rae (1,620) while Abi won the race (600 with the place bonus).
+3. **Laps on every course — DONE.** 1-5 laps (Choose your racer > Laps, default 3; The Tour and Stunt Show 3; Time Trial 1; Dam Shame its
+   own 3). Lap counter, LAP 2 / FINAL LAP flashes, lap times and best lap on the results, positions across laps, Barnaby's lap calls.
+   Paradise Plunge trimmed: check pilot lap **124.7 -> 97.9 s (3 laps ~4.9 min)** (the climb's ramp moved west, the lagoon left on its
+   west side, a compact Coral Vault). *Checks:* `laps17` PASS on all three: 3-lap races with the player's racer AI-driven: Paradise Plunge
+   281 s (laps 95 / 93 / 93), Coaster Coast 310 s (5.2 min; its lap is not trimmed this round), Big Top 280 s; 0 resets, 33 / 33 gates.
+4. **Paradise Plunge's big route splits — DONE (the Valley Flight is harder for a human than for the AI).** Valley Flight (LB on the Lake
+   Jump's ramp: a long low loop through the dinosaur valley, six rings, long-necks at a waterhole, triceratops, the T. rex, pterodactyls;
+   joins the Sky Arch flight past the ramp) vs Cliffside Run (canyon, climb, the Cliff Gap now a plain big-air jump, ramp); Sunken Caves
+   (the violet dive lane after the splashdown, a sinkhole in the lagoon's bed, a winding drowned riverbed under the whole river, up before
+   the Sunken Gateway) vs Mangrove River. Folded in: Lake flight, Cliff flight, Mangrove bypass, Coral Vault tunnel (only with `-oldPP`).
+   Item rows on both sides; big airtime on the Creek Jump / Cliff Gap; breach water in the lagoon. *Checks:* `pp17`: AI (Hard, no boost)
+   fork to rejoin: Valley Flight **18.8 s** vs Cliffside Run **22.4 s**; Sunken Caves **19.2 s** vs Mangrove River **21.5 s**; 0 resets.
+   Human-like pilot on the Valley Flight **6 of 8** (stick 21-23 s, keys ~35 s: they circle the last loop; the two misses were put forward
+   with +3 s). Soaks (Paradise Plunge, 4 AI per race, Easy): with items **100 of 100 laps, 7 resets** (after the fix below; 37 before it), with `-noItems` 48 of 48 (before the fix); the AI took the Valley Flight 36 times and the Sunken Caves 5 times in 100 laps. Found and fixed: AI subs breaching inside the surfacing pool flew over its
+   "Surface" zone and reached the road as subs (30 resets in 100 laps): a breaching sub over a surfacing zone now surfaces, and the AI
+   never breaches within 150 m of a form change.
+5. **Regression + release — DONE.** `round2` PASS (Paradise lap 98.0 s), `cclap` PASS 106.1 s, `btlap` PASS 94.8 s, `damlap` PASS
+   147.5 s, `round11` PASS (Buck on every course, The Tour's four stops; its retry case run with `-noItems`: with items on, Buck's Big Finish
+   fired the deliberately slow player into 1st), `challenges` 8 of 8, `menuwalk` 13 / 13. AI soaks with items: Coaster Coast 24 / 24 laps
+   (3 resets), Big Top 24 / 24 (4), Dam Shame 24 / 24 (1), 0 bad gate sequences. Release build 20 (0.15.0) published; disk cleaned.
+
+### For Dan to check (build 20)
+1. Race any course with items On: pick up boxes, press B. Do the items feel creative and fair? Too many, too few, too strong?
+2. Try items in every form: zap a flying rival with Wrong Form, bubble a boat, send the dino egg after a sub.
+3. Off the jumps and in flight: right stick for tricks. Land them; try one while you change form (the SHIFT TRICK). Do the boat's hop
+   (stick back on the water) and the sub's breach (stick back just under open water) work for you?
+4. Stunt Show (main menu): is winning on points fun? Is Buck's judging too much or too little?
+5. Laps: the Laps row on Choose your racer (default 3). Is a 3-lap Paradise Plunge (~5 min) the right length?
+6. Paradise Plunge: LB on the Lake Jump's ramp for the Valley Flight. Can you follow the rings round its loop? Worth it against the climb?
+7. After the splashdown: the violet dive lane into the Sunken Caves, or the river. Different enough to want to try the other way?
+8. Anything you miss from the old lap (the short Lake / Cliff flights, the Mangrove bypass, the long Coral Vault)?
 
 ### Round 16 delivery (2026-11-17) — status per item
 Evidence: `Docs/Checks/round16/` (reports, pictures). Every run: built exe, `-batchmode -mute`, no window, Below Normal; measured audio
@@ -732,7 +790,7 @@ unmuted. No window opened.
 
 - **Round 4 — walls, keeping up, the start line, the tunnel, near-miss gates** (2026-11-13, release `build-5` / 0.4.0). Spec moved to `TODO-ARCHIVE.md`.
 
-## Current Objective — Round 17: the fun round (power-ups, stunts, big route splits, laps) — Paradise Plunge first
+## Current Objective — Round 17 (DONE, build 20): the fun round (power-ups, stunts, big route splits, laps) — Paradise Plunge first
 
 **Why (Dan, 2026-11-17):** the game wasn't clicking — "a great idea on paper" but something missing. Agreed with the planning
 chat: the racing needs things to *play with*, and the choices need to matter. Dan's words:
@@ -806,7 +864,7 @@ ask; no visible window. Same testing rules. Read-only references as before.
 - Publish a release every round. Target hardware: Steam Deck, 60 fps.
 
 ### For Dan to check (fill in at end of round)
-- …
+- See "For Dan to check (build 20)" under Completed Tasks.
 
 ## Next Steps (Do Not Start Yet)
 - **Round 18 (planned): the big route splits on Coaster Coast, Big Top Breakdown and Dam Shame**, like Round 17 did for

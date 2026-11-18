@@ -84,6 +84,7 @@ namespace ShiftStorm
         {
             if (!Forms) return; float t = Time.time - bounceAt;
             Forms.transform.localPosition = t >= 0 && t < .9f ? new Vector3(0, -bounceAmp * Mathf.Exp(-t / .16f) * Mathf.Cos(17f * t), 0) : Vector3.zero;
+            Forms.transform.localRotation = TrickVisual();   // Round 17: a trick, a knock's spin, a wipeout's wobble (looks only)
         }
     }
 }

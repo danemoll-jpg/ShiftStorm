@@ -39,8 +39,8 @@ namespace ShiftStorm
         public static readonly Rival[] Roster =
         {
             new Rival { name = "Rocket Rae", character = "Rae", color = new Color(.85f, .12f, .15f), lane = -2.5f, brakeMargin = .92f, boostMeter = .5f, boostStraight = 11f, shortcut = "Sky Arch slit|Lighthouse rocks|Island rapids", shortcutRate = .5f, seed = 11 },
-            new Rival { name = "Chip \"Showtime\" Sterling", character = "Chip", color = new Color(.15f, .4f, .95f), lane = 2.5f, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Coral Vault tunnel|Lighthouse rocks|Island rapids", shortcutRate = .5f, seed = 23 },
-            new Rival { name = "Vivi", character = "Vivi", color = new Color(.62f, .25f, .9f), lane = 0f, brakeMargin = .88f, boostMeter = .65f, boostStraight = 8f, shortcut = "Mangrove bypass", shortcutRate = .5f, seed = 37 },   // Round 13: the bypass
+            new Rival { name = "Chip \"Showtime\" Sterling", character = "Chip", color = new Color(.15f, .4f, .95f), lane = 2.5f, brakeMargin = .9f, boostMeter = .6f, boostStraight = 9f, shortcut = "Coral Vault tunnel|Sunken Caves|Lighthouse rocks|Island rapids", shortcutRate = .5f, seed = 23 },
+            new Rival { name = "Vivi", character = "Vivi", color = new Color(.62f, .25f, .9f), lane = 0f, brakeMargin = .88f, boostMeter = .65f, boostStraight = 8f, shortcut = "Mangrove bypass|Sunken Caves", shortcutRate = .5f, seed = 37 },   // Round 13: the bypass; Round 17: the Sunken Caves
         };
     }
 
@@ -74,7 +74,8 @@ namespace ShiftStorm
             v = GetComponent<ShiftVehicle>(); input = v.Input; input.Scripted = true;
             rnd = new System.Random(rival != null ? rival.seed : 1);
             v.WallHit += (a, k, w) => hitTimes.Add(Time.time);
-            v.Event += (kind, text) => { if (kind == "start") { gridLane = float.NaN; decided.Clear(); planned = null; scDone = false; Plan = ""; laps++; lastTaken = 0; launched = false; launchAt = -1; nextMistake = -1; mistakeUntil = -1; } };
+            v.Event += (kind, text) => { if (kind == "lap") { decided.Clear(); planned = null; scDone = false; Plan = ""; lastTaken = v.ShortcutsTaken.Count; scS = 0; }   // Round 17: each lap decides its own choices
+                if (kind == "start") { gridLane = float.NaN; decided.Clear(); planned = null; scDone = false; Plan = ""; laps++; lastTaken = 0; launched = false; launchAt = -1; nextMistake = -1; mistakeUntil = -1; } };
         }
 
         // look-ahead: shorter inside a shortcut underwater (a tunnel: follow its line, never cut its corners into the walls)
@@ -154,7 +155,7 @@ namespace ShiftStorm
             if (planned && !scDone)
             {
                 if (v.OnShortcut == planned || v.Progress >= planned.mainFrom) scS = planned.Project(p, v.OnShortcut == planned || scS > 0 ? scS : -1, out _, out _);
-                if (v.ShortcutsTaken.Count > lastTaken || (v.OnShortcut != planned && v.Progress > planned.mainTo - 5) || v.GatesPassed > planned.nextGate + (planned.replacesGate >= 0 ? 1 : 0)) scDone = true;
+                if (v.ShortcutsTaken.Count > lastTaken || (v.OnShortcut != planned && v.Progress > planned.mainTo - 5) || v.GatesPassed > planned.nextGate + planned.GatesReplaced) scDone = true;
             }
 
             var skill = Skill;
@@ -199,7 +200,7 @@ namespace ShiftStorm
             float max = MaxOffset();
             var fwd3 = (look - p).normalized; var right = Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(fwd3, Vector3.up).normalized);
             float want = rival != null ? rival.lane : 0; float stepWant = 0;
-            if (!float.IsNaN(gridLane) && v.Progress < startProgress + 200f) want = gridLane;
+            if (!float.IsNaN(gridLane) && v.Progress < startProgress + 200f && v.Lap == 1) want = gridLane;
             else if (skill.wobble > 0) want += skill.wobble * Mathf.Sin(Time.time * .37f + (rival != null ? rival.seed : 0)) * Mathf.Sin(Time.time * .13f + 1.7f);
             if (Game.Instance && Game.Instance.Race)
                 foreach (var o in Game.Instance.Race.Racers)
@@ -248,7 +249,7 @@ namespace ShiftStorm
             // the pace it holds (lifting off above it), and a mistake: off the throttle for a moment
             // Round 5: the pace cap and the mistakes start 600 m after the grid: at the faster launch (30 m/s2) a held-back Easy car right
             // in front of the grid's back row was rammed in the first seconds (15 touches in 25 starts); the field now gets away cleanly
-            bool launchRun = v.Progress < startProgress + 600f;
+            bool launchRun = v.Progress < startProgress + 600f && v.Lap == 1;   // Round 17: only the first lap's launch
             if (skill.pace < 1f && !boost && !launchRun && speed > skill.pace * v.TopSpeedNow) thr = 0;
             if (Time.time < mistakeUntil && !launchRun) { thr = 0; boost = false; }
             if (v.Mode == Mode.Dive && thr > 0) thr = Mathf.Min(thr, skill.pace);

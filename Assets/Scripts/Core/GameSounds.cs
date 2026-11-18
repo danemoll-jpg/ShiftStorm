@@ -39,6 +39,10 @@ namespace ShiftStorm
             // Round 9 item 3: Tee'd Off's win jingle (to_match_win) is gone: it played on top of ShiftStorm's own finish (Dan's "Victory" song)
             ("finish", new[] { "to_cheer_big" }), ("applause", new[] { "to_applause" }), ("lost", new[] { "to_crowd_clap_small" }),
             ("reset", new[] { "to_void_bloop_1", "to_void_bloop_2" }),
+            // Round 17: the items (ElevenLabs sound generation, Tools/Audio/item_sfx.py)
+            ("it_pick", new[] { "it_pick" }), ("it_zap", new[] { "it_zap" }), ("it_pop", new[] { "it_pop" }), ("it_bubble", new[] { "it_bubble" }), ("it_rain", new[] { "it_rain" }),
+            ("it_rocket", new[] { "it_rocket" }), ("it_boom", new[] { "it_boom" }), ("it_squeak", new[] { "it_squeak" }), ("it_rewind", new[] { "it_rewind" }), ("it_shimmer", new[] { "it_shimmer" }),
+            ("it_wave", new[] { "it_wave" }), ("it_swap", new[] { "it_swap" }), ("it_slick", new[] { "it_slick" }),
             ("ui_move", new[] { "to_ui_click" }), ("ui_select", new[] { "to_ui_select" }), ("ui_back", new[] { "to_ui_back" }),
         };
 
@@ -66,6 +70,12 @@ namespace ShiftStorm
             src.pitch = pitch; src.PlayOneShot(c, vol * bus); LastVolume[KindOf(name)] = vol * bus;
             Played[name] = (Played.TryGetValue(name, out var k) ? k : 0) + 1;
             SoundLog.Add(KindOf(name), c.name);
+        }
+        // Round 17: an item's sound where it happens: full near player 1's racer, quieter further off, nothing beyond 160 m
+        public void At(string name, Vector3 at, float vol = 1f)
+        {
+            var p = game ? game.Player : null; if (!p || !p.Body) return; float d = Vector3.Distance(p.Body.position, at); if (d > 160f) return;
+            Play(name, vol * Mathf.Clamp01(1.15f - d / 160f));
         }
         // Round 9: the kind of each effect (SoundLog)
         public static string KindOf(string name)

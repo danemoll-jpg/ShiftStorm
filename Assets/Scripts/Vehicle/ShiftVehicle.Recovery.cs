@@ -15,6 +15,7 @@ namespace ShiftStorm
             if (!Course) return;
             if (Input.ConsumeReset()) { if (Finished) { if (Human && Game.Instance) Game.Instance.ResetAfterFinish(this); else if (IsPlayer) Begin(Course); } else Recover("reset button"); return; }   // after the finish: start again (the race too)
             if (Finished) return;
+            if (FunHoldsRecovery) { OutOfBoundsFor = 0; stuckFor = 0; wrongWaterFor = 0; noProgressFor = 0; return; }   // Round 17: an item's effect never resets anyone
             if (rail != null) { OutOfBoundsFor = 0; stuckFor = 0; noProgressFor = 0; return; }   // Round 10: locked to a coaster rail (it never stalls; it runs to its end)
             var p = Body.position;
             // out of bounds: at once on land and water and below / above the course; in the air (a much wider corridor) after a few seconds of
@@ -94,7 +95,7 @@ namespace ShiftStorm
             if (anchor)
             {
                 how = $"forward from the {br.label}";
-                if (br.replacesGate >= 0 && GatesPassed == br.replacesGate) { var g = Course.gates[GatesPassed]; GatesPassed++; GateLog.Add(g.index); ShortcutsTaken.Add(br.label + " (recovered)"); Note("gate", $"gate {g.label} counted by the {br.label}'s forward recovery ({GatesPassed}/{Course.gates.Count})"); }
+                if (br.replacesGate >= 0 && GatesPassed == br.replacesGate) { ShortcutsTaken.Add(br.label + " (recovered)"); for (int k = 0; k < br.replacesCount; k++) { var g = Course.gates[GatesPassed]; GatesPassed++; GateLog.Add(g.index); Note("gate", $"gate {g.label} counted by the {br.label}'s forward recovery ({GatesPassed}/{Course.gates.Count})"); } }
                 Penalty += shared.branchRecoveryPenalty; NearMisses.Add(br.label.Replace(" ", "-") + "-reset"); MissCueUntil = Time.time + 2.5f;
             }
             else
@@ -129,7 +130,7 @@ namespace ShiftStorm
         // Put the vehicle at an anchor in a form, at a speed along the anchor's facing; no change animation (the form snaps).
         void Place(RecoveryAnchor anchor, Mode mode, float speed, Vector3 offset = default)
         {
-            Changing = false; Authority = 1; assistLeft = 0; OnShortcut = null; ClearStunts();
+            Changing = false; Authority = 1; assistLeft = 0; OnShortcut = null; ClearStunts(); EffectsOffForPlace(); breaching = false;   // Round 17
             Body.isKinematic = true;
             var pos = anchor.transform.position + anchor.transform.rotation * offset;
             transform.SetPositionAndRotation(pos, anchor.transform.rotation);

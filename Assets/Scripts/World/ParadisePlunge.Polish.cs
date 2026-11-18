@@ -110,7 +110,8 @@ namespace ShiftStorm
                 Beach(W(300, 0, -300), W(525, 0, -300), Vector3.back);
                 Beach(W(500, 0, -295), W(500, 0, -640), Vector3.left);
                 Beach(W(300, 0, -620), W(525, 0, -620), Vector3.forward);
-                Beach(W(300, 0, -330), W(300, 0, -500), Vector3.right);
+                if (Old) Beach(W(300, 0, -330), W(300, 0, -500), Vector3.right);
+                else { Beach(W(300, 0, -436), W(300, 0, -520), Vector3.right); Beach(W(300, 0, -300), W(300, 0, -350), Vector3.right); }   // Round 17: the river's mouth between
                 // waterfalls off a rock cliff on the east bank into the lagoon (well beside the landing corridor)
                 Fall(W(500, 0, -420), Quaternion.LookRotation(Vector3.left), 9f, 16f, true);
                 Fall(W(500, 0, -545), Quaternion.LookRotation(Vector3.left), 7f, 12f, true);

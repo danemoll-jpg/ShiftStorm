@@ -101,8 +101,8 @@ namespace ShiftStorm
             else eye = t.TransformPoint(new Vector3(0, 1.05f, -.05f));
             // through the change the eye holds still in the vehicle's own frame, 12 cm higher, and the model squashes and twirls beneath it
             // (following her twirling head looked across her shoulder)
-            if (!v.Changing) eyeLocal = t.InverseTransformPoint(eye);
-            else eye = t.TransformPoint(eyeLocal + Vector3.up * .12f);
+            if (!v.Changing && !v.TrickBusy) eyeLocal = t.InverseTransformPoint(eye);   // Round 17: a trick turns the model under a still eye
+            else eye = t.TransformPoint(eyeLocal + Vector3.up * (v.Changing ? .12f : 0f));
             // Round 9 item 1: looking ahead (5 deg down, 3 in flight; Round 8 tipped it 12 deg down to show its oversized wheel), and a narrower
             // field-of-view swing than the chase camera's (70 at rest -> 77 at top speed, 80 on boost; chase +4 was 69 -> 102): the steering
             // mechanism stays a steady ~15-20 % of the screen height
@@ -155,7 +155,8 @@ namespace ShiftStorm
             float yaw = 0, pitch = 0; bool held = false;
             if (CanDrive)
             {
-                var stick = v.Input.Look; float amount = Mathf.Clamp01((stick.magnitude - .15f) / .7f);
+                var stick = v.TrickAir ? Vector2.zero : v.Input.Look; float amount = Mathf.Clamp01((stick.magnitude - .15f) / .7f);
+                // Round 17: in the air the right stick does tricks (no look)
                 if (amount > 0) { yaw = Mathf.Atan2(stick.x, stick.y) * Mathf.Rad2Deg * amount; held = true; }
             }
             float smooth = held ? .1f : .22f;

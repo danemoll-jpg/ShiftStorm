@@ -22,7 +22,7 @@ namespace ShiftStorm
         public static float BypassFrom => BayFrom - 60;   // main progress where it leaves the line (on the surface)
         public static float BypassTo => M("G5") - 28;      // and where it rejoins (a boat again)
         // the AI keeps exactly to the line beside the bay unless it goes for the bypass
-        public static bool InDiveLane(float p) => MangroveBypass && mark.ContainsKey("bend1") && p > BypassFrom - 20 && p < BayTo + 10;
+        public static bool InDiveLane(float p) => Old ? MangroveBypass && mark.ContainsKey("bend1") && p > BypassFrom - 20 && p < BayTo + 10 : mark.ContainsKey("splash") && p > CavesFrom - 30 && p < CavesFrom + 110;
         static List<Vector3> bypassLine;
 
         static List<Vector3> BypassCtrl()
@@ -64,9 +64,9 @@ namespace ShiftStorm
         static List<(float a, float b, float l, float r)> RiverBedPieces(float a, float b)
         {
             var list = new List<(float, float, float, float)>();
-            if (!MangroveBypass) { list.Add((a, b, -21, 21)); return list; }
-            bypassLine ??= Shortcut.Smooth(BypassCtrl());
-            var holes = new List<(float p0, float p1, float l0, float l1)>(); bool inHole = false; float hp0 = 0, hp1 = 0, lmin = 0, lmax = 0, hint = BypassFrom;
+            if (Old && !MangroveBypass) { list.Add((a, b, -21, 21)); return list; }
+            bypassLine ??= Shortcut.Smooth(Old ? BypassCtrl() : CavesCtrl());   // Round 17: the Sunken Caves come up through the river bed before the portal
+            var holes = new List<(float p0, float p1, float l0, float l1)>(); bool inHole = false; float hp0 = 0, hp1 = 0, lmin = 0, lmax = 0, hint = Old ? BypassFrom : CavesFrom;
             foreach (var q in bypassLine)
             {
                 bool cross = q.y + 5.5f + 2f > -16f && q.y - 5.5f - 2.5f < -17f;
@@ -78,6 +78,7 @@ namespace ShiftStorm
             float from = a;
             foreach (var h in holes)
             {
+                if (h.p1 < a || h.p0 > b || h.l1 < -21 || h.l0 > 21) continue;   // Round 17: only openings in this river's bed
                 if (h.p0 > from) list.Add((from, h.p0, -21, 21));
                 if (h.l0 > -19) list.Add((h.p0, h.p1, -21, h.l0));
                 if (h.l1 < 19) list.Add((h.p0, h.p1, h.l1, 21));

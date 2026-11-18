@@ -16,6 +16,8 @@ namespace ShiftStorm
         public ProgressGate entry, exit;
         public int nextGate;            // the main gate the racer must be heading for when it enters
         public int replacesGate = -1;   // the main gate the shortcut stands in for (-1: none, both paths still pass the next main gate)
+        public int replacesCount = 1;   // Round 17: how many main gates in a row from replacesGate (Paradise Plunge's Valley Flight: G1 and G2)
+        public int GatesReplaced => replacesGate >= 0 ? replacesCount : 0;
         public float mainFrom, mainTo;  // main-line progress where the shortcut leaves and rejoins
         public float halfWidth = 12;    // how far from its line a racer may be and still be on it
         public bool choice;             // Round 7: the choice jump's flight branch (the AI decides it with AiSkill.fly, and opens its wings for it)

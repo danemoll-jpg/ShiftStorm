@@ -51,7 +51,7 @@ namespace ShiftStorm
         public float GraceUntil { get; private set; } = -1;
         public float HoldUntil { get; private set; } = -1;          // a time trial's countdown: the vehicle waits on the grid until GO
         public bool Holding => held;
-        public float RaceDistance => Course ? Course.RaceDistance(GatesPassed, Progress) : 0;
+        public float RaceDistance => Course ? (OwnLaps ? (Lap - 1) * Course.gates.Count : 0) + Course.RaceDistance(GatesPassed, Progress) : 0;   // Round 17: laps done count first
         public readonly List<float> Splits = new List<float>();     // time from GO at the end of each course segment (Course.segments)
         public ProgressGate MissedGate { get; private set; }         // the next gate when the racer has gone past it without earning it
         public string Cue { get; private set; } = "";                // a direction cue for the HUD ("WRONG WAY", "THIS WAY", "TURN BACK ...")
@@ -72,6 +72,7 @@ namespace ShiftStorm
             Body.mass = 1200; Body.linearDamping = 0; Body.angularDamping = .5f; Body.maxAngularVelocity = 5;
             Body.centerOfMass = new Vector3(0, -.35f, 0);
             SetLayer(VehicleLayer);
+            if (!GetComponent<RacerItems>()) gameObject.AddComponent<RacerItems>().v = this;   // Round 17: the item held
         }
         void OnDestroy() { if (Player == this) Player = null; }
 
@@ -88,7 +89,7 @@ namespace ShiftStorm
         {
             Course = course; bool fromStart = at == null || at == course.anchors[0]; at = at ? at : course.anchors[0];
             GatesPassed = 0; BestProgress = lastBest = 0; Finished = false; FinishTime = -1; Resets = 0; Changes = 0;
-            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); Penalty = 0; NearMisses.Clear(); Scrapes = 0; WallHits = 0; MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute();
+            Boost = shared.boostStart; StartTime = Time.time; Log.Clear(); Splits.Clear(); Penalty = 0; NearMisses.Clear(); Scrapes = 0; WallHits = 0; MissedGate = null; Cue = ""; CueUntil = -1; missedFor = 0; ClearRoute(); ResetLaps(); ResetFun();
             Place(at, at.mode, at.mode == Mode.Fly || at.mode == Mode.Dive ? shared.resetSpeed : 0, grid);   // Round 13: an offset at any anchor (a rival challenge's two lanes)
             OnShortcut = null; ShortcutsTaken.Clear(); GateLog.Clear(); scrapeUntil = -1;
             // starting at a later anchor: the gates behind it count as passed, and its place on the course as reached
@@ -129,21 +130,25 @@ namespace ShiftStorm
                     Note("changed", $"{ChangeFrom}->{Mode} done in {took:0.000} s");
                 }
             }
-            CheckZones();
+            if (!Launching) CheckZones();
             Carry(dt);
-            bool railed = StepStunts(dt);   // Round 7: the loop's rail, the boost pad, jumps, the wings
+            bool railed = !Launching && StepStunts(dt);   // Round 7: the loop's rail, the boost pad, jumps, the wings
             if (!railed)
             {
-                switch (Mode)
+                if (!StepEffects(dt))   // Round 17: an item's effect (Buck's cannon, a bubble) moves it this step instead
                 {
-                    case Mode.Drive: StepDrive(dt); break;
-                    case Mode.Boat: StepBoat(dt); break;
-                    case Mode.Fly: StepFly(dt); break;
-                    case Mode.Dive: StepDive(dt); break;
+                    switch (Mode)
+                    {
+                        case Mode.Drive: StepDrive(dt); break;
+                        case Mode.Boat: StepBoat(dt); break;
+                        case Mode.Fly: StepFly(dt); break;
+                        case Mode.Dive: StepDive(dt); break;
+                    }
+                    AlignAssist(dt);
                 }
-                AlignAssist(dt);
             }
-            TrackProgress();
+            AfterEffects(dt); StepTricks(dt);   // Round 17: items (soaked, the rainbow lane, ...) and tricks in the air
+            if (!Launching) TrackProgress();
             Recovery(dt);
             if (GraceUntil > 0 && Time.time >= GraceUntil) { GraceUntil = -1; SetLayer(VehicleLayer); }
             var f = Vector3.ProjectOnPlane(Mode == Mode.Fly || Mode == Mode.Dive ? transform.forward : (Body.linearVelocity.sqrMagnitude > 4 && Vector3.Dot(Body.linearVelocity, transform.forward) > 0 ? Body.linearVelocity : transform.forward), Vector3.up);
@@ -191,8 +196,10 @@ namespace ShiftStorm
             var p = Body.position; var v = Body.linearVelocity;
             foreach (var z in TransformZone.All)
             {
-                if (z == LastZone || z.target == Mode || !z.Contains(p)) continue;
+                if (z == LastZone || !(z.Contains(p) || (breaching && z.target == Mode.Boat && z.ContainsXZ(p) && p.y > z.transform.position.y))) continue;   // Round 17: a sub leaping out of the water over a surfacing zone surfaces too
+                if (z.target == Mode) { if (Forced && z.MovingThrough(v)) ForcedZone(z); continue; }   // Round 17: in the wrong form, a zone passed sets the form to go back to
                 if (!z.MovingThrough(v)) continue;
+                if (Forced) ForcedUntil = -1;
                 LastZone = z; Change(z.target, z.label);
                 return;
             }
@@ -238,7 +245,7 @@ namespace ShiftStorm
         public void Change(Mode to, string why, bool animate = true)
         {
             var from = Mode; float speedIn = Speed;
-            ChangeFrom = from; Mode = to; Changes++;
+            ChangeFrom = from; Mode = to; Changes++; breaching = false;
             switch (to)
             {
                 case Mode.Drive: EnterDrive(speedIn); break;
@@ -319,7 +326,7 @@ namespace ShiftStorm
             while (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].Crossed(lastPos, p))
             {
                 var g = gates[GatesPassed];
-                if (!g.Allows(Mode))
+                if (!g.Allows(Mode) && !(Forced && g.Allows(forcedFrom)))   // Round 17: a racer in the Wrong Form still earns the gate
                 {
                     Note("rejected", $"gate {g.label} crossed as {Mode}: not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn);
                     // Round 12 item 3: turning back cannot help (a zone changes the form only once, so the racer stays in the wrong form): build
@@ -334,16 +341,16 @@ namespace ShiftStorm
             if (!OnShortcut && GatesPassed < gates.Count && gates[GatesPassed].CrossedNear(lastPos, p, shared.nearMissMargin, out float outBy))
             {
                 var g = gates[GatesPassed];
-                if (!g.Allows(Mode)) { Note("rejected", $"near miss of {g.label} as {Mode} ({outBy:0.0} m outside): not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); if (!OldFlight && !Finished) { Recover($"{g.label} passed as {Mode}"); return; } }
+                if (!g.Allows(Mode) && !(Forced && g.Allows(forcedFrom))) { Note("rejected", $"near miss of {g.label} as {Mode} ({outBy:0.0} m outside): not counted (needs {string.Join("/", g.modes)})"); ShowCue($"{g.label}: NOT AS {Mode}", CueKind.Warn); if (!OldFlight && !Finished) { Recover($"{g.label} passed as {Mode}"); return; } }
                 else if (TravelAlong(p) < .5f) Note("rejected", $"near miss of {g.label} ({outBy:0.0} m outside) not heading along the route: not counted");
                 else { AddPenalty(g.label, outBy); PassGate(g, $" (near miss, {outBy:0.0} m outside, +{shared.nearMissPenalty:0} s)"); }
             }
             if (GatesPassed > 0 && GatesPassed < gates.Count && gates[GatesPassed - 1].CrossedBackward(lastPos, p)) Note("back through", $"back through {gates[GatesPassed - 1].label} (still {GatesPassed} gates)");
             lastPos = p;
             var segs = Course.segments;
-            while (Splits.Count < segs.Count && GatesPassed >= segs[Splits.Count].gatesNeeded && Progress >= segs[Splits.Count].endProgress - 1f)
+            while (Splits.Count - LapSplitBase < segs.Count && GatesPassed >= segs[Splits.Count - LapSplitBase].gatesNeeded && Progress >= segs[Splits.Count - LapSplitBase].endProgress - 1f)
             {
-                var sg = segs[Splits.Count]; float t = Time.time - StartTime, prev = Splits.Count > 0 ? Splits[Splits.Count - 1] : 0; Splits.Add(t);
+                var sg = segs[Splits.Count - LapSplitBase]; float t = Time.time - StartTime, prev = Splits.Count > 0 ? Splits[Splits.Count - 1] : 0; Splits.Add(t);
                 Note("split", $"split {sg.name}: {t - prev:0.00} s (target {sg.target:0} s), total {t:0.00} s");
             }
             TrackRoute(p, at, dir);
@@ -352,8 +359,9 @@ namespace ShiftStorm
         {
             var gates = Course.gates;
             GatesPassed++; MissedGate = null; missedFor = 0; GateLog.Add(g.index);
-            Note("gate", $"gate {g.label} passed{how} ({GatesPassed}/{gates.Count})");
-            if (GatesPassed == gates.Count && !Finished) { Finished = true; FinishTime = Time.time - StartTime + Penalty; Note("finish", $"finish in {FinishTime:0.00} s{(Penalty > 0 ? $" (including +{Penalty:0} s for {NearMisses.Count} near misses)" : "")}, {Resets} resets"); }
+            Note("gate", $"gate {g.label} passed{how} ({GatesPassed}/{gates.Count}{(OwnLaps ? $", lap {Lap}/{LapsTotal}" : "")})");
+            if (GatesPassed == gates.Count && !Finished && NextLap(g)) return;   // Round 17: laps
+            if (GatesPassed == gates.Count && !Finished) { FinishLaps(); Finished = true; FinishTime = Time.time - StartTime + Penalty; Note("finish", $"finish in {FinishTime:0.00} s{(Penalty > 0 ? $" (including +{Penalty:0} s for {NearMisses.Count} near misses)" : "")}, {Resets} resets"); }
         }
         // Round 4 item 6: near misses, each with ShiftTuning.nearMissPenalty seconds added to the lap
         public float Penalty { get; private set; }

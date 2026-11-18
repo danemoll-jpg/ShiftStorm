@@ -141,3 +141,17 @@ The forms cross-fade over 0.35 s at a change; louder with the throttle.
   rises (`rise1_*`, `rise2_*`), The Tour's Stop 4 scenes (4 intro, 2 pass, 2 retry), Rae's Flood Run. Hattie Sluice, the dam keeper,
   speaks in subtitles only (no voice yet: her Voice Design prompt is in `Docs/STORY.md`).
 - **Rae, 3 lines** (`driver_lines.py` ROUND16): her Flood Run challenge (taunt, win, lose). All voices re-levelled to -16 LUFS.
+
+## Round 17 (2026-11-17): items, stunts, laps
+- **Item sounds, 13 new** (ElevenLabs sound generation, `Tools/Audio/item_sfx.py` -> `Resources/Audio/Sfx/it_*.ogg`, -18 LUFS, a short
+  fade-out): `it_pick` (an item box), `it_zap` (Wrong Form), `it_bubble` / `it_pop` (Bubble Trap, a shield or bubble popping, a Slick
+  dropped), `it_rain` (Pocket Storm), `it_rocket` (firework rocket), `it_boom` (the human cannonball, Buck's stunt cannon), `it_squeak`
+  (the dino egg hatching), `it_rewind`, `it_shimmer` (Mirage), `it_wave` (Mini Flood), `it_swap` (Swap Spot), `it_slick` (a racer
+  spinning on a Slick). Played where it happens (`GameSounds.At`: full near player 1's racer, nothing beyond 160 m). The Hype Horn uses
+  the GO horn and the finish cheer; a good trick landing the crowd's "ooh", a big combo the applause (Crowd volume).
+- **Barnaby, 48 new lines** (`caller_lines.py` ROUND17, 1,141 credits): laps on every course (`lapnext` 3, `lapfinal` 3), Stunt Show's
+  start (2), stunts (`combo` 4, `bigcombo` 3, `shifttrick` 3, `wipeout` 3), items (`ithit` 3, `itblock` 2, and one or two per item:
+  Wrong Form, Bubble Trap, Swap Spot, Pocket Storm, the dino egg, the rocket, the cannonball, the flood, Buck's Big Finish, Rewind, Hype
+  Horn, Mirage, Rainbow Bridge). Item lines only when a person's racer fires one or is hit by one.
+- **Buck, 13 new lines** (`buck_lines.py`, 397 credits): he judges the stunts over the tannoy (`judge_good` 3, `judge_great` 3,
+  `judge_bad` 3, `judge_shift` 2: a person's racer only, every 25 s at most) and fires his stunt cannon (`cannon` 2, Buck's Big Finish).

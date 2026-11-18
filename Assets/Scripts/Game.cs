@@ -33,13 +33,21 @@ namespace ShiftStorm
         public Race Race { get; private set; }
         public int CourseIndex { get; private set; }
         public bool RaceMode { get; private set; }   // the current course is raced against the rivals
+        // Round 17 item 2: Stunt Show (Menu > Stunt Show): the same courses against the three rivals, 3 laps, items on, won on stunt points
+        // (the finishing place adds a little: ShowBonus); Race again / Next keep it, any other start ends it
+        public bool StuntShow { get; private set; }
+        public static readonly int[] ShowBonus = { 1000, 600, 300, 0 };
+        public int ShowPoints(ShiftVehicle r) { if (!r) return 0; int pl = Race ? Race.Place(r) : 4; return r.StuntScore + (pl >= 1 && pl <= ShowBonus.Length ? ShowBonus[pl - 1] : 0); }
+        public List<ShiftVehicle> ShowOrder() { var l = new List<ShiftVehicle>(Race ? Race.Racers : new List<ShiftVehicle>()); l.Sort((a, b) => ShowPoints(b).CompareTo(ShowPoints(a))); return l; }
+        // Round 17 item 3: The Tour and Stunt Show race 3 laps (a check run 1, unless "-raceLaps")
+        public static int FixedLaps => QuietRun.Check && Array.IndexOf(Environment.GetCommandLineArgs(), "-raceLaps") < 0 && !Settings.LapsSetByCheck ? 1 : 3;
         public int MenuCourse { get; private set; }  // the course the menus' Race / Time Trial / 2 Players start (the one last started)
         public ShiftTuning Shared; public DriveTuning Drive; public BoatTuning Boat; public FlyTuning Fly; public DiveTuning Dive;
         public readonly List<ShiftVehicle> Rivals = new List<ShiftVehicle>();
 
         // ---- the menu ----
         public enum Page { Main, Settings, Quit, Garage, Split, Tour, Pick, Title, Pause, Course, SetGameplay, SetAudio, SetVideo, SetControls }
-        public enum PickFor { Race, Trial, Tour }
+        public enum PickFor { Race, Trial, Tour, Show }
         PickFor pickFor; int pickStop; public TourRunner TourRun { get; private set; }
         public ChallengeRunner ChallengeRun { get; private set; }   // Round 13 item 4
         public string MenuNote { get; private set; } = "";
@@ -137,6 +145,7 @@ namespace ShiftStorm
                 CourseLook.Apply(Courses[CourseIndex]);
                 for (int k = 0; k < Rivals.Count; k++) Rivals[k].gameObject.SetActive(was[k]);
             }
+            ItemField.Make(this);   // Round 17 item 1: the item boxes on every course
             CourseCards.Make(this);   // Round 14: each course's picture for the course cards
             Debug.Log($"[Screen] at the first frame: {Screen.fullScreenMode} {Screen.width} x {Screen.height}, desktop {Display.main.systemWidth} x {Display.main.systemHeight}, current resolution {Screen.currentResolution.width} x {Screen.currentResolution.height}");
             Debug.Log($"[Time] fixed step {Time.fixedDeltaTime * 1000:0.00} ms, maximum frame catch-up {Time.maximumDeltaTime:0.00} s, target frame rate {Application.targetFrameRate}, vSync {QualitySettings.vSyncCount}");
@@ -165,6 +174,10 @@ namespace ShiftStorm
         void StartCourseInner(Course c, bool race)
         {
             RaceMode = race && c.timeTrial;
+            // Round 17 item 3: the lap count of this race (a single-lap course raced round again: ShiftVehicle.Laps); Dam Shame keeps its 3
+            foreach (var cc in Courses) cc.raceLaps = 1;
+            c.raceLaps = !RaceMode ? 1 : StuntShow || Tour.ActiveStop >= 0 ? FixedLaps : Settings.Laps;
+            ItemFx.ClearAll();   // Round 17: no projectile, cloud or slick from the last race
             CourseLook.Apply(c);   // Round 10: only this course is shown (its look and sky); the other one is hidden
             CourseAudio.Instance?.SetCourse(c);
             ResultsIndex = 0;
@@ -208,7 +221,7 @@ namespace ShiftStorm
             if (SplitScreen.Active) EndSplit(false);
             InFront = false;
             CourseIndex = (index % Courses.Count + Courses.Count) % Courses.Count; MenuCourse = CourseIndex; var c = Courses[CourseIndex];
-            RaceMode = true; CourseLook.Apply(c); CourseAudio.Instance?.SetCourse(c); ResultsIndex = 0;
+            RaceMode = true; StuntShow = false; foreach (var cc in Courses) cc.raceLaps = 1; CourseLook.Apply(c); CourseAudio.Instance?.SetCourse(c); ResultsIndex = 0;
             Player.Begin(c, at, new Vector3(-5.5f, 0, 0));
             foreach (var rv in Rivals) { bool on = rv == rival; rv.gameObject.SetActive(on); if (on) rv.Begin(c, at, new Vector3(5.5f, 0, 0)); }
             Race.Setup(true, Player, new List<ShiftVehicle> { rival });
@@ -225,7 +238,7 @@ namespace ShiftStorm
             if (Garage.Active) Garage.Instance.Close();
             if (!SplitScreen.Active) SplitScreen.Begin();
             else if (SplitScreen.Session.P2 && SplitScreen.Session.P2.RacerName != Lineup.P2.name) { SplitScreen.Begin(); }   // another driver picked: a new player 2
-            Tour.ActiveStop = -1; Lineup.Apply(this);   // Round 11: player 1's pick and the AI fill
+            Tour.ActiveStop = -1; StuntShow = false; Lineup.Apply(this);   // Round 11: player 1's pick and the AI fill
             if (Player2) { Player2.Forms.SetOwnDesign(Lineup.P2Machine); Player2.Tint = Lineup.P2.color; }
             MenuNote = ""; CloseMenuForced(); StartCourse(MenuCourse, race);
         }
@@ -245,10 +258,10 @@ namespace ShiftStorm
             if (full) ScreenSetting.Toggle();
             if (stats) ToggleStats();
             // Round 11: Buck's card (a briefing or a Tour scene): A / Enter (or Menu / B) skips him
-            if (Buck.Instance && Buck.Instance.CardOn && !MenuOpen) { if (confirm || menuP || backP) Buck.Instance.Skip(); return; }
+            if (Buck.Instance && Buck.Instance.CardOn && !MenuOpen) { if (confirm || menuP || backP) Buck.Instance.Skip(); foreach (var i in MenuInputs()) i.ConsumeItem(); return; }
             if (MenuOpen)
             {
-                foreach (var i in MenuInputs()) { i.ConsumeReset(); i.ConsumeView(); i.ConsumeWings(); }
+                foreach (var i in MenuInputs()) { i.ConsumeReset(); i.ConsumeView(); i.ConsumeWings(); i.ConsumeItem(); }   // Round 17: B is Back here, never the item
                 if (MenuPage == Page.Title)
                 {
                     // any device: the title is the first thing a player sees, before 2 Players binds anything
@@ -295,7 +308,7 @@ namespace ShiftStorm
                 case Page.Pause: CloseMenu(); break;
                 case Page.Settings: ShowPage(settingsFrom, settingsFrom == Page.Main ? MainRow("Settings") : PauseRow("Settings")); break;
                 case Page.SetGameplay: case Page.SetAudio: case Page.SetVideo: case Page.SetControls: ShowPage(Page.Settings, (int)MenuPage - (int)Page.SetGameplay); break;
-                case Page.Course: ShowPage(Page.Main, MainRow(pickFor == PickFor.Trial ? "Time Trial" : "Race")); break;
+                case Page.Course: ShowPage(Page.Main, MainRow(pickFor == PickFor.Trial ? "Time Trial" : pickFor == PickFor.Show ? "Stunt Show" : "Race")); break;
                 case Page.Pick: if (pickFor == PickFor.Tour) ShowPage(Page.Tour, pickStop); else ShowPage(Page.Course); break;
                 case Page.Quit: ShowPage(quitFrom, quitFrom == Page.Main ? MainRow("Quit game") : PauseRow("Quit to menu")); break;
                 case Page.Split: if (SplitScreen.Active && !InFront) ShowPage(Page.Pause); else ShowPage(Page.Main, MainRow("2 Players")); break;
@@ -385,6 +398,7 @@ namespace ShiftStorm
                     Item("The Tour", () => ShowPage(Page.Tour), "The story: race the tour's stops, win points, unlock the next stop and the rival challenges.");
                     Item("Race", () => ShowCourses(PickFor.Race), "Race three rivals on a course of your choice.");
                     Item("Time Trial", () => ShowCourses(PickFor.Trial), "Race the clock alone. Your best lap is saved.");
+                    Item("Stunt Show", () => ShowCourses(PickFor.Show), "Three laps against the rivals, won on stunt points: tricks in the air (right stick), items on.");
                     Item("2 Players", OpenSplitPage, "Split screen: a second controller joins with A.");
                     Item("Garage", () => ShowPage(Page.Garage), "Look at the machines in every form; paints won in rival challenges.");
                     Item("Settings", () => ShowPage(Page.Settings), "Gameplay, audio, video and controls.");
@@ -403,7 +417,7 @@ namespace ShiftStorm
                     break;
                 case Page.Course:
                     {
-                        string mode = pickFor == PickFor.Race ? "Race against three rivals" : "Time trial: alone, best lap saved";
+                        string mode = pickFor == PickFor.Race ? "Race against three rivals" : pickFor == PickFor.Show ? "Stunt Show: won on stunt points" : "Time trial: alone, best lap saved";
                         var r = Item("Course", () => ShowPick(pickFor), mode + ". Left / right: another course, A: choose your racer.", pp.courseName, d => { MenuCourse = Wrap(MenuCourse + d, Courses.Count); });
                         r.card = true;
                         Item("Back", Back, "Back to the main menu.");
@@ -413,16 +427,20 @@ namespace ShiftStorm
                     {
                         // Round 11 item 4: choose your racer: a driver and a machine (the Garage's turntable shows it); the others race as the AI
                         var gar = Garage.Get(); if (!Garage.Active) gar.Open(Cam); if (gar.Design != Settings.Design) gar.SetDesign(Settings.Design);
-                        string go = pickFor == PickFor.Race ? $"Race {pp.courseName}" : pickFor == PickFor.Trial ? $"Time Trial {pp.courseName}" : $"Tour stop {pickStop + 1}: {Tour.Stops[pickStop].title}";
+                        string go = pickFor == PickFor.Race ? $"Race {pp.courseName}" : pickFor == PickFor.Trial ? $"Time Trial {pp.courseName}" : pickFor == PickFor.Show ? $"Stunt Show {pp.courseName}" : $"Tour stop {pickStop + 1}: {Tour.Stops[pickStop].title}";
                         Item("Driver", () => StepDriver(1), "Who drives. The other three race as the AI, each in their own machine.", Lineup.P1.name, StepDriver);
                         Item("Machine", () => StepMachine(1), "The machine you race (every one has a car, boat, plane and sub form).", VehicleDesigns.Title(Settings.Design) + OwnerOf(Settings.Design), StepMachine);
                         Item("Form", () => gar.NextForm(), "Look at the machine's four forms (the change plays).", FormName(gar.Form), d => { if (d > 0) gar.NextForm(); else gar.SetForm(FormSet.All[Wrap(Array.IndexOf(FormSet.All, gar.Form) - 1, 4)], true); });
+                        // Round 17 item 3: the race's laps (Race: 1-5, saved; Stunt Show, The Tour: 3; Time Trial: 1; Dam Shame: always its 3)
+                        if (pp.laps > 1) Info($"Laps: {pp.laps} (the water rises every lap)");
+                        else if (pickFor == PickFor.Race) Item("Laps", () => Settings.Laps = Settings.Laps % 5 + 1, "How many laps (1 to 5).", Settings.Laps.ToString(), d => Settings.Laps = Mathf.Clamp(Settings.Laps + d, 1, 5));
+                        else Info(pickFor == PickFor.Trial ? "Laps: 1 (your best lap is saved)" : "Laps: 3");
                         Item("Go: " + go, () => GoPick(), "Start.");
                         Item("Back", Back, pickFor == PickFor.Tour ? "Back to The Tour." : "Back to the courses.");
                     }
                     break;
                 case Page.Settings:
-                    Item("Gameplay", () => ShowPage(Page.SetGameplay), "AI difficulty, Buck's briefings, The Tour's stops, playtest logs.");
+                    Item("Gameplay", () => ShowPage(Page.SetGameplay), "AI difficulty, items, Buck's briefings, The Tour's stops, playtest logs.");
                     Item("Audio", () => ShowPage(Page.SetAudio), "Music, voices, engines, effects and crowd volumes.");
                     Item("Video", () => ShowPage(Page.SetVideo), "Graphics quality, full screen, the FPS readout, the 2-player layout.");
                     Item("Controls", () => ShowPage(Page.SetControls), "Invert flight / dive, camera view, the controls.");
@@ -430,6 +448,7 @@ namespace ShiftStorm
                     break;
                 case Page.SetGameplay:
                     Item("AI difficulty", () => StepDifficulty(1), "How well the three rivals drive (never faster machines).", Settings.Difficulty.ToString(), StepDifficulty);
+                    Item("Items", () => Settings.Items = !Settings.Items, "Item boxes in races, Stunt Show and The Tour (B / Q uses the item held). Never in a time trial.", Settings.Items ? "On" : "Off", d => Settings.Items = !Settings.Items);
                     Item("Buck's briefings", () => StepBuck(1), "Buck talks before a course's first race of the session: in full, short, or not at all.", Settings.BuckNames[Settings.BuckBriefings], StepBuck);
                     Item("Unlock all Tour stops", () => Settings.UnlockAllTour = !Settings.UnlockAllTour, "On: every Tour stop is open. Off: the stops open in order (top 3 opens the next). Race and Time Trial are always open.", Settings.UnlockAllTour ? "On" : "Off", d => Settings.UnlockAllTour = !Settings.UnlockAllTour);
                     Item("Save playtest logs", () => Settings.PlaytestLogs = !Settings.PlaytestLogs, "A small log of each race for playtesting.", Settings.PlaytestLogs ? "On" : "Off", d => Settings.PlaytestLogs = !Settings.PlaytestLogs);
@@ -461,6 +480,7 @@ namespace ShiftStorm
                         Info("RT / W: go    LT / S: brake    left stick / A-D: steer");
                         Info("A / Space: boost    RB / Shift: drift, carve    LB / E: wings on a choice jump");
                         Info("Stick back / I-K: climb, dive    Y / R: reset    Start / Esc: pause");
+                        Info("B / Q: use the item    in the air: right stick / T-F-G-H: tricks    boat: stick back = hop");
                         Item("Back", Back, "");
                     }
                     break;
@@ -476,6 +496,7 @@ namespace ShiftStorm
                         Item("AI racers", () => SplitScreen.AiCount = (SplitScreen.AiCount + 1) % 3, "0, 1 or 2 AI rivals in a 2-player race.", SplitScreen.AiCount.ToString(), d => SplitScreen.AiCount = Mathf.Clamp(SplitScreen.AiCount + d, 0, 2));
                         Item("Screen", () => SplitLayout(), "", SplitScreen.LeftRight ? "Left / right" : "Top / bottom (player 1 on top)", d => SplitLayout());
                         Item("Course", () => MenuCourse = Wrap(MenuCourse + 1, Courses.Count), "", pp.courseName, d => MenuCourse = Wrap(MenuCourse + d, Courses.Count));
+                        Item("Laps", () => Settings.Laps = Settings.Laps % 5 + 1, "A 2-player race's laps (1 to 5; Dam Shame: always 3; Time Trial: 1).", Settings.Laps.ToString(), d => Settings.Laps = Mathf.Clamp(Settings.Laps + d, 1, 5));
                         Item($"Race: 2 players + {SplitScreen.AiCount} AI", () => StartSplit(true), ready ? "" : "Waiting for player 2.");
                         Item("Time Trial: 2 players", () => StartSplit(false), ready ? "" : "Waiting for player 2.");
                         Item("Back", Back, "");
@@ -513,12 +534,12 @@ namespace ShiftStorm
             Page.Title => "", Page.Main => SplitScreen.Active ? "MAIN MENU (2 PLAYERS)" : "MAIN MENU", Page.Pause => "PAUSED", Page.Settings => "SETTINGS",
             Page.SetGameplay => "SETTINGS: GAMEPLAY", Page.SetAudio => "SETTINGS: AUDIO", Page.SetVideo => "SETTINGS: VIDEO", Page.SetControls => "SETTINGS: CONTROLS",
             Page.Garage => "GARAGE", Page.Split => "2 PLAYERS", Page.Tour => "THE TOUR", Page.Pick => "CHOOSE YOUR RACER",
-            Page.Course => pickFor == PickFor.Race ? "RACE: CHOOSE A COURSE" : "TIME TRIAL: CHOOSE A COURSE", _ => "QUIT SHIFTSTORM?"
+            Page.Course => pickFor == PickFor.Race ? "RACE: CHOOSE A COURSE" : pickFor == PickFor.Show ? "STUNT SHOW: CHOOSE A COURSE" : "TIME TRIAL: CHOOSE A COURSE", _ => "QUIT SHIFTSTORM?"
         };
         public PickFor PickingFor => pickFor;
         void ShowCourses(PickFor what) { pickFor = what; ShowPage(Page.Course); }
         // Round 11: choose your racer, then the race / time trial / Tour stop
-        void ShowPick(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; ShowPage(Page.Pick, 3); }
+        void ShowPick(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; ShowPage(Page.Pick, 3); int go = Rows.FindIndex(r => r.label.StartsWith("Go")); if (go >= 0) MenuIndex = go; }
         public void PickAndGo(PickFor what, int stop = 0) { pickFor = what; pickStop = stop; GoPick(); }   // checks
         public void PickCourse(int course) => MenuCourse = Wrap(course, Courses.Count);   // checks
         static string OwnerOf(string design) { foreach (var r in Lineup.All) if (Lineup.MachineOf(r) == design) return $" ({r.name}'s)"; return ""; }
@@ -533,8 +554,9 @@ namespace ShiftStorm
             if (SplitScreen.Active) { CloseMenuForced(); EndSplit(false); }
             UseDesign(Settings.Design); Lineup.Apply(this);
             CloseMenuForced();
+            StuntShow = pickFor == PickFor.Show;
             if (pickFor == PickFor.Tour) { TourRun.Play(pickStop, true); return; }
-            Tour.ActiveStop = -1; StartCourse(MenuCourse, pickFor == PickFor.Race);
+            Tour.ActiveStop = -1; StartCourse(MenuCourse, pickFor == PickFor.Race || pickFor == PickFor.Show);
         }
         void CloseMenuForced() { if (MenuPage == Page.Split) LeaveSplitPage(); if (Garage.Active) Garage.Instance.Close(); MenuOpen = false; InFront = false; Time.timeScale = 1; }
         void ToggleStats() { Hud.StatsOn = !Hud.StatsOn; if (!QuietRun.Check) Settings.ShowStats = Hud.StatsOn; }

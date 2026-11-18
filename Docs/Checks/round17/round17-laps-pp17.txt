@@ -1,0 +1,189 @@
+ShiftStorm check 'round17', 2026-11-17 19:24, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+ITEMS (Paradise Plunge, every item in every form; the player's racer uses it with Rae 45 m ahead; 6 s each):
+  Drive Wrong Form        OK   used True, on Rae: HIT, resets 0; Abi uses Wrong Form as Drive: at Rocket Rae | Abi Wrong Form reached Rocket Rae (Boat): hit
+  Drive Rainbow Bridge    FAIL used False (), on Rae: -, resets 0; Abi uses Rainbow Bridge as Drive: lane laid
+  Drive Bubble Trap       OK   used True, on Rae: HIT, resets 0; Abi uses Bubble Trap as Drive: at Rocket Rae | Abi Bubble Trap reached Rocket Rae (Drive): hit
+  Drive Swap Spot         FAIL used False (), on Rae: -, resets 0; Abi uses Swap Spot as Drive: with Rocket Rae
+  Drive Mirage            FAIL used False (), on Rae: -, resets 0; Abi uses Mirage as Drive: 3 decoys
+  Drive Rewind            OK   used True, on Rae: -, resets 0; Abi uses Rewind as Drive: 3 s back
+  Drive Pocket Storm      FAIL used False (), on Rae: HIT, resets 0; Abi uses Pocket Storm as Drive: cloud ahead | Abi Pocket Storm over Rocket Rae (Drive): soaked | Abi Pocket Storm over Chip "Showtime" Sterling (Drive): soaked | Abi Pocket Storm over Vivi (Drive): soaked
+  Drive Hype Horn         FAIL used False (), on Rae: -, resets 0; Abi uses Hype Horn as Drive: stunts x2 for 10 s
+  Drive Bubble Shield     FAIL used False (), on Rae: -, resets 0; Abi uses Bubble Shield as Drive: shield up
+  Drive Slick             FAIL used False (), on Rae: -, resets 0; Abi uses Slick as Drive: dropped
+  Drive Dino Egg          OK   used True, on Rae: HIT, resets 0; Abi uses Dino Egg as Drive: at Rocket Rae | Abi Dino Egg reached Rocket Rae (Drive): hit
+  Drive Buck's Big Finish FAIL used False (), on Rae: -, resets 0; Abi uses Buck's Big Finish as Drive: fired | Abi item box at Paradise Plunge 1020 m: Hype Horn (place 1)
+  Fly   Wrong Form        FAIL used False (), on Rae: HIT, resets 0; Abi uses Wrong Form as Drive: at Rocket Rae | Abi Wrong Form reached Rocket Rae (Boat): hit
+  Fly   Rainbow Bridge    FAIL used False (), on Rae: -, resets 0; Abi uses Rainbow Bridge as Drive: lane laid
+  Fly   Bubble Trap       FAIL used False (), on Rae: HIT, resets 0; Abi uses Bubble Trap as Drive: at Rocket Rae | Abi Bubble Trap reached Rocket Rae (Drive): hit
+  Fly   Swap Spot         FAIL used False (), on Rae: -, resets 0; Abi uses Swap Spot as Drive: with Rocket Rae
+  Fly   Mirage            FAIL used False (), on Rae: -, resets 0; Abi uses Mirage as Drive: 3 decoys
+  Fly   Rewind            FAIL used False (), on Rae: -, resets 0; Abi uses Rewind as Drive: 3 s back | Rocket Rae item box at Paradise Plunge 1708 m: Hype Horn (place 1)
+  Fly   Pocket Storm      FAIL used False (), on Rae: HIT, resets 0; Abi uses Pocket Storm as Drive: cloud ahead | Abi Pocket Storm over Rocket Rae (Drive): soaked | Abi Pocket Storm over Chip "Showtime" Sterling (Drive): soaked | Abi Pocket Storm over Vivi (Drive): soaked
+  Fly   Hype Horn         FAIL used False (), on Rae: -, resets 0; Abi uses Hype Horn as Drive: stunts x2 for 10 s
+  Fly   Bubble Shield     FAIL used False (), on Rae: -, resets 0; Abi uses Bubble Shield as Drive: shield up
+  Fly   Slick             FAIL used False (), on Rae: -, resets 0; Abi uses Slick as Drive: dropped
+  Fly   Dino Egg          FAIL used False (), on Rae: HIT, resets 0; Abi uses Dino Egg as Drive: at Rocket Rae | Abi Dino Egg reached Rocket Rae (Drive): hit
+  Fly   Buck's Big Finish FAIL used False (), on Rae: -, resets 0; Abi uses Buck's Big Finish as Drive: fired | Abi item box at Paradise Plunge 1708 m: Wrong Form (place 1)
+  Boat  Wrong Form        FAIL used False (), on Rae: HIT, resets 0; Abi uses Wrong Form as Boat: at Rocket Rae | Abi Wrong Form reached Rocket Rae (Drive): hit
+  Boat  Rainbow Bridge    FAIL used False (), on Rae: -, resets 0; Abi uses Rainbow Bridge as Boat: lane laid
+  Boat  Bubble Trap       OK   used True, on Rae: HIT, resets 0; Abi uses Bubble Trap as Boat: at Rocket Rae | Abi Bubble Trap reached Rocket Rae (Boat): hit
+  Boat  Swap Spot         FAIL used False (), on Rae: -, resets 0; Abi uses Swap Spot as Boat: with Rocket Rae
+  Boat  Mirage            FAIL used False (), on Rae: -, resets 0; Abi uses Mirage as Boat: 3 decoys
+  Boat  Rewind            FAIL used False (), on Rae: -, resets 0; Abi uses Rewind as Boat: 3 s back | Rocket Rae item box at Paradise Plunge 4311 m: Slick (place 1)
+  Boat  Pocket Storm      FAIL used False (), on Rae: HIT, resets 0; Abi uses Pocket Storm as Boat: cloud ahead | Abi Pocket Storm over Rocket Rae (Boat): soaked
+  Boat  Hype Horn         FAIL used False (), on Rae: -, resets 0; Abi uses Hype Horn as Boat: stunts x2 for 10 s
+  Boat  Bubble Shield     FAIL used False (), on Rae: -, resets 0; Abi uses Bubble Shield as Boat: shield up
+  Boat  Slick             FAIL used False (), on Rae: -, resets 0; Abi uses Slick as Boat: dropped | Abi Slick caught Chip "Showtime" Sterling (Boat): spun
+  Boat  Dino Egg          OK   used True, on Rae: HIT, resets 0; Abi uses Dino Egg as Boat: at Rocket Rae | Abi Dino Egg reached Rocket Rae (Boat): hit
+  Boat  Buck's Big Finish FAIL used False (NO ROOM FOR THE CANNON), on Rae: -, resets 0; 
+  Dive  Wrong Form        FAIL used False (), on Rae: HIT, resets 0; Abi uses Wrong Form as Dive: at Rocket Rae | Abi Wrong Form reached Rocket Rae (Dive): hit | Abi item box at Paradise Plunge 4969 m: Bubble Shield (place 1) | Rocket Rae item box at Paradise Plunge 4969 m: Slick (place 2)
+  Dive  Rainbow Bridge    FAIL used False (), on Rae: -, resets 0; Abi uses Rainbow Bridge as Dive: lane laid | Abi item box at Paradise Plunge 4969 m: Bubble Shield (place 2)
+  Dive  Bubble Trap       FAIL used False (), on Rae: HIT, resets 0; Abi uses Bubble Trap as Dive: at Rocket Rae | Abi Bubble Trap reached Rocket Rae (Dive): hit | Rocket Rae item box at Paradise Plunge 4969 m: Rewind (place 1) | Abi item box at Paradise Plunge 4969 m: Mirage (place 2)
+  Dive  Swap Spot         FAIL used False (), on Rae: -, resets 0; Abi uses Swap Spot as Dive: with Rocket Rae | Abi item box at Paradise Plunge 4969 m: Bubble Shield (place 1) | Rocket Rae item box at Paradise Plunge 4969 m: Bubble Shield (place 2)
+  Dive  Mirage            FAIL used False (), on Rae: -, resets 0; Abi uses Mirage as Dive: 3 decoys | Rocket Rae item box at Paradise Plunge 4969 m: Pocket Storm (place 1) | Abi item box at Paradise Plunge 4969 m: Swap Spot (place 2)
+  Dive  Rewind            FAIL used False (), on Rae: -, resets 0; Abi uses Rewind as Dive: 3 s back | Chip "Showtime" Sterling item box at Paradise Plunge 4969 m: Bubble Trap (place 2) | Abi item box at Paradise Plunge 4969 m: Dino Egg (place 3)
+  Dive  Pocket Storm      FAIL used False (), on Rae: HIT, resets 0; Abi uses Pocket Storm as Dive: cloud ahead | Abi Pocket Storm over Rocket Rae (Dive): soaked | Rocket Rae item box at Paradise Plunge 4969 m: Bubble Shield (place 1) | Abi item box at Paradise Plunge 4969 m: Rainbow Bridge (place 2)
+  Dive  Hype Horn         FAIL used False (), on Rae: -, resets 0; Abi uses Hype Horn as Dive: stunts x2 for 10 s | Rocket Rae item box at Paradise Plunge 4969 m: Mirage (place 1) | Abi item box at Paradise Plunge 4969 m: Slick (place 2) | Rocket Rae uses Mirage as Dive: 3 decoys
+  Dive  Bubble Shield     OK   used True, on Rae: -, resets 0; Abi uses Bubble Shield as Dive: shield up | Abi item box at Paradise Plunge 4969 m: Slick (place 2)
+  Dive  Slick             FAIL used False (), on Rae: -, resets 0; Abi uses Slick as Dive: dropped | Rocket Rae item box at Paradise Plunge 4969 m: Pocket Storm (place 1) | Abi Slick caught Chip "Showtime" Sterling (Dive): spun | Abi item box at Paradise Plunge 4969 m: Slick (place 2)
+  Dive  Dino Egg          FAIL used False (), on Rae: HIT, resets 0; Abi uses Dino Egg as Dive: at Rocket Rae | Abi Dino Egg reached Rocket Rae (Dive): hit | Rocket Rae item box at Paradise Plunge 4969 m: Slick (place 1) | Abi item box at Paradise Plunge 4969 m: Pocket Storm (place 2)
+  Dive  Buck's Big Finish FAIL used False (NO ROOM FOR THE CANNON), on Rae: -, resets 0; Rocket Rae item box at Paradise Plunge 4969 m: Dino Egg (place 1)
+  Paradise Plunge's own item Dino Egg (themed for 'jurassic': DinoEgg): HIT, resets 0
+  Coaster Coast's own item Firework Rocket (themed for 'coaster': FireworkRocket): HIT, resets 0
+  Big Top Breakdown's own item Human Cannonball (themed for 'bigtop': HumanCannonball): HIT, resets 0
+  Dam Shame's own item Mini Flood (themed for 'dam': FloodWave): not hit, resets 0
+ITEMS PASS: 7 used, 16 hits, 0 blocked, 0 attacks missed, 0 resets caused (must be 0)
+ITEM GRACE FAIL: a second hit at once took effect False; 4 s later (still in the grace) True; hits taken 2
+  car spin: NOT LANDED (), resets 0
+  car front flip: NOT LANDED (), resets 0
+  car back flip: NOT LANDED (), resets 0
+  car late flip: NO WIPEOUT (), resets 0
+  plane barrel roll: NOT BANKED ()
+  plane loop: NOT BANKED ()
+  boat hop + spin: hops 2, landed +130 (3.4 landed: Hull spin x1 = 130)
+  sub breach + corkscrew: breaches 1, landed +160 (2.2 landed: Corkscrew x1 = 160), resets 1
+  shift trick: shift tricks 1, points +650 (1.5 shift trick (Drive->Fly); 3.4 flown: Spin x1.5 +shift = 650), on Fly
+STUNTS CHECK: 0 of 3 car tricks clean
+  human trick 1: spin, 0.43 s late: landed +100
+  human trick 2: back flip, 0.34 s late: no trick
+  human trick 3: spin, 0.44 s late: no trick
+  human trick 4: back flip, 0.35 s late: landed +160
+  human trick 5: spin, 0.45 s late: no trick
+  human trick 6: back flip, 0.35 s late: no trick
+  human trick 7: spin, 0.26 s late: landed +100
+  human trick 8: back flip, 0.36 s late: no trick
+HUMAN-LIKE TRICKS CHECK: landed 3 of 8, wipeouts 0
+LAPS Paradise Plunge PASS: 3 laps, finished True in 281.2 s; lap times 95.3 / 93.1 / 92.8 (best 92.8); gates logged 33 (3 x 11); flashes LAP 2 / 3, FINAL LAP!; results show laps True; resets 0; order Abi 281, Vivi lap 3, Rocket Rae lap 3, Chip "Showtime" Sterling lap 3
+LAPS Coaster Coast PASS: 3 laps, finished True in 310.3 s; lap times 107.0 / 102.0 / 101.2 (best 101.2); gates logged 33 (3 x 11); flashes LAP 2 / 3, FINAL LAP!; results show laps True; resets 0; order Abi 310, Chip "Showtime" Sterling lap 3, Rocket Rae lap 3, Vivi lap 3
+LAPS Big Top Breakdown PASS: 3 laps, finished True in 279.9 s; lap times 101.0 / 87.9 / 87.9 (best 87.9); gates logged 33 (3 x 11); flashes LAP 2 / 3, FINAL LAP!; results show laps True; resets 0; order Abi 280, Chip "Showtime" Sterling lap 3, Vivi lap 3, Rocket Rae lap 3
+  3-lap race times (the player's racer AI-driven at Hard pace): see above; Dam Shame keeps its own 3 laps (Course.laps 3)
+STUNT SHOW CHECK: laps 1, items True; standing on points: Vivi 1010 (410 stunts, 2nd, 3 tricks, 0 wipeouts, best combo 160, shift 0), Abi 1000 (0 stunts, 1st, 0 tricks, 0 wipeouts, best combo 0, shift 0), Rocket Rae 380 (80 stunts, 3rd, 1 tricks, 2 wipeouts, best combo 80, shift 1), Chip "Showtime" Sterling 210 (210 stunts, 4th, 2 tricks, 0 wipeouts, best combo 130, shift 0); race order Abi, Vivi, Rocket Rae, Chip "Showtime" Sterling; the winner on points is not the race winner
+  results text: <size=26><color=#ffd34d><b>STUNT SHOW: 2nd</b></color></size>   <size=18>(stunt points + place bonus 1000 / 600 / 300 / 0)</size>
+  human Valley Flight try 1 MADE IT: stick, late 0.42 s, lip -> G3's way 21.3 s, flew it True, resets 0
+  human Valley Flight try 2 MADE IT: keys, late 0.32 s, lip -> G3's way 35.6 s, flew it True, resets 0
+  human Valley Flight try 3 MADE IT: stick, late 0.43 s, lip -> G3's way 21.6 s, flew it True, resets 0
+  human Valley Flight try 4 MADE IT: keys, late 0.33 s, lip -> G3's way 35.4 s, flew it True, resets 0
+  human Valley Flight try 5 MISSED: stick, late 0.44 s, lip -> G3's way 29.7 s, flew it False, resets 1
+  human Valley Flight try 6 MADE IT: stick, late 0.34 s, lip -> G3's way 22.8 s, flew it True, resets 0
+  human Valley Flight try 7 MADE IT: keys, late 0.45 s, lip -> G3's way 20.9 s, flew it True, resets 0
+  human Valley Flight try 8 MISSED: stick, late 0.35 s, lip -> G3's way 30.2 s, flew it False, resets 1
+HUMAN-LIKE VALLEY FLIGHT CHECK: made it 6 of 8, lip to the rejoin mean 26.3 s
+PARADISE PLUNGE LAP: line 5923 m, check pilot 97.9 s, resets 0; splits Beach Promenade 18.4, Cliffside Climb 14.1, Sky Arch 19.3, Lagoon Landing 7.9, Mangrove Run 12.6, Sunken Gateway 6.9, Coral Vault 7.2, Waterfall Return 11.5; 3 laps ~ 4.9 min
+  Sky Arch slit BRANCH: 12.5 s fork to rejoin, took it True, resets 0 (out of bounds)
+  Sky Arch slit MAIN: 12.5 s fork to rejoin, took it False, resets 0 (out of bounds)
+  Valley Flight BRANCH: 18.8 s fork to rejoin, took it True, resets 0 (out of bounds)
+  Valley Flight MAIN: 22.4 s fork to rejoin, took it False, resets 0 (out of bounds)
+  Sunken Caves BRANCH: 19.2 s fork to rejoin, took it True, resets 0 (out of bounds)
+  Sunken Caves MAIN: 21.5 s fork to rejoin, took it False, resets 0 (out of bounds)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 3.25 ms, 95th pct 6.21 ms, 99th pct 11.69 ms, worst 1925.70 ms over 520318 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  trick-shift  Drive->Fly  z   661.4  0.602 s  frames worst 11.31 / mean 3.59 ms
+  laps-0       Drive->Fly  z   651.9  0.602 s  frames worst 12.52 / mean 4.33 ms
+  laps-0       Fly->Boat   z  -606.7  0.605 s  frames worst 10.00 / mean 3.51 ms
+  laps-0       Boat->Dive  z  -780.4  0.606 s  frames worst 7.38 / mean 3.37 ms
+  laps-0       Dive->Boat  z  -466.4  0.604 s  frames worst 23.11 / mean 4.99 ms
+  laps-0       Boat->Drive z  -304.8  0.604 s  frames worst 12.83 / mean 3.58 ms
+  laps-0       Drive->Fly  z   652.1  0.600 s  frames worst 11.45 / mean 4.72 ms
+  laps-0       Fly->Boat   z  -606.7  0.604 s  frames worst 33.33 / mean 5.41 ms
+  laps-0       Boat->Dive  z  -199.3  0.603 s  frames worst 14.25 / mean 4.01 ms
+  laps-0       Dive->Boat  z  -466.3  0.605 s  frames worst 62.25 / mean 4.76 ms
+  laps-0       Boat->Drive z  -304.7  0.602 s  frames worst 18.60 / mean 3.78 ms
+  laps-0       Drive->Fly  z   652.0  0.602 s  frames worst 15.03 / mean 5.07 ms
+  laps-0       Fly->Boat   z  -607.5  0.602 s  frames worst 10.78 / mean 3.36 ms
+  laps-0       Boat->Dive  z  -199.4  0.605 s  frames worst 8.11 / mean 3.81 ms
+  laps-0       Dive->Boat  z  -466.9  0.600 s  frames worst 13.79 / mean 4.09 ms
+  laps-0       Boat->Drive z  -304.3  0.602 s  frames worst 17.00 / mean 3.90 ms
+  laps-1       Drive->Fly  z   230.7  0.601 s  frames worst 49.60 / mean 6.15 ms
+  laps-1       Fly->Drive  z   703.7  0.609 s  frames worst 23.67 / mean 3.25 ms
+  laps-1       Drive->Fly  z   572.0  0.611 s  frames worst 15.10 / mean 3.64 ms
+  laps-1       Fly->Boat   z   908.6  0.601 s  frames worst 9.44 / mean 2.41 ms
+  laps-1       Boat->Dive  z  -366.6  0.601 s  frames worst 12.69 / mean 2.82 ms
+  laps-1       Dive->Boat  z  -473.7  0.602 s  frames worst 28.23 / mean 2.56 ms
+  laps-1       Boat->Drive z  -370.7  0.615 s  frames worst 10.49 / mean 2.53 ms
+  laps-1       Drive->Fly  z   230.1  0.602 s  frames worst 12.45 / mean 2.48 ms
+  laps-1       Fly->Drive  z   704.0  0.603 s  frames worst 5.73 / mean 2.17 ms
+  laps-1       Drive->Fly  z   572.0  0.603 s  frames worst 7.16 / mean 2.70 ms
+  laps-1       Fly->Boat   z   908.6  0.604 s  frames worst 25.13 / mean 3.57 ms
+  laps-1       Boat->Dive  z  -366.6  0.601 s  frames worst 22.73 / mean 4.35 ms
+  laps-1       Dive->Boat  z  -473.5  0.602 s  frames worst 9.75 / mean 2.87 ms
+  laps-1       Boat->Drive z  -370.3  0.603 s  frames worst 6.19 / mean 2.70 ms
+  laps-1       Drive->Fly  z   230.8  0.611 s  frames worst 15.11 / mean 3.11 ms
+  laps-1       Fly->Drive  z   704.1  0.604 s  frames worst 7.35 / mean 2.73 ms
+  laps-1       Drive->Fly  z   572.0  0.600 s  frames worst 13.80 / mean 2.38 ms
+  laps-1       Fly->Boat   z   908.6  0.600 s  frames worst 11.07 / mean 2.81 ms
+  laps-1       Boat->Dive  z  -366.4  0.602 s  frames worst 10.39 / mean 2.99 ms
+  laps-1       Dive->Boat  z  -473.7  0.600 s  frames worst 7.54 / mean 2.39 ms
+  laps-1       Boat->Drive z  -370.6  0.603 s  frames worst 9.07 / mean 2.63 ms
+  laps-2       Drive->Fly  z   642.9  0.609 s  frames worst 8.01 / mean 2.57 ms
+  laps-2       Fly->Drive  z   812.2  0.605 s  frames worst 7.94 / mean 2.70 ms
+  laps-2       Drive->Fly  z   960.0  0.604 s  frames worst 10.19 / mean 2.43 ms
+  laps-2       Fly->Boat   z   819.6  0.601 s  frames worst 9.88 / mean 2.47 ms
+  laps-2       Fly->Boat   z   819.0  0.606 s  frames worst 18.21 / mean 3.41 ms
+  laps-2       Boat->Dive  z  -228.9  0.606 s  frames worst 59.88 / mean 4.14 ms
+  laps-2       Dive->Boat  z  -473.8  0.619 s  frames worst 62.19 / mean 7.54 ms
+  laps-2       Boat->Drive z  -370.2  0.601 s  frames worst 97.35 / mean 5.62 ms
+  laps-2       Drive->Fly  z   643.7  0.603 s  frames worst 15.78 / mean 3.18 ms
+  laps-2       Fly->Drive  z   813.7  0.602 s  frames worst 12.00 / mean 2.29 ms
+  laps-2       Drive->Fly  z   960.0  0.823 s  frames worst 109.33 / mean 47.80 ms  OUT OF 0.5-0.8 s
+  laps-2       Fly->Boat   z   819.3  0.603 s  frames worst 8.38 / mean 2.38 ms
+  laps-2       Boat->Dive  z  -229.0  0.603 s  frames worst 10.47 / mean 2.52 ms
+  laps-2       Dive->Boat  z  -473.1  0.617 s  frames worst 15.99 / mean 4.55 ms
+  laps-2       Boat->Drive z  -370.3  0.602 s  frames worst 56.35 / mean 3.73 ms
+  laps-2       Drive->Fly  z   642.9  0.606 s  frames worst 14.57 / mean 4.47 ms
+  laps-2       Fly->Drive  z   812.4  0.602 s  frames worst 9.04 / mean 2.39 ms
+  laps-2       Drive->Fly  z   960.0  0.608 s  frames worst 20.85 / mean 4.87 ms
+  laps-2       Fly->Boat   z   819.7  0.601 s  frames worst 60.65 / mean 4.93 ms
+  laps-2       Boat->Dive  z  -229.1  0.604 s  frames worst 9.29 / mean 3.05 ms
+  laps-2       Dive->Boat  z  -473.2  0.611 s  frames worst 9.47 / mean 2.63 ms
+  laps-2       Boat->Drive z  -370.5  0.606 s  frames worst 12.34 / mean 3.12 ms
+  show         Drive->Fly  z   652.1  0.607 s  frames worst 13.15 / mean 4.82 ms
+  show         Fly->Boat   z  -607.1  0.687 s  frames worst 79.41 / mean 10.63 ms
+  show         Boat->Dive  z  -199.6  0.601 s  frames worst 47.24 / mean 6.50 ms
+  show         Dive->Boat  z  -466.9  0.607 s  frames worst 10.98 / mean 3.96 ms
+  show         Boat->Drive z  -304.5  0.601 s  frames worst 11.05 / mean 3.83 ms
+  pp17-human-valley Drive->Fly  z   652.2  0.602 s  frames worst 8.87 / mean 3.55 ms
+  pp17-human-valley Drive->Fly  z   651.7  0.602 s  frames worst 61.13 / mean 6.97 ms
+  pp17-human-valley Drive->Fly  z   652.8  0.601 s  frames worst 12.14 / mean 3.52 ms
+  pp17-human-valley Drive->Fly  z   652.9  0.603 s  frames worst 13.26 / mean 4.11 ms
+  pp17-human-valley Drive->Fly  z   651.8  0.602 s  frames worst 13.84 / mean 4.11 ms
+  pp17-human-valley Drive->Fly  z   652.5  0.602 s  frames worst 12.10 / mean 4.23 ms
+  pp17-human-valley Drive->Fly  z   652.9  0.618 s  frames worst 116.91 / mean 34.01 ms
+  pp17-human-valley Drive->Fly  z   652.8  0.601 s  frames worst 4.94 / mean 2.79 ms
+  pp17-lap     Drive->Fly  z   944.3  0.600 s  frames worst 10.73 / mean 3.38 ms
+  pp17-lap     Fly->Boat   z  -606.6  0.601 s  frames worst 47.65 / mean 3.04 ms
+  pp17-lap     Boat->Dive  z  -199.2  0.601 s  frames worst 9.86 / mean 2.83 ms
+  pp17-lap     Dive->Boat  z  -466.8  0.605 s  frames worst 12.77 / mean 2.84 ms
+  pp17-lap     Boat->Drive z  -304.8  0.603 s  frames worst 12.19 / mean 3.27 ms
+  pp17-Sky-Arch-slit-branch Drive->Fly  z   944.9  0.604 s  frames worst 60.52 / mean 5.51 ms
+  pp17-Sky-Arch-slit-main Drive->Fly  z   944.9  0.601 s  frames worst 20.75 / mean 4.17 ms
+  pp17-Valley-Flight-branch Drive->Fly  z   652.2  0.603 s  frames worst 9.21 / mean 3.09 ms
+  pp17-Valley-Flight-main Drive->Fly  z   944.4  0.603 s  frames worst 15.56 / mean 3.12 ms
+  pp17-Sunken-Caves-branch Fly->Boat   z  -607.5  0.613 s  frames worst 24.36 / mean 2.90 ms
+  pp17-Sunken-Caves-branch Boat->Dive  z  -780.3  0.600 s  frames worst 59.12 / mean 3.57 ms
+  pp17-Sunken-Caves-main Fly->Boat   z  -607.5  0.602 s  frames worst 10.99 / mean 2.33 ms
+  pp17-Sunken-Caves-main Boat->Dive  z  -199.5  0.600 s  frames worst 10.26 / mean 2.97 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 11, Abi lines: messup: mishit_1; messup: bogey_1; messup: disaster_1; messup: messup_3; messup: gasp_1; messup: messup_3; messup: disaster_1; messup: messup_1; messup: disaster_1; messup: bogey_1; messup: disaster_1; messup: messup_2; messup: mishit_1; messup: gasp_1; messup: line_1; messup: messup_2; messup: disaster_1; messup: messup_2; messup: mishit_1; messup: messup_2; messup: bogey_1; messup: messup_1; messup: messup_2; messup: disaster_1; messup: messup_1; messup: messup_2; messup: bogey_1; messup: gasp_1; messup: bogey_1; messup: messup_3; messup: gasp_1; messup: skipped (Barnaby talking, reset: reset (out of bounds, at -738.8 (x 476.4, y 1.9), 38 m/s, 75 m off the line) to the anchor at 68 m in Drive, 4053 m behind the best progress); messup: bogey_1; messup: skipped (another driver, reset: reset (missed gate G1 promenade exit as Fly, at 1025.5 (x -119.6, y 5.0), 73 m/s, 169 m off the line) to the anchor (forward from the Valley Flight, +3 s) at 2176 m in Fly, -894 m behind the best progress); messup: disaster_1; waterfall: skipped (Barnaby talking); messup: bogey_1; messup: skipped (another driver, wall hit (78 deg)); waterfall: lucky_1; messup: messup_1; messup: skipped (another driver, wall hit (79 deg)); waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); messup: gasp_1; messup: disaster_1; messup: gasp_1; messup: bogey_1; waterfall: lucky_1; waterfall: skipped (Barnaby talking); waterfall: lucky_1; win: skipped (Barnaby talking); waterfall: laugh_1; win: skipped (Barnaby talking); messup: messup_3; messup: line_1; waterfall: skipped (Barnaby talking)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Disapproval, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

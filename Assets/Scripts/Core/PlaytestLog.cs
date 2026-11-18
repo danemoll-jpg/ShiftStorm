@@ -21,6 +21,8 @@ namespace ShiftStorm
             public string session = "", build = "", date = "", course = "", player = "", driver = "", mode = "", difficulty = "", design = "", result = "";
             public int race, players, place, field, resets, wallHits, nearMisses, missedGates;
             public float lap = -1, penalty;
+            // Round 17: laps, stunts, items
+            public int laps = 1, stunts, tricksLanded, wipeouts, shiftTricks, bestCombo, itemsUsed, hitsTaken, hitsBlocked; public List<float> lapTimes = new List<float>(); public List<string> itemUses = new List<string>();
             public List<string> segmentNames = new List<string>(); public List<float> segmentTimes = new List<float>();
             public List<Ev> resetList = new List<Ev>(), gates = new List<Ev>(), shortcuts = new List<Ev>(), choices = new List<Ev>(), changes = new List<Ev>(), walls = new List<Ev>();
         }
@@ -93,7 +95,7 @@ namespace ShiftStorm
             return new Record
             {
                 session = session, build = Application.version, date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), course = v.Course.courseName, race = races,
-                player = v == g.Player ? "P1" : "P2", driver = v.RacerName, mode = (g.RaceMode ? "race" : "time trial") + (split ? ", 2 players" : ""), players = split ? 2 : 1,
+                player = v == g.Player ? "P1" : "P2", driver = v.RacerName, mode = (g.StuntShow ? "stunt show" : g.RaceMode ? "race" : "time trial") + (split ? ", 2 players" : "") + (g.RaceMode && Items.OnNow(g) ? ", items" : ""), players = split ? 2 : 1,
                 difficulty = g.RaceMode ? Settings.Difficulty.ToString() : "-", design = Settings.Design,
             };
         }
@@ -103,6 +105,9 @@ namespace ShiftStorm
             var race = game.Race; bool raced = race && race.Active && race.Racers.Contains(v);
             r.place = raced ? race.Finishers.FindIndex(f => f.v == v) + 1 : 1; r.field = raced ? race.Racers.Count : 1;
             r.lap = Round(v.FinishTime); r.penalty = v.Penalty;
+            r.laps = v.LapsTotal; foreach (var t in v.LapTimes) r.lapTimes.Add(Round(t));
+            r.stunts = v.StuntScore; r.tricksLanded = v.TricksLanded; r.wipeouts = v.TricksFailed; r.shiftTricks = v.ShiftTricks; r.bestCombo = v.BestCombo;
+            r.hitsTaken = v.HitsTaken; r.hitsBlocked = v.HitsBlocked; if (v.Bag) { r.itemsUsed = v.Bag.Used.Count; r.itemUses.AddRange(v.Bag.Used); }
             float prev = 0; var c = v.Course;
             for (int k = 0; k < v.Splits.Count && k < c.segments.Count; k++) { r.segmentNames.Add(c.segments[k].name); r.segmentTimes.Add(Round(v.Splits[k] - prev)); prev = v.Splits[k]; }
             Write(v, r, "finished");

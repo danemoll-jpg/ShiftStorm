@@ -11,7 +11,7 @@ namespace ShiftStorm
     // machine (FormSet) in place, so every system holding a vehicle keeps it.
     public static class Lineup
     {
-        public static readonly Rival Abi = new Rival { name = "Abi", character = "Abigail", color = new Color(.95f, .45f, .1f), lane = -1f, brakeMargin = .9f, boostMeter = .55f, boostStraight = 10f, shortcut = "Mangrove bypass|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .35f, seed = 5 };
+        public static readonly Rival Abi = new Rival { name = "Abi", character = "Abigail", color = new Color(.95f, .45f, .1f), lane = -1f, brakeMargin = .9f, boostMeter = .55f, boostStraight = 10f, shortcut = "Mangrove bypass|Sunken Caves|Coral Vault tunnel|Lighthouse rocks", shortcutRate = .35f, seed = 5 };
         public static readonly Rival[] All = { Abi, Rival.Roster[0], Rival.Roster[1], Rival.Roster[2] };
         public static string[] Names => new[] { "Abi", "Rocket Rae", "Chip \"Showtime\" Sterling", "Vivi" };
         public static string Short(int i) => i == 0 ? "Abi" : i == 1 ? "Rae" : i == 2 ? "Chip" : "Vivi";

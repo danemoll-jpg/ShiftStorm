@@ -44,7 +44,7 @@ namespace ShiftStorm
             if (OldFlight) { br = null; return null; }
             br = OnShortcut && OnShortcut.flight ? OnShortcut : leftBranch && Time.time - leftBranchAt < 8f && Progress < leftBranch.mainTo + 80f ? leftBranch : null;
             if (!br || br.nextGate != GatesPassed) { br = null; return null; }
-            int gates = GatesPassed + (br.replacesGate >= 0 && GatesPassed == br.replacesGate ? 1 : 0);
+            int gates = GatesPassed + (br.replacesGate >= 0 && GatesPassed == br.replacesGate ? br.replacesCount : 0);
             float limit = br.mainTo + 60f; if (gates < Course.gates.Count) limit = Mathf.Min(limit, Course.gates[gates].progress);
             RecoveryAnchor pick = null; foreach (var a in Course.anchors) if (a.progress <= limit + .5f && a.progress > br.mainFrom + 1f) pick = a;
             if (!pick) br = null;
@@ -75,10 +75,11 @@ namespace ShiftStorm
                 scPenalties.Clear();
                 OnShortcut = null; ShortcutsTaken.Add(sc.label);
                 if (sc.replacesGate >= 0 && GatesPassed == sc.replacesGate)
-                {
-                    var g = Course.gates[GatesPassed]; GatesPassed++; GateLog.Add(g.index); MissedGate = null; missedFor = 0;
-                    Note("gate", $"gate {g.label} passed via {sc.label} ({GatesPassed}/{Course.gates.Count})");
-                }
+                    for (int k = 0; k < sc.replacesCount && GatesPassed < Course.gates.Count - 1; k++)   // Round 17: one or more gates in a row
+                    {
+                        var g = Course.gates[GatesPassed]; GatesPassed++; GateLog.Add(g.index); MissedGate = null; missedFor = 0;
+                        Note("gate", $"gate {g.label} passed via {sc.label} ({GatesPassed}/{Course.gates.Count})");
+                    }
                 Note("shortcut", $"shortcut {sc.label}: out ({Mode}, {Speed:0} m/s)");
                 Progress = Course.Project(p, sc.mainTo, out at, out dir);
                 return;

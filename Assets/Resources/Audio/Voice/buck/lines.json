@@ -58,6 +58,14 @@
    "text": "This is a private trial, just us and a few curious dinosaurs. Nobody's watching. Which is a shame, because I've got a feeling this is going to be spectacular."
   },
   {
+   "id": "cannon_1",
+   "text": "Load the cannon! Buck's Big Finish, coming right up!"
+  },
+  {
+   "id": "cannon_2",
+   "text": "Stand back, folks! One stunt cannon, one very brave racer!"
+  },
+  {
    "id": "ch_c1_intro_1",
    "text": "Rae says nobody beats her from the Coral Vault up the waterfall. She says it a lot. Let's find out."
   },
@@ -76,6 +84,50 @@
   {
    "id": "ch_reward_1",
    "text": "Now that's a show! Head to the Garage, partner. I had them mix you a new paint, on the house."
+  },
+  {
+   "id": "judge_bad_1",
+   "text": "Ooh. I've landed like that. I don't recommend it."
+  },
+  {
+   "id": "judge_bad_2",
+   "text": "Shake it off, partner! Every great stunt starts with a few bruises!"
+  },
+  {
+   "id": "judge_bad_3",
+   "text": "Ah, the old roof landing. A classic. A painful classic."
+  },
+  {
+   "id": "judge_good_1",
+   "text": "Now that's a landing! Knees bent, chin up. I taught them that. Probably."
+  },
+  {
+   "id": "judge_good_2",
+   "text": "Nice trick, partner! Clean as a whistle!"
+  },
+  {
+   "id": "judge_good_3",
+   "text": "Ooh, I like that one! Seven out of ten! Eight if you wave!"
+  },
+  {
+   "id": "judge_great_1",
+   "text": "Magnificent! That's a ten from me! I've got a ten paddle right here!"
+  },
+  {
+   "id": "judge_great_2",
+   "text": "In my day we'd have needed three ambulances for that! Bravo!"
+  },
+  {
+   "id": "judge_great_3",
+   "text": "That, folks, is how you finish big! A perfect ten!"
+  },
+  {
+   "id": "judge_shift_1",
+   "text": "Changed shape in the middle of a flip?! I never managed that! Ten!"
+  },
+  {
+   "id": "judge_shift_2",
+   "text": "A shift trick! That's my kind of showmanship!"
   },
   {
    "id": "res_bt_back_1",

@@ -1,0 +1,121 @@
+ShiftStorm check 'aisoak17', 2026-11-17 20:10, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  Paradise Plunge race 1: Abi 104 (0 resets, 0 stunts, hit 0), Vivi 108 (0 resets, 380 stunts, hit 1), Chip "Showtime" Sterling 108 (0 resets, 340 stunts, hit 0), Rocket Rae 124 (1 resets, 310 stunts, hit 1); items used 15
+  Paradise Plunge race 2: Abi 106 (0 resets, 0 stunts, hit 2), Vivi 110 (0 resets, 160 stunts, hit 2), Chip "Showtime" Sterling 111 (0 resets, 440 stunts, hit 2), Rocket Rae 128 (1 resets, 810 stunts, hit 3); items used 17
+  Paradise Plunge race 3: Abi 107 (0 resets, 0 stunts, hit 2), Vivi 109 (0 resets, 260 stunts, hit 0), Chip "Showtime" Sterling 123 (0 resets, 240 stunts, hit 0), Rocket Rae 139 (1 resets, 460 stunts, hit 1); items used 4
+  Coaster Coast race 1: Chip "Showtime" Sterling 118 (0 resets, 380 stunts, hit 0), Vivi 119 (0 resets, 210 stunts, hit 2), Abi 121 (0 resets, 0 stunts, hit 2), Rocket Rae 124 (0 resets, 380 stunts, hit 1); items used 11
+  Coaster Coast race 2: Rocket Rae 114 (0 resets, 920 stunts, hit 0), Abi 118 (0 resets, 0 stunts, hit 2), Chip "Showtime" Sterling 119 (0 resets, 440 stunts, hit 3), Vivi 120 (0 resets, 560 stunts, hit 2); items used 14
+  Coaster Coast race 3: Vivi 117 (0 resets, 820 stunts, hit 3), Rocket Rae 118 (0 resets, 80 stunts, hit 1), Abi 118 (0 resets, 0 stunts, hit 0), Chip "Showtime" Sterling 120 (1 resets, 630 stunts, hit 0); items used 17
+  Big Top Breakdown race 1: Vivi 106 (0 resets, 210 stunts, hit 2), Rocket Rae 107 (0 resets, 80 stunts, hit 1), Chip "Showtime" Sterling 108 (0 resets, 280 stunts, hit 3), Abi 112 (1 resets, 0 stunts, hit 3); items used 20
+  Big Top Breakdown race 2: Rocket Rae 106 (0 resets, 520 stunts, hit 1), Abi 107 (0 resets, 0 stunts, hit 4), Chip "Showtime" Sterling 109 (0 resets, 700 stunts, hit 1), Vivi 111 (1 resets, 1210 stunts, hit 2); items used 19
+  Big Top Breakdown race 3: Vivi 103 (0 resets, 1240 stunts, hit 0), Rocket Rae 104 (0 resets, 180 stunts, hit 0), Abi 104 (0 resets, 0 stunts, hit 0), Chip "Showtime" Sterling 105 (0 resets, 1490 stunts, hit 2); items used 9
+  Dam Shame race 1: Chip "Showtime" Sterling 156 (0 resets, 80 stunts, hit 0), Abi 158 (0 resets, 0 stunts, hit 2), Vivi 159 (0 resets, 0 stunts, hit 1), Rocket Rae 161 (0 resets, 0 stunts, hit 1); items used 16
+  Dam Shame race 2: Chip "Showtime" Sterling 156 (0 resets, 80 stunts, hit 0), Rocket Rae 163 (0 resets, 200 stunts, hit 3), Abi 163 (0 resets, 0 stunts, hit 6), Vivi 171 (0 resets, 80 stunts, hit 4); items used 28
+  Dam Shame race 3: Chip "Showtime" Sterling 156 (0 resets, 150 stunts, hit 1), Rocket Rae 159 (0 resets, 0 stunts, hit 2), Vivi 161 (0 resets, 0 stunts, hit 1), Abi 163 (0 resets, 0 stunts, hit 5); items used 25
+AI SOAK WITH ITEMS PASS: 48 of 48 finished, 6 resets in all, 0 within 4 s after an item hit (must be 0), 544 hits; items used: Slick 39, Hype Horn 30, Bubble Shield 21, Bubble Trap 18, Mirage 18, Rainbow Bridge 15, Wrong Form 14, Pocket Storm 12, Swap Spot 11, Dino Egg 6, Firework Rocket 5, Mini Flood 3, Human Cannonball 2, Buck's Big Finish 1
+ITEM ODDS BY PLACE (rolls seen in the soak: 239; plus 50 races x 4 places x 8 boxes from Items.Roll):
+  place 1: Slick 29%, Bubble Shield 20%, Mirage 13%, Hype Horn 12%, Rainbow Bridge 8%, Dino Egg 5%, Bubble Trap 5%, Rewind 5%, Pocket Storm 2%, Wrong Form 1%, Firework Rocket 0% (479 rolls)
+  place 2: Bubble Shield 19%, Slick 18%, Hype Horn 11%, Rainbow Bridge 10%, Mirage 10%, Bubble Trap 6%, Rewind 6%, Swap Spot 5%, Dino Egg 5%, Wrong Form 4%, Pocket Storm 4%, Firework Rocket 0% (468 rolls)
+  place 3: Rainbow Bridge 13%, Slick 10%, Dino Egg 9%, Wrong Form 9%, Pocket Storm 9%, Bubble Trap 9%, Hype Horn 9%, Swap Spot 8%, Rewind 8%, Mirage 8%, Bubble Shield 8%, Firework Rocket 0%, Human Cannonball 0%, Mini Flood 0% (448 rolls)
+  place 4: Bubble Trap 15%, Dino Egg 14%, Rainbow Bridge 13%, Wrong Form 11%, Swap Spot 10%, Pocket Storm 9%, Rewind 7%, Hype Horn 6%, Mirage 4%, Bubble Shield 4%, Slick 4%, Buck's Big Finish 2%, Mini Flood 0%, Firework Rocket 0%, Human Cannonball 0% (444 rolls)
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 2.48 ms, 95th pct 4.18 ms, 99th pct 5.57 ms, worst 1269.26 ms over 213910 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  aisoak-0-0   Drive->Fly  z   652.1  0.602 s  frames worst 19.31 / mean 5.36 ms
+  aisoak-0-0   Fly->Boat   z  -606.4  0.607 s  frames worst 10.95 / mean 3.87 ms
+  aisoak-0-0   Boat->Dive  z  -199.4  0.609 s  frames worst 10.41 / mean 4.35 ms
+  aisoak-0-0   Dive->Boat  z  -466.5  0.602 s  frames worst 10.12 / mean 3.66 ms
+  aisoak-0-0   Boat->Drive z  -304.6  0.604 s  frames worst 7.58 / mean 3.65 ms
+  aisoak-0-1   Drive->Fly  z   652.1  0.601 s  frames worst 7.44 / mean 4.16 ms
+  aisoak-0-1   Fly->Boat   z  -606.9  0.609 s  frames worst 9.61 / mean 3.36 ms
+  aisoak-0-1   Boat->Drive z  -292.8  0.606 s  frames worst 8.47 / mean 4.07 ms
+  aisoak-0-1   Drive->Boat z  -242.5  0.602 s  frames worst 12.75 / mean 4.39 ms
+  aisoak-0-1   Boat->Dive  z  -201.6  0.607 s  frames worst 8.62 / mean 4.00 ms
+  aisoak-0-1   Dive->Boat  z  -466.5  0.602 s  frames worst 7.89 / mean 3.57 ms
+  aisoak-0-1   Boat->Drive z  -304.5  0.610 s  frames worst 7.34 / mean 4.09 ms
+  aisoak-0-2   Drive->Fly  z   652.1  0.601 s  frames worst 8.99 / mean 4.47 ms
+  aisoak-0-2   Fly->Boat   z   685.8  0.604 s  frames worst 6.74 / mean 3.37 ms
+  aisoak-0-2   Boat->Fly   z   746.3  0.607 s  frames worst 10.38 / mean 3.20 ms
+  aisoak-0-2   Fly->Boat   z  -606.5  0.605 s  frames worst 9.41 / mean 3.93 ms
+  aisoak-0-2   Boat->Dive  z  -199.7  0.602 s  frames worst 7.62 / mean 3.57 ms
+  aisoak-0-2   Dive->Boat  z  -466.6  0.601 s  frames worst 9.60 / mean 3.82 ms
+  aisoak-0-2   Boat->Drive z  -304.8  0.603 s  frames worst 12.11 / mean 4.34 ms
+  aisoak-1-0   Drive->Fly  z   230.9  0.605 s  frames worst 5.54 / mean 2.59 ms
+  aisoak-1-0   Fly->Drive  z   704.1  0.608 s  frames worst 6.23 / mean 2.96 ms
+  aisoak-1-0   Drive->Fly  z   572.0  0.602 s  frames worst 4.92 / mean 2.56 ms
+  aisoak-1-0   Fly->Boat   z   909.4  0.609 s  frames worst 10.29 / mean 3.43 ms
+  aisoak-1-0   Boat->Dive  z  -366.4  0.604 s  frames worst 10.92 / mean 2.74 ms
+  aisoak-1-0   Dive->Boat  z  -473.9  0.605 s  frames worst 4.49 / mean 2.55 ms
+  aisoak-1-0   Boat->Drive z  -370.3  0.602 s  frames worst 5.27 / mean 2.53 ms
+  aisoak-1-1   Drive->Fly  z   230.9  0.604 s  frames worst 6.26 / mean 2.70 ms
+  aisoak-1-1   Fly->Drive  z   704.1  0.606 s  frames worst 4.88 / mean 2.57 ms
+  aisoak-1-1   Drive->Fly  z   572.0  0.606 s  frames worst 5.18 / mean 2.69 ms
+  aisoak-1-1   Fly->Boat   z   909.2  0.605 s  frames worst 6.85 / mean 2.87 ms
+  aisoak-1-1   Boat->Dive  z  -366.1  0.601 s  frames worst 5.70 / mean 2.55 ms
+  aisoak-1-1   Dive->Boat  z  -473.6  0.605 s  frames worst 6.06 / mean 2.31 ms
+  aisoak-1-1   Boat->Drive z  -370.6  0.605 s  frames worst 7.43 / mean 2.96 ms
+  aisoak-1-2   Drive->Fly  z   230.9  0.601 s  frames worst 4.92 / mean 2.05 ms
+  aisoak-1-2   Fly->Drive  z   704.1  0.602 s  frames worst 8.11 / mean 2.20 ms
+  aisoak-1-2   Drive->Fly  z   572.0  0.601 s  frames worst 6.55 / mean 2.59 ms
+  aisoak-1-2   Fly->Boat   z   908.8  0.603 s  frames worst 5.11 / mean 2.29 ms
+  aisoak-1-2   Boat->Dive  z  -363.6  0.602 s  frames worst 5.03 / mean 2.13 ms
+  aisoak-1-2   Dive->Boat  z  -473.4  0.602 s  frames worst 5.95 / mean 2.22 ms
+  aisoak-1-2   Boat->Drive z  -370.5  0.603 s  frames worst 5.09 / mean 2.12 ms
+  aisoak-2-0   Drive->Fly  z   642.7  0.604 s  frames worst 5.48 / mean 1.94 ms
+  aisoak-2-0   Fly->Drive  z   812.1  0.602 s  frames worst 10.15 / mean 2.06 ms
+  aisoak-2-0   Drive->Boat z  1041.6  0.601 s  frames worst 4.78 / mean 2.14 ms
+  aisoak-2-0   Boat->Drive z  1028.4  0.601 s  frames worst 4.04 / mean 1.99 ms
+  aisoak-2-0   Fly->Boat   z   818.9  0.605 s  frames worst 8.86 / mean 2.23 ms
+  aisoak-2-0   Boat->Dive  z  -229.1  0.603 s  frames worst 5.82 / mean 2.18 ms
+  aisoak-2-0   Dive->Boat  z  -473.3  0.605 s  frames worst 4.91 / mean 2.19 ms
+  aisoak-2-0   Boat->Drive z  -370.2  0.604 s  frames worst 9.49 / mean 2.23 ms
+  aisoak-2-1   Drive->Fly  z   642.7  0.605 s  frames worst 5.35 / mean 2.20 ms
+  aisoak-2-1   Fly->Drive  z   812.1  0.602 s  frames worst 10.79 / mean 2.48 ms
+  aisoak-2-1   Drive->Fly  z   960.0  0.603 s  frames worst 10.45 / mean 3.11 ms
+  aisoak-2-1   Fly->Boat   z  1219.4  0.604 s  frames worst 5.70 / mean 2.22 ms
+  aisoak-2-1   Boat->Fly   z  1213.0  0.601 s  frames worst 8.74 / mean 2.37 ms
+  aisoak-2-1   Fly->Boat   z   819.7  0.602 s  frames worst 5.38 / mean 2.53 ms
+  aisoak-2-1   Boat->Dive  z  -228.9  0.605 s  frames worst 9.83 / mean 2.40 ms
+  aisoak-2-1   Dive->Boat  z  -473.7  0.601 s  frames worst 5.65 / mean 2.32 ms
+  aisoak-2-1   Boat->Drive z  -370.7  0.602 s  frames worst 5.23 / mean 2.23 ms
+  aisoak-2-2   Drive->Fly  z   642.7  0.600 s  frames worst 6.28 / mean 2.23 ms
+  aisoak-2-2   Fly->Drive  z   812.1  0.602 s  frames worst 6.34 / mean 2.02 ms
+  aisoak-2-2   Drive->Fly  z   960.0  0.603 s  frames worst 9.90 / mean 2.12 ms
+  aisoak-2-2   Fly->Boat   z   819.3  0.603 s  frames worst 7.25 / mean 2.23 ms
+  aisoak-2-2   Boat->Dive  z  -229.2  0.603 s  frames worst 5.82 / mean 2.28 ms
+  aisoak-2-2   Dive->Boat  z  -473.4  0.602 s  frames worst 6.81 / mean 2.08 ms
+  aisoak-2-2   Boat->Drive z  -370.3  0.601 s  frames worst 5.26 / mean 2.20 ms
+  aisoak-3-0   Drive->Fly  z -9460.5  0.600 s  frames worst 9.75 / mean 2.10 ms
+  aisoak-3-0   Fly->Drive  z -9815.3  0.605 s  frames worst 5.93 / mean 2.23 ms
+  aisoak-3-0   Drive->Boat z -9093.6  0.601 s  frames worst 5.70 / mean 1.99 ms
+  aisoak-3-0   Boat->Fly   z -9483.4  0.604 s  frames worst 11.45 / mean 2.14 ms
+  aisoak-3-0   Fly->Boat   z -9789.2  0.600 s  frames worst 5.06 / mean 1.91 ms
+  aisoak-3-0   Boat->Drive z -9449.6  0.604 s  frames worst 8.71 / mean 2.11 ms
+  aisoak-3-0   Drive->Boat z -9093.7  0.601 s  frames worst 4.76 / mean 1.93 ms
+  aisoak-3-0   Boat->Dive  z -9365.9  0.601 s  frames worst 8.84 / mean 2.00 ms
+  aisoak-3-0   Dive->Boat  z -9395.0  0.602 s  frames worst 6.28 / mean 2.28 ms
+  aisoak-3-0   Boat->Drive z -9327.5  0.606 s  frames worst 10.04 / mean 2.48 ms
+  aisoak-3-1   Drive->Fly  z -9461.0  0.601 s  frames worst 8.75 / mean 2.25 ms
+  aisoak-3-1   Fly->Drive  z -9815.1  0.603 s  frames worst 5.25 / mean 2.03 ms
+  aisoak-3-1   Drive->Boat z -9093.6  0.601 s  frames worst 10.36 / mean 2.49 ms
+  aisoak-3-1   Boat->Fly   z -9483.4  0.606 s  frames worst 9.71 / mean 2.35 ms
+  aisoak-3-1   Fly->Boat   z -9789.1  0.604 s  frames worst 7.31 / mean 2.19 ms
+  aisoak-3-1   Boat->Drive z -9450.0  0.602 s  frames worst 8.78 / mean 2.71 ms
+  aisoak-3-1   Drive->Boat z -9093.2  0.602 s  frames worst 12.45 / mean 2.31 ms
+  aisoak-3-1   Boat->Dive  z -9365.6  0.602 s  frames worst 8.28 / mean 1.83 ms
+  aisoak-3-1   Dive->Boat  z -9394.8  0.601 s  frames worst 5.92 / mean 2.17 ms
+  aisoak-3-1   Boat->Drive z -9327.6  0.604 s  frames worst 6.42 / mean 2.18 ms
+  aisoak-3-2   Drive->Fly  z -9460.9  0.602 s  frames worst 6.87 / mean 2.62 ms
+  aisoak-3-2   Drive->Boat z -9093.7  0.605 s  frames worst 13.73 / mean 2.48 ms
+  aisoak-3-2   Boat->Fly   z -9483.2  0.605 s  frames worst 14.57 / mean 3.88 ms
+  aisoak-3-2   Fly->Boat   z -9789.0  0.601 s  frames worst 9.27 / mean 2.63 ms
+  aisoak-3-2   Boat->Drive z -9449.2  0.600 s  frames worst 18.25 / mean 2.78 ms
+  aisoak-3-2   Drive->Boat z -8998.5  0.602 s  frames worst 12.28 / mean 2.39 ms
+  aisoak-3-2   Boat->Drive z -8998.1  0.602 s  frames worst 13.12 / mean 2.36 ms
+  aisoak-3-2   Drive->Boat z -9093.5  0.603 s  frames worst 9.27 / mean 2.77 ms
+  aisoak-3-2   Boat->Dive  z -9365.3  0.600 s  frames worst 11.35 / mean 3.55 ms
+  aisoak-3-2   Dive->Boat  z -9394.6  0.603 s  frames worst 26.11 / mean 2.91 ms
+  aisoak-3-2   Boat->Drive z -9327.5  0.604 s  frames worst 16.15 / mean 3.54 ms
+sound: music theme playing (its own signal peak 0.000), splashes played 18, Abi lines: waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); messup: messup_2; waterfall: skipped (Barnaby talking); messup: line_1; waterfall: skipped (Barnaby talking); win: skipped (Barnaby talking); messup: gasp_1; messup: messup_2; waterfall: skipped (Barnaby talking); messup: skipped (another driver, hit by Firework Rocket); messup: messup_3; waterfall: skipped (Barnaby talking); messup: gasp_1; messup: bogey_1; waterfall: skipped (Barnaby talking); waterfall: skipped (Barnaby talking); messup: bogey_1; messup: gasp_1; waterfall: skipped (cooldown); messup: skipped (cooldown); messup: disaster_1; messup: mishit_1; messup: skipped (another driver, hit by Bubble Trap); waterfall: skipped (Barnaby talking); messup: mishit_1; messup: messup_1; messup: line_1; messup: skipped (another driver, hit by Pocket Storm); messup: messup_3; waterfall: skipped (Barnaby talking); messup: messup_2; waterfall: skipped (Barnaby talking); waterfall: lucky_1; messup: bogey_1; waterfall: skipped (Barnaby talking); messup: mishit_1; messup: messup_1; messup: gasp_1; messup: bogey_1; waterfall: lucky_1; messup: skipped (another driver, hit by Slick); messup: messup_1; messup: skipped (another driver, hit by Mini Flood); messup: messup_2; waterfall: skipped (cooldown); messup: gasp_1; messup: messup_1; waterfall: skipped (Barnaby talking); messup: skipped (another driver, hit by Mini Flood); waterfall: skipped (Barnaby talking); messup: messup_1; waterfall: skipped (Barnaby talking); messup: skipped (Barnaby talking, hit by Slick)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Clap, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Honking Horn, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Honking Horn, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Thumbs Up, Sitting Disapproval, Sitting Thumbs Up
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0

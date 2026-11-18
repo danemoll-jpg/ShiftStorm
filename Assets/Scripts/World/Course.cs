@@ -30,6 +30,7 @@ namespace ShiftStorm
         // Round 16: a multi-lap course (Dam Shame): its line is the lap `laps` times over, end to end; lapStarts: the progress of each lap's
         // start line (lap 1's .. the finish), so lap = how many of them a racer is past
         public int laps = 1;
+        public int raceLaps = 1;   // Round 17: a single-lap course raced this many times round (ShiftVehicle.Laps; set by Game per race)
         public readonly List<float> lapStarts = new List<float>();
         public int LapAt(float progress) { if (laps <= 1) return 1; int l = 1; for (int i = 1; i < lapStarts.Count - 1; i++) if (progress >= lapStarts[i] - .5f) l = i + 1; return Mathf.Min(l, laps); }
         // Round 13 item 5c: stretches where a racer who stops making progress is lost (under Coaster Coast's decks and pier): recovered sooner,

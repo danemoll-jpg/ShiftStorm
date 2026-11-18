@@ -1,0 +1,28 @@
+ShiftStorm check 'stunts17', 2026-11-17 20:04, build 0.15.0, NVIDIA GeForce GTX 1660 Ti, 1280x800 off-screen
+model: ; driver: Abigail.fbx (Tee'd Off), Humanoid, 6 shared Mixamo clips (Driving loop), scale 0.69
+muted from the first frame: True; AudioListener.volume = 0; audio output 48000 Hz
+  car spin: landed clean +100 (4.1 landed: Spin x1 = 100), resets 0
+  car front flip: landed clean +150 (4.1 landed: Front flip x1 = 150), resets 0
+  car back flip: landed clean +160 (4.1 landed: Back flip x1 = 160), resets 0
+  car late flip: WIPEOUT as meant (4.1 WIPEOUT (landed mid-Front flip): -150), resets 0
+  plane barrel roll: banked +80 (2.4 flown: Barrel roll x1 = 80)
+  plane loop: banked +200 (2.9 flown: Loop x1 = 200)
+  boat hop + spin: hops 2, landed +130 (3.2 landed: Hull spin x1 = 130)
+  sub breach + corkscrew: breaches 1, landed +160 (2.2 landed: Corkscrew x1 = 160), resets 1
+  shift trick: shift tricks 1, points +650 (1.5 shift trick (Drive->Fly); 3.4 flown: Spin x1.5 +shift = 650), on Fly
+STUNTS PASS: 3 of 3 car tricks clean
+  human trick 1: spin, 0.43 s late: landed +100
+  human trick 2: back flip, 0.34 s late: landed +160
+  human trick 3: spin, 0.44 s late: landed +100
+  human trick 4: back flip, 0.35 s late: landed +160
+  human trick 5: spin, 0.45 s late: landed +100
+  human trick 6: back flip, 0.35 s late: landed +160
+  human trick 7: spin, 0.26 s late: landed +100
+  human trick 8: back flip, 0.36 s late: landed +160
+HUMAN-LIKE TRICKS PASS: landed 8 of 8, wipeouts 0
+frame time over the run (PC, 1280x800 off-screen, uncapped, frames that saved a picture left out): mean 1.97 ms, 95th pct 3.25 ms, 99th pct 4.05 ms, worst 43.64 ms over 68491 frames; GPU time not available in batch mode
+changes (scenario, change, z, visual time, worst / mean frame time from 0.25 s before to 0.25 s after):
+  trick-shift  Drive->Fly  z   661.4  0.601 s  frames worst 17.27 / mean 3.45 ms
+sound: music race_paradise playing (its own signal peak 0.000), splashes played 0, Abi lines: messup: skipped (Barnaby talking, trick wipeout); messup: bogey_1; messup: mishit_1; messup: skipped (another driver, reset: reset (missed gate G1 promenade exit as Fly, at 1025.7 (x -119.5, y 4.9), 73 m/s, 169 m off the line) to the anchor (forward from the Valley Flight, +3 s) at 2176 m in Fly, -894 m behind the best progress)
+Abi's clips: 6 loaded, one-shots played: Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Sitting Disapproval, Honking Horn, Sitting Thumbs Up, Sitting Disapproval, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn, Honking Horn
+audio output level (AudioListener.GetOutputData, all frames): peak 0.000000, last RMS 0.000000, AudioListener.volume 0
